@@ -1,3 +1,5 @@
+'use client';
+
 import { Button as BaseButton } from '@base-ui/react/button';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { ButtonSize, ButtonVariant } from './manifest.js';

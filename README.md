@@ -37,7 +37,7 @@ function Example() {
 
 ## 開発
 
-Node.js 20 以降と pnpm を使用します。
+Node.js 22.22.2 以降の 22.x、24.15.0 以降の 24.x、または 26.0.0 以降と、pnpm 10.18.3 を使用します。テスト依存関係の要件に合わせ、対応バージョンをルートの `package.json` の `engines.node` に定義しています。
 
 ```sh
 pnpm install
