@@ -73,3 +73,9 @@ node packages/mcp/dist/server.js
 ## 初期スコープとトレードオフ
 
 最初のリリースでは Button、Field、Dialog と Lism CSS の基礎プリミティブに集中します。色・サイズは CSS カスタムプロパティで上書きでき、実行時 CSS-in-JS は使いません。Manifest は公開 API の初期契約であり、Props や構成を追加するときは実装・テストと同時に更新します。残るコンポーネント群、Storybook、Playwright、ビジュアル回帰、SSR の専用検証は、基礎 API の利用結果を踏まえて段階的に追加します。
+
+### CI の静的解析と Action ロック
+
+Biome は CI で `pnpm exec biome ci .` を実行します。fallow は PR で `audit` を実行し、ベースブランチとの比較で新たな問題を検出します。Action と CLI はともに 3.38.1 に固定しています。PR コメントの投稿は行いません。
+
+Action の依存は `.github/workflows/actions.lock` に記録します。workflow の `uses:` を変更したら `gh actions-lock` で更新し、workflow とロックファイルを一緒にコミットしてください。`gh actions-lock --verify` でオンライン検証、`--verify-local` で参照の網羅性をオフライン検証できます。CI では PR・main への push・週次にオンライン検証します。
