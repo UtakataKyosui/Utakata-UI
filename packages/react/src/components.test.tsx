@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import axe from 'axe-core';
 import { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
 import { Button } from './Button.js';
@@ -78,24 +77,5 @@ describe('Dialog', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  });
-});
-
-describe('accessibility', () => {
-  it('has no axe violations for a labelled field and button', async () => {
-    const { container } = render(
-      <>
-        <Field.Root>
-          <Field.Label>Name</Field.Label>
-          <Field.Control />
-        </Field.Root>
-        <Button>Submit</Button>
-      </>,
-    );
-
-    const results = await axe.run(container, {
-      rules: { 'color-contrast': { enabled: false } },
-    });
-    expect(results.violations).toEqual([]);
   });
 });

@@ -1,0 +1,42 @@
+name: Quality
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  accessibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4.4.0
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.15.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Biome
+        run: pnpm exec biome ci .
+      - run: pnpm typecheck
+      - run: pnpm test:a11y
+      - run: pnpm test
+      - run: pnpm build
+  fallow:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: fallow-rs/fallow@v3.38.1
+        with:
+          command: audit
+          version: "3.38.1"
+          fail-on-issues: "true"
+          comment: "false"
+          review-comments: "false"
+          sarif: "false"

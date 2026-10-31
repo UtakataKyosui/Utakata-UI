@@ -47,6 +47,14 @@ pnpm typecheck
 pnpm lint
 ```
 
+### アクセシビリティの品質チェック
+
+`pnpm test:a11y` で Button の各 variant、Field のラベル・説明、開いた Dialog の portal を axe-core で検査します。違反があればテストが失敗し、違反ルールと対象要素が表示されます。検査自体が動作していることも、名前のないボタンを検出するテストで確認します。
+
+GitHub Actions の `Quality / accessibility` は push・PR 時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。
+
+コンポーネント追加・変更時は `packages/react/src/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
+
 MCP サーバーはビルド後に stdio transport で起動できます。
 
 ```sh
@@ -65,3 +73,9 @@ node packages/mcp/dist/server.js
 ## 初期スコープとトレードオフ
 
 最初のリリースでは Button、Field、Dialog と Lism CSS の基礎プリミティブに集中します。色・サイズは CSS カスタムプロパティで上書きでき、実行時 CSS-in-JS は使いません。Manifest は公開 API の初期契約であり、Props や構成を追加するときは実装・テストと同時に更新します。残るコンポーネント群、Storybook、Playwright、ビジュアル回帰、SSR の専用検証は、基礎 API の利用結果を踏まえて段階的に追加します。
+
+### CI の静的解析と Action ロック
+
+Biome は CI で `pnpm exec biome ci .` を実行します。fallow は PR で `audit` を実行し、ベースブランチとの比較で新たな問題を検出します。Action と CLI はともに 3.38.1 に固定しています。PR コメントの投稿は行いません。
+
+Action の依存は `.github/workflows/actions.lock` に記録します。workflow の `uses:` を変更したら `gh actions-lock` で更新し、workflow とロックファイルを一緒にコミットしてください。`gh actions-lock --verify` でオンライン検証、`--verify-local` で参照の網羅性をオフライン検証できます。CI では PR・main への push・週次にオンライン検証します。
