@@ -1,0 +1,18 @@
+# Utakata-UI
+
+> An AI-native React and TypeScript UI framework built on Base UI and Lism CSS.
+
+## Documentation
+
+- [Project overview and usage](README.md)
+- [Agent implementation guide](skills/utakata-ui/SKILL.md)
+- [React package exports](packages/react/src/index.ts)
+- [Component manifest](packages/react/src/manifest.ts)
+- [MCP server tools](packages/mcp/src/server.ts)
+
+## Principles
+
+- Use the component manifest as the source for supported variants, defaults, composition, and accessibility contracts.
+- Preserve Base UI behavior and compose Field and Dialog from their documented parts.
+- Use semantic HTML, Lism CSS, and CSS custom properties; do not invent component props.
+- Verify generated UI with keyboard interaction and accessibility checks.

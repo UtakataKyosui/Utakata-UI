@@ -1,0 +1,17 @@
+{
+  "name": "@utakata-ui/mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@utakata-ui/react": "workspace:*",
+    "zod": "4.6.7"
+  }
+}

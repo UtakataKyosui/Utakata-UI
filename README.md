@@ -4,7 +4,7 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 ## パッケージ
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/manifest.ts` にまとめています。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
 
 ```tsx
 import { Button, Dialog, Field } from '@utakata-ui/react';
@@ -47,12 +47,19 @@ pnpm typecheck
 pnpm lint
 ```
 
+MCP サーバーはビルド後に stdio transport で起動できます。
+
+```sh
+pnpm build
+node packages/mcp/dist/server.js
+```
+
 ## 設計方針
 
 - **Foundation:** Lism CSS の Box、Stack、Flex、Grid、Container、Text、Heading と CSS カスタムプロパティを利用します。
 - **Behavior:** Button、Field、Dialog のフォーカス・キーボード・ARIA 挙動は Base UI に委ねます。
 - **Composition:** Field と Dialog は Base UI の compound parts を公開し、意味のある HTML と柔軟な合成を優先します。
-- **AI Interface:** manifest は Props、既定値、制約、構成方法、アクセシビリティ契約を記述する機械可読な公開仕様です。
+- **AI Interface:** manifest は機械可読な公開仕様で、Agent Skill と MCP の `list_components`、`get_component`、`search_components` ツールから参照できます。`llms.txt` は入口を示します。
 - **Quality:** Vitest、Testing Library、axe-core で代表コンポーネントを検証します。自動検査は手動のアクセシビリティ確認に代わるものではありません。
 
 ## 初期スコープとトレードオフ
