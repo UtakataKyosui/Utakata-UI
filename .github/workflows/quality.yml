@@ -5,27 +5,65 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   accessibility:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select check scope
+        id: scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [[ "$EVENT_NAME" == pull_request ]]; then
+            base=$(git merge-base "$BASE_SHA" HEAD)
+            if ! git diff --name-only "$base" HEAD | grep -Eq '(^|/)(package.json|pnpm-lock.yaml|pnpm-workspace.yaml|biome.json|.*config.*)$|^\.github/|test-setup\.'; then
+              echo "base=$base" >> "$GITHUB_OUTPUT"
+            fi
+          fi
       - uses: pnpm/action-setup@v4.3.0
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: "24.15.0"
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+          cache-dependency-path: pnpm-lock.yaml
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
       - name: Biome
-        run: pnpm exec biome ci .
-      - run: pnpm typecheck
-      - run: pnpm test:a11y
-      - run: pnpm test
-      - run: pnpm build
+        env:
+          BASE: ${{ steps.scope.outputs.base }}
+        run: |
+          if [[ -n "$BASE" ]]; then
+            pnpm exec biome ci . --vcs-enabled=true --vcs-client-kind=git --changed --since="$BASE" --no-errors-on-unmatched
+          else
+            pnpm exec biome ci .
+          fi
+      - name: Type check
+        run: pnpm typecheck
+      - name: Accessibility tests
+        run: pnpm test:a11y
+      - name: Unit tests
+        env:
+          BASE: ${{ steps.scope.outputs.base }}
+        run: |
+          args=(--exclude '**/accessibility.test.tsx')
+          if [[ -n "$BASE" ]]; then
+            args+=(--changed "$BASE" --passWithNoTests)
+          fi
+          pnpm exec vitest run "${args[@]}"
+      - name: Build packages
+        run: pnpm build
   fallow:
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4.4.0
