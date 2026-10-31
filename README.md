@@ -47,6 +47,14 @@ pnpm typecheck
 pnpm lint
 ```
 
+### アクセシビリティの品質チェック
+
+`pnpm test:a11y` で Button の各 variant、Field のラベル・説明、開いた Dialog の portal を axe-core で検査します。違反があればテストが失敗し、違反ルールと対象要素が表示されます。検査自体が動作していることも、名前のないボタンを検出するテストで確認します。
+
+GitHub Actions の `Quality / accessibility` は push・PR 時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。
+
+コンポーネント追加・変更時は `packages/react/src/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
+
 MCP サーバーはビルド後に stdio transport で起動できます。
 
 ```sh
