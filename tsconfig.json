@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "paths": {
+      "@utakata-ui/react/manifest": ["./packages/react/src/manifest.ts"]
+    }
+  },
+  "include": [
+    "packages/react/src/**/*.ts",
+    "packages/react/src/**/*.tsx",
+    "packages/mcp/src/**/*.ts",
+    "vitest.config.ts"
+  ]
+}
