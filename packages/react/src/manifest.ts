@@ -1,8 +1,12 @@
+import { qualityRules } from './quality.js';
+
 export const componentManifest = {
   version: 1,
   framework: 'Utakata-UI',
+  sharedQualityRules: qualityRules.shared,
   components: {
     Button: {
+      qualityRules: qualityRules.Button,
       description:
         'An action control built on the native button behavior from Base UI.',
       props: {
@@ -32,6 +36,7 @@ export const componentManifest = {
         'Retains Base UI native button semantics, disabled behavior, and keyboard support.',
     },
     Field: {
+      qualityRules: qualityRules.Field,
       description: 'A form field composed from Base UI Field parts.',
       parts: ['Root', 'Label', 'Control', 'Description', 'Error'],
       partProps: {
@@ -54,6 +59,7 @@ export const componentManifest = {
         'Associate every control with a visible Field.Label; use Description and Error for additional context.',
     },
     Dialog: {
+      qualityRules: qualityRules.Dialog,
       description: 'A modal dialog composed from Base UI Dialog parts.',
       parts: [
         'Root',
