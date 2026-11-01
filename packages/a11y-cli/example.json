@@ -1,0 +1,24 @@
+[
+  {
+    "name": "light body",
+    "kind": "text",
+    "foreground": "#1c2432",
+    "background": "#fff",
+    "conveysMeaning": false
+  },
+  {
+    "name": "light error",
+    "kind": "text",
+    "foreground": "#b42318",
+    "background": "#fff",
+    "conveysMeaning": true,
+    "nonColorCue": "Visible error message"
+  },
+  {
+    "name": "dark border",
+    "kind": "non-text",
+    "foreground": "#748099",
+    "background": "#1c2432",
+    "conveysMeaning": false
+  }
+]
