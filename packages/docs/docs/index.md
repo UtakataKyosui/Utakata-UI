@@ -8,6 +8,7 @@ Base UI のアクセシブルな振る舞いと Lism CSS のプリミティブ�
 
 - [導入方法](./getting-started)
 - [コンポーネント仕様](./components)
+- [UIプレビュー](./preview)
 - [MCP の利用方法](./mcp)
 
 ## アクセシビリティ

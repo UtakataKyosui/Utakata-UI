@@ -62,6 +62,12 @@ function Example() {
 
 ## 開発
 
+### docsのUIプレビュー
+
+既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のButton・Field・Dialogを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
+
+`pnpm build:docs` でUI本体とdocsをビルドします。VercelのRoot Directoryは `packages/docs` のまま使用し、ビルドコマンドと出力先は同ディレクトリの `vercel.json` に定義しています。
+
 ### npm リリース（React）
 
 `packages/react` を MIT ライセンスで公開します。ルート・docs・MCP はこのリリースの対象外です。
