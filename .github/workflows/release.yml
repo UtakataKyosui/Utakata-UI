@@ -44,6 +44,9 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            .github/workflows/release.yml
       - name: Check npm supports trusted publishing
         run: |
           node --input-type=module -e '
@@ -54,6 +57,8 @@ jobs:
             }
           '
       - run: pnpm install --frozen-lockfile
+      - name: Verify Docs native compiler after install
+        run: node scripts/check-docs-compiler.mjs
       - name: Quality checks
         run: pnpm check
       - name: Pack and test public package

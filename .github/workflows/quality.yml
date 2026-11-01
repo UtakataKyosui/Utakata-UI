@@ -102,7 +102,15 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
+          # Keep the complete Docs toolchain store separate from other jobs.
+          # Include workflow policy to invalidate the previous failing store.
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            .github/workflows/quality.yml
       - run: pnpm install --frozen-lockfile
+      - name: Verify Docs native compiler after install
+        if: needs.scope.outputs.docs == 'true'
+        run: node scripts/check-docs-compiler.mjs
       - name: Build React (also required by Docs)
         if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true'
         run: pnpm --filter @utakata-ui/react build

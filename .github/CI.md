@@ -29,9 +29,12 @@ selected by Vitest's source graph. A deleted markup file is not linted, but its
 path still selects affected gates. Scope failure fails the aggregate check.
 
 pnpm stores are cached by setup-node's lockfile key; installs remain frozen.
-Do not add `--prefer-offline` to pnpm installs: the Linux x64 clean-install
-reproduction with Node 24.15/pnpm 10.18.3 failed to load Astro's native binding
-with that option, while the normal frozen install restored and loaded it.
+Build and Release use separate store keys including their workflow policy as well as the
+lockfile. This avoids reusing the store from the failed native-dependency run
+or having another job populate the build cache. A native compiler smoke check
+verifies the actual Docs dependency graph immediately after install. Linux
+container reproduction loaded and built successfully with a fresh normal frozen
+install; removing `--prefer-offline` alone did not fix the cached GitHub run.
 The separate build job caches npm's download cache
 for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell
