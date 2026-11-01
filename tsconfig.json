@@ -11,6 +11,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
+      "@utakata-ui/react": ["./packages/react/src/index.ts"],
       "@utakata-ui/react/manifest": [
         "./packages/react/src/metadata/manifest.ts"
       ]
