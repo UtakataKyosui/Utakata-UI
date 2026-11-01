@@ -29,12 +29,16 @@ selected by Vitest's source graph. A deleted markup file is not linted, but its
 path still selects affected gates. Scope failure fails the aggregate check.
 
 pnpm stores are cached by setup-node's lockfile key; installs remain frozen.
-Build and Release use separate store keys including their workflow policy as well as the
-lockfile. This avoids reusing the store from the failed native-dependency run
-or having another job populate the build cache. A native compiler smoke check
-verifies the actual Docs dependency graph immediately after install. Linux
-container reproduction loaded and built successfully with a fresh normal frozen
-install; removing `--prefer-offline` alone did not fix the cached GitHub run.
+Build and Release use separate store keys including their workflow policy,
+package-manager pin and lockfile. A native compiler smoke check verifies the
+actual Docs dependency graph immediately after install. Installation diagnostics
+record why pnpm excluded the optional Astro parser or compiler bindings, and are
+printed if the smoke check fails. Node must satisfy the entire development
+graph, including optional parsers: `astro-eslint-parser@3.2.0` requires
+`^22.22.3 || ^24.16.0 || >=26.3.0`. At Node 24.15, pnpm skipped that parser
+with `unsupported_engine` and also excluded the shared compiler's optional
+native children. A newer pnpm alone and cold caches did not fix this. CI uses
+Node 24.16; development engines are `^24.16.0 || >=26.3.0`.
 The separate build job caches npm's download cache
 for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell

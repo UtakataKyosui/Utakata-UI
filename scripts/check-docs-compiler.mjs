@@ -1,6 +1,6 @@
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 // Resolve from the actual Docs dependency graph, without hard-coded .pnpm paths.
@@ -23,5 +23,23 @@ try {
     readdirSync(dirname(dirname(binding))),
   );
   console.error(error);
+  const log = join(
+    process.env.RUNNER_TEMP ?? '/nonexistent',
+    'pnpm-install.ndjson',
+  );
+  if (existsSync(log)) {
+    for (const line of readFileSync(log, 'utf8')
+      .split('\n')
+      .filter((line) => line.startsWith('{'))) {
+      const event = JSON.parse(line);
+      if (
+        event.name === 'pnpm:skipped-optional-dependency' &&
+        (event.package?.name?.startsWith('@astrojs/compiler-binding') ||
+          event.package?.name === 'astro-eslint-parser')
+      ) {
+        console.error('pnpm native dependency exclusion:', event);
+      }
+    }
+  }
   process.exitCode = 1;
 }

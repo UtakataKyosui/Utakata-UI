@@ -138,7 +138,7 @@ Git 管理外ファイルに置いてください。
 [OpenAI Skills](https://learn.chatgpt.com/docs/build-skills)、
 [OpenAI Hooks](https://learn.chatgpt.com/docs/hooks)。
 
-開発には Node.js 24.15.0 以降の 24.x、または 26.0.0 以降と、pnpm 10.18.3 を使用します。Markuplint 5 が Node.js 24 以上を必要とするため、ルートの `package.json` の `engines.node` も合わせています。これはリポジトリ開発ツールの要件です。
+開発には Node.js 24.16.0 以降の 24.x、または 26.3.0 以降と、pnpm 10.18.3 を使用します。Markuplint の optional Astro parser を含む開発依存の要件に合わせ、ルートの `package.json` の `engines.node` を定義しています。これはリポジトリ開発ツールの要件です。
 
 ```sh
 pnpm install
