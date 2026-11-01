@@ -67,6 +67,11 @@ jobs:
           pnpm exec vitest run "${args[@]}"
       - name: Build packages
         run: pnpm build
+      - name: Verify shipped consumer types and accessibility contract
+        run: |
+          mkdir -p "$RUNNER_TEMP/react-consumer"
+          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
+          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
   fallow:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
