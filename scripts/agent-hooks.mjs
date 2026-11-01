@@ -21,21 +21,28 @@ export function hookContext(event, root) {
   return `git diff --check reported tracked working-tree issues (possibly pre-existing):\n${result.stdout || result.stderr}`;
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
   try {
     const input = JSON.parse(readFileSync(0, 'utf8'));
     const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
     const context = hookContext(input.hook_event_name, root);
     if (context) {
-      console.log(JSON.stringify({
-        hookSpecificOutput: {
-          hookEventName: input.hook_event_name,
-          additionalContext: context,
-        },
-      }));
+      console.log(
+        JSON.stringify({
+          hookSpecificOutput: {
+            hookEventName: input.hook_event_name,
+            additionalContext: context,
+          },
+        }),
+      );
     }
   } catch {
-    console.error('Agent hook could not read its event; check hook configuration.');
+    console.error(
+      'Agent hook could not read its event; check hook configuration.',
+    );
     process.exitCode = 1;
   }
 }

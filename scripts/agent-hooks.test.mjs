@@ -13,6 +13,11 @@ import test from 'node:test';
 import { hookContext } from './agent-hooks.mjs';
 
 test('hook checks tracked whitespace without modifying files', () => {
+  // Git hooks export repository/index paths; the fixture must use its own index.
+  const gitEnvironment = Object.entries(process.env).filter(([key]) =>
+    key.startsWith('GIT_'),
+  );
+  for (const [key] of gitEnvironment) delete process.env[key];
   const root = mkdtempSync(join(tmpdir(), 'utakata-hooks-'));
   const git = (...args) => {
     const result = spawnSync('git', args, { cwd: root, encoding: 'utf8' });
@@ -25,11 +30,15 @@ test('hook checks tracked whitespace without modifying files', () => {
     assert.equal(hookContext('PostToolUse', root), '');
     writeFileSync(join(root, 'sample.txt'), 'trailing  \n');
     assert.match(hookContext('PostToolUse', root), /sample.txt/);
-    assert.equal(readFileSync(join(root, 'sample.txt'), 'utf8'), 'trailing  \n');
+    assert.equal(
+      readFileSync(join(root, 'sample.txt'), 'utf8'),
+      'trailing  \n',
+    );
     assert.equal(hookContext('Unknown', root), '');
     assert.match(hookContext('SessionStart', root), /AGENTS.md/);
   } finally {
     rmSync(root, { recursive: true, force: true });
+    for (const [key, value] of gitEnvironment) process.env[key] = value;
   }
 });
 

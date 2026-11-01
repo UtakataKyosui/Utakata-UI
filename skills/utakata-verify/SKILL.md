@@ -1,4 +1,5 @@
 ---
+
 name: utakata-verify
 description: Verify or review Utakata-UI changes using scoped tests, workspace checks and accessibility evidence before handoff.
 ---

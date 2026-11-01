@@ -70,11 +70,11 @@ function Example() {
 Skills の本体は `skills/` に置き、`.agents/skills/`（Codex）と
 `.claude/skills/`（Claude Code）から相対シンボリックリンクで共有します。
 
-| Skill | 用途 | Claude Code | Codex |
-| --- | --- | --- | --- |
-| utakata-ui | 公開コンポーネントを使った UI 実装 | `/utakata-ui` | `$utakata-ui` |
+| Skill             | 用途                                      | Claude Code          | Codex                |
+| ----------------- | ----------------------------------------- | -------------------- | -------------------- |
+| utakata-ui        | 公開コンポーネントを使った UI 実装        | `/utakata-ui`        | `$utakata-ui`        |
 | utakata-component | コンポーネント・公開 API・manifest の開発 | `/utakata-component` | `$utakata-component` |
-| utakata-verify | 変更範囲に応じた検証・レビュー | `/utakata-verify` | `$utakata-verify` |
+| utakata-verify    | 変更範囲に応じた検証・レビュー            | `/utakata-verify`    | `$utakata-verify`    |
 
 Node と pnpm は `package.json` の指定バージョンを使用してください。
 リポジトリを開き直して Skills を読み込み、Claude Code と Codex の `/hooks`

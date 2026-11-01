@@ -1,4 +1,5 @@
 ---
+
 name: utakata-component
 description: Implement or change Utakata-UI React components, their public API, manifest and accessibility behavior in this repository.
 ---
