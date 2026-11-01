@@ -25,6 +25,9 @@ and understandable status/error feedback. Verify supported themes, zoom/reflow,
 target sizes, forced colors and reduced motion. Keep API, manifest, quality rules,
 tests and usage examples aligned. Automated checks alone do not establish WCAG
 conformance; record manual evidence and leave unperformed checks unverified.
+Vibration feedback is optional and default-off, with explicit user control and
+equivalent visible and assistive-technology-accessible information. Follow the
+fallback and verification requirements in `ACCESSIBILITY.md`.
 
 ## Verification commands
 
