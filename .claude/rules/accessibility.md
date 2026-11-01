@@ -3,6 +3,9 @@
 Read `ACCESSIBILITY.md` before changing components, styles, metadata, tests or usage examples. It is the shared source of requirements for Codex and Claude.
 
 Read `ACCESSIBILITY-VERIFICATION.md` for the automation plan and evidence contract.
+Read `ACCESSIBILITY-TOOLS.md` for implemented static/browser gates and their limits.
+Run `pnpm lint:markup` and `pnpm test:a11y:browser` for relevant changes. Keep
+known-invalid controls and evidence artifacts; do not suppress new failures.
 
 - Maintain two layers: development-side CI validates behavior, themes and the shipped type contract; consumer-side Props/typechecking prevent invalid usage. Test positive and negative fixtures against packed exports/declarations without source aliases.
 - Encode statically expressible mandatory conditions as type errors. TypeScript has no general custom warning severity for types; JSDoc/editor guidance and optional lint rules cover recommendations. Reserve `@deprecated` for genuinely deprecated APIs.

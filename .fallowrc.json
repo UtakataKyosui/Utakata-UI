@@ -3,6 +3,9 @@
     "packages/docs/blume.config.ts",
     "packages/docs/docs/**/*.mdx",
     "packages/docs/examples.css",
-    "packages/docs/examples/**/*.tsx"
-  ]
+    "packages/docs/examples/**/*.tsx",
+    "tests/browser/main.tsx",
+    "scripts/required-browser-checks.mjs"
+  ],
+  "ignoreDependencies": ["@markuplint/jsx-parser", "@markuplint/react-spec"]
 }

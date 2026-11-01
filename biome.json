@@ -8,6 +8,8 @@
       "!**/.agents",
       "!**/.claude",
       "!**/.blume",
+      "!playwright-report",
+      "!test-results",
       "!packages/docs/docs/components.md"
     ]
   },

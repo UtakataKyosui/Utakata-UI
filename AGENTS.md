@@ -62,6 +62,11 @@ UI behavior changes also require `pnpm test:a11y`; real keyboard, screen reader
 and theme checks must be reported as unverified unless actually performed.
 `pnpm check:fallow` requires an available `origin/main` reference.
 Agent infrastructure has a dependency-free check: `pnpm test:agents`.
+Run `pnpm lint:markup` for component/example/markup changes and
+`pnpm test:a11y:browser` for component, CSS or browser fixture changes.
+See [ACCESSIBILITY-TOOLS.md](ACCESSIBILITY-TOOLS.md) for tool selection, exact
+coverage and exceptions. Keep negative controls and CI evidence artifacts working;
+do not silently suppress new violations or incomplete results.
 
 ## Collaboration
 

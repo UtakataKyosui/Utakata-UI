@@ -1,0 +1,12 @@
+{
+  "extends": ["markuplint:recommended-react"],
+  "parser": { "\\.[jt]sx$": "@markuplint/jsx-parser" },
+  "specs": { "\\.[jt]sx$": "@markuplint/react-spec" },
+  "overrides": {
+    "tests/browser/index.html": {
+      "rules": {
+        "require-h1": false
+      }
+    }
+  }
+}
