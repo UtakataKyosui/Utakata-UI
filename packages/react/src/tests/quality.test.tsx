@@ -3,7 +3,7 @@ import {
   evaluateQuality,
   formatQualityReport,
   type QualityRule,
-} from './quality.js';
+} from '../metadata/quality.js';
 
 const required: QualityRule = {
   id: 'example.required',

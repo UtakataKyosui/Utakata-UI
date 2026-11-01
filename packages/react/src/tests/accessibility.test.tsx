@@ -7,16 +7,16 @@ import {
 } from '@testing-library/react';
 import axe from 'axe-core';
 import { describe, expect, it } from 'vitest';
-import { Button } from './Button.js';
-import { Dialog } from './Dialog.js';
-import { Field } from './Field.js';
-import { componentManifest } from './manifest.js';
+import { Button } from '../components/Button.js';
+import { Dialog } from '../components/Dialog.js';
+import { Field } from '../components/Field.js';
+import { componentManifest } from '../metadata/manifest.js';
 import {
   evaluateQuality,
   formatQualityReport,
   type QualityCheck,
   type QualityRule,
-} from './quality.js';
+} from '../metadata/quality.js';
 
 async function audit(element: HTMLElement) {
   // jsdom has no layout engine; verify contrast in a real browser manually.

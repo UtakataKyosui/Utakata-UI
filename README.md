@@ -29,7 +29,7 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 docs と MCP は UI 本体をワークスペース依存として参照します。UI 本体は docs・MCP に依存しません。
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
 
 ```tsx
 import { Button, Dialog, Field } from '@utakata-ui/react';
@@ -125,7 +125,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 ### アクセシビリティの品質チェック
 
-`packages/react/src/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。MCP のコンポーネント取得・検索結果には、共通ルールも含めて返します。
+`packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。MCP のコンポーネント取得・検索結果には、共通ルールも含めて返します。
 
 `pnpm test:a11y` は登録された自動ルールを検証します。Button の名前と無効化、Field のラベル・説明の関連付け、Dialog の名前・説明と Escape による閉鎖・フォーカス復帰を対象とします。必須の自動ルールが失敗、または検証処理が未登録なら CI が失敗します。ルール ID の重複や、存在しないルールに対する検証処理もエラーです。失敗時のレポートにはルール ID・要件・修正方法を含めます。コンポーネント追加・変更時は、ルールと `accessibility.test.tsx` の検証処理を一緒に更新してください。
 
@@ -135,7 +135,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 GitHub Actions の `Quality / accessibility` は push・PR 時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。
 
-コンポーネント追加・変更時は `packages/react/src/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
+コンポーネント追加・変更時は `packages/react/src/tests/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
 
 MCP サーバーはビルド後に stdio transport で起動できます。
 

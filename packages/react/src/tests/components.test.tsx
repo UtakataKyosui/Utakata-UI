@@ -1,10 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { createRef } from 'react';
 import { describe, expect, it } from 'vitest';
-import { Button } from './Button.js';
-import { Dialog } from './Dialog.js';
-import { Field } from './Field.js';
-import { componentManifest } from './manifest.js';
+import { Button } from '../components/Button.js';
+import { Dialog } from '../components/Dialog.js';
+import { Field } from '../components/Field.js';
+import { componentManifest } from '../metadata/manifest.js';
 
 describe('Button', () => {
   it('uses the manifest defaults and forwards native button behavior', () => {
