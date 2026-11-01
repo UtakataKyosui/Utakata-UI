@@ -6,6 +6,7 @@ import {
   type ElementType,
   forwardRef,
 } from 'react';
+import { useAccessibilityRef } from './accessibility.js';
 
 type DialogPartProps<T extends ElementType> = ComponentPropsWithoutRef<T> & {
   className?: string;
@@ -32,10 +33,11 @@ const Popup = forwardRef<
   HTMLDivElement,
   DialogPartProps<typeof BaseDialog.Popup>
 >(function DialogPopup({ className, ...props }, ref) {
+  const accessibilityRef = useAccessibilityRef('Dialog.Popup', ref);
   return (
     <BaseDialog.Popup
       {...props}
-      ref={ref}
+      ref={accessibilityRef}
       className={withClassName('ui-dialog__popup', className)}
     />
   );

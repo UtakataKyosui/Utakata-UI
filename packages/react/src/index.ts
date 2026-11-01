@@ -7,7 +7,10 @@ export {
   Stack,
   Text,
 } from 'lism-css/react';
-export type { ButtonProps } from './components/Button.js';
+export type {
+  ButtonAccessibilityProps,
+  ButtonProps,
+} from './components/Button.js';
 export { Button } from './components/Button.js';
 export { Dialog } from './components/Dialog.js';
 export { Field } from './components/Field.js';

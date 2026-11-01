@@ -28,6 +28,9 @@ conformance; record manual evidence and leave unperformed checks unverified.
 Vibration feedback is optional and default-off, with explicit user control and
 equivalent visible and assistive-technology-accessible information. Follow the
 fallback and verification requirements in `ACCESSIBILITY.md`.
+Prevent invalid usage through types, development diagnostics and CI. Require
+accessible information rather than redundant ARIA attributes; visible text is
+a valid name. Design variants must preserve the same accessibility requirements.
 
 ## Verification commands
 
