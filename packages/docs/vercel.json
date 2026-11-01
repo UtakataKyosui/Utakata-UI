@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "vite",
-  "buildCommand": "pnpm build",
+  "framework": null,
+  "buildCommand": "pnpm --filter @utakata-ui/docs... build",
   "outputDirectory": "dist"
 }

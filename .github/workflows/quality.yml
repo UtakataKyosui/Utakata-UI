@@ -1,7 +1,11 @@
 name: Quality
 on:
   pull_request:
+    branches:
+      - main
   push:
+    branches:
+      - main
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,6 +41,8 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+      - name: Agent infrastructure
+        run: pnpm test:agents
       - name: Biome
         env:
           BASE: ${{ steps.scope.outputs.base }}

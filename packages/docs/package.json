@@ -1,18 +1,19 @@
 {
   "name": "@utakata-ui/docs",
   "private": true,
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "build": "vite build --base ./",
-    "preview": "vite preview --host 127.0.0.1"
+    "dev": "pnpm generate:reference && blume dev",
+    "build": "pnpm generate:reference && blume build",
+    "generate:reference": "node scripts/generate-reference.mjs",
+    "doctor": "blume doctor",
+    "preview": "blume preview"
   },
   "dependencies": {
-    "@utakata-ui/react": "workspace:*",
-    "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "@utakata-ui/react": "workspace:*"
   },
   "devDependencies": {
-    "vite": "8.3.5"
+    "blume": "^2.2.6"
   }
 }

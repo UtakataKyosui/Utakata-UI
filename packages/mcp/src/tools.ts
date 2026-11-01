@@ -7,6 +7,10 @@ export function listComponents() {
     ([name, details]) => ({
       name,
       ...details,
+      qualityRules: [
+        ...details.qualityRules,
+        ...componentManifest.sharedQualityRules,
+      ],
     }),
   );
 }
@@ -23,6 +27,10 @@ export function getComponent(name: string) {
   return {
     name: componentName,
     ...componentManifest.components[componentName],
+    qualityRules: [
+      ...componentManifest.components[componentName].qualityRules,
+      ...componentManifest.sharedQualityRules,
+    ],
   };
 }
 

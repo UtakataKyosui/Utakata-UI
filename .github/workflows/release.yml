@@ -1,0 +1,65 @@
+name: Release React
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "react-v*"
+permissions:
+  contents: read
+concurrency:
+  group: release-react
+  cancel-in-progress: false
+jobs:
+  release:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate release ref
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          git merge-base --is-ancestor HEAD origin/main
+          if [[ "$EVENT_NAME" == push ]]; then
+            # shellcheck disable=SC2016
+            node --input-type=module -e '
+              import { readFileSync } from "node:fs";
+              const { version } = JSON.parse(readFileSync("packages/react/package.json"));
+              if (!/^\d+\.\d+\.\d+$/.test(version) || process.env.REF_NAME !== `react-v${version}`) {
+                throw new Error("Release tag must match the stable package version: react-vX.Y.Z");
+              }
+            '
+          fi
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.15.0"
+      - name: Check npm supports trusted publishing
+        run: |
+          node --input-type=module -e '
+            import { execFileSync } from "node:child_process";
+            const [major, minor, patch] = execFileSync("npm", ["--version"], { encoding: "utf8" }).trim().split(".").map(Number);
+            if (major < 11 || (major === 11 && (minor < 5 || (minor === 5 && patch < 1)))) {
+              throw new Error("npm >= 11.5.1 is required for trusted publishing");
+            }
+          '
+      - run: pnpm install --frozen-lockfile
+      - name: Quality checks
+        run: pnpm check
+      - name: Pack and test public package
+        run: |
+          mkdir -p "$RUNNER_TEMP/react-release"
+          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-release"
+          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-release/*.tgz
+      - name: Publish with npm trusted publishing
+        if: github.event_name == 'push'
+        run: npm publish "$RUNNER_TEMP"/react-release/*.tgz --access public --provenance --tag latest

@@ -1,0 +1,7 @@
+{
+  "entry": [
+    "packages/docs/blume.config.ts",
+    "packages/docs/docs/**/*.mdx",
+    "packages/docs/examples/**/*.tsx"
+  ]
+}

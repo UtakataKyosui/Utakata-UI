@@ -2,6 +2,20 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('exposes component and shared review rules to agents', () => {
+    expect(getComponent('Dialog')?.qualityRules.map(({ id }) => id)).toEqual(
+      expect.arrayContaining([
+        'dialog.accessible-name',
+        'dialog.escape-focus-return',
+        'theme.contrast-focus',
+        'content.labels-headings',
+      ]),
+    );
+    expect(
+      searchComponents('dialog.escape-focus-return').map(({ name }) => name),
+    ).toEqual(['Dialog']);
+  });
+
   it('lists every public component', () => {
     expect(listComponents().map(({ name }) => name)).toEqual([
       'Button',
