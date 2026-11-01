@@ -151,7 +151,7 @@ pnpm check
 
 ### ドキュメントサイト
 
-ドキュメントサイトには [Blume](https://useblume.dev/docs/quickstart) を使用します。`packages/docs/docs` の Markdown と `blume.config.ts` で内容と設定を管理します。コンポーネント仕様の `components.md` は UI 本体の公開 manifest から起動・ビルド時に生成するため、直接編集しません。
+ドキュメントサイトには [Blume](https://useblume.dev/docs/quickstart) を使用します。`packages/docs/docs` の Markdown と `blume.config.ts` で内容と設定を管理します。コンポーネント一覧の `components.md` と、実例・仕様を載せた `components/*.mdx` の個別ページは UI 本体の公開 manifest から起動・ビルド時に生成するため、直接編集しません。
 
 `pnpm dev` で開発サーバーを起動します。`pnpm build:docs` は UI 本体を先にビルドし、検索インデックスを含む公開用の静的ファイルを `packages/docs/dist` に生成します。このディレクトリを静的ホスティングに配置できます。ローカルで成果物を確認する場合は `pnpm --filter @utakata-ui/docs preview` を実行します。
 

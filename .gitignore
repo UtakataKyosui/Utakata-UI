@@ -6,6 +6,7 @@ coverage/
 .fallow/
 packages/docs/.blume/
 packages/docs/docs/components.md
+packages/docs/docs/components/
 .claude/settings.local.json
 .claude/*.local.md
 .codex/*.local.*
