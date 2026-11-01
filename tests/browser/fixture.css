@@ -1,0 +1,18 @@
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+  font-family: system-ui, sans-serif;
+  margin: 0;
+}
+
+main {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

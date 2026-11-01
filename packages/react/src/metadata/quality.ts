@@ -13,7 +13,8 @@ export const qualityRules = {
       requirement: 'Every button has an accessible name.',
       verification: 'automated',
       severity: 'error',
-      remediation: 'Provide visible text or an explicit accessible label.',
+      remediation:
+        'Provide visible text or use iconOnly with aria-label or aria-labelledby; resolve development diagnostics and verify computed names with axe.',
     },
     {
       id: 'button.disabled',
@@ -35,7 +36,8 @@ export const qualityRules = {
   Dialog: [
     {
       id: 'dialog.accessible-name',
-      requirement: 'An open dialog has an accessible name and description.',
+      requirement:
+        'An open dialog has an accessible name and, when useful, a description.',
       verification: 'automated',
       severity: 'error',
       remediation: 'Provide Dialog.Title and a useful Dialog.Description.',

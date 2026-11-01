@@ -24,6 +24,18 @@ describe('manifest tools', () => {
     ]);
   });
 
+  it('exposes strict icon naming and development diagnostics', () => {
+    expect(getComponent('Button')).toMatchObject({
+      props: {
+        iconOnly: {
+          default: false,
+          type: 'boolean; true requires aria-label or aria-labelledby',
+        },
+      },
+      composition: expect.stringContaining('Development diagnostics'),
+    });
+  });
+
   it('retrieves a component by case-insensitive name', () => {
     expect(getComponent('field')).toMatchObject({
       name: 'Field',

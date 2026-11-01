@@ -6,7 +6,15 @@ import {
   waitFor,
 } from '@testing-library/react';
 import axe from 'axe-core';
-import { describe, expect, it } from 'vitest';
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type MockInstance,
+  vi,
+} from 'vitest';
 import { Button } from '../components/Button.js';
 import { Dialog } from '../components/Dialog.js';
 import { Field } from '../components/Field.js';
@@ -26,6 +34,31 @@ async function audit(element: HTMLElement) {
 }
 
 describe('accessibility regression checks', () => {
+  let warnings: MockInstance<typeof console.warn>;
+  beforeEach(() => {
+    warnings = vi.spyOn(console, 'warn');
+  });
+  afterEach(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    const diagnostics = warnings.mock.calls.filter(([message]) =>
+      String(message).startsWith('[Utakata-UI a11y]'),
+    );
+    warnings.mockRestore();
+    expect(
+      diagnostics,
+      'Valid accessibility fixtures must not emit development diagnostics',
+    ).toEqual([]);
+  });
+
+  it('audits explicitly named icon-only buttons', async () => {
+    const { container } = render(
+      <Button iconOnly aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </Button>,
+    );
+    expect(screen.getByRole('button', { name: 'Close' })).toBeVisible();
+    expect((await audit(container)).violations).toEqual([]);
+  });
   it('enforces all registered automatic quality rules and reports pending reviews', async () => {
     const checks: Record<string, QualityCheck> = {
       'button.accessible-name': async () => {

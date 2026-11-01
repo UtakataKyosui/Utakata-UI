@@ -42,7 +42,12 @@ jobs:
       - uses: pnpm/action-setup@v4.3.0
       - uses: actions/setup-node@v4.4.0
         with:
-          node-version: "24.15.0"
+          node-version: "24.16.0"
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+            .github/workflows/release.yml
       - name: Check npm supports trusted publishing
         run: |
           node --input-type=module -e '
@@ -52,7 +57,14 @@ jobs:
               throw new Error("npm >= 11.5.1 is required for trusted publishing");
             }
           '
-      - run: pnpm install --frozen-lockfile
+      - name: Install release dependencies with native diagnostics
+        run: |
+          pnpm install --frozen-lockfile --reporter=ndjson > "$RUNNER_TEMP/pnpm-install.ndjson" || {
+            tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
+            exit 1
+          }
+      - name: Verify Docs native compiler after install
+        run: node scripts/check-docs-compiler.mjs
       - name: Quality checks
         run: pnpm check
       - name: Pack and test public package

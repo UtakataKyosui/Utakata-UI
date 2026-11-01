@@ -4,23 +4,30 @@
   "type": "module",
   "packageManager": "pnpm@10.18.3",
   "engines": {
-    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    "node": "^24.16.0 || >=26.3.0"
   },
   "scripts": {
     "prepare": "vp config --hooks --no-agent",
-    "check": "pnpm test:agents && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:fallow",
+    "check": "pnpm test:agents && pnpm test:ci && pnpm lint && pnpm lint:markup && pnpm typecheck && pnpm test && pnpm build && pnpm check:fallow",
     "check:fallow": "fallow audit --changed-since origin/main",
     "dev": "pnpm --filter @utakata-ui/react build && pnpm --filter @utakata-ui/docs dev",
     "build": "pnpm -r build",
     "build:docs": "pnpm --filter @utakata-ui/docs... build",
     "lint": "biome check .",
+    "lint:markup": "node scripts/lint-markup.mjs && node --test scripts/accessibility-lint.test.mjs",
+    "test:ci": "node --test scripts/ci-scope.test.mjs",
+    "test:a11y:browser": "playwright test",
     "test": "vitest run",
     "test:a11y": "vitest run packages/react/src/tests/accessibility.test.tsx",
     "test:agents": "node --test scripts/agent-hooks.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@biomejs/biome": "2.6.4",
+    "@markuplint/jsx-parser": "5.4.0",
+    "@markuplint/react-spec": "5.4.0",
+    "@playwright/test": "1.64.1",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
     "@types/react": "19.3.0",
@@ -28,9 +35,11 @@
     "axe-core": "4.14.0",
     "fallow": "3.38.1",
     "jsdom": "30.1.3",
+    "markuplint": "5.4.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "typescript": "5.9.3",
+    "vite": "8.3.5",
     "vite-plus": "1.0.0",
     "vitest": "5.0.5"
   }

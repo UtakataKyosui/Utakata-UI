@@ -6,6 +6,7 @@ import {
   type ElementType,
   forwardRef,
 } from 'react';
+import { useAccessibilityRef } from './accessibility.js';
 
 type FieldPartProps<T extends ElementType> = ComponentPropsWithoutRef<T> & {
   className?: string;
@@ -43,10 +44,11 @@ const Control = forwardRef<
   HTMLElement,
   FieldPartProps<typeof BaseField.Control>
 >(function FieldControl({ className, ...props }, ref) {
+  const accessibilityRef = useAccessibilityRef('Field.Control', ref);
   return (
     <BaseField.Control
       {...props}
-      ref={ref}
+      ref={accessibilityRef}
       className={withClassName('ui-field__control', className)}
     />
   );

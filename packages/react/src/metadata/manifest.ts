@@ -18,6 +18,10 @@ export const componentManifest = {
           type: 'sm | md | lg',
           default: 'md',
         },
+        iconOnly: {
+          type: 'boolean; true requires aria-label or aria-labelledby',
+          default: false,
+        },
         disabled: {
           type: 'boolean',
           default: false,
@@ -26,14 +30,14 @@ export const componentManifest = {
       variants: ['solid', 'outline', 'ghost'],
       sizes: ['sm', 'md', 'lg'],
       composition:
-        'Place an accessible text label or an explicitly labelled icon inside Button.',
+        'Place visible text inside Button. For icon-only content use iconOnly with aria-label or aria-labelledby. Development diagnostics warn about missing name sources and dangling label/description references.',
       avoid: [
         'Do not replace an action button with a non-semantic element.',
         'Do not pass unsupported visual props; use variant, size, className, and CSS custom properties.',
       ],
       example: '<Button variant="solid" size="md">Save</Button>',
       accessibility:
-        'Retains Base UI native button semantics, disabled behavior, and keyboard support.',
+        'Retains Base UI native button semantics, disabled behavior, and keyboard support. iconOnly requires an explicit name source at typecheck time; empty or unresolved names need runtime and axe checks.',
     },
     Field: {
       qualityRules: qualityRules.Field,
@@ -56,7 +60,7 @@ export const componentManifest = {
       example:
         '<Field.Root><Field.Label>Email</Field.Label><Field.Control type="email" /></Field.Root>',
       accessibility:
-        'Associate every control with a visible Field.Label; use Description and Error for additional context.',
+        'Associate every control with a visible Field.Label; use Description and Error for additional context. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
     Dialog: {
       qualityRules: qualityRules.Dialog,
@@ -91,7 +95,7 @@ export const componentManifest = {
       example:
         '<Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger><Dialog.Portal><Dialog.Popup><Dialog.Title>Details</Dialog.Title></Dialog.Popup></Dialog.Portal></Dialog.Root>',
       accessibility:
-        'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and useful Description.',
+        'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and an optional useful Description. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
   },
 } as const;
