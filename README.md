@@ -68,7 +68,8 @@ function Example() {
 GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動実行で検証と
 パッケージ作成を行い、`react-vX.Y.Z` タグへの push で同じ検証の後に npm へ公開します。
 タグのバージョンは `packages/react/package.json` と一致する安定版に限り、コミットは
-`main` に含まれている必要があります。公開するものと同じ tgz を一時的な外部プロジェクトに
+`main` に含まれている必要があります。手動実行は main を選択してください（他の ref はスキップします）。
+公開するものと同じ tgz を一時的な外部プロジェクトに
 インストールし、型・SSR・CSS の解決・manifest を確認します。
 
 初回公開前に、次の設定を行ってください。
@@ -164,7 +165,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 `pnpm test:a11y` で Button の各 variant、Field のラベル・説明、開いた Dialog の portal を axe-core で検査します。違反があればテストが失敗し、違反ルールと対象要素が表示されます。検査自体が動作していることも、名前のないボタンを検出するテストで確認します。
 
-GitHub Actions の `Quality / accessibility` は push・PR 時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。
+GitHub Actions の `Quality / accessibility` は main 向け PR・main への push・手動実行時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。作業ブランチへの push とタグでは起動しません。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。必須チェックを欠落させないため、Quality にはパスフィルターを設定しません。
 
 コンポーネント追加・変更時は `packages/react/src/tests/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
 
@@ -191,4 +192,7 @@ node packages/mcp/dist/server.js
 
 Biome は CI で `pnpm exec biome ci .` を実行します。fallow は PR で `audit` を実行し、ベースブランチとの比較で新たな問題を検出します。Action と CLI はともに 3.38.1 に固定しています。PR コメントの投稿は行いません。
 
-Action の依存は `.github/workflows/actions.lock` に記録します。workflow の `uses:` を変更したら `gh actions-lock` で更新し、workflow とロックファイルを一緒にコミットしてください。`gh actions-lock --verify` でオンライン検証、`--verify-local` で参照の網羅性をオフライン検証できます。CI では PR・main への push・週次にオンライン検証します。
+Action の依存は `.github/workflows/actions.lock` に記録します。workflow の `uses:` を変更したら `gh actions-lock` で更新し、workflow とロックファイルを一緒にコミットしてください。`gh actions-lock --verify` でオンライン検証、`--verify-local` で参照の網羅性をオフライン検証できます。CI では `.github/workflows/**` を変更する main 向け PR・main への push と、週次・手動実行時にオンライン検証します。同じ ref の古い実行はキャンセルします。
+
+`verify-lockfile` は変更パスによって起動しないため、必須チェックには設定しないでください。
+パスフィルターで起動しなかった必須チェックは Pending に残ります（[GitHub の説明](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks)）。
