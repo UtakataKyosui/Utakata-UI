@@ -7,9 +7,9 @@
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
   "scripts": {
-    "docs:dev": "vite docs --host 127.0.0.1",
-    "docs:build": "vite build docs --base ./",
-    "docs:preview": "vite preview docs --host 127.0.0.1",
+    "docs:dev": "pnpm --filter @utakata-ui/docs dev",
+    "docs:build": "pnpm --filter @utakata-ui/docs build",
+    "docs:preview": "pnpm --filter @utakata-ui/docs preview",
     "build": "tsc -p packages/react/tsconfig.build.json && tsc -p packages/mcp/tsconfig.build.json",
     "lint": "biome check .",
     "test": "vitest run",

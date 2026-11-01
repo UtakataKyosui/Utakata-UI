@@ -5,8 +5,8 @@ import {
   componentManifest,
   Dialog,
   Field,
-} from '../packages/react/src/index.js';
-import '../packages/react/src/styles.css';
+} from '../react/src/index.js';
+import '../react/src/styles.css';
 import './styles.css';
 
 function Example({ code }: { code: string }) {
