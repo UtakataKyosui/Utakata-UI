@@ -28,8 +28,11 @@ Browser checks retain all six light/dark cases when relevant; they are not
 selected by Vitest's source graph. A deleted markup file is not linted, but its
 path still selects affected gates. Scope failure fails the aggregate check.
 
-pnpm stores are cached by setup-node's lockfile key; installs remain frozen and
-prefer offline downloads. The separate build job caches npm's download cache
+pnpm stores are cached by setup-node's lockfile key; installs remain frozen.
+Do not add `--prefer-offline` to pnpm installs: the Linux x64 clean-install
+reproduction with Node 24.15/pnpm 10.18.3 failed to load Astro's native binding
+with that option, while the normal frozen install restored and loaded it.
+The separate build job caches npm's download cache
 for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell
 by exact Playwright version, OS and architecture. OS libraries are installed

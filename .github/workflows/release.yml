@@ -53,7 +53,7 @@ jobs:
               throw new Error("npm >= 11.5.1 is required for trusted publishing");
             }
           '
-      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm install --frozen-lockfile
       - name: Quality checks
         run: pnpm check
       - name: Pack and test public package

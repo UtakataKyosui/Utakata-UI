@@ -59,7 +59,7 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm install --frozen-lockfile
       - name: Biome (changed files on PRs)
         env:
           BASE: ${{ needs.scope.outputs.base }}
@@ -102,7 +102,7 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm install --frozen-lockfile
       - name: Build React (also required by Docs)
         if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true'
         run: pnpm --filter @utakata-ui/react build
@@ -139,7 +139,7 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
-      - run: pnpm install --frozen-lockfile --prefer-offline
+      - run: pnpm install --frozen-lockfile
       - name: Select exact browser cache version
         id: playwright
         run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
