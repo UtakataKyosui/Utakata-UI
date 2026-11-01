@@ -37,6 +37,16 @@ function Example() {
 
 ## 開発
 
+### UIドキュメント
+
+`docs/` に、開発中の Button・Field・Dialog を実際に操作できるプレビューと使用例を掲載しています。コンポーネント本体と共通CSSを直接読み込むため、実装の変更も反映されます。
+
+```sh
+pnpm docs:dev
+```
+
+表示されたローカルURLをブラウザーで開いてください。`pnpm docs:build` で静的サイトを `docs/dist/` に生成し、`pnpm docs:preview` でビルド結果を確認できます。公開先へのデプロイは含みません。
+
 Node.js 22.22.2 以降の 22.x、24.15.0 以降の 24.x、または 26.0.0 以降と、pnpm 10.18.3 を使用します。テスト依存関係の要件に合わせ、対応バージョンをルートの `package.json` の `engines.node` に定義しています。
 
 ```sh

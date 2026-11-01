@@ -7,6 +7,9 @@
     "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
   },
   "scripts": {
+    "docs:dev": "vite docs --host 127.0.0.1",
+    "docs:build": "vite build docs --base ./",
+    "docs:preview": "vite preview docs --host 127.0.0.1",
     "build": "tsc -p packages/react/tsconfig.build.json && tsc -p packages/mcp/tsconfig.build.json",
     "lint": "biome check .",
     "test": "vitest run",
@@ -24,6 +27,7 @@
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "typescript": "5.9.3",
+    "vite": "8.3.5",
     "vitest": "5.0.5"
   }
 }
