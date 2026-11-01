@@ -16,7 +16,17 @@ When changing public components, update `index.ts`, `manifest.ts`, relevant
 quality rules, tests and documentation together. TypeScript source imports use
 `.js` extensions. Do not edit generated `dist`, `.blume` or `docs/components.md`.
 
-## Verification
+## Accessibility requirements
+
+Read [ACCESSIBILITY.md](ACCESSIBILITY.md) for component, theme, example and
+quality-rule changes. Target applicable WCAG 2.2 A/AA criteria and document
+consumer responsibilities. Preserve semantics, keyboard access, focus behavior
+and understandable status/error feedback. Verify supported themes, zoom/reflow,
+target sizes, forced colors and reduced motion. Keep API, manifest, quality rules,
+tests and usage examples aligned. Automated checks alone do not establish WCAG
+conformance; record manual evidence and leave unperformed checks unverified.
+
+## Verification commands
 
 Start with the relevant test file using `pnpm exec vitest run <path>`.
 For runtime changes run `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build`.
