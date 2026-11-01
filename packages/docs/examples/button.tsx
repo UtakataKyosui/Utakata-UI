@@ -1,6 +1,5 @@
 import { Button, componentManifest, Flex, Stack } from '@utakata-ui/react';
 import { useState } from 'react';
-import '@utakata-ui/react/styles.css';
 
 export default function ButtonExample() {
   const [count, setCount] = useState(0);

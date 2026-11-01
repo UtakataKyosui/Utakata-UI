@@ -66,6 +66,8 @@ function Example() {
 
 既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のButton・Field・Dialogを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
 
+プレビュー専用のCSSは `packages/docs/examples.css` から読み込み、Blumeの `examples.css` 設定でiframe内に隔離します。サンプルのTSXからグローバルCSSをimportするとドキュメント本体にも混入するため、CSSのimportはこの専用ファイルにまとめてください。利用側のアプリでは通常どおり `@utakata-ui/react/styles.css` を読み込みます。
+
 `pnpm build:docs` でUI本体とdocsをビルドします。VercelのRoot Directoryは `packages/docs` のまま使用し、ビルドコマンドと出力先は同ディレクトリの `vercel.json` に定義しています。
 
 ### npm リリース（React）

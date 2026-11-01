@@ -1,5 +1,4 @@
 import { Field, Stack } from '@utakata-ui/react';
-import '@utakata-ui/react/styles.css';
 
 export default function FieldExample() {
   return (

@@ -1,0 +1,29 @@
+@import "@utakata-ui/react/styles.css";
+
+/* Blume syncs data-theme into each iframe. Follow it instead of the OS. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --ui-color-primary: #2357c6;
+  --ui-color-on-primary: #fff;
+  --ui-color-surface: #fff;
+  --ui-color-text: #1c2432;
+  --ui-color-muted: #596579;
+  --ui-color-border: #8c96a8;
+  --ui-color-danger: #b42318;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ui-color-primary: #9bb9ff;
+  --ui-color-on-primary: #101a30;
+  --ui-color-surface: #1c2432;
+  --ui-color-text: #f0f3f9;
+  --ui-color-muted: #c1cad8;
+  --ui-color-border: #748099;
+  --ui-color-danger: #ffb4ab;
+}
+
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
