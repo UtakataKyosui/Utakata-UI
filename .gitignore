@@ -2,3 +2,5 @@ node_modules/
 packages/*/node_modules/
 packages/*/dist/
 coverage/
+.vite-hooks/_/
+.fallow/

@@ -18,6 +18,7 @@
     "packages/react/src/**/*.ts",
     "packages/react/src/**/*.tsx",
     "packages/mcp/src/**/*.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "vite.config.ts"
   ]
 }

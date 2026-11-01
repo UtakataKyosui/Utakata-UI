@@ -13,3 +13,9 @@ export { Dialog } from './Dialog.js';
 export { Field } from './Field.js';
 export type { ButtonSize, ButtonVariant } from './manifest.js';
 export { componentManifest } from './manifest.js';
+export type { QualityCheck, QualityResult, QualityRule } from './quality.js';
+export {
+  evaluateQuality,
+  formatQualityReport,
+  qualityRules,
+} from './quality.js';
