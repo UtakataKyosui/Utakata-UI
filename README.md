@@ -64,6 +64,8 @@ function Example() {
 
 ### docsのUIプレビュー
 
+Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS MEDIAの解説](https://ics.media/entry/240411/)に沿って、長いURLの折り返しと日本語の厳格な禁則処理を適用します。
+
 既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のButton・Field・Dialogを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
 
 プレビュー専用のCSSは `packages/docs/examples.css` から読み込み、Blumeの `examples.css` 設定でiframe内に隔離します。サンプルのTSXからグローバルCSSをimportするとドキュメント本体にも混入するため、CSSのimportはこの専用ファイルにまとめてください。利用側のアプリでは通常どおり `@utakata-ui/react/styles.css` を読み込みます。

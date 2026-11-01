@@ -1,0 +1,6 @@
+/* Site typography; Blume loads this separately from the example iframes. */
+body {
+  overflow-wrap: anywhere;
+  word-break: normal;
+  line-break: strict;
+}
