@@ -45,6 +45,15 @@ or emulation with physical devices. Standard-theme tokens alone do not prove
 rendered contrast. Record residual checks and invalidate affected evidence when
 implementation or verification conditions change. Planned checks are not passes.
 
+Maintain both layers: library CI verifies component behavior and the distributed
+type contract; consumers prevent misuse through public Props and typechecking.
+Test valid/invalid consumer fixtures against packed exports and declarations,
+not only workspace source aliases. Encode statically expressible requirements
+as type errors. TypeScript types cannot emit arbitrary warning-level checks;
+use JSDoc for guidance, lint for optional recommendations, and development DOM
+diagnostics for runtime relationships. Do not call runtime warnings type warnings.
+Document the limits of dynamic strings, JSX composition and custom CSS.
+
 ## Verification commands
 
 Start with the relevant test file using `pnpm exec vitest run <path>`.

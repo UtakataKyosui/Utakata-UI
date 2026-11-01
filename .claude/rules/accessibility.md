@@ -4,6 +4,10 @@ Read `ACCESSIBILITY.md` before changing components, styles, metadata, tests or u
 
 Read `ACCESSIBILITY-VERIFICATION.md` for the automation plan and evidence contract.
 
+- Maintain two layers: development-side CI validates behavior, themes and the shipped type contract; consumer-side Props/typechecking prevent invalid usage. Test positive and negative fixtures against packed exports/declarations without source aliases.
+- Encode statically expressible mandatory conditions as type errors. TypeScript has no general custom warning severity for types; JSDoc/editor guidance and optional lint rules cover recommendations. Reserve `@deprecated` for genuinely deprecated APIs.
+- Runtime DOM warnings supplement types for dynamic names/references and JSX composition. Do not advertise them as type warnings or claim typechecking proves text quality, actual DOM relationships or customized styling. State which planned consumer tools remain unimplemented.
+
 - Decompose broad manual checks into deterministic properties and residual human/assistive-technology checks. Implement browser checks before changing a rule to automated.
 - Define applicability, expected results, environments, states and evidence per rule. Use known-invalid fixtures to verify detection. New public variants/sizes need coverage definitions.
 - Required automated checks must fail for failed or unverified results. Missing tests, skip, timeout, axe incomplete, or stale evidence never count as passed. Document justified non-applicability separately.
