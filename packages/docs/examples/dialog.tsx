@@ -1,5 +1,4 @@
 import { Button, Dialog } from '@utakata-ui/react';
-import '@utakata-ui/react/styles.css';
 
 export default function DialogExample() {
   return (
