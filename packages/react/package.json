@@ -1,6 +1,17 @@
 {
   "name": "@utakata-ui/react",
   "version": "0.1.0",
+  "description": "Accessible React components built with Base UI and Lism CSS.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UtakataKyosui/Utakata-UI.git",
+    "directory": "packages/react"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "type": "module",
   "files": [
     "dist",
