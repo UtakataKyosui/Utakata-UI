@@ -2,6 +2,14 @@
 
 Read `ACCESSIBILITY.md` before changing components, styles, metadata, tests or usage examples. It is the shared source of requirements for Codex and Claude.
 
+Read `ACCESSIBILITY-VERIFICATION.md` for the automation plan and evidence contract.
+
+- Decompose broad manual checks into deterministic properties and residual human/assistive-technology checks. Implement browser checks before changing a rule to automated.
+- Define applicability, expected results, environments, states and evidence per rule. Use known-invalid fixtures to verify detection. New public variants/sizes need coverage definitions.
+- Required automated checks must fail for failed or unverified results. Missing tests, skip, timeout, axe incomplete, or stale evidence never count as passed. Document justified non-applicability separately.
+- Record commit, browser/OS/tool versions, theme, content, actual results and artifacts. Invalidate affected evidence when conditions change; preserve unresolved manual checks independently.
+- Do not treat DOM key events as browser keyboard tests, viewport/device scaling as zoom, ARIA snapshots as screen-reader output, emulation as physical-device tests, or token contrast as rendered contrast. State the exact scope of every guarantee.
+
 - Target applicable WCAG 2.2 A/AA criteria. Distinguish component guarantees from consumer responsibilities; never claim whole-site conformance from library adoption.
 - Preserve native semantics and Base UI interaction. Verify accessible names, descriptions, errors, state announcements, keyboard operation and focus restoration.
 - Check every supported theme and relevant state, zoom/reflow, target size, forced colors and reduced motion. Do not communicate essential information by color alone.

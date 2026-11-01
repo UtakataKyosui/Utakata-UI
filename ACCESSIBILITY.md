@@ -42,6 +42,8 @@
 
 ## 検証と完了条件
 
+自動化の具体的な判定方法・保証範囲・証拠の扱いは [ACCESSIBILITY-VERIFICATION.md](ACCESSIBILITY-VERIFICATION.md) に従う。「手動」の項目も機械判定可能な性質へ分解し、実ブラウザーの検証を優先する。未実装の計画は検証済みと扱わない。
+
 - 部品ごとに対象基準、対応状態（通常・フォーカス・無効・エラー・開閉等）、利用側の責任を manifest、quality rules、使用例に記載する。対象外には理由を残す。
 - DOM/axe 検査と操作テストに加え、実ブラウザーでキーボード、拡大、コントラスト、テーマ、forced-colors、動きを確認する。axe の合格だけを適合の証拠にしない。
 - 初期の手動検証対象は NVDA + Firefox（Windows）、VoiceOver + Safari（macOS）、VoiceOver + Safari（iOS）とする。バージョン、実施日、対象コミット、手順、期待値、結果、未解決事項を残す。未実施は unverified とする。

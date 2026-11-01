@@ -32,6 +32,19 @@ Prevent invalid usage through types, development diagnostics and CI. Require
 accessible information rather than redundant ARIA attributes; visible text is
 a valid name. Design variants must preserve the same accessibility requirements.
 
+Follow [ACCESSIBILITY-VERIFICATION.md](ACCESSIBILITY-VERIFICATION.md) when
+designing or changing validation. Split broad manual checks into independently
+testable properties; automate deterministic checks in real browsers and keep
+assistive-technology output and user comprehension as separate evidence.
+For each rule record applicability, expected behavior, environment/state coverage,
+commit and artifacts. Include known-invalid fixtures that prove detection works.
+Missing, skipped, timed-out, incomplete or stale checks stay unverified and must
+fail required automated gates. Do not equate synthetic DOM events with browser
+keyboard behavior, viewport/device scaling with zoom, ARIA snapshots with speech,
+or emulation with physical devices. Standard-theme tokens alone do not prove
+rendered contrast. Record residual checks and invalidate affected evidence when
+implementation or verification conditions change. Planned checks are not passes.
+
 ## Verification commands
 
 Start with the relevant test file using `pnpm exec vitest run <path>`.
