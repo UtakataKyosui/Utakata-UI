@@ -62,6 +62,37 @@ function Example() {
 
 ## 開発
 
+### npm リリース（React）
+
+`packages/react` を MIT ライセンスで公開します。ルート・docs・MCP はこのリリースの対象外です。
+GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動実行で検証と
+パッケージ作成を行い、`react-vX.Y.Z` タグへの push で同じ検証の後に npm へ公開します。
+タグのバージョンは `packages/react/package.json` と一致する安定版に限り、コミットは
+`main` に含まれている必要があります。公開するものと同じ tgz を一時的な外部プロジェクトに
+インストールし、型・SSR・CSS の解決・manifest を確認します。
+
+初回公開前に、次の設定を行ってください。
+
+1. npm で `@utakata-ui` スコープの所有・公開権限と名前の利用可否を確認します。
+2. GitHub に `npm` Environment を作成し、必要に応じて承認者と `react-v*` タグの制限を設定します。
+3. 初回はローカルで `pnpm check`、`pnpm --filter @utakata-ui/react build` を実行し、
+   `npm pack ./packages/react --pack-destination /tmp` の内容を確認します。
+   `node scripts/verify-react-package.mjs /tmp/utakata-ui-react-0.1.0.tgz` で利用側を検証できます。
+   `npm login` とアカウントの 2FA を使って、確認した tgz を `npm publish <tgzのパス> --access public` で公開します。
+4. npm のパッケージ設定に Trusted Publisher を登録します。
+   GitHub owner は `UtakataKyosui`、repository は `Utakata-UI`、workflow filename は
+   `release.yml`、environment は `npm` とし、`npm publish` の許可を有効にします。
+   新しい設定は有効期限があるため、次の公開の直前に登録してください。
+
+以後はバージョンを更新した変更を main にマージし、手動の `Release React` で検証してから、
+そのコミットに `react-vX.Y.Z` タグを付けて push します。公開済みのバージョンは再利用できません。
+初回のローカル公開と同じバージョンのタグでは再公開せず、CI の初回公開には次のバージョンを使用します。
+認証には OIDC を使い、npm トークンや `.npmrc` の認証情報をリポジトリに保存しません。
+CI は npm 11.5.1 以降を確認し、公開リポジトリでは provenance も付与します。
+
+公開前には実ブラウザーのキーボード・スクリーンリーダー・テーマ確認を別途記録してください。
+詳細は [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) を参照してください。
+
 ### Claude Code / Codex
 
 このリポジトリには共通の開発指針 `AGENTS.md` と、それを読み込む

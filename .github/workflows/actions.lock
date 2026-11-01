@@ -8,6 +8,10 @@ workflows:
         - 'actions/setup-node@v4.4.0'
         - 'fallow-rs/fallow@v3.38.1'
         - 'pnpm/action-setup@v4.3.0'
+    '.github/workflows/release.yml':
+        - 'actions/checkout@v4.4.0'
+        - 'actions/setup-node@v4.4.0'
+        - 'pnpm/action-setup@v4.3.0'
     '.github/workflows/verify-lockfile.yml':
         - 'actions/checkout@v7.0.1'
 dependencies:
