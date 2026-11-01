@@ -6,6 +6,8 @@ description: Utakata-UI を React アプリケーションで使う
 
 React 18.3.1 以降を使用します。現在は開発段階のため、このリポジトリのワークスペース内で利用できます。
 
+Utakata UI は、Base UI を基盤とし、内部で Lism CSS を使用するコンポーネントを、Agent Coding で組み合わせて UI を構築することを前提としています。エージェントには[コンポーネント仕様](./components)と [MCP](./mcp)を参照させ、公開 API とアクセシビリティ要件に沿って実装を進めてください。
+
 ```tsx
 import { Button, Dialog, Field } from '@utakata-ui/react';
 import '@utakata-ui/react/styles.css';
