@@ -87,6 +87,25 @@ export interface QualityResult extends QualityRule {
 
 export type QualityCheck = () => void | Promise<void>;
 
+async function evaluateRule(
+  rule: QualityRule,
+  check: QualityCheck | undefined,
+): Promise<QualityResult> {
+  if (rule.verification === 'manual' || !check) {
+    return { ...rule, status: 'unverified' };
+  }
+  try {
+    await check();
+    return { ...rule, status: 'passed' };
+  } catch (error) {
+    return {
+      ...rule,
+      status: 'failed',
+      detail: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
 /** Missing checks never count as passes. Manual review stays unverified. */
 export async function evaluateQuality(
   rules: readonly QualityRule[],
@@ -98,20 +117,7 @@ export async function evaluateQuality(
     if (ids.has(rule.id)) throw new Error(`Duplicate quality rule: ${rule.id}`);
     ids.add(rule.id);
     const check = Object.hasOwn(checks, rule.id) ? checks[rule.id] : undefined;
-    if (rule.verification === 'manual' || !check) {
-      results.push({ ...rule, status: 'unverified' });
-      continue;
-    }
-    try {
-      await check();
-      results.push({ ...rule, status: 'passed' });
-    } catch (error) {
-      results.push({
-        ...rule,
-        status: 'failed',
-        detail: error instanceof Error ? error.message : String(error),
-      });
-    }
+    results.push(await evaluateRule(rule, check));
   }
   for (const id of Object.keys(checks)) {
     if (!ids.has(id)) throw new Error(`Unknown quality check: ${id}`);

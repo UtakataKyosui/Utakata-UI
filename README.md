@@ -60,7 +60,14 @@ pnpm test
 pnpm build
 pnpm typecheck
 pnpm lint
+pnpm check
 ```
+
+### コミット前のチェック
+
+Vite+ のコミットフックを使用します。`pnpm install` の `prepare` でフックを設定し、コミット時に `vp staged` から `pnpm check` を一度実行します。ステージした内容に対して lint・型検査・全テスト（a11y を含む）・ビルド・Fallow を実行し、失敗すればコミットを止めます。部分的にステージしたファイルの未ステージ部分は、`vp staged` が一時退避して検証後に戻します。自動修正は行いません。
+
+Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査します。初回と main 更新後には `git fetch origin main` で比較元を更新してください。手動での確認は `pnpm check`、フックの状態確認は `pnpm exec vp hooks status`、既存 clone への設定は `pnpm run prepare` です。生成される `.vite-hooks/_` と `.fallow` キャッシュはコミットしません。
 
 ### アクセシビリティの品質チェック
 
