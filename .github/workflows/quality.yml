@@ -37,6 +37,8 @@ jobs:
           cache-dependency-path: pnpm-lock.yaml
       - name: Install locked dependencies
         run: pnpm install --frozen-lockfile
+      - name: Agent infrastructure
+        run: pnpm test:agents
       - name: Biome
         env:
           BASE: ${{ steps.scope.outputs.base }}

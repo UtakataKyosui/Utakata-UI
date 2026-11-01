@@ -1,0 +1,39 @@
+# Utakata-UI development
+
+## Repository map
+
+- `packages/react/src`: React components, CSS, public exports, manifest and quality rules.
+- `packages/mcp/src`: tools exposing the same manifest to agents.
+- `packages/docs`: Blume documentation; `docs/components.md` is generated.
+- `skills/utakata-ui`: consumer-facing UI usage skill; keep it consistent with the public API.
+
+## Implementation
+
+Use pnpm (the version is pinned in `package.json`) and a Node version allowed by `engines`.
+Preserve Base UI keyboard, dismissal and focus behavior. Use Lism primitives and
+CSS custom properties rather than a second styling or interaction system.
+When changing public components, update `index.ts`, `manifest.ts`, relevant
+quality rules, tests and documentation together. TypeScript source imports use
+`.js` extensions. Do not edit generated `dist`, `.blume` or `docs/components.md`.
+
+## Verification
+
+Start with the relevant test file using `pnpm exec vitest run <path>`.
+For runtime changes run `pnpm lint`, `pnpm typecheck`, `pnpm test` and `pnpm build`.
+UI behavior changes also require `pnpm test:a11y`; real keyboard, screen reader
+and theme checks must be reported as unverified unless actually performed.
+`pnpm check:fallow` requires an available `origin/main` reference.
+Agent infrastructure has a dependency-free check: `pnpm test:agents`.
+
+## Collaboration
+
+Preserve unrelated changes. Ask before adding production dependencies,
+destructive operations, production changes or external messages. Commit, push,
+PR creation and remote mutations require a user request. Never add credentials,
+machine-specific settings or generated caches.
+
+## Skills
+
+Shared skills live in `skills/`; Codex discovers them through `.agents/skills`
+and Claude through `.claude/skills` symlinks. Use `utakata-component` for component API
+or behavior changes and `utakata-verify` for validation and review requests.

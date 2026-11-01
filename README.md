@@ -62,6 +62,42 @@ function Example() {
 
 ## 開発
 
+### Claude Code / Codex
+
+このリポジトリには共通の開発指針 `AGENTS.md` と、それを読み込む
+`CLAUDE.md` を同梱しています。個人のグローバル設定を変更せず利用できます。
+
+Skills の本体は `skills/` に置き、`.agents/skills/`（Codex）と
+`.claude/skills/`（Claude Code）から相対シンボリックリンクで共有します。
+
+| Skill             | 用途                                      | Claude Code          | Codex                |
+| ----------------- | ----------------------------------------- | -------------------- | -------------------- |
+| utakata-ui        | 公開コンポーネントを使った UI 実装        | `/utakata-ui`        | `$utakata-ui`        |
+| utakata-component | コンポーネント・公開 API・manifest の開発 | `/utakata-component` | `$utakata-component` |
+| utakata-verify    | 変更範囲に応じた検証・レビュー            | `/utakata-verify`    | `$utakata-verify`    |
+
+Node と pnpm は `package.json` の指定バージョンを使用してください。
+リポジトリを開き直して Skills を読み込み、Claude Code と Codex の `/hooks`
+で設定内容を確認してください。Codex はプロジェクトと Hooks の信頼が必要です。
+信頼の承認は利用者が行います。古いクライアントなど Hooks 非対応の環境でも、
+共通ガイドと Skills、手動の検証コマンドを利用できます。
+
+Hooks はセッション開始時に開発上の注意を伝え、編集・シェル操作後に
+`git diff --check` を実行して追跡済みファイルの空白エラーを通知します。
+自動修正・自動インストール・外部通信は行いません。未追跡ファイルやステージ済み
+差分、型・テスト・アクセシビリティの検証は含まないため、Skill の手順に従って
+別途確認してください。既存の Vite Plus pre-commit hook も継続利用します。
+
+`pnpm test:agents` で共有リンク、両クライアントの Hook コマンド（サブディレクトリ
+からの実行を含む）、空白エラー検出と非破壊性を確認できます。CI と `pnpm check`
+にも組み込んでいます。個人設定は `.claude/settings.local.json` などの
+Git 管理外ファイルに置いてください。
+
+設定形式の参照元: [Claude Skills](https://code.claude.com/docs/en/skills)、
+[Claude Hooks](https://code.claude.com/docs/en/hooks)、
+[OpenAI Skills](https://learn.chatgpt.com/docs/build-skills)、
+[OpenAI Hooks](https://learn.chatgpt.com/docs/hooks)。
+
 Node.js 22.22.2 以降の 22.x、24.15.0 以降の 24.x、または 26.0.0 以降と、pnpm 10.18.3 を使用します。テスト依存関係の要件に合わせ、対応バージョンをルートの `package.json` の `engines.node` に定義しています。
 
 ```sh
