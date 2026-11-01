@@ -7,7 +7,7 @@
 - [Project overview and usage](README.md)
 - [Agent implementation guide](skills/utakata-ui/SKILL.md)
 - [React package exports](packages/react/src/index.ts)
-- [Component manifest](packages/react/src/manifest.ts)
+- [Component manifest](packages/react/src/metadata/manifest.ts)
 - [MCP server tools](packages/mcp/src/server.ts)
 
 ## Principles

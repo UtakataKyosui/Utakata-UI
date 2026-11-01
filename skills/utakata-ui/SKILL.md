@@ -6,7 +6,7 @@ description: Build accessible React interfaces using the verified Utakata-UI com
 
 # Utakata-UI implementation guide
 
-Before writing UI, inspect `packages/react/src/manifest.ts` or query the `get_component` MCP tool. Treat the manifest as the authority for supported component names, variants, defaults, composition, and accessibility requirements. Do not invent props or substitute components that are not exported by `packages/react/src/index.ts`.
+Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query the `get_component` MCP tool. Treat the manifest as the authority for supported component names, variants, defaults, composition, and accessibility requirements. Do not invent props or substitute components that are not exported by `packages/react/src/index.ts`.
 
 ## Component usage
 

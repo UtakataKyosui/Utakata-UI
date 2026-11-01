@@ -7,15 +7,19 @@ export {
   Stack,
   Text,
 } from 'lism-css/react';
-export type { ButtonProps } from './Button.js';
-export { Button } from './Button.js';
-export { Dialog } from './Dialog.js';
-export { Field } from './Field.js';
-export type { ButtonSize, ButtonVariant } from './manifest.js';
-export { componentManifest } from './manifest.js';
-export type { QualityCheck, QualityResult, QualityRule } from './quality.js';
+export type { ButtonProps } from './components/Button.js';
+export { Button } from './components/Button.js';
+export { Dialog } from './components/Dialog.js';
+export { Field } from './components/Field.js';
+export type { ButtonSize, ButtonVariant } from './metadata/manifest.js';
+export { componentManifest } from './metadata/manifest.js';
+export type {
+  QualityCheck,
+  QualityResult,
+  QualityRule,
+} from './metadata/quality.js';
 export {
   evaluateQuality,
   formatQualityReport,
   qualityRules,
-} from './quality.js';
+} from './metadata/quality.js';

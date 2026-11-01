@@ -2,7 +2,7 @@
 
 import { Button as BaseButton } from '@base-ui/react/button';
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
-import type { ButtonSize, ButtonVariant } from './manifest.js';
+import type { ButtonSize, ButtonVariant } from '../metadata/manifest.js';
 
 export type ButtonProps = Omit<
   ComponentPropsWithoutRef<typeof BaseButton>,

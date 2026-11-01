@@ -2,7 +2,7 @@
 
 ## Repository map
 
-- `packages/react/src`: React components, CSS, public exports, manifest and quality rules.
+- `packages/react/src`: Public exports in `index.ts`; components in `components/`, manifest and quality rules in `metadata/`, CSS in `styles/`, and tests in `tests/`.
 - `packages/mcp/src`: tools exposing the same manifest to agents.
 - `packages/docs`: Blume documentation; `docs/components.md` is generated.
 - `skills/utakata-ui`: consumer-facing UI usage skill; keep it consistent with the public API.

@@ -15,7 +15,7 @@
     "build:docs": "pnpm --filter @utakata-ui/docs... build",
     "lint": "biome check .",
     "test": "vitest run",
-    "test:a11y": "vitest run packages/react/src/accessibility.test.tsx",
+    "test:a11y": "vitest run packages/react/src/tests/accessibility.test.tsx",
     "test:agents": "node --test scripts/agent-hooks.test.mjs",
     "typecheck": "tsc --noEmit"
   },

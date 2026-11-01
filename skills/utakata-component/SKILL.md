@@ -6,7 +6,7 @@ description: Implement or change Utakata-UI React components, their public API, 
 
 # Component development
 
-Read the component, `packages/react/src/index.ts`, `manifest.ts`, `quality.ts`
+Read the component, `packages/react/src/index.ts`, `metadata/manifest.ts`, `metadata/quality.ts`
 and existing tests before editing. Read `skills/utakata-ui/SKILL.md` for usage.
 
 Preserve Base UI interactions and Lism layout primitives. Match existing ref,
