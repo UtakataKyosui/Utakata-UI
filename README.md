@@ -19,6 +19,16 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 ## パッケージ
 
+`packages` 配下を次の3つのワークスペースに分けています。
+
+| ディレクトリ     | パッケージ                    | 役割                             |
+| ---------------- | ----------------------------- | -------------------------------- |
+| `packages/docs`  | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト   |
+| `packages/react` | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest |
+| `packages/mcp`   | `@utakata-ui/mcp`             | manifest を参照する MCP サーバー |
+
+docs と MCP は UI 本体をワークスペース依存として参照します。UI 本体は docs・MCP に依存しません。
+
 `@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
 
 ```tsx
@@ -62,6 +72,14 @@ pnpm typecheck
 pnpm lint
 pnpm check
 ```
+
+### ドキュメントサイト
+
+ドキュメントサイトには [Blume](https://useblume.dev/docs/quickstart) を使用します。`packages/docs/docs` の Markdown と `blume.config.ts` で内容と設定を管理します。コンポーネント仕様の `components.md` は UI 本体の公開 manifest から起動・ビルド時に生成するため、直接編集しません。
+
+`pnpm dev` で開発サーバーを起動します。`pnpm build:docs` は UI 本体を先にビルドし、検索インデックスを含む公開用の静的ファイルを `packages/docs/dist` に生成します。このディレクトリを静的ホスティングに配置できます。ローカルで成果物を確認する場合は `pnpm --filter @utakata-ui/docs preview` を実行します。
+
+`pnpm build` は3パッケージを依存順にビルドします。個別のビルドには `pnpm --filter @utakata-ui/react build`、MCP とその依存には `pnpm --filter @utakata-ui/mcp... build` を使用します。
 
 ### コミット前のチェック
 
