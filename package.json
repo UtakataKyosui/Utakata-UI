@@ -8,7 +8,7 @@
   },
   "scripts": {
     "prepare": "vp config --hooks --no-agent",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:fallow",
+    "check": "pnpm test:agents && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm check:fallow",
     "check:fallow": "fallow audit --changed-since origin/main",
     "dev": "pnpm --filter @utakata-ui/react build && pnpm --filter @utakata-ui/docs dev",
     "build": "pnpm -r build",
@@ -16,6 +16,7 @@
     "lint": "biome check .",
     "test": "vitest run",
     "test:a11y": "vitest run packages/react/src/accessibility.test.tsx",
+    "test:agents": "node --test scripts/agent-hooks.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
