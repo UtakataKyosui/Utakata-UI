@@ -19,6 +19,7 @@ try {
     '--ignore-scripts',
     '--no-audit',
     '--no-fund',
+    '--prefer-offline',
     archive,
     'react@19',
     'react-dom@19',

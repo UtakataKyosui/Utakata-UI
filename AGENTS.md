@@ -67,6 +67,8 @@ Run `pnpm lint:markup` for component/example/markup changes and
 See [ACCESSIBILITY-TOOLS.md](ACCESSIBILITY-TOOLS.md) for tool selection, exact
 coverage and exceptions. Keep negative controls and CI evidence artifacts working;
 do not silently suppress new violations or incomplete results.
+For CI changes follow [.github/CI.md](.github/CI.md), run `pnpm test:ci` and
+`actionlint`, and synchronize/verify the Actions lockfile with `gh actions-lock`.
 
 ## Collaboration
 

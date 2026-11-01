@@ -4,6 +4,7 @@ export default defineConfig({
   testDir: './tests/browser',
   forbidOnly: true,
   retries: 0,
+  globalTimeout: 180_000,
   reporter: [
     ['list'],
     ['html', { open: 'never' }],

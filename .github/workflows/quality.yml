@@ -1,11 +1,10 @@
 name: Quality
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -13,39 +12,57 @@ concurrency:
   group: quality-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  accessibility:
+  scope:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 3
+    outputs:
+      base: ${{ steps.scope.outputs.base }}
+      checks: ${{ steps.scope.outputs.checks }}
+      build: ${{ steps.scope.outputs.build }}
+      types: ${{ steps.scope.outputs.types }}
+      tests: ${{ steps.scope.outputs.tests }}
+      markup: ${{ steps.scope.outputs.markup }}
+      browser: ${{ steps.scope.outputs.browser }}
+      docs: ${{ steps.scope.outputs.docs }}
+      react: ${{ steps.scope.outputs.react }}
+      mcp: ${{ steps.scope.outputs.mcp }}
+      fallow: ${{ steps.scope.outputs.fallow }}
     steps:
       - uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Select check scope
+      - name: Test scope selection (no dependency install)
+        run: node --test scripts/ci-scope.test.mjs
+      - name: Select required gates
         id: scope
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          if [[ "$EVENT_NAME" == pull_request ]]; then
-            base=$(git merge-base "$BASE_SHA" HEAD)
-            if ! git diff --name-only "$base" HEAD | grep -Eq '(^|/)(package.json|pnpm-lock.yaml|pnpm-workspace.yaml|biome.json|.*config.*)$|^\.github/|test-setup\.'; then
-              echo "base=$base" >> "$GITHUB_OUTPUT"
-            fi
-          fi
+        run: node scripts/ci-scope.mjs
+      - name: Agent infrastructure (no dependency install)
+        if: steps.scope.outputs.agents == 'true'
+        run: node --test scripts/agent-hooks.test.mjs
+
+  checks:
+    needs: scope
+    if: needs.scope.outputs.checks == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - uses: pnpm/action-setup@v4.3.0
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: "24.15.0"
           cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - name: Install locked dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Agent infrastructure
-        run: pnpm test:agents
-      - name: Biome
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Biome (changed files on PRs)
         env:
-          BASE: ${{ steps.scope.outputs.base }}
+          BASE: ${{ needs.scope.outputs.base }}
         run: |
           if [[ -n "$BASE" ]]; then
             pnpm exec biome ci . --vcs-enabled=true --vcs-client-kind=git --changed --since="$BASE" --no-errors-on-unmatched
@@ -53,28 +70,27 @@ jobs:
             pnpm exec biome ci .
           fi
       - name: Type check
+        if: needs.scope.outputs.types == 'true'
         run: pnpm typecheck
-      - name: HTML structure and static accessibility (Markuplint)
-        run: pnpm lint:markup
-      - name: Accessibility tests
-        run: pnpm test:a11y
-      - name: Unit tests
+      - name: Markuplint and detection controls
+        if: needs.scope.outputs.markup == 'true'
         env:
-          BASE: ${{ steps.scope.outputs.base }}
+          CI_DIFF_BASE: ${{ needs.scope.outputs.base }}
+        run: pnpm lint:markup
+      - name: Unit and jsdom accessibility tests (single run)
+        if: needs.scope.outputs.tests == 'true'
+        env:
+          BASE: ${{ needs.scope.outputs.base }}
         run: |
-          args=(--exclude '**/accessibility.test.tsx')
           if [[ -n "$BASE" ]]; then
-            args+=(--changed "$BASE" --passWithNoTests)
+            pnpm exec vitest run --changed "$BASE" --passWithNoTests
+          else
+            pnpm test
           fi
-          pnpm exec vitest run "${args[@]}"
-      - name: Build packages
-        run: pnpm build
-      - name: Verify shipped consumer types and accessibility contract
-        run: |
-          mkdir -p "$RUNNER_TEMP/react-consumer"
-          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
-          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
-  browser-accessibility:
+
+  build:
+    needs: scope
+    if: needs.scope.outputs.build == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -86,14 +102,64 @@ jobs:
         with:
           node-version: "24.15.0"
           cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Build React (also required by Docs)
+        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true'
+        run: pnpm --filter @utakata-ui/react build
+      - name: Build MCP
+        if: needs.scope.outputs.mcp == 'true'
+        run: pnpm --filter @utakata-ui/mcp build
+      - name: Build Docs
+        if: needs.scope.outputs.docs == 'true'
+        run: pnpm --filter @utakata-ui/docs build
+      - name: Cache consumer npm downloads
+        if: needs.scope.outputs.react == 'true'
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.npm
+          key: consumer-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'scripts/verify-react-package.mjs') }}
+      - name: Verify packed public types and SSR
+        if: needs.scope.outputs.react == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/react-consumer"
+          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
+          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
+
+  browser-accessibility:
+    needs: scope
+    if: needs.scope.outputs.browser == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.15.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Select exact browser cache version
+        id: playwright
+        run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
+      - name: Cache Chromium headless shell
+        id: browsers
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-ubuntu24-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-headless
+      - name: Install OS dependencies (not cached)
+        run: pnpm exec playwright install-deps chromium
+      - name: Download Chromium headless shell
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --only-shell chromium
       - name: Rendered accessibility and keyboard behavior
+        id: browser-tests
         run: pnpm test:a11y:browser
       - name: Upload browser evidence
-        if: always()
-        uses: actions/upload-artifact@v4
+        if: always() && (steps.browser-tests.outcome == 'success' || steps.browser-tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4.6.2
         with:
           name: browser-accessibility-${{ github.sha }}
           path: |
@@ -101,10 +167,12 @@ jobs:
             test-results/
           if-no-files-found: error
           retention-days: 14
+
   fallow:
-    if: github.event_name == 'pull_request'
+    needs: scope
+    if: github.event_name == 'pull_request' && needs.scope.outputs.fallow == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4.4.0
         with:
@@ -118,3 +186,20 @@ jobs:
           comment: "false"
           review-comments: "false"
           sarif: "false"
+
+  # Preserve the existing required-check name, including docs-only PRs.
+  # Skipped irrelevant jobs are allowed; a failed scope or gate cannot pass.
+  accessibility:
+    needs: [scope, checks, build, browser-accessibility, fallow]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - name: Require all applicable gates
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          node --input-type=module -e '
+            const jobs = JSON.parse(process.env.RESULTS);
+            if (jobs.scope.result !== "success" || Object.values(jobs).some(({result}) => !["success", "skipped"].includes(result))) process.exit(1);
+          '

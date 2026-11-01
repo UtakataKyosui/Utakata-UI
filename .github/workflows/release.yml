@@ -43,6 +43,7 @@ jobs:
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: "24.15.0"
+          cache: pnpm
       - name: Check npm supports trusted publishing
         run: |
           node --input-type=module -e '
@@ -52,7 +53,7 @@ jobs:
               throw new Error("npm >= 11.5.1 is required for trusted publishing");
             }
           '
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile --prefer-offline
       - name: Quality checks
         run: pnpm check
       - name: Pack and test public package
