@@ -1,0 +1,19 @@
+{
+  "name": "@utakata-ui/docs",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm generate:reference && blume dev",
+    "build": "pnpm generate:reference && blume build",
+    "generate:reference": "node scripts/generate-reference.mjs",
+    "doctor": "blume doctor",
+    "preview": "blume preview"
+  },
+  "dependencies": {
+    "@utakata-ui/react": "workspace:*"
+  },
+  "devDependencies": {
+    "blume": "^2.2.6"
+  }
+}

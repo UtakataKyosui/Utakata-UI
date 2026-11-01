@@ -4,3 +4,5 @@ packages/*/dist/
 coverage/
 .vite-hooks/_/
 .fallow/
+packages/docs/.blume/
+packages/docs/docs/components.md
