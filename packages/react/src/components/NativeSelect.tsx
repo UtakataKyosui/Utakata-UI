@@ -14,6 +14,7 @@ export type NativeSelectProps = Omit<
   ComponentPropsWithoutRef<'select'>,
   'className' | 'size' | 'multiple'
 > & {
+  multiple?: never;
   className?: string;
   size?: NativeSelectSize;
 };

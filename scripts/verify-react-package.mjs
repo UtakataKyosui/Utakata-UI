@@ -37,10 +37,210 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Kbd, KbdGroup, Separator, type ButtonProps } from '@utakata-ui/react';
+    `import type { ComponentProps } from 'react';
+import { Alert, Avatar, Badge, Breadcrumb, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
+export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;
+// @ts-expect-error Numeric listbox size is excluded from the shipped API.
+export const nativeSelectNumericSize: NativeSelectProps = { size: 4 };
+// @ts-expect-error Multiple selection is not supported.
+export const nativeSelectMultiple = <NativeSelect multiple aria-label="Country" />;
+const multipleSelectProps = { multiple: true, className: 'country' };
+// @ts-expect-error Spreads must preserve the single-selection contract.
+export const nativeSelectMultipleSpread = <NativeSelect {...multipleSelectProps} aria-label="Country" />;
+export const textareaProps: TextareaProps = { size: 'sm', rows: 4, maxLength: 500, className: 'notes' };
+export const notes = <Field.Root><Field.Label>Notes</Field.Label><Textarea {...textareaProps} /></Field.Root>;
+// @ts-expect-error Unsupported Textarea sizes fail against shipped declarations.
+export const textareaUnsupportedSize: TextareaProps = { size: 'xl' };
+// @ts-expect-error Textarea className must be a string.
+export const textareaFunctionClass = <Textarea aria-label="Notes" className={() => 'x'} />;
+export const inputProps: InputProps = { size: 'lg', type: 'email', readOnly: true, className: 'email' };
+export const input = <Field.Root><Field.Label>Email</Field.Label><Input {...inputProps} /></Field.Root>;
+// @ts-expect-error Input visual sizes replace the numeric native size.
+export const inputNativeSize: InputProps = { size: 20 };
+// @ts-expect-error Unsupported sizes must fail in shipped declarations.
+export const inputUnsupportedSize = <Input aria-label="Email" size="xl" />;
+// @ts-expect-error Input className must be a string.
+export const inputFunctionClass: InputProps = { className: () => 'x' };
+export const radioGroupProps: RadioGroupRootProps = { orientation: 'horizontal', className: 'plan', name: 'plan' };
+export const plan = <RadioGroup.Root {...radioGroupProps} aria-label="Plan"><RadioGroup.Item value="free"><RadioGroup.Indicator />Free</RadioGroup.Item></RadioGroup.Root>;
+// @ts-expect-error RadioGroup orientation is limited to the manifest values in shipped declarations.
+export const radioGroupDiagonal: RadioGroupRootProps = { orientation: 'diagonal' };
+// @ts-expect-error RadioGroup className must be a string in shipped declarations.
+export const radioGroupFunctionClass: RadioGroupRootProps = { className: () => 'x' };
+export const selectProps: SelectRootProps<string> = { defaultValue: 'system', name: 'theme' };
+export const theme = <Select.Root {...selectProps}><Select.Label>Theme</Select.Label><Select.Trigger><Select.Value placeholder="Choose a theme" /><Select.Icon /></Select.Trigger></Select.Root>;
+// @ts-expect-error Select is single-selection only in shipped declarations.
+export const selectMultiple: SelectRootProps<string> = { multiple: true };
+// @ts-expect-error A single Select does not accept an array value in shipped declarations.
+export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
+// @ts-expect-error Select.Trigger className must be a string in shipped declarations.
+export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
+type SliderRootProps = ComponentProps<typeof Slider.Root>;
+export const sliderProps: SliderRootProps = { defaultValue: 50, min: 0, max: 100, step: 5, name: 'volume' };
+export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider.Label><Slider.Control><Slider.Track><Slider.Indicator /><Slider.Thumb getAriaValueText={(value) => value + ' percent'} /></Slider.Track></Slider.Control></Slider.Root>;
+// @ts-expect-error Slider values are numbers in shipped declarations.
+export const sliderStringValue: SliderRootProps = { defaultValue: '50' };
+// @ts-expect-error Slider className must be a string in shipped declarations.
+export const sliderFunctionClass: SliderRootProps = { className: () => 'x' };
+export const badgeProps: BadgeProps = { variant: 'outline', children: 'Draft' };
+export const badge = <Badge {...badgeProps} />;
+// @ts-expect-error Badge variants are limited to the manifest in shipped declarations.
+export const badgeUnsupportedVariant = <Badge variant="loud">Draft</Badge>;
+// @ts-expect-error Badge requires visible text children in shipped declarations.
+export const badgeMissingText = <Badge />;
+// @ts-expect-error Badge className must be a string in shipped declarations.
+export const badgeFunctionClass = <Badge className={() => 'x'}>Draft</Badge>;
+export const skeletonProps: SkeletonProps = { shape: 'circle', style: { width: 40 } };
+export const skeleton = <Skeleton {...skeletonProps} />;
+// @ts-expect-error Skeleton shapes are limited to the manifest in shipped declarations.
+export const skeletonUnsupportedShape: SkeletonProps = { shape: 'pill' };
+// @ts-expect-error Skeleton never exposes status semantics in shipped declarations.
+export const skeletonRole: SkeletonProps = { role: 'status' };
+const skeletonFocusProps = { tabIndex: 0, role: 'button' };
+// @ts-expect-error Spreads cannot make a Skeleton focusable in shipped declarations.
+export const skeletonFocusSpread = <Skeleton {...skeletonFocusProps} />;
+const skeletonContentProps = { children: 'Loading' };
+// @ts-expect-error Spreads cannot give a Skeleton content in shipped declarations.
+export const skeletonContentSpread = <Skeleton {...skeletonContentProps} />;
+export const spinnerProps: SpinnerProps = { label: 'Uploading', size: 'sm' };
+export const spinner = <Spinner {...spinnerProps} />;
+export const decorativeSpinner = <Button><Spinner decorative />Saving</Button>;
+// @ts-expect-error Decorative spinners announce nothing, so a label is invalid in shipped declarations.
+export const spinnerLabelledDecorative: SpinnerProps = { decorative: true, label: 'Saving' };
+// @ts-expect-error The status role is managed by Spinner in shipped declarations.
+export const spinnerRole: SpinnerProps = { role: 'progressbar' };
+// @ts-expect-error The name comes from label, including hyphenated JSX attributes.
+export const spinnerAriaLabel = <Spinner aria-label="Loading" />;
+// @ts-expect-error Spinner sizes are limited to the manifest in shipped declarations.
+export const spinnerUnsupportedSize: SpinnerProps = { size: 'xl' };
+const spinnerRoleProps = { role: 'progressbar' };
+// @ts-expect-error Spreads cannot override the managed status role.
+export const spinnerRoleSpread = <Spinner {...spinnerRoleProps} />;
+const spinnerNameProps = { 'aria-label': 'Loading' };
+// @ts-expect-error Spreads cannot add a second accessible name.
+export const spinnerNameSpread = <Spinner {...spinnerNameProps} />;
+function SpinnerWrapper(props: SpinnerProps) { return <Spinner {...props} />; }
+export const wrappedSpinner = <SpinnerWrapper label="Uploading" />;
+// @ts-expect-error Wrappers must preserve the decorative and label exclusion.
+export const wrappedSpinnerInvalid = <SpinnerWrapper decorative label="Uploading" />;
+type CardTitleProps = ComponentProps<typeof Card.Title>;
+export const cardTitleProps: CardTitleProps = { level: '2', children: 'Profile' };
+export const card = <Card.Root><Card.Header><Card.Title {...cardTitleProps} /><Card.Description>Edit</Card.Description></Card.Header><Card.Content>Body</Card.Content><Card.Footer><Button>Save</Button></Card.Footer></Card.Root>;
+// @ts-expect-error Card.Title heading levels are limited to 1-6 in shipped declarations.
+export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile' };
+// @ts-expect-error Card.Title requires heading text in shipped declarations.
+export const cardEmptyTitle: CardTitleProps = { level: '2' };
+// @ts-expect-error Card className must be a string in shipped declarations.
+export const cardFunctionClass = <Card.Root className={() => 'x'} />;
+type AlertRootProps = ComponentProps<typeof Alert.Root>;
+export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
+export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;
+export const staticAlert = <Alert.Root><Alert.Title>Notice</Alert.Title></Alert.Root>;
+// @ts-expect-error Only live-region roles are supported on Alert.Root in shipped declarations.
+export const alertRegionRole: AlertRootProps = { role: 'region' };
+// @ts-expect-error Alert variants are limited to the manifest in shipped declarations.
+export const alertUnsupportedVariant: AlertRootProps = { variant: 'warning' };
+const alertRoleProps = { role: 'region' };
+// @ts-expect-error Spreads cannot widen the Alert role contract.
+export const alertRoleSpread = <Alert.Root {...alertRoleProps} />;
+// @ts-expect-error Alert className must be a string in shipped declarations.
+export const alertFunctionClass = <Alert.Root className={() => 'x'} />;
+type AvatarImageProps = ComponentProps<typeof Avatar.Image>;
+export const namedAvatarProps: AvatarImageProps = { src: '/aya.png', alt: 'Aya' };
+export const decorativeAvatarProps: AvatarImageProps = { src: '/aya.png', alt: '' };
+export const avatar = <Avatar.Root size="lg"><Avatar.Image {...namedAvatarProps} /><Avatar.Fallback>Aya</Avatar.Fallback></Avatar.Root>;
+export const adjacentNameAvatar = <Avatar.Root><Avatar.Image {...decorativeAvatarProps} /><Avatar.Fallback aria-hidden="true">A</Avatar.Fallback></Avatar.Root>;
+// @ts-expect-error Avatar images require an explicit alt decision in shipped declarations.
+export const avatarMissingAlt: AvatarImageProps = { src: '/aya.png' };
+// @ts-expect-error Avatar.Image requires alt in JSX in shipped declarations.
+export const avatarMissingAltJsx = <Avatar.Image src="/aya.png" />;
+const avatarSpreadProps = { src: '/aya.png' };
+// @ts-expect-error Spreads cannot bypass the required alt.
+export const avatarSpreadMissingAlt = <Avatar.Image {...avatarSpreadProps} />;
+function AvatarWrapper(props: AvatarImageProps) { return <Avatar.Image {...props} />; }
+export const wrappedAvatar = <AvatarWrapper src="/aya.png" alt="Aya" />;
+// @ts-expect-error Wrappers must preserve the required alt.
+export const wrappedAvatarInvalid = <AvatarWrapper src="/aya.png" />;
+// @ts-expect-error Avatar sizes are limited to the manifest in shipped declarations.
+export const avatarUnsupportedSize = <Avatar.Root size="xl" />;
+export const labelledProgress: ProgressRootProps = { value: 10, label: 'Upload' };
+export const namedProgress: ProgressRootProps = { value: 10, 'aria-label': 'Upload' };
+export const indeterminateProgress: ProgressRootProps = { value: null, 'aria-labelledby': 'upload-label' };
+export const progress = <Progress.Root {...labelledProgress}><Progress.Value /><Progress.Track><Progress.Indicator /></Progress.Track></Progress.Root>;
+// @ts-expect-error Progress.Root requires a name source in shipped declarations.
+export const unnamedProgress: ProgressRootProps = { value: 10 };
+// @ts-expect-error label and aria-label are alternative name sources in shipped declarations.
+export const doubleNamedProgress: ProgressRootProps = { value: 1, label: 'A', 'aria-label': 'B' };
+// @ts-expect-error value is required; use null for indeterminate.
+export const progressMissingValue: ProgressRootProps = { label: 'Upload' };
+// @ts-expect-error JSX usage must also provide a name source.
+export const progressUnnamedJsx = <Progress.Root value={10} />;
+const unnamedProgressProps = { value: 10 };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const progressSpreadUnnamed = <Progress.Root {...unnamedProgressProps} />;
+function ProgressWrapper(props: ProgressRootProps) { return <Progress.Root {...props} />; }
+export const wrappedProgress = <ProgressWrapper value={5} label="Upload" />;
+// @ts-expect-error Wrappers must preserve the required name.
+export const wrappedProgressInvalid = <ProgressWrapper value={5} />;
+export const labelledTable: TableContainerProps = { 'aria-label': 'Team members' };
+export const referencedTable: TableContainerProps = { 'aria-labelledby': 'team-caption' };
+export const table = <Table.Container {...labelledTable}><Table.Root><Table.Caption id="team-caption">Team</Table.Caption><Table.Header><Table.Row><Table.Head scope="col">Name</Table.Head></Table.Row></Table.Header></Table.Root></Table.Container>;
+// @ts-expect-error Table.Container requires a name in shipped declarations.
+export const unnamedTable: TableContainerProps = {};
+// @ts-expect-error Container focusability is fixed for keyboard scrolling.
+export const untabbableTable: TableContainerProps = { 'aria-label': 'x', tabIndex: -1 };
+// @ts-expect-error The region role is fixed.
+export const tableRoleOverride: TableContainerProps = { 'aria-label': 'x', role: 'none' };
+const tableRoleProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Spreads cannot override the region role.
+export const tableRoleSpread = <Table.Container {...tableRoleProps} />;
+const tableFocusProps = { 'aria-label': 'x', tabIndex: -1 };
+// @ts-expect-error Spreads cannot remove the container from the tab order.
+export const tableFocusSpread = <Table.Container {...tableFocusProps} />;
+export const hrefLink: BreadcrumbLinkProps = { href: '/' };
+export const routerLink: BreadcrumbLinkProps = { render: <a href="/docs">Docs</a> };
+export const breadcrumb = <Breadcrumb.Root><Breadcrumb.List><Breadcrumb.Item><Breadcrumb.Link {...hrefLink}>Home</Breadcrumb.Link></Breadcrumb.Item><Breadcrumb.Separator /><Breadcrumb.Item><Breadcrumb.Page>Docs</Breadcrumb.Page></Breadcrumb.Item></Breadcrumb.List></Breadcrumb.Root>;
+// @ts-expect-error A breadcrumb link needs href or a render element in shipped declarations.
+export const breadcrumbNoDestination: BreadcrumbLinkProps = { children: 'Home' };
+// @ts-expect-error JSX usage must also provide a destination.
+export const breadcrumbNoDestinationJsx = <Breadcrumb.Link>Home</Breadcrumb.Link>;
+// @ts-expect-error The current page always uses aria-current="page" in shipped declarations.
+export const breadcrumbWrongCurrent: BreadcrumbPageProps = { 'aria-current': 'step' };
+const breadcrumbCurrentProps = { 'aria-current': 'step' as const };
+// @ts-expect-error Spreads cannot change the current-page marker.
+export const breadcrumbCurrentSpread = <Breadcrumb.Page {...breadcrumbCurrentProps} />;
+const breadcrumbVisibleProps = { 'aria-hidden': false as const, role: 'presentation' };
+// @ts-expect-error Spreads cannot expose decorative separators.
+export const breadcrumbSeparatorSpread = <Breadcrumb.Separator {...breadcrumbVisibleProps} />;
+const breadcrumbLinkProps = { children: 'Home' };
+// @ts-expect-error Spreads cannot create a link without a destination.
+export const breadcrumbLinkSpread = <Breadcrumb.Link {...breadcrumbLinkProps} />;
+export const paginationPage: PaginationLinkProps = { href: '?page=2', active: true };
+export const paginationEnabled: PaginationDirectionProps = { href: '?page=2' };
+export const paginationDisabled: PaginationDirectionProps = { disabled: true };
+export const pagination = <Pagination.Root aria-label="Result pages"><Pagination.List><Pagination.Item><Pagination.Previous {...paginationDisabled} /></Pagination.Item><Pagination.Item><Pagination.Link {...paginationPage}>1</Pagination.Link></Pagination.Item><Pagination.Item><Pagination.Ellipsis label="More pages" /></Pagination.Item><Pagination.Item><Pagination.Next {...paginationEnabled} /></Pagination.Item></Pagination.List></Pagination.Root>;
+// @ts-expect-error Page links need a URL in shipped declarations.
+export const paginationNoHref: PaginationLinkProps = { children: '2' };
+// @ts-expect-error An enabled Previous/Next needs a URL in shipped declarations.
+export const paginationEnabledNoHref: PaginationDirectionProps = {};
+// @ts-expect-error A disabled Previous/Next must not keep its URL in shipped declarations.
+export const paginationDisabledHref: PaginationDirectionProps = { disabled: true, href: '?' };
+// @ts-expect-error The current page is set with active, not aria-current.
+export const paginationRawCurrent: PaginationLinkProps = { href: '?', 'aria-current': 'page' };
+const paginationCurrentProps = { href: '?', 'aria-current': 'page' as const };
+// @ts-expect-error Spreads cannot set aria-current directly.
+export const paginationCurrentSpread = <Pagination.Link {...paginationCurrentProps} />;
+const paginationDisabledProps = { href: '?', 'aria-disabled': false as const };
+// @ts-expect-error Spreads cannot override the managed disabled state.
+export const paginationDisabledSpread = <Pagination.Next {...paginationDisabledProps} />;
+function PaginationWrapper(props: PaginationDirectionProps) { return <Pagination.Next {...props} />; }
+export const wrappedPagination = <PaginationWrapper href="?page=3" />;
+// @ts-expect-error Wrappers must preserve the href/disabled exclusion.
+export const wrappedPaginationInvalid = <PaginationWrapper disabled href="?page=3" />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
@@ -63,6 +263,26 @@ export const unsupportedKbd = <Kbd size="lg">K</Kbd>;
 export const divider = <Separator decorative={false} orientation="vertical" />;
 // @ts-expect-error Separator semantics are controlled by decorative.
 export const separatorRole = <Separator role="presentation" />;
+// @ts-expect-error Decorative separators cannot receive focus.
+export const focusableSeparator = <Separator tabIndex={0} />;
+// @ts-expect-error Semantic separators are static rather than resizable widgets.
+export const focusableSemanticSeparator = <Separator decorative={false} tabIndex={0} />;
+const focusableDividerProps = { tabIndex: 0 };
+// @ts-expect-error Spreads cannot bypass the static separator contract.
+export const focusableSeparatorSpread = <Separator {...focusableDividerProps} />;
+// @ts-expect-error Editable separators would introduce keyboard focus.
+export const editableSeparator = <Separator contentEditable />;
+// @ts-expect-error Display-only keys cannot receive keyboard focus.
+export const focusableKbd = <Kbd tabIndex={0}>K</Kbd>;
+// @ts-expect-error Display-only groups cannot intercept keyboard events.
+export const keyboardGroup = <KbdGroup onKeyDown={() => {}}>K</KbdGroup>;
+const interactiveKeyProps = { tabIndex: 0, onKeyUp: () => {} };
+// @ts-expect-error Spreads cannot bypass the display-only key contract.
+export const interactiveKbdSpread = <Kbd {...interactiveKeyProps}>K</Kbd>;
+// @ts-expect-error Spreads cannot bypass the display-only group contract.
+export const interactiveGroupSpread = <KbdGroup {...interactiveKeyProps}>K</KbdGroup>;
+// @ts-expect-error Editable keys would introduce keyboard interaction.
+export const editableKbd = <Kbd contentEditable>K</Kbd>;
 `,
   );
   run(process.execPath, [

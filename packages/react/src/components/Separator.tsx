@@ -6,6 +6,8 @@ export type SeparatorProps = Omit<
   ComponentPropsWithoutRef<'div'>,
   'className' | 'role' | 'aria-orientation' | 'children'
 > & {
+  tabIndex?: never;
+  contentEditable?: never;
   className?: string;
   orientation?: SeparatorOrientation;
   /** Decorative separators are hidden from assistive technology. */
