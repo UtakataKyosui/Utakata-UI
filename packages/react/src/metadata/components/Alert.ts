@@ -20,13 +20,22 @@ export const alertQualityRules = [
       'Write the outcome, such as an error, in Alert.Title and add aria-hidden="true" to decorative icons.',
   },
   {
-    id: 'alert.theme-announcement',
+    id: 'alert.visual-theme',
     requirement:
-      'Every variant is legible in every supported theme and forced colors, and dynamic role="alert" messages are announced once by screen readers.',
+      'In a real browser both variants keep at least 4.5:1 text contrast against the alert background in every supported theme and in forced colors, long content wraps without clipping or overflow at 320 CSS px and 200% text size, and the alert keeps a visible border in forced colors.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep overflow-wrap on Alert.Root; check --ui-alert-background and --ui-alert-border overrides and the destructive color against the surface.',
+  },
+  {
+    id: 'alert.announcement',
+    requirement:
+      'Dynamic role="alert" messages are announced once by screen readers, role="status" messages politely, and static alerts are read in document order.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast and forced colors, and record screen reader announcements in a real browser.',
+      'Record screen reader, browser and observed announcement; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 
