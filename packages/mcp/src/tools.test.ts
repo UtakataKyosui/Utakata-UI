@@ -49,6 +49,7 @@ describe('manifest tools', () => {
       'Popover',
       'DropdownMenu',
       'AlertDialog',
+      'Toast',
     ]);
   });
 
