@@ -10,6 +10,7 @@ import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
+import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
@@ -147,6 +148,7 @@ export const componentManifest = {
     Tabs: tabsManifest,
     Toggle: toggleManifest,
     Tooltip: tooltipManifest,
+    Popover: popoverManifest,
   },
 } as const;
 

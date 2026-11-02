@@ -17,6 +17,7 @@ import {
   KbdGroup,
   NativeSelect,
   Pagination,
+  Popover,
   Progress,
   RadioGroup,
   Select,
@@ -639,6 +640,34 @@ function TooltipStates() {
   );
 }
 
+function PopoverStates() {
+  return (
+    <section aria-label="Popover states">
+      <Button>Before popover</Button>
+      <Popover.Root>
+        <Popover.Trigger render={<Button variant="outline" />}>
+          Open options
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Positioner sideOffset={8}>
+            <Popover.Popup>
+              <Popover.Title>Options</Popover.Title>
+              <Popover.Description>Adjust the options.</Popover.Description>
+              <label>
+                Name <input type="text" defaultValue="Aya" />
+              </label>
+              <Popover.Close render={<Button variant="outline" />}>
+                Close options
+              </Popover.Close>
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
+      <Button>After popover</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -826,6 +855,7 @@ function Fixture() {
       <TabsStates />
       <ToggleStates />
       <TooltipStates />
+      <PopoverStates />
     </main>
   );
 }
