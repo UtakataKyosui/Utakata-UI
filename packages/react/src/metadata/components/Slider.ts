@@ -13,8 +13,8 @@ export const sliderQualityRules = [
   {
     id: 'slider.keyboard',
     requirement:
-      'Arrow keys change the value by step, Page Up/Down by largeStep, Home/End move to min/max, and values stay within bounds including decimal steps.',
-    verification: 'automated',
+      'In a real browser, Tab focuses the thumb, arrow keys change the value by step, Page Up/Down by largeStep, Home/End move to min/max, and values stay within bounds including decimal steps.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI Slider keyboard handling; do not add custom key handlers.',
@@ -29,9 +29,18 @@ export const sliderQualityRules = [
       'Use onValueCommitted for expensive work, set name on Root and use disabled rather than removing the slider.',
   },
   {
-    id: 'slider.pointer-real-browser',
+    id: 'slider.pointer',
     requirement:
-      'Pointer drag and track press change the value in a real browser, and screen readers announce name, value text and changes.',
+      'In a real browser, a track press moves the thumb to the pressed position, dragging the thumb changes the value continuously, and onValueCommitted reports the final value once on release.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Preserve Base UI Slider pointer handling; do not cover the control with elements that intercept pointer events.',
+  },
+  {
+    id: 'slider.screen-reader',
+    requirement:
+      'Screen readers announce the slider name, value text and value changes.',
     verification: 'manual',
     severity: 'error',
     remediation:

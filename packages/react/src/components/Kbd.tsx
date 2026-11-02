@@ -2,17 +2,30 @@ import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { KbdSize } from '../metadata/manifest.js';
 import { withClassName } from './classNames.js';
 
-export type KbdProps = Omit<ComponentPropsWithoutRef<'kbd'>, 'className'> & {
-  className?: string;
-  size?: KbdSize;
+type DisplayOnlyProps = {
+  tabIndex?: never;
+  contentEditable?: never;
+  onKeyDown?: never;
+  onKeyDownCapture?: never;
+  onKeyUp?: never;
+  onKeyUpCapture?: never;
+  onKeyPress?: never;
+  onKeyPressCapture?: never;
 };
+
+export type KbdProps = Omit<ComponentPropsWithoutRef<'kbd'>, 'className'> &
+  DisplayOnlyProps & {
+    className?: string;
+    size?: KbdSize;
+  };
 
 export type KbdGroupProps = Omit<
   ComponentPropsWithoutRef<'span'>,
   'className' | 'role'
-> & {
-  className?: string;
-};
+> &
+  DisplayOnlyProps & {
+    className?: string;
+  };
 
 /** Displays one key. Consumers supply the platform-specific key label. */
 export const Kbd = forwardRef<HTMLElement, KbdProps>(function Kbd(
