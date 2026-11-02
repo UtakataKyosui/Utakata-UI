@@ -4,6 +4,7 @@ import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
+import { collapsibleManifest } from './components/Collapsible.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
@@ -137,6 +138,7 @@ export const componentManifest = {
     RadioGroup: radioGroupManifest,
     Select: selectManifest,
     Slider: sliderManifest,
+    Collapsible: collapsibleManifest,
   },
 } as const;
 

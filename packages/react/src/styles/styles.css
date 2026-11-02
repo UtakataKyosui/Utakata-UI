@@ -1085,6 +1085,76 @@
     cursor: not-allowed;
   }
 
+  .ui-collapsible__trigger {
+    align-items: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-weight: 600;
+    gap: 0.5rem;
+    justify-content: space-between;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    text-align: start;
+    width: 100%;
+  }
+
+  .ui-collapsible__trigger::after {
+    block-size: 0.5em;
+    border-block-end: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    content: "";
+    flex-shrink: 0;
+    inline-size: 0.5em;
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+  }
+
+  .ui-collapsible__trigger[data-panel-open]::after {
+    transform: rotate(-135deg);
+  }
+
+  .ui-collapsible__trigger:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-collapsible__trigger[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-collapsible__panel {
+    color: var(--ui-color-text);
+    overflow: hidden;
+    transition: height 150ms ease;
+  }
+
+  .ui-collapsible__panel {
+    height: var(--collapsible-panel-height);
+  }
+
+  .ui-collapsible__panel[data-starting-style],
+  .ui-collapsible__panel[data-ending-style] {
+    height: 0;
+  }
+
+  .ui-collapsible__panel > * {
+    margin-block: 0;
+  }
+
+  .ui-collapsible__panel {
+    padding-inline: 0.75rem;
+  }
+  .ui-collapsible__panel > :last-child {
+    padding-block-end: 0.75rem;
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;
@@ -1224,6 +1294,11 @@
 
     .ui-switch,
     .ui-switch__thumb {
+      transition: none;
+    }
+
+    .ui-collapsible__panel,
+    .ui-collapsible__trigger::after {
       transition: none;
     }
   }

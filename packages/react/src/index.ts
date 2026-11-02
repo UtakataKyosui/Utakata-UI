@@ -50,7 +50,12 @@ export type {
   CheckboxRootProps,
 } from './components/Checkbox.js';
 export { Checkbox } from './components/Checkbox.js';
-
+export type {
+  CollapsiblePanelProps,
+  CollapsibleRootProps,
+  CollapsibleTriggerProps,
+} from './components/Collapsible.js';
+export { Collapsible } from './components/Collapsible.js';
 export { Dialog } from './components/Dialog.js';
 
 export { Field } from './components/Field.js';

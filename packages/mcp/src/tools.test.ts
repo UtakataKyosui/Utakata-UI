@@ -41,6 +41,7 @@ describe('manifest tools', () => {
       'RadioGroup',
       'Select',
       'Slider',
+      'Collapsible',
     ]);
   });
 

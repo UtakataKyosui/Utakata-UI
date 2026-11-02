@@ -4,6 +4,7 @@ import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
+import { collapsibleQualityRules } from './components/Collapsible.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
@@ -101,6 +102,7 @@ export const qualityRules = {
   RadioGroup: radioGroupQualityRules,
   Select: selectQualityRules,
   Slider: sliderQualityRules,
+  Collapsible: collapsibleQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
