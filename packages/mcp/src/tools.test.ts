@@ -29,6 +29,7 @@ describe('manifest tools', () => {
       'Card',
       'Alert',
       'Avatar',
+      'Progress',
       'Input',
       'Textarea',
       'NativeSelect',

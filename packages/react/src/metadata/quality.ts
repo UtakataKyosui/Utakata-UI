@@ -6,6 +6,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
+import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
@@ -85,6 +86,7 @@ export const qualityRules = {
   Card: cardQualityRules,
   Alert: alertQualityRules,
   Avatar: avatarQualityRules,
+  Progress: progressQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
