@@ -13,8 +13,8 @@ export const dropdownMenuQualityRules = [
   {
     id: 'dropdown-menu.keyboard',
     requirement:
-      'Arrow keys, Home/End and typeahead move the highlight; disabled items stay discoverable with arrow keys (as in the APG menu pattern) but cannot be activated by click or Enter.',
-    verification: 'automated',
+      'In a real browser arrow keys, Home/End and typeahead move the highlight; disabled items stay discoverable with arrow keys (as in the APG menu pattern) but cannot be activated by click or Enter.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI roving focus and typeahead; use the disabled prop instead of removing items.',
@@ -22,20 +22,29 @@ export const dropdownMenuQualityRules = [
   {
     id: 'dropdown-menu.activate-dismiss',
     requirement:
-      'Activating an item runs its action once and closes the menu; Escape and outside press close the menu and restore focus to the trigger.',
-    verification: 'automated',
+      'In a real browser activating an item with Enter or Space runs its action once and closes the menu; Escape and outside press close the menu and restore focus to the trigger.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Handle actions in Item onClick; do not reimplement dismissal or focus return.',
   },
   {
-    id: 'dropdown-menu.real-browser',
+    id: 'dropdown-menu.forced-highlight',
     requirement:
-      'Verify real keyboard operation, edge positioning, highlight visibility in every theme and forced colors, 200% zoom and screen-reader announcements.',
+      'In a real browser with forced colors active the highlighted item, including a highlighted disabled item, uses the Highlight and HighlightText system colors, and the focused trigger keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the forced-colors overrides for highlighted and disabled-highlighted items with enough specificity, and the trigger outline fallback.',
+  },
+  {
+    id: 'dropdown-menu.platform-manual',
+    requirement:
+      'Edge collision positioning, highlight visibility in real high-contrast modes, real 200% browser zoom and screen-reader announcements are verified on real devices and assistive technology.',
     verification: 'manual',
     severity: 'error',
     remediation:
-      'Record browser, assistive technology, commit and findings before release.',
+      'Record browser, assistive technology, commit and findings before release; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

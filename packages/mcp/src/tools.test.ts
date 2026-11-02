@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
+    const rules = getComponent('DropdownMenu')?.qualityRules ?? [];
+    for (const id of [
+      'dropdown-menu.keyboard',
+      'dropdown-menu.activate-dismiss',
+      'dropdown-menu.forced-highlight',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'dropdown-menu.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Popover dismissal and forced-colors focus and keeps platform checks manual', () => {
     const rules = getComponent('Popover')?.qualityRules ?? [];
     for (const id of ['popover.open-dismiss-focus', 'popover.forced-focus'])

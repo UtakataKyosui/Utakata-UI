@@ -162,3 +162,9 @@ section[aria-label="Popover states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+section[aria-label="Menu states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}

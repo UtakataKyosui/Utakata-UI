@@ -1598,6 +1598,10 @@
       forced-color-adjust: none;
     }
 
+    .ui-button:focus-visible,
+    .ui-field__control:focus-visible,
+    .ui-dialog__popup :focus-visible,
+    .ui-dropdown-menu__trigger:focus-visible,
     .ui-table-container:focus-visible,
     .ui-tooltip__trigger:focus-visible,
     .ui-popover__trigger:focus-visible,
@@ -1645,7 +1649,8 @@
       display: none;
     }
 
-    .ui-dropdown-menu__item[data-highlighted] {
+    .ui-dropdown-menu__item[data-highlighted],
+    .ui-dropdown-menu__item[data-disabled][data-highlighted] {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
