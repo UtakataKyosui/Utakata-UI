@@ -8,6 +8,7 @@ import {
   Badge,
   Breadcrumb,
   Button,
+  ButtonGroup,
   Card,
   Checkbox,
   Collapsible,
@@ -866,6 +867,45 @@ function ToggleGroupStates() {
   );
 }
 
+function ButtonGroupStates() {
+  return (
+    <section aria-label="ButtonGroup states">
+      <Button>Before button groups</Button>
+      <ButtonGroup aria-label="History actions" data-case="horizontal">
+        <Button variant="outline">Back</Button>
+        <Button variant="outline" disabled>
+          Forward
+        </Button>
+        <Button variant="outline">Copy</Button>
+        <Button variant="solid">Paste</Button>
+      </ButtonGroup>
+      <ButtonGroup
+        aria-label="Order actions"
+        orientation="vertical"
+        data-case="vertical"
+      >
+        <Button variant="outline">Top</Button>
+        <Button variant="outline" disabled>
+          Up
+        </Button>
+        <Button variant="outline">Down</Button>
+      </ButtonGroup>
+      <div className="fixture-button-group-wrap">
+        <ButtonGroup aria-label="Many actions" data-case="wrap">
+          {['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'].map(
+            (name) => (
+              <Button key={name} variant="outline">
+                {name}
+              </Button>
+            ),
+          )}
+        </ButtonGroup>
+      </div>
+      <Button>After button groups</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -1058,6 +1098,7 @@ function Fixture() {
       <AlertDialogStates />
       <ToastStates />
       <ToggleGroupStates />
+      <ButtonGroupStates />
     </main>
   );
 }

@@ -9,6 +9,8 @@ export type ButtonGroupProps = Omit<
 > & {
   className?: string;
   orientation?: ButtonGroupOrientation;
+  // Optional `never` members also reject the name when props arrive through a spread.
+  role?: never;
 } & (
     | { 'aria-label': string; 'aria-labelledby'?: never }
     | { 'aria-label'?: never; 'aria-labelledby': string }

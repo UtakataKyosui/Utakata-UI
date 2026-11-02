@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -381,6 +381,29 @@ function ToggleGroupWrapper(props: ToggleGroupRootProps) { return <ToggleGroup.R
 export const wrappedToggleGroup = <ToggleGroupWrapper aria-label="Format" />;
 // @ts-expect-error Wrappers must preserve the required group name.
 export const wrappedToggleGroupInvalid = <ToggleGroupWrapper />;
+export const buttonGroupNamed: ButtonGroupProps = { 'aria-label': 'History' };
+export const buttonGroupReferenced: ButtonGroupProps = { 'aria-labelledby': 'history', orientation: 'vertical' };
+export const buttonGroup = <ButtonGroup {...buttonGroupNamed}><Button>Undo</Button><Button disabled>Redo</Button></ButtonGroup>;
+// @ts-expect-error A button group requires aria-label or aria-labelledby in shipped declarations.
+export const buttonGroupUnnamed: ButtonGroupProps = {};
+// @ts-expect-error Only one group name source may be passed in shipped declarations.
+export const buttonGroupBothNames: ButtonGroupProps = { 'aria-label': 'History', 'aria-labelledby': 'history' };
+// @ts-expect-error The group role is fixed; toolbar behavior is not provided.
+export const buttonGroupToolbar: ButtonGroupProps = { 'aria-label': 'x', role: 'toolbar' };
+// @ts-expect-error Orientations are limited to the manifest in shipped declarations.
+export const buttonGroupDiagonal: ButtonGroupProps = { 'aria-label': 'x', orientation: 'd' };
+// @ts-expect-error JSX usage must also name the group.
+export const buttonGroupUnnamedJsx = <ButtonGroup />;
+const buttonGroupUnnamedProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the required group name.
+export const buttonGroupSpreadUnnamed = <ButtonGroup {...buttonGroupUnnamedProps} />;
+const buttonGroupRoleProps = { 'aria-label': 'x', role: 'toolbar' };
+// @ts-expect-error Spreads cannot change the fixed group role.
+export const buttonGroupSpreadRole = <ButtonGroup {...buttonGroupRoleProps} />;
+function ButtonGroupWrapper(props: ButtonGroupProps) { return <ButtonGroup {...props} />; }
+export const wrappedButtonGroup = <ButtonGroupWrapper aria-label="History" />;
+// @ts-expect-error Wrappers must preserve the required group name.
+export const wrappedButtonGroupInvalid = <ButtonGroupWrapper />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

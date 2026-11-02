@@ -186,3 +186,13 @@ section[aria-label="ToggleGroup states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+section[aria-label="ButtonGroup states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fixture-button-group-wrap {
+  inline-size: 240px;
+}
