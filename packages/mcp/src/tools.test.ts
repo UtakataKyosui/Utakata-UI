@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Accordion keyboard and motion and keeps zoom and speech manual', () => {
+    const rules = getComponent('Accordion')?.qualityRules ?? [];
+    for (const id of ['accordion.keyboard-focus', 'accordion.motion-forced'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['accordion.zoom-theme', 'accordion.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for Collapsible keyboard and motion and keeps zoom manual', () => {
     const rules = getComponent('Collapsible')?.qualityRules ?? [];
     for (const id of [

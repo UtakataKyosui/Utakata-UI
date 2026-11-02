@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
+import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -254,6 +254,21 @@ function CollapsibleWrapper(props: CollapsibleRootProps) { return <Collapsible.R
 export const wrappedCollapsible = <CollapsibleWrapper defaultOpen />;
 // @ts-expect-error Wrappers must preserve the string className contract.
 export const wrappedCollapsibleInvalid = <CollapsibleWrapper className={() => 'x'} />;
+export const accordionHeader: AccordionHeaderProps = { level: 2 };
+export const accordion = <Accordion.Root defaultValue={['a']}><Accordion.Item value="a"><Accordion.Header {...accordionHeader}><Accordion.Trigger>Account</Accordion.Trigger></Accordion.Header><Accordion.Panel>Details</Accordion.Panel></Accordion.Item></Accordion.Root>;
+// @ts-expect-error Heading levels are limited to 2-6 in shipped declarations.
+export const accordionPageTitleLevel: AccordionHeaderProps = { level: 1 };
+// @ts-expect-error Heading levels are limited to 2-6 in JSX in shipped declarations.
+export const accordionInvalidLevelJsx = <Accordion.Header level={7} />;
+const accordionBadLevel = { level: 1 };
+// @ts-expect-error Spreads cannot bypass the heading level contract.
+export const accordionLevelSpread = <Accordion.Header {...accordionBadLevel} />;
+// @ts-expect-error Accordion className must be a string in shipped declarations.
+export const accordionFunctionClass = <Accordion.Root className={() => 'x'} />;
+function AccordionHeaderWrapper(props: AccordionHeaderProps) { return <Accordion.Header {...props} />; }
+export const wrappedAccordionHeader = <AccordionHeaderWrapper level={4} />;
+// @ts-expect-error Wrappers must preserve the heading level contract.
+export const wrappedAccordionHeaderInvalid = <AccordionHeaderWrapper level={1} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

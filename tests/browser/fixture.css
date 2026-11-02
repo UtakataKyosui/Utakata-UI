@@ -114,3 +114,13 @@ section[aria-label="Collapsible states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+section[aria-label="Accordion states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Accordion states"] .ui-accordion {
+  inline-size: 240px;
+}
