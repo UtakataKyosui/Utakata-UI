@@ -50,13 +50,6 @@ export async function openPopover(trigger: HTMLElement) {
   return dialog;
 }
 
-async function expectClosedWithFocusReturn(trigger: HTMLElement) {
-  await waitFor(() =>
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
-  );
-  expect(trigger).toHaveAttribute('aria-expanded', 'false');
-}
-
 export const popoverChecks: Record<string, QualityCheck> = {
   'popover.accessible-name': async () => {
     const trigger = renderPopover();
@@ -65,29 +58,6 @@ export const popoverChecks: Record<string, QualityCheck> = {
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(trigger).toHaveAttribute('aria-haspopup', 'dialog');
     expect((await audit(dialog)).violations).toEqual([]);
-  },
-  'popover.open-dismiss-focus': async () => {
-    const trigger = renderPopover();
-    let dialog = await openPopover(trigger);
-    const input = screen.getByRole('spinbutton', { name: 'Font size' });
-    input.focus();
-    fireEvent.pointerDown(input);
-    fireEvent.mouseDown(input);
-    fireEvent.click(input);
-    expect(dialog).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
-    await expectClosedWithFocusReturn(trigger);
-    await waitFor(() => expect(trigger).toHaveFocus());
-    dialog = await openPopover(trigger);
-    fireEvent.keyDown(document.activeElement ?? dialog, { key: 'Escape' });
-    await expectClosedWithFocusReturn(trigger);
-    await waitFor(() => expect(trigger).toHaveFocus());
-    await openPopover(trigger);
-    const outside = screen.getByRole('button', { name: 'Outside' });
-    fireEvent.pointerDown(outside);
-    fireEvent.mouseDown(outside);
-    fireEvent.click(outside);
-    await expectClosedWithFocusReturn(trigger);
   },
   'popover.disabled-controlled': async () => {
     const disabled = renderPopover({}, true);

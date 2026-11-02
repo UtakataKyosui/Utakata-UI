@@ -31,11 +31,20 @@ export const progressQualityRules = [
   {
     id: 'progress.visual-motion',
     requirement:
-      'The track, fill and indeterminate state stay distinguishable in every supported theme, forced colors and with reduced motion.',
+      'In a real browser the indicator width matches the value, the fill keeps at least 3:1 contrast against the track and the track boundary against the surface, the value text keeps 4.5:1, the indeterminate bar animates by default and becomes a static patterned bar under prefers-reduced-motion, and forced colors keep the fill and track boundary visible.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the reduced-motion pattern and forced-colors fill; check --ui-progress-color overrides against the track.',
+  },
+  {
+    id: 'progress.os-reduced-motion',
+    requirement:
+      'With the operating system reduced-motion setting and real high-contrast modes the indeterminate bar shows no motion and remains distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast of the fill against the track, forced colors and prefers-reduced-motion in a real browser.',
+      'Check the OS reduced-motion and high-contrast settings in a real browser; leave unverified until performed.',
   },
   {
     id: 'progress.screen-reader',
