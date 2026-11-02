@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Alert,
+  Avatar,
   Badge,
   Button,
   Card,
@@ -287,6 +288,31 @@ function AlertStates() {
   );
 }
 
+// A wide image proves the avatar crops instead of stretching it.
+const avatarImage =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="#3366cc"/><circle cx="100" cy="50" r="40" fill="#ffffff"/></svg>',
+  );
+
+function AvatarStates() {
+  return (
+    <section aria-label="Avatar states">
+      {componentManifest.components.Avatar.sizes.map((size) => (
+        <Avatar.Root key={`${size}-image`} size={size} data-case="image">
+          <Avatar.Image src={avatarImage} alt={`Image ${size}`} />
+          <Avatar.Fallback>IM</Avatar.Fallback>
+        </Avatar.Root>
+      ))}
+      {componentManifest.components.Avatar.sizes.map((size) => (
+        <Avatar.Root key={`${size}-fallback`} size={size} data-case="fallback">
+          <Avatar.Fallback>{size.toUpperCase()}</Avatar.Fallback>
+        </Avatar.Root>
+      ))}
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -464,6 +490,7 @@ function Fixture() {
       <SpinnerStates />
       <CardStates />
       <AlertStates />
+      <AvatarStates />
     </main>
   );
 }
