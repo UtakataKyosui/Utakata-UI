@@ -68,3 +68,13 @@ section[aria-label="Alert states"] {
 section[aria-label="Alert states"] .ui-alert {
   inline-size: 240px;
 }
+
+section[aria-label="Progress states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Progress states"] .ui-progress {
+  inline-size: 240px;
+}

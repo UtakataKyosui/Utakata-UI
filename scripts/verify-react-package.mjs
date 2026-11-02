@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -167,6 +167,25 @@ export const wrappedAvatar = <AvatarWrapper src="/aya.png" alt="Aya" />;
 export const wrappedAvatarInvalid = <AvatarWrapper src="/aya.png" />;
 // @ts-expect-error Avatar sizes are limited to the manifest in shipped declarations.
 export const avatarUnsupportedSize = <Avatar.Root size="xl" />;
+export const labelledProgress: ProgressRootProps = { value: 10, label: 'Upload' };
+export const namedProgress: ProgressRootProps = { value: 10, 'aria-label': 'Upload' };
+export const indeterminateProgress: ProgressRootProps = { value: null, 'aria-labelledby': 'upload-label' };
+export const progress = <Progress.Root {...labelledProgress}><Progress.Value /><Progress.Track><Progress.Indicator /></Progress.Track></Progress.Root>;
+// @ts-expect-error Progress.Root requires a name source in shipped declarations.
+export const unnamedProgress: ProgressRootProps = { value: 10 };
+// @ts-expect-error label and aria-label are alternative name sources in shipped declarations.
+export const doubleNamedProgress: ProgressRootProps = { value: 1, label: 'A', 'aria-label': 'B' };
+// @ts-expect-error value is required; use null for indeterminate.
+export const progressMissingValue: ProgressRootProps = { label: 'Upload' };
+// @ts-expect-error JSX usage must also provide a name source.
+export const progressUnnamedJsx = <Progress.Root value={10} />;
+const unnamedProgressProps = { value: 10 };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const progressSpreadUnnamed = <Progress.Root {...unnamedProgressProps} />;
+function ProgressWrapper(props: ProgressRootProps) { return <Progress.Root {...props} />; }
+export const wrappedProgress = <ProgressWrapper value={5} label="Upload" />;
+// @ts-expect-error Wrappers must preserve the required name.
+export const wrappedProgressInvalid = <ProgressWrapper value={5} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

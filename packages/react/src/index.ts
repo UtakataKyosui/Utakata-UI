@@ -57,6 +57,15 @@ export type { NativeSelectProps } from './components/NativeSelect.js';
 export { NativeSelect } from './components/NativeSelect.js';
 
 export type {
+  ProgressAccessibilityProps,
+  ProgressIndicatorProps,
+  ProgressLabelProps,
+  ProgressRootProps,
+  ProgressTrackProps,
+  ProgressValueProps,
+} from './components/Progress.js';
+export { Progress } from './components/Progress.js';
+export type {
   RadioGroupIndicatorProps,
   RadioGroupItemProps,
   RadioGroupRootProps,

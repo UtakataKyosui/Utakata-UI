@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`progress.visual-motion` は 0・50・100 の確定値と不確定値の Progress を Chromium light/dark で実測する必須 browser ルールです。インジケーター幅が値に比例すること（トラック内寸に対し ±1px）、塗りがトラックと背景に対し 3:1 以上、トラックの境界が背景に対し 3:1 以上、値と見出しの文字が 4.5:1 以上であること、不確定バーが既定でアニメーション実行中で `prefers-reduced-motion: reduce` のエミュレーションでは `none` かつ静止した縞模様になること、強制配色でも塗りとトラック境界が見えることを算出色とレイアウトで検証します。幅の誤り・塗りとトラックの同色化・縮小モーション時のアニメーション維持の対照例では検証が失敗することを確認します。`progress-evidence` と `progress-axe` を既存のコミット付き CI 成果物へ添付します。実際の OS 設定とハイコントラストは `progress.os-reduced-motion`、スクリーンリーダーの発話は `progress.screen-reader` に未検証として残ります。
+
 `avatar.visual-theme` は sm/md/lg の画像表示とフォールバック表示を Chromium light/dark で実測する必須 browser ルールです。横長の画像が `object-fit: cover` で正方形の枠いっぱいに歪まず収まること、アバターが円（幅＝高さ）でサイズが昇順に異なること、フォールバック文字が算出した実効背景に対し 4.5:1 以上であること（ルート文字サイズ200% を含む）、強制配色で 1px 以上の実線境界が背景に対し 3:1 以上あることを検証します。`object-fit: fill` と低コントラストの対照例では検証が失敗することを確認します。`avatar-evidence` と `avatar-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームと画像 alt・フォールバックの読み上げは `avatar.zoom-assistive` に未検証として残ります。
 
 `alert.visual-theme` は default / destructive の両バリアント（アイコン付き・長文）を Chromium light/dark で実測する必須 browser ルールです。タイトルと説明の文字が算出した実効背景に対し 4.5:1 以上であること、長い連続文字列が通常・幅320px・ルート文字サイズ200% でクリップや枠外へのはみ出しなく折り返すこと、強制配色で 1px 以上の実線境界が背景に対し 3:1 以上あることを検証します。低コントラストの destructive と折り返し無効の対照例では検証が失敗することを確認します。`alert-evidence` と `alert-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの通知（`role="alert"` / `status`）は `alert.announcement` に未検証として残ります。

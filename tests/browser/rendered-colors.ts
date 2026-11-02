@@ -16,6 +16,7 @@ export type RenderedColors = {
   /** Style of the right border (the ring track). */
   trackBorderStyle: string;
   opacity: number;
+  backgroundImage: string;
   animationName: string;
   animationPlayState: string;
   animationDuration: string;
@@ -116,6 +117,7 @@ export async function measureRenderedColors(
         borderStyle: style.borderTopStyle,
         trackBorderStyle: style.borderRightStyle,
         opacity: Number.parseFloat(style.opacity),
+        backgroundImage: style.backgroundImage,
         animationName: style.animationName,
         animationPlayState: style.animationPlayState,
         animationDuration: style.animationDuration,

@@ -6,6 +6,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
+import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
@@ -121,6 +122,7 @@ export const componentManifest = {
     Card: cardManifest,
     Alert: alertManifest,
     Avatar: avatarManifest,
+    Progress: progressManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
