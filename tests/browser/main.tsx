@@ -11,6 +11,7 @@ import {
   Checkbox,
   Collapsible,
   Dialog,
+  DropdownMenu,
   Field,
   Input,
   Kbd,
@@ -668,6 +669,46 @@ function PopoverStates() {
   );
 }
 
+function MenuStates() {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  return (
+    <section aria-label="Menu states">
+      <Button>Before menu</Button>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger render={<Button variant="outline" />}>
+          Actions
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Positioner sideOffset={4}>
+            <DropdownMenu.Popup>
+              <DropdownMenu.Group>
+                <DropdownMenu.GroupLabel>Document</DropdownMenu.GroupLabel>
+                <DropdownMenu.Item onClick={record('Edit')}>
+                  Edit
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={record('Duplicate')}>
+                  Duplicate
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item disabled onClick={record('Delete')}>
+                Delete
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onClick={record('Share')}>
+                Share
+              </DropdownMenu.Item>
+            </DropdownMenu.Popup>
+          </DropdownMenu.Positioner>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+      <Button>After menu</Button>
+      <output aria-label="Menu actions">{JSON.stringify(actions)}</output>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -856,6 +897,7 @@ function Fixture() {
       <ToggleStates />
       <TooltipStates />
       <PopoverStates />
+      <MenuStates />
     </main>
   );
 }

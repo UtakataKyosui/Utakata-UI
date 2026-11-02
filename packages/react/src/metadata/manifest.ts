@@ -6,6 +6,7 @@ import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
+import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
@@ -149,6 +150,7 @@ export const componentManifest = {
     Toggle: toggleManifest,
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
+    DropdownMenu: dropdownMenuManifest,
   },
 } as const;
 

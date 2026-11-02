@@ -64,7 +64,7 @@ export type {
 } from './components/Collapsible.js';
 export { Collapsible } from './components/Collapsible.js';
 export { Dialog } from './components/Dialog.js';
-
+export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
 export type { InputProps } from './components/Input.js';
 export { Input } from './components/Input.js';
