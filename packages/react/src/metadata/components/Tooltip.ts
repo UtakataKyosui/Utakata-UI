@@ -13,8 +13,8 @@ export const tooltipQualityRules = [
   {
     id: 'tooltip.focus-hover-escape',
     requirement:
-      'The tooltip opens after the delay on hover and on keyboard focus, and Escape closes it without moving focus.',
-    verification: 'automated',
+      'In a real browser the tooltip opens after the delay on hover and on keyboard focus, and Escape closes it without moving focus.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI hover/focus handling; do not open tooltips only from pointer events.',
@@ -22,8 +22,8 @@ export const tooltipQualityRules = [
   {
     id: 'tooltip.hoverable',
     requirement:
-      'Moving the pointer from the trigger onto the popup keeps the tooltip open (WCAG 1.4.13).',
-    verification: 'automated',
+      'In a real browser moving the pointer from the trigger onto the popup keeps the tooltip open (WCAG 1.4.13).',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Keep the hoverable popup behavior; Tooltip.Root does not accept disableHoverablePopup.',
@@ -38,13 +38,22 @@ export const tooltipQualityRules = [
       'Compose Tooltip.Trigger onto an existing control with render; move interactive content to Popover.',
   },
   {
-    id: 'tooltip.real-browser',
+    id: 'tooltip.visual-position',
     requirement:
-      'Verify real keyboard focus display, pointer travel to the popup, edge positioning, touch usability without the tooltip, themes, forced colors, 200% zoom and screen-reader description output.',
+      'In a real browser the popup text keeps at least 4.5:1 contrast against the popup background in every supported theme, the popup stays inside a 320 CSS px viewport, and in forced colors the popup keeps a visible border and the focused trigger keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the popup collision handling, the forced-colors border and the trigger outline; check --ui-tooltip-background and --ui-tooltip-color overrides.',
+  },
+  {
+    id: 'tooltip.platform-manual',
+    requirement:
+      'Touch usability without the tooltip, real 200% browser zoom, real high-contrast modes and screen-reader description output are verified on real devices and assistive technology.',
     verification: 'manual',
     severity: 'error',
     remediation:
-      'Record browser, assistive technology, commit and findings before release.',
+      'Record browser, assistive technology, device, commit and findings before release; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

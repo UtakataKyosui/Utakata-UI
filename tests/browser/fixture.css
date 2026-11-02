@@ -150,3 +150,9 @@ section[aria-label="Toggle states"] {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
+section[aria-label="Tooltip states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}

@@ -1491,6 +1491,7 @@
     }
 
     .ui-table-container:focus-visible,
+    .ui-tooltip__trigger:focus-visible,
     .ui-breadcrumb__link:focus-visible,
     .ui-pagination__link:focus-visible,
     .ui-radio-group__item:focus-visible,

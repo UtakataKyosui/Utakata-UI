@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Tooltip interaction and visuals and keeps platform checks manual', () => {
+    const rules = getComponent('Tooltip')?.qualityRules ?? [];
+    for (const id of [
+      'tooltip.focus-hover-escape',
+      'tooltip.hoverable',
+      'tooltip.visual-position',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'tooltip.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Toggle keyboard and visuals and keeps zoom manual', () => {
     const rules = getComponent('Toggle')?.qualityRules ?? [];
     for (const id of ['toggle.keyboard', 'toggle.visual-theme'])
