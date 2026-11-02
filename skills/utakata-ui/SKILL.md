@@ -14,6 +14,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 - Use `Button` for actions and provide a visible text label. For icon-only content set `iconOnly` and provide `aria-label` or `aria-labelledby`; this is enforced by TypeScript. Resolve development name/reference warnings and validate computed names with axe. A warning-free render is not proof of accessibility.
 - Compose `Field.Root` with a visible `Field.Label` and `Field.Control`. Add `Field.Description` or `Field.Error` when useful.
 - Compose `Dialog.Root` with `Dialog.Trigger` and a portalled `Dialog.Popup` containing a `Dialog.Title`. Use Base UI's `Dialog.Close` and do not implement a second open-state or focus-management system.
+- Use `Kbd` for each displayed key and `KbdGroup` for combinations. Key labels are supplied by you; when symbols such as `⌘` read poorly, set `aria-label` on `KbdGroup` and wrap the visual keys in `aria-hidden="true"`. Kbd does not register shortcuts.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 

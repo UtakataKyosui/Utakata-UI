@@ -150,6 +150,36 @@
     color: var(--ui-color-muted);
   }
 
+  .ui-kbd {
+    background: var(--ui-kbd-background, var(--ui-color-surface));
+    border: 1px solid var(--ui-color-border);
+    border-bottom-width: 2px;
+    border-radius: 0.25rem;
+    color: var(--ui-color-text);
+    display: inline-block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .ui-kbd--sm {
+    font-size: 0.75rem;
+    padding: 0.0625rem 0.3125rem;
+  }
+
+  .ui-kbd--md {
+    font-size: 0.875rem;
+    padding: 0.125rem 0.4375rem;
+  }
+
+  .ui-kbd-group {
+    align-items: center;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .ui-button {
       transition: none;

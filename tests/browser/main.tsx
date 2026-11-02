@@ -1,5 +1,11 @@
 import { createRoot } from 'react-dom/client';
-import { Button, Dialog, Field } from '../../packages/react/src/index.js';
+import {
+  Button,
+  Dialog,
+  Field,
+  Kbd,
+  KbdGroup,
+} from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
@@ -39,6 +45,16 @@ function Fixture() {
           </Dialog.Popup>
         </Dialog.Portal>
       </Dialog.Root>
+      <section aria-label="Static display">
+        <p>
+          Search:{' '}
+          <KbdGroup aria-label="Control and K">
+            <span aria-hidden="true">
+              <Kbd>Ctrl</Kbd> + <Kbd size="sm">K</Kbd>
+            </span>
+          </KbdGroup>
+        </p>
+      </section>
     </main>
   );
 }

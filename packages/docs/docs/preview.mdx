@@ -1,6 +1,6 @@
 ---
 title: UIプレビュー
-description: 開発中のButton・Field・Dialogを操作して確認できます。
+description: 開発中のコンポーネントを操作して確認できます。
 ---
 
 ライブラリ本体を使った実例です。Previewで操作し、Codeで実装を確認できます。
@@ -29,3 +29,13 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 ボタンで開き、Tabキーで移動、Escapeキーや閉じるボタンで閉じられます。
 
 <Component path="dialog" />
+
+## Kbd
+
+詳しい使い方とAPIは[Kbd](./components/kbd)を参照してください。
+
+単一キーと組み合わせの表示例です。組み合わせは`KbdGroup`の`aria-label`で読み上げ用の名前を付けます。
+
+`Kbd`と`KbdGroup`は表示専用です。`tabIndex`・`contentEditable`・キーボードイベントハンドラーは指定できません。ショートカットの処理はアプリケーション側に実装してください。TypeScriptを経由しない値や動的なJSX・独自CSSについては、利用側でもこの制約を確認してください。
+
+<Component path="kbd" />

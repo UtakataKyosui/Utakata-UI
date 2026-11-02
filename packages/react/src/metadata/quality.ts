@@ -1,3 +1,5 @@
+import { kbdQualityRules } from './components/Kbd.js';
+
 export interface QualityRule {
   id: string;
   requirement: string;
@@ -60,6 +62,7 @@ export const qualityRules = {
         'Record browser, assistive technology and findings before release.',
     },
   ],
+  Kbd: kbdQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

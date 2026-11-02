@@ -49,6 +49,20 @@ test('all button variants/sizes and field pass rendered axe checks', async ({
   await audit(page, 'default-axe');
 });
 
+test('static display components expose names and orientation', async ({
+  page,
+}) => {
+  const section = page.getByRole('region', { name: 'Static display' });
+  await expect(
+    section.getByRole('group', { name: 'Control and K' }),
+  ).toBeVisible();
+  await audit(
+    page,
+    'static-display-axe',
+    'section[aria-label="Static display"]',
+  );
+});
+
 test('keyboard activates buttons and dialog traps and restores focus', async ({
   page,
 }) => {
