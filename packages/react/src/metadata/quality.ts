@@ -1,4 +1,5 @@
 import { badgeQualityRules } from './components/Badge.js';
+import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
@@ -79,6 +80,7 @@ export const qualityRules = {
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,
+  Card: cardQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

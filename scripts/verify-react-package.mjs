@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
+import { Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -127,6 +127,15 @@ function SpinnerWrapper(props: SpinnerProps) { return <Spinner {...props} />; }
 export const wrappedSpinner = <SpinnerWrapper label="Uploading" />;
 // @ts-expect-error Wrappers must preserve the decorative and label exclusion.
 export const wrappedSpinnerInvalid = <SpinnerWrapper decorative label="Uploading" />;
+type CardTitleProps = ComponentProps<typeof Card.Title>;
+export const cardTitleProps: CardTitleProps = { level: '2', children: 'Profile' };
+export const card = <Card.Root><Card.Header><Card.Title {...cardTitleProps} /><Card.Description>Edit</Card.Description></Card.Header><Card.Content>Body</Card.Content><Card.Footer><Button>Save</Button></Card.Footer></Card.Root>;
+// @ts-expect-error Card.Title heading levels are limited to 1-6 in shipped declarations.
+export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile' };
+// @ts-expect-error Card.Title requires heading text in shipped declarations.
+export const cardEmptyTitle: CardTitleProps = { level: '2' };
+// @ts-expect-error Card className must be a string in shipped declarations.
+export const cardFunctionClass = <Card.Root className={() => 'x'} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
