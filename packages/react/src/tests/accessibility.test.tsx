@@ -24,6 +24,7 @@ import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
+import { switchChecks } from './quality/Switch.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
@@ -118,6 +119,7 @@ describe('accessibility regression checks', () => {
       ...textareaChecks,
       ...nativeSelectChecks,
       ...checkboxChecks,
+      ...switchChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

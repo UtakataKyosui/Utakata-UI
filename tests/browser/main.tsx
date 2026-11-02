@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   KbdGroup,
   NativeSelect,
   Separator,
+  Switch,
   Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
@@ -20,6 +22,30 @@ function cancelResetRef(form: HTMLFormElement | null) {
   const cancel = (event: Event) => event.preventDefault();
   form.addEventListener('reset', cancel);
   return () => form.removeEventListener('reset', cancel);
+}
+
+function SwitchStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="Switch input">
+      <Button>Before switches</Button>
+      {['Enabled', 'Disabled', 'Read only'].map((state) => (
+        <label key={state}>
+          <Switch.Root
+            disabled={state === 'Disabled'}
+            readOnly={state === 'Read only'}
+            onCheckedChange={(checked) =>
+              setChanges((previous) => [...previous, `${state}:${checked}`])
+            }
+          >
+            <Switch.Thumb />
+          </Switch.Root>
+          <span>{state} switch</span>
+        </label>
+      ))}
+      <output aria-label="Switch changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
 }
 
 function Fixture() {
@@ -190,6 +216,7 @@ function Fixture() {
           }),
         )}
       </section>
+      <SwitchStates />
     </main>
   );
 }

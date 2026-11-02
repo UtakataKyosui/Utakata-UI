@@ -3,6 +3,7 @@ import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { separatorManifest } from './components/Separator.js';
+import { switchManifest } from './components/Switch.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
 
@@ -109,6 +110,7 @@ export const componentManifest = {
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
     Checkbox: checkboxManifest,
+    Switch: switchManifest,
   },
 } as const;
 
