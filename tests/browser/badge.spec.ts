@@ -14,6 +14,9 @@ type BadgeMeasurement = {
   overflowsViewport: boolean;
   lines: number;
   borderWidth: number;
+  right: number;
+  parentRight: number;
+  clientWidth: number;
 };
 
 // Colors are resolved through a canvas so color-mix() and system colors become RGBA.
@@ -107,6 +110,9 @@ function measureBadges(page: Page) {
             (node.parentElement?.getBoundingClientRect().right ?? 0) + 1,
         lines: Math.round((box.height - padding) / lineHeight),
         borderWidth: Number.parseFloat(style.borderTopWidth),
+        right: box.right,
+        parentRight: node.parentElement?.getBoundingClientRect().right ?? 0,
+        clientWidth: document.documentElement.clientWidth,
       };
     });
   });
@@ -116,7 +122,7 @@ function verify(measurements: BadgeMeasurement[], forcedColors = false) {
   const variants = componentManifest.components.Badge.variants;
   expect(measurements).toHaveLength(variants.length * 3);
   for (const item of measurements) {
-    const label = `${item.variant}/${item.kind}`;
+    const label = `${item.variant}/${item.kind} ${JSON.stringify(item)}`;
     expect(item.contrast, `${label} contrast`).toBeGreaterThanOrEqual(4.5);
     expect(item.clipped, `${label} clipped`).toBe(false);
     expect(item.overflowsViewport, `${label} overflow`).toBe(false);
