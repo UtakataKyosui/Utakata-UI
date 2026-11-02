@@ -19,6 +19,7 @@ import {
   type QualityRule,
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
+import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
@@ -116,6 +117,7 @@ describe('accessibility regression checks', () => {
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,
+      ...checkboxChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

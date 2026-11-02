@@ -14,6 +14,12 @@ export type {
 } from './components/Button.js';
 export { Button } from './components/Button.js';
 
+export type {
+  CheckboxIndicatorProps,
+  CheckboxRootProps,
+} from './components/Checkbox.js';
+export { Checkbox } from './components/Checkbox.js';
+
 export { Dialog } from './components/Dialog.js';
 
 export { Field } from './components/Field.js';

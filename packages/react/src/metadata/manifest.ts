@@ -1,3 +1,4 @@
+import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
@@ -107,6 +108,7 @@ export const componentManifest = {
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
+    Checkbox: checkboxManifest,
   },
 } as const;
 

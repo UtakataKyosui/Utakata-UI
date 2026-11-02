@@ -26,6 +26,7 @@ describe('manifest tools', () => {
       'Input',
       'Textarea',
       'NativeSelect',
+      'Checkbox',
     ]);
   });
 

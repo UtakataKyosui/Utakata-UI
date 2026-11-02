@@ -1,3 +1,4 @@
+import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
@@ -71,6 +72,7 @@ export const qualityRules = {
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
+  Checkbox: checkboxQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
