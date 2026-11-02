@@ -27,6 +27,7 @@ import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
+import { skeletonChecks } from './quality/Skeleton.checks.js';
 import { sliderChecks } from './quality/Slider.checks.js';
 import { switchChecks } from './quality/Switch.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
@@ -120,6 +121,7 @@ describe('accessibility regression checks', () => {
       ...kbdChecks,
       ...separatorChecks,
       ...badgeChecks,
+      ...skeletonChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

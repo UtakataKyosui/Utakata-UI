@@ -6,6 +6,7 @@ import { nativeSelectManifest } from './components/NativeSelect.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
+import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { switchManifest } from './components/Switch.js';
 import { textareaManifest } from './components/Textarea.js';
@@ -111,6 +112,7 @@ export const componentManifest = {
     Kbd: kbdManifest,
     Separator: separatorManifest,
     Badge: badgeManifest,
+    Skeleton: skeletonManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,

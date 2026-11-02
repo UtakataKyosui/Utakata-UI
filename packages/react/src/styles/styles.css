@@ -241,6 +241,30 @@
     color: var(--ui-badge-color, var(--ui-color-surface));
   }
 
+  .ui-skeleton {
+    animation: ui-skeleton-pulse 1.5s ease-in-out infinite;
+    background: var(
+      --ui-skeleton-color,
+      color-mix(in srgb, var(--ui-color-muted) 25%, transparent)
+    );
+    block-size: var(--ui-skeleton-height, 1em);
+    border-radius: var(--ui-radius-control);
+    display: block;
+    inline-size: var(--ui-skeleton-width, 100%);
+  }
+
+  .ui-skeleton--circle {
+    block-size: var(--ui-skeleton-height, 2.5rem);
+    border-radius: 50%;
+    inline-size: var(--ui-skeleton-width, 2.5rem);
+  }
+
+  @keyframes ui-skeleton-pulse {
+    50% {
+      opacity: 0.45;
+    }
+  }
+
   .ui-input,
   .ui-textarea,
   .ui-native-select__control {
@@ -702,6 +726,10 @@
       border: 1px solid CanvasText;
     }
 
+    .ui-skeleton {
+      border: 1px solid GrayText;
+    }
+
     .ui-checkbox,
     .ui-switch {
       background: Canvas;
@@ -776,6 +804,10 @@
   @media (prefers-reduced-motion: reduce) {
     .ui-button {
       transition: none;
+    }
+
+    .ui-skeleton {
+      animation: none;
     }
 
     .ui-switch,
