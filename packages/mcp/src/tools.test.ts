@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for RadioGroup keyboard interaction', () => {
+    expect(getComponent('RadioGroup')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'radio-group.keyboard',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Switch keyboard interaction', () => {
     expect(getComponent('Switch')?.qualityRules).toEqual(
       expect.arrayContaining([

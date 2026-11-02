@@ -37,7 +37,7 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type TextareaProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -64,6 +64,12 @@ export const inputNativeSize: InputProps = { size: 20 };
 export const inputUnsupportedSize = <Input aria-label="Email" size="xl" />;
 // @ts-expect-error Input className must be a string.
 export const inputFunctionClass: InputProps = { className: () => 'x' };
+export const radioGroupProps: RadioGroupRootProps = { orientation: 'horizontal', className: 'plan', name: 'plan' };
+export const plan = <RadioGroup.Root {...radioGroupProps} aria-label="Plan"><RadioGroup.Item value="free"><RadioGroup.Indicator />Free</RadioGroup.Item></RadioGroup.Root>;
+// @ts-expect-error RadioGroup orientation is limited to the manifest values in shipped declarations.
+export const radioGroupDiagonal: RadioGroupRootProps = { orientation: 'diagonal' };
+// @ts-expect-error RadioGroup className must be a string in shipped declarations.
+export const radioGroupFunctionClass: RadioGroupRootProps = { className: () => 'x' };
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
