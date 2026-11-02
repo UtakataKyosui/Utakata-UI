@@ -37,7 +37,7 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Kbd, KbdGroup, type ButtonProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Kbd, KbdGroup, Separator, type ButtonProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -60,6 +60,9 @@ export const unsupportedVariant = <Button variant="unsupported">Save</Button>;
 export const shortcut = <KbdGroup aria-label="Control and K"><Kbd>Ctrl</Kbd><Kbd size="sm">K</Kbd></KbdGroup>;
 // @ts-expect-error Kbd sizes are limited to the manifest.
 export const unsupportedKbd = <Kbd size="lg">K</Kbd>;
+export const divider = <Separator decorative={false} orientation="vertical" />;
+// @ts-expect-error Separator semantics are controlled by decorative.
+export const separatorRole = <Separator role="presentation" />;
 `,
   );
   run(process.execPath, [

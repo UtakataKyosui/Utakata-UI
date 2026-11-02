@@ -180,6 +180,29 @@
     gap: 0.25rem;
   }
 
+  .ui-separator {
+    background: var(--ui-separator-color, var(--ui-color-border));
+    border: 0;
+    flex-shrink: 0;
+  }
+
+  .ui-separator--horizontal {
+    block-size: var(--ui-separator-size, 1px);
+    inline-size: 100%;
+  }
+
+  .ui-separator--vertical {
+    align-self: stretch;
+    inline-size: var(--ui-separator-size, 1px);
+    min-block-size: 1em;
+  }
+
+  @media (forced-colors: active) {
+    .ui-separator {
+      background: CanvasText;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .ui-button {
       transition: none;

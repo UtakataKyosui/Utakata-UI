@@ -1,4 +1,5 @@
 import { kbdQualityRules } from './components/Kbd.js';
+import { separatorQualityRules } from './components/Separator.js';
 
 export interface QualityRule {
   id: string;
@@ -63,6 +64,7 @@ export const qualityRules = {
     },
   ],
   Kbd: kbdQualityRules,
+  Separator: separatorQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

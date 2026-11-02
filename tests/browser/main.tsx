@@ -5,6 +5,7 @@ import {
   Field,
   Kbd,
   KbdGroup,
+  Separator,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -54,6 +55,12 @@ function Fixture() {
             </span>
           </KbdGroup>
         </p>
+        <Separator />
+        <div className="fixture-row">
+          <span>Profile</span>
+          <Separator decorative={false} orientation="vertical" />
+          <span>Settings</span>
+        </div>
       </section>
     </main>
   );
