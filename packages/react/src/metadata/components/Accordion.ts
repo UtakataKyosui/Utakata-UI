@@ -38,22 +38,40 @@ export const accordionQualityRules = [
       'Let Accordion.Panel manage hidden state; do not force display on a closed panel with custom CSS.',
   },
   {
-    id: 'accordion.real-keyboard-focus',
+    id: 'accordion.keyboard-focus',
     requirement:
-      'Enter and Space toggle items with real keyboard input, Tab moves into open panel links in DOM order, and focus stays on the trigger after closing.',
-    verification: 'manual',
+      'In a real browser Tab visits each enabled trigger in order and skips disabled ones, Enter and Space toggle an item, Tab then moves into the open panel links in DOM order, focus stays on the trigger after closing, and closed panel links are skipped.',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify in each supported browser with real keyboard input and a screen reader; record the results.',
+      'Preserve Base UI Accordion keyboard and hidden-state handling; do not add tabindex or force display on a closed panel.',
   },
   {
-    id: 'accordion.motion-theme',
+    id: 'accordion.motion-forced',
     requirement:
-      'Open state is shown by a rotating indicator, not color alone; height animation is removed under prefers-reduced-motion; content reflows at 200% zoom in every theme and forced colors.',
+      'In a real browser the open state is shown by a rotating indicator rather than color alone, the height and indicator transitions run by default and are removed under prefers-reduced-motion, and in forced colors the focused trigger keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the prefers-reduced-motion override, the rotating indicator and the transparent focus outline that forced colors expose.',
+  },
+  {
+    id: 'accordion.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the triggers and panel content reflow without loss.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check reduced motion, zoom, dark theme and forced colors in a real browser.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
+  },
+  {
+    id: 'accordion.screen-reader',
+    requirement:
+      'Screen readers announce each heading level, trigger name, expanded state and the revealed panel content.',
+    verification: 'manual',
+    severity: 'warning',
+    remediation:
+      'Record NVDA + Firefox and VoiceOver + Safari results; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 
