@@ -16,6 +16,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 - Compose `Dialog.Root` with `Dialog.Trigger` and a portalled `Dialog.Popup` containing a `Dialog.Title`. Use Base UI's `Dialog.Close` and do not implement a second open-state or focus-management system.
 - Use `Kbd` for each displayed key and `KbdGroup` for combinations. Key labels are supplied by you; when symbols such as `⌘` read poorly, set `aria-label` on `KbdGroup` and wrap the visual keys in `aria-hidden="true"`. Kbd does not register shortcuts.
 - `Separator` is decorative (hidden from assistive technology) by default. Set `decorative={false}` only for meaningful separation; vertical separators stretch inside `Flex`.
+- Use `Input` for single-line text inside `Field.Root` in place of `Field.Control` (never both); one input receives `Field.Label`, `Field.Description` and `Field.Error`. `size` is visual (`sm | md | lg`); set width with CSS. Provide `autoComplete` and visible error text; do not coerce values in the component.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 

@@ -3,6 +3,7 @@ import {
   Button,
   Dialog,
   Field,
+  Input,
   Kbd,
   KbdGroup,
   Separator,
@@ -61,6 +62,36 @@ function Fixture() {
           <Separator decorative={false} orientation="vertical" />
           <span>Settings</span>
         </div>
+      </section>
+      <section aria-label="Input states">
+        {componentManifest.components.Input.sizes.map((size) => (
+          <div key={size} className="fixture-inputs">
+            <Field.Root name={`input-${size}`}>
+              <Field.Label>Input {size}</Field.Label>
+              <Input size={size} placeholder="Enter a value" />
+              <Field.Description>
+                Required contact information.
+              </Field.Description>
+            </Field.Root>
+            <Input
+              size={size}
+              aria-label={`Read only ${size}`}
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Input
+              size={size}
+              aria-label={`Disabled ${size}`}
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid {size}</Field.Label>
+              <Input size={size} defaultValue="Invalid value" />
+              <Field.Error match>Enter a valid contact value.</Field.Error>
+            </Field.Root>
+          </div>
+        ))}
       </section>
     </main>
   );

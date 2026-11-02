@@ -5,17 +5,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Button, type ButtonProps } from '../components/Button.js';
 import { Dialog } from '../components/Dialog.js';
 import { Field } from '../components/Field.js';
+import { settle } from './quality-helpers.js';
 
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
   vi.unstubAllEnvs();
 });
-
-const settle = () =>
-  act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 20));
-  });
 
 // These fixtures are checked by pnpm typecheck, without rendering invalid JSX.
 const namedIcon: ButtonProps = { iconOnly: true, 'aria-label': 'Save' };

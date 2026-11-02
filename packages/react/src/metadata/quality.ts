@@ -1,10 +1,11 @@
+import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { separatorQualityRules } from './components/Separator.js';
 
 export interface QualityRule {
   id: string;
   requirement: string;
-  verification: 'automated' | 'manual';
+  verification: 'automated' | 'browser' | 'manual';
   severity: 'error' | 'warning';
   remediation: string;
 }
@@ -65,6 +66,7 @@ export const qualityRules = {
   ],
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
+  Input: inputQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
@@ -133,7 +135,7 @@ export async function evaluateQuality(
     results,
     automatedPassed: results.every(
       (result) =>
-        result.verification !== 'automated' ||
+        result.verification === 'manual' ||
         result.severity !== 'error' ||
         result.status === 'passed',
     ),
