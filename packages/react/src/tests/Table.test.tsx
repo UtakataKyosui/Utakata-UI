@@ -15,7 +15,21 @@ const unnamed: TableContainerProps = {};
 const untabbable: TableContainerProps = { 'aria-label': 'x', tabIndex: -1 };
 // @ts-expect-error The region role is fixed.
 const roleOverride: TableContainerProps = { 'aria-label': 'x', role: 'none' };
-void [labelled, named, unnamed, untabbable, roleOverride];
+const spreadRoleProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Spreads cannot override the region role.
+const spreadRole = <Table.Container {...spreadRoleProps} />;
+const spreadFocusProps = { 'aria-label': 'x', tabIndex: -1 };
+// @ts-expect-error Spreads cannot remove the container from the tab order.
+const spreadFocus = <Table.Container {...spreadFocusProps} />;
+void [
+  labelled,
+  named,
+  unnamed,
+  untabbable,
+  roleOverride,
+  spreadRole,
+  spreadFocus,
+];
 
 afterEach(cleanup);
 

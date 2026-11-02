@@ -17,7 +17,20 @@ const routerLink: BreadcrumbLinkProps = { render: <a href="/docs">Docs</a> };
 const noDestination: BreadcrumbLinkProps = { children: 'Home' };
 // @ts-expect-error The current page always uses aria-current="page".
 const wrongCurrent: BreadcrumbPageProps = { 'aria-current': 'step' };
-void [hrefLink, routerLink, noDestination, wrongCurrent];
+const currentProps = { 'aria-current': 'step' as const };
+// @ts-expect-error Spreads cannot change the current-page marker.
+const spreadCurrent = <Breadcrumb.Page {...currentProps} />;
+const visibleProps = { 'aria-hidden': false as const, role: 'presentation' };
+// @ts-expect-error Spreads cannot expose decorative separators.
+const spreadSeparator = <Breadcrumb.Separator {...visibleProps} />;
+void [
+  hrefLink,
+  routerLink,
+  noDestination,
+  wrongCurrent,
+  spreadCurrent,
+  spreadSeparator,
+];
 
 afterEach(cleanup);
 
