@@ -1,9 +1,56 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { promisify } from 'node:util';
 import { writeRegistry } from '../packages/docs/scripts/generate-registry.mjs';
+
+async function verifyHTTP(cwd, registry, version) {
+  const server = createServer(async (request, response) => {
+    if (!/^\/(registry|button)\.json$/.test(request.url ?? '')) {
+      response.writeHead(404).end();
+      return;
+    }
+    response.setHeader('Content-Type', 'application/json');
+    response.end(await readFile(join(registry, request.url.slice(1))));
+  });
+  await new Promise((ready) => server.listen(0, '127.0.0.1', ready));
+  try {
+    const url = `http://127.0.0.1:${server.address().port}`;
+    const { stdout } = await promisify(execFile)(
+      'npm',
+      [
+        'exec',
+        '--offline',
+        '--yes',
+        '--',
+        `@utakata-ui/cli@${version}`,
+        'add',
+        'button',
+        '--registry',
+        url,
+        '--cwd',
+        cwd,
+        '--dir',
+        'http/components',
+      ],
+      { cwd, timeout: 30_000 },
+    );
+    assert.match(stdout, /create/);
+    assert.match(
+      await readFile(
+        join(cwd, 'http/components/components/Button.tsx'),
+        'utf8',
+      ),
+      /iconOnly: true/,
+    );
+  } finally {
+    server.closeAllConnections();
+    await new Promise((done) => server.close(done));
+  }
+}
 
 if (!process.argv[2])
   throw new Error('Usage: node scripts/verify-cli-package.mjs <cli.tgz>');
@@ -74,8 +121,9 @@ try {
   await assert.rejects(readFile(join(cwd, 'components.json')), {
     code: 'ENOENT',
   });
+  await verifyHTTP(cwd, registry, metadata.version);
   console.log(
-    'Packed CLI: package-name execution, list, dry-run, source installation and repeat installation passed.',
+    'Packed CLI: package-name execution, list, dry-run, source installation, repeat installation and HTTP download passed.',
   );
 } finally {
   await rm(cwd, { recursive: true, force: true });
