@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { expect } from 'vitest';
 import { Pagination } from '../../components/Pagination.js';
 import type { QualityCheck } from '../../metadata/quality.js';
@@ -54,28 +54,6 @@ export const paginationChecks: Record<string, QualityCheck> = {
     expect(screen.getByRole('link', { name: '2' })).not.toHaveAttribute(
       'aria-current',
     );
-    expect((await audit(container)).violations).toEqual([]);
-  },
-  'pagination.disabled-direction': async () => {
-    let clicks = 0;
-    const { container } = render(
-      <ResultsPagination onClick={() => clicks++} />,
-    );
-    const previous = screen.getByRole('link', { name: 'Previous' });
-    expect(previous).toHaveAttribute('aria-disabled', 'true');
-    expect(previous).not.toHaveAttribute('href');
-    // Without href and tabindex an anchor is not focusable; jsdom reports
-    // tabIndex 0 here, so real Tab order is checked in the browser suite.
-    expect(previous).not.toHaveAttribute('tabindex');
-    previous.focus();
-    expect(previous).not.toHaveFocus();
-    fireEvent.click(previous);
-    fireEvent.keyDown(previous, { key: 'Enter' });
-    expect(clicks).toBe(0);
-    const next = screen.getByRole('link', { name: 'Next' });
-    expect(next).toHaveAttribute('href', '?page=2');
-    expect(next).not.toHaveAttribute('aria-disabled');
-    expect(next.tabIndex).toBe(0);
     expect((await audit(container)).violations).toEqual([]);
   },
   'pagination.ellipsis': async () => {

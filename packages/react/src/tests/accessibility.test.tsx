@@ -160,7 +160,11 @@ describe('accessibility regression checks', () => {
       ),
       ...componentManifest.sharedQualityRules,
     ];
-    const report = await evaluateQuality(rules, isolatedChecks);
+    // This is jsdom evidence only; browser rules are required by Playwright.
+    const report = await evaluateQuality(
+      rules.filter((rule) => rule.verification !== 'browser'),
+      isolatedChecks,
+    );
     const output = formatQualityReport(report.results);
     console.info(output);
     expect(report.automatedPassed, output).toBe(true);

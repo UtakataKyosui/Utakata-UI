@@ -19,7 +19,13 @@ const withRole: SkeletonProps = { role: 'status' };
 const exposed: SkeletonProps = { 'aria-hidden': false };
 // @ts-expect-error Shapes are limited to the manifest.
 const unsupported: SkeletonProps = { shape: 'pill' };
-void [circle, withRole, exposed, unsupported];
+const interactiveProps = { tabIndex: 0, role: 'button' };
+// @ts-expect-error Spreads cannot bypass the decorative-only contract.
+const spreadFocusable = <Skeleton {...interactiveProps} />;
+const textProps = { children: 'Loading' };
+// @ts-expect-error Skeleton holds no content, even through spreads.
+const spreadContent = <Skeleton {...textProps} />;
+void [circle, withRole, exposed, unsupported, spreadFocusable, spreadContent];
 
 describe('Skeleton', () => {
   it('defaults to a hidden rect and forwards className, ref and style', () => {

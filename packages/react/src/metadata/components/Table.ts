@@ -29,13 +29,22 @@ export const tableQualityRules = [
       'Use Button or native links inside Table.Cell with specific text; set colSpan to the column count for empty-state rows.',
   },
   {
-    id: 'table.reflow-theme',
+    id: 'table.reflow-focus',
     requirement:
-      'At 320 CSS px, 200% zoom and with long text, the table scrolls horizontally inside Container without clipping, and borders, headers and focus stay visible in every theme and forced colors.',
+      'In a real browser a table wider than its container scrolls horizontally inside Table.Container without widening the page, Tab reaches the focusable container, arrow keys scroll it, the focused container shows a visible indicator, and in forced colors that indicator is a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep overflow-x on Table.Container, its tabindex and the forced-colors outline; do not hide columns at narrow widths.',
+  },
+  {
+    id: 'table.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the table stays readable with its borders and headers visible; two-dimensional tables are a reflow exception that must be recorded.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check narrow viewports, browser zoom, keyboard scrolling of the focused region, dark theme and forced colors in a real browser. Two-dimensional tables are a reflow exception; record it.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
   {
     id: 'table.screen-reader',

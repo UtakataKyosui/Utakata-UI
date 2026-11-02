@@ -22,11 +22,20 @@ export const avatarQualityRules = [
   {
     id: 'avatar.visual-theme',
     requirement:
-      'The image keeps its aspect ratio inside the circle, and fallback text is legible in every supported theme, 200% text zoom and forced colors.',
+      'In a real browser every size renders a circle whose image fills it with object-fit cover without distortion, fallback text keeps at least 4.5:1 contrast against the avatar background in every supported theme and in forced colors, and the avatar keeps a visible border in forced colors.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep object-fit: cover on Avatar.Image and the forced-colors border; check --ui-avatar-background overrides and fallback text color against the surface.',
+  },
+  {
+    id: 'avatar.zoom-assistive',
+    requirement:
+      'At real 200% browser zoom the fallback text stays legible inside the avatar, and assistive technology reads the image alt or the fallback text once.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered images, initials contrast and forced colors in a real browser.',
+      'Check browser zoom and screen reader output in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 
