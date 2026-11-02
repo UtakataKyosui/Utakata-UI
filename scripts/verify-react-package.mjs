@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -356,6 +356,31 @@ function ToastCloseWrapper(props: ToastCloseProps) { return <Toast.Close {...pro
 export const wrappedToastClose = <ToastCloseWrapper aria-label="Close" />;
 // @ts-expect-error Wrappers must preserve the required name.
 export const wrappedToastCloseInvalid = <ToastCloseWrapper />;
+export const toggleGroupNamed: ToggleGroupRootProps = { 'aria-label': 'Format', multiple: true };
+export const toggleGroupReferenced: ToggleGroupRootProps = { 'aria-labelledby': 'format' };
+export const toggleGroupItem: ToggleGroupItemProps = { value: 'bold', variant: 'outline' };
+export const toggleGroup = <ToggleGroup.Root {...toggleGroupNamed}><ToggleGroup.Item {...toggleGroupItem}>Bold</ToggleGroup.Item><ToggleGroup.Item value="italic" iconOnly aria-label="Italic" /></ToggleGroup.Root>;
+// @ts-expect-error The group requires aria-label or aria-labelledby in shipped declarations.
+export const toggleGroupUnnamed: ToggleGroupRootProps = { multiple: true };
+// @ts-expect-error Only one group name source may be passed in shipped declarations.
+export const toggleGroupBothNames: ToggleGroupRootProps = { 'aria-label': 'Format', 'aria-labelledby': 'format' };
+// @ts-expect-error Values are arrays in both single and multiple mode in shipped declarations.
+export const toggleGroupScalarValue: ToggleGroupRootProps = { 'aria-label': 'x', value: 'a' };
+// @ts-expect-error Every item needs a value in shipped declarations.
+export const toggleGroupNoValue: ToggleGroupItemProps = { children: 'Bold' };
+// @ts-expect-error Icon-only items keep the Toggle name requirement in shipped declarations.
+export const toggleGroupUnnamedIcon: ToggleGroupItemProps = { value: 'b', iconOnly: true };
+// @ts-expect-error Pressed state belongs to ToggleGroup.Root in shipped declarations.
+export const toggleGroupPressedItem: ToggleGroupItemProps = { value: 'b', pressed: true };
+// @ts-expect-error JSX usage must also name the group.
+export const toggleGroupUnnamedJsx = <ToggleGroup.Root />;
+const toggleGroupUnnamedProps = { multiple: true as const };
+// @ts-expect-error Spreads cannot bypass the required group name.
+export const toggleGroupSpreadUnnamed = <ToggleGroup.Root {...toggleGroupUnnamedProps} />;
+function ToggleGroupWrapper(props: ToggleGroupRootProps) { return <ToggleGroup.Root {...props} />; }
+export const wrappedToggleGroup = <ToggleGroupWrapper aria-label="Format" />;
+// @ts-expect-error Wrappers must preserve the required group name.
+export const wrappedToggleGroupInvalid = <ToggleGroupWrapper />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
