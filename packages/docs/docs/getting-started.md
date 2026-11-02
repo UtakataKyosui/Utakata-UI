@@ -17,7 +17,7 @@ export function Example() {
 }
 ```
 
-Button・Field・Dialog・Kbd・Separator と、Box・Stack・Flex・Grid・Container・Text・Heading を公開しています。
+Button・Field・Dialog・Kbd・Separator・Badge・Skeleton・Spinner・Card・Alert・Avatar・Progress・Table・Breadcrumb・Pagination・Input・Textarea・NativeSelect・Checkbox・Switch・RadioGroup・Select・Slider・Collapsible・Accordion・Tabs・Toggle・Tooltip・Popover・DropdownMenu・AlertDialog・Toast・InputGroup・ToggleGroup・ButtonGroup と、Box・Stack・Flex・Grid・Container・Text・Heading を公開しています。
 
 対応する Props・構成例・品質要件は[コンポーネント仕様](./components)を参照してください。
 
@@ -32,7 +32,7 @@ Button・Field・Dialog・Kbd・Separator と、Box・Stack・Flex・Grid・Cont
 </Button>
 ```
 
-Field は `Field.Label`、Dialog は `Dialog.Title` を組み合わせます。説明は必要な場合に追加します。Button・Field.Control・Dialog.Popup は、開発時に名前の取得元の欠落や `aria-labelledby` / `aria-describedby` の参照切れを `[Utakata-UI a11y]` 警告で通知します。動的なラベル変更も再確認し、同じ警告の連発を抑えます。警告は画面を停止しません。
+Field は `Field.Label`、Dialog は `Dialog.Title` を組み合わせます。説明は必要な場合に追加します。Button・Field.Control・Dialog.Popup をはじめ、名前が必要な操作要素（フォーム部品・トリガー・ポップアップなど）は、開発時に名前の取得元の欠落や `aria-labelledby` / `aria-describedby` の参照切れを `[Utakata-UI a11y]` 警告で通知します。動的なラベル変更も再確認し、同じ警告の連発を抑えます。警告は画面を停止しません。
 
 診断は一般的な名前の取得元を確認する補助機能であり、完全な Accessible Name 計算ではありません。複雑な参照関係、CSS 生成コンテンツや支援技術の実際の読み上げは axe と実機で確認してください。文字列型は空白の名前や文言の適切さを保証しません。`iconOnly` を省略したアイコンだけの内容も型では判別できないため、DOM 検査が必要です。
 

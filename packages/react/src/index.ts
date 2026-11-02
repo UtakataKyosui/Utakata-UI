@@ -70,7 +70,13 @@ export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
 export type { InputProps } from './components/Input.js';
 export { Input } from './components/Input.js';
-
+export type {
+  InputGroupAddonProps,
+  InputGroupButtonProps,
+  InputGroupRootProps,
+  InputGroupTextProps,
+} from './components/InputGroup.js';
+export { InputGroup } from './components/InputGroup.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
@@ -156,7 +162,7 @@ export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
 export type { InputSize } from './metadata/components/Input.js';
-
+export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';

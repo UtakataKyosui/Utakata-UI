@@ -50,6 +50,7 @@ describe('manifest tools', () => {
       'DropdownMenu',
       'AlertDialog',
       'Toast',
+      'InputGroup',
       'ToggleGroup',
       'ButtonGroup',
     ]);

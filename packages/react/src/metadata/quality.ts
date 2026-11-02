@@ -10,6 +10,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
+import { inputGroupQualityRules } from './components/InputGroup.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
@@ -121,6 +122,7 @@ export const qualityRules = {
   DropdownMenu: dropdownMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
+  InputGroup: inputGroupQualityRules,
   ToggleGroup: toggleGroupQualityRules,
   ButtonGroup: buttonGroupQualityRules,
   shared: [
