@@ -40,6 +40,7 @@ import { sliderChecks } from './quality/Slider.checks.js';
 import { spinnerChecks } from './quality/Spinner.checks.js';
 import { switchChecks } from './quality/Switch.checks.js';
 import { tableChecks } from './quality/Table.checks.js';
+import { tabsChecks } from './quality/Tabs.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
@@ -150,6 +151,7 @@ describe('accessibility regression checks', () => {
       ...sliderChecks,
       ...collapsibleChecks,
       ...accordionChecks,
+      ...tabsChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

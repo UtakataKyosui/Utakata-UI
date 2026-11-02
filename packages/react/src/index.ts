@@ -116,7 +116,14 @@ export type {
   TableHeadProps,
 } from './components/Table.js';
 export { Table } from './components/Table.js';
-
+export type {
+  TabsIndicatorProps,
+  TabsListProps,
+  TabsPanelProps,
+  TabsRootProps,
+  TabsTabProps,
+} from './components/Tabs.js';
+export { Tabs } from './components/Tabs.js';
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 

@@ -19,6 +19,7 @@ import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
 import { switchManifest } from './components/Switch.js';
 import { tableManifest } from './components/Table.js';
+import { tabsManifest } from './components/Tabs.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
 
@@ -141,6 +142,7 @@ export const componentManifest = {
     Slider: sliderManifest,
     Collapsible: collapsibleManifest,
     Accordion: accordionManifest,
+    Tabs: tabsManifest,
   },
 } as const;
 
