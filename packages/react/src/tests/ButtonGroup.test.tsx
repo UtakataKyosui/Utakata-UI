@@ -32,7 +32,10 @@ const bothNames: ButtonGroupProps = {
 const toolbar: ButtonGroupProps = { 'aria-label': 'x', role: 'toolbar' };
 // @ts-expect-error Orientations are limited to the manifest.
 const diagonal: ButtonGroupProps = { 'aria-label': 'x', orientation: 'd' };
-void [named, referenced, unnamed, bothNames, toolbar, diagonal];
+const roleProps = { 'aria-label': 'x', role: 'toolbar' };
+// @ts-expect-error Spreads cannot change the fixed group role.
+const spreadRole = <ButtonGroup {...roleProps} />;
+void [named, referenced, unnamed, bothNames, toolbar, diagonal, spreadRole];
 
 describe('ButtonGroup', () => {
   it('applies defaults, className and ref', () => {

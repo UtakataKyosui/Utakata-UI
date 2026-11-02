@@ -41,19 +41,28 @@ export const toggleGroupQualityRules = [
     id: 'toggle-group.keyboard',
     requirement:
       'In a real browser, arrow keys matching the orientation move focus between enabled items (skipping disabled ones), Home and End move to the ends, Space and Enter toggle the focused item, and Tab leaves the group.',
-    verification: 'manual',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify with real keyboard input in each supported browser for both orientations; record results in the evidence log.',
+      'Preserve Base UI ToggleGroup composite focus and keyboard handling for both orientations; do not add custom key handlers or tabindex values.',
   },
   {
     id: 'toggle-group.visual-states',
     requirement:
-      'Pressed, unpressed, focus and disabled items are distinguishable without color alone in both orientations, every theme, at 200% zoom and in forced colors.',
+      'In a real browser pressed items differ from unpressed ones by an inset outline rather than color alone in both orientations, item text keeps at least 4.5:1 contrast, and in forced colors pressed items use the Highlight and HighlightText system colors and the focused item keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the pressed inset outline, the forced-colors pressed colors and the outline fallback for focused items.',
+  },
+  {
+    id: 'toggle-group.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes pressed, unpressed, focus and disabled items stay distinguishable in both orientations.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast, the pressed border/fill and the focus ring in a real browser, including forced colors.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

@@ -46,19 +46,6 @@ export const sliderChecks: Record<string, QualityCheck> = {
     expect(screen.getByText('50', { selector: 'output' })).toBeVisible();
     expect((await audit(container)).violations).toEqual([]);
   },
-  'slider.keyboard': async () => {
-    render(
-      <Volume min={0} max={1} step={0.1} largeStep={0.5} defaultValue={0.5} />,
-    );
-    slider().focus();
-    await press('ArrowRight', '0.6');
-    await press('ArrowDown', '0.5');
-    await press('PageUp', '1');
-    await press('ArrowRight', '1');
-    await press('Home', '0');
-    await press('ArrowLeft', '0');
-    await press('End', '1');
-  },
   'slider.change-commit-form': async () => {
     const changes: number[] = [];
     const commits: number[] = [];

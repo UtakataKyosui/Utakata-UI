@@ -10,7 +10,7 @@
     --ui-color-surface: #fff;
     --ui-color-text: #1c2432;
     --ui-color-muted: #596579;
-    --ui-color-border: #8c96a8;
+    --ui-color-border: #8993a5;
     --ui-color-danger: #b42318;
     --ui-radius-control: 0.375rem;
     --ui-shadow-popup: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
@@ -663,7 +663,7 @@
   .ui-checkbox:focus-visible,
   .ui-switch:focus-visible {
     box-shadow: var(--ui-focus-ring);
-    outline: 2px solid transparent;
+    outline: 2px solid var(--ui-color-primary);
     outline-offset: 2px;
   }
 
@@ -1258,11 +1258,13 @@
   .ui-tabs__indicator {
     background: var(--ui-color-primary);
     block-size: 2px;
-    inset-block-end: -1px;
+    inset-block-start: 0;
     inset-inline-start: 0;
     inline-size: var(--active-tab-width);
     position: absolute;
-    translate: var(--active-tab-left) 0;
+    /* Follows the selected tab's own row when the list wraps. */
+    translate: var(--active-tab-left)
+      calc(var(--active-tab-top) + var(--active-tab-height) - 2px);
     transition:
       translate 150ms ease,
       inline-size 150ms ease;
@@ -1647,7 +1649,10 @@
     flex-direction: column;
     gap: 0.5rem;
     inset: auto 1rem 1rem auto;
+    /* Bounded to the screen so tall stacks scroll instead of leaving the top unreachable. */
+    max-block-size: calc(100dvh - 2rem);
     max-width: calc(100vw - 2rem);
+    overflow-y: auto;
     position: fixed;
     width: 24rem;
     z-index: 50;
@@ -1655,6 +1660,7 @@
 
   .ui-toast {
     background: var(--ui-color-surface);
+    flex-shrink: 0;
     border: 1px solid var(--ui-color-border);
     border-radius: 0.75rem;
     box-shadow: var(--ui-shadow-popup);
@@ -1742,6 +1748,9 @@
     .ui-spinner__ring {
       border-color: GrayText;
       border-block-start-color: CanvasText;
+      /* The track is dotted so the arc is distinct without relying on color. */
+      border-style: dotted;
+      border-block-start-style: solid;
       forced-color-adjust: none;
     }
 
@@ -1831,6 +1840,17 @@
       forced-color-adjust: none;
     }
 
+    .ui-button:focus-visible,
+    .ui-field__control:focus-visible,
+    .ui-dialog__popup :focus-visible,
+    .ui-dropdown-menu__trigger:focus-visible,
+    .ui-table-container:focus-visible,
+    .ui-tooltip__trigger:focus-visible,
+    .ui-popover__trigger:focus-visible,
+    .ui-popover__popup:focus-visible,
+    .ui-popover__popup :focus-visible,
+    .ui-breadcrumb__link:focus-visible,
+    .ui-pagination__link:focus-visible,
     .ui-radio-group__item:focus-visible,
     .ui-select__trigger:focus-visible,
     .ui-slider__thumb:has(:focus-visible) {
@@ -1882,7 +1902,8 @@
       display: none;
     }
 
-    .ui-dropdown-menu__item[data-highlighted] {
+    .ui-dropdown-menu__item[data-highlighted],
+    .ui-dropdown-menu__item[data-disabled][data-highlighted] {
       background: Highlight;
       color: HighlightText;
       forced-color-adjust: none;

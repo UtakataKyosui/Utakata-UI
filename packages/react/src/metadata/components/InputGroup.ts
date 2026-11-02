@@ -32,19 +32,28 @@ export const inputGroupQualityRules = [
     id: 'input-group.keyboard',
     requirement:
       'In a real browser, Tab moves from the input to each enabled addon button in visual order, text input works normally, Enter in the input does not activate the addon button (native implicit submission of a single-field form still applies) and focus stays visible on the group and on the button.',
-    verification: 'manual',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify with real keyboard input in each supported browser; record results in the evidence log.',
+      'Keep the addon button after the input in the DOM with its default type and do not add tabindex to the group or the input.',
   },
   {
     id: 'input-group.visual-states',
     requirement:
-      'Inline and block addons, long units, focus-within, disabled, read-only and invalid states never overlap the input text and stay distinguishable without color alone in every theme, at 200% zoom, at 320 CSS px width and in forced colors.',
+      'In a real browser inline and block addons and long units never overlap the input text, addon text keeps at least 4.5:1 contrast, read-only and disabled frames differ by border style or cursor and invalid frames differ from valid ones while Field.Error text states the problem, content stays inside the group at 320 CSS px and 200% text size, and in forced colors the focused frame keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the frame state styles, wrapping and the forced-colors outline; pair invalid borders with Field.Error text.',
+  },
+  {
+    id: 'input-group.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes addons, units and states stay readable and distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Inspect rendered contrast, spacing, reflow and forced colors in a real browser; pair invalid borders with Field.Error text.',
+      'Inspect rendered contrast, spacing, reflow and forced colors in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

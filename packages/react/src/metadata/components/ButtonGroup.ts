@@ -22,20 +22,29 @@ export const buttonGroupQualityRules = [
   {
     id: 'button-group.keyboard',
     requirement:
-      'In a real browser, Tab and Shift+Tab move through each enabled Button in visual order and the focus ring of each Button is not covered by its neighbors.',
-    verification: 'manual',
+      'In a real browser, Tab and Shift+Tab move through each enabled Button of both orientations in visual order, skipping disabled ones, and the focused Button is stacked above its neighbors so its focus ring is not covered.',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify with real keyboard input in each supported browser; record results in the evidence log.',
+      'Keep the focus-visible stacking rule and do not add tabIndex, toolbar or radiogroup behavior to the group.',
   },
   {
-    id: 'button-group.visual',
+    id: 'button-group.visual-layout',
     requirement:
-      'Joined borders and end radii look correct for horizontal and vertical groups, one or many Buttons and mixed variants, in every theme, at 200% zoom, at 320 CSS px width and in forced colors.',
+      'In a real browser joined Buttons share one border and only the outer ends of horizontal and vertical groups keep rounded corners, long horizontal groups wrap without clipping or overflow at 320 CSS px and 200% text size, and in forced colors the focused Button keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the joined border radii and overlap, group wrapping and the forced-colors outline; switch to vertical orientation at narrow widths when needed.',
+  },
+  {
+    id: 'button-group.zoom-theme',
+    requirement:
+      'Joined borders and end radii look correct for mixed variants in every theme at real 200% browser zoom and in real high-contrast modes.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Inspect the rendered group in a real browser; wrap long groups or switch to vertical orientation at narrow widths.',
+      'Inspect the rendered group in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

@@ -43,9 +43,718 @@ import { componentManifest } from '../../packages/react/src/metadata/manifest.js
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
 
-function FixtureToasts() {
-  const { toasts } = useToastManager();
-  return toasts.map((toast) => (
+function cancelResetRef(form: HTMLFormElement | null) {
+  if (!form) return;
+  const cancel = (event: Event) => event.preventDefault();
+  form.addEventListener('reset', cancel);
+  return () => form.removeEventListener('reset', cancel);
+}
+
+function SwitchStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="Switch input">
+      <Button>Before switches</Button>
+      {['Enabled', 'Disabled', 'Read only'].map((state) => (
+        <label key={state}>
+          <Switch.Root
+            disabled={state === 'Disabled'}
+            readOnly={state === 'Read only'}
+            onCheckedChange={(checked) =>
+              setChanges((previous) => [...previous, `${state}:${checked}`])
+            }
+          >
+            <Switch.Thumb />
+          </Switch.Root>
+          <span>{state} switch</span>
+        </label>
+      ))}
+      <output aria-label="Switch changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function RadioGroupStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="RadioGroup input">
+      <Button>Before radios</Button>
+      <RadioGroup.Root
+        aria-label="Plan"
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, String(value)])
+        }
+      >
+        {['free', 'team', 'pro'].map((value) => (
+          <RadioGroup.Item
+            key={value}
+            value={value}
+            disabled={value === 'team'}
+          >
+            <RadioGroup.Indicator />
+            {value}
+          </RadioGroup.Item>
+        ))}
+      </RadioGroup.Root>
+      <Button>After radios</Button>
+      <output aria-label="RadioGroup changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+const selectThemes = [
+  { value: 'system', label: 'System' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'light', label: 'Light' },
+];
+
+function SelectStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="Select input">
+      <Button>Before select</Button>
+      <form aria-label="Select form">
+        <Select.Root
+          name="theme"
+          defaultValue="system"
+          items={selectThemes}
+          onValueChange={(value) =>
+            setChanges((previous) => [...previous, String(value)])
+          }
+        >
+          <Select.Label>Theme</Select.Label>
+          <Select.Trigger>
+            <Select.Value placeholder="Choose a theme" />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner>
+              <Select.Popup>
+                <Select.List>
+                  {selectThemes.map((theme) => (
+                    <Select.Item
+                      key={theme.value}
+                      value={theme.value}
+                      disabled={theme.value === 'dark'}
+                    >
+                      <Select.ItemText>{theme.label}</Select.ItemText>
+                      <Select.ItemIndicator>✓</Select.ItemIndicator>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </form>
+      <Button>After select</Button>
+      <output aria-label="Select changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function SliderStates() {
+  const [events, setEvents] = useState<string[]>([]);
+  return (
+    <section aria-label="Slider input">
+      <Button>Before slider</Button>
+      <Slider.Root
+        min={0}
+        max={1}
+        step={0.1}
+        largeStep={0.5}
+        defaultValue={0.5}
+      >
+        <Slider.Label>Gain</Slider.Label>
+        <Slider.Value />
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Indicator />
+            <Slider.Thumb getAriaValueText={(value) => `${value} gain`} />
+          </Slider.Track>
+        </Slider.Control>
+      </Slider.Root>
+      <Slider.Root
+        defaultValue={50}
+        step={5}
+        onValueChange={(value) =>
+          setEvents((previous) => [...previous, `change:${value}`])
+        }
+        onValueCommitted={(value) =>
+          setEvents((previous) => [...previous, `commit:${value}`])
+        }
+      >
+        <Slider.Label>Volume</Slider.Label>
+        <Slider.Value />
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Indicator />
+            <Slider.Thumb getAriaValueText={(value) => `${value} percent`} />
+          </Slider.Track>
+        </Slider.Control>
+      </Slider.Root>
+      <output aria-label="Slider events">{JSON.stringify(events)}</output>
+    </section>
+  );
+}
+
+const badgeLongText =
+  'Awaiting approval from the regional administration team before publication';
+
+function BadgeStates() {
+  return (
+    <section aria-label="Badge states">
+      {componentManifest.components.Badge.variants.map((variant) => (
+        <div key={variant} className="fixture-badges">
+          <Badge variant={variant} data-case="short">
+            Active {variant}
+          </Badge>
+          <Badge variant={variant} data-case="long">
+            {badgeLongText} {variant}
+          </Badge>
+          <Badge variant={variant} data-case="icon">
+            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+              <circle cx="6" cy="6" r="5" fill="currentColor" />
+            </svg>
+            Icon {variant}
+          </Badge>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function SkeletonStates() {
+  return (
+    <section aria-label="Skeleton states">
+      <p role="status">Loading profile</p>
+      <div aria-busy="true" className="fixture-skeletons">
+        <Skeleton shape="circle" style={{ width: 40, height: 40 }} />
+        <Skeleton style={{ width: 160, height: 16 }} />
+      </div>
+    </section>
+  );
+}
+
+function SpinnerStates() {
+  return (
+    <section aria-label="Spinner states">
+      {componentManifest.components.Spinner.sizes.map((size) => (
+        <Spinner key={size} size={size} label={`Loading ${size}`} />
+      ))}
+    </section>
+  );
+}
+
+const cardLongText =
+  'Supercalifragilisticexpialidocious_unbroken_identifier_that_must_wrap and a long sentence describing the account in detail.';
+
+function CardStates() {
+  return (
+    <section aria-label="Card states">
+      <Card.Root data-case="full">
+        <Card.Header>
+          <Card.Title level="2">Profile</Card.Title>
+          <Card.Description>Edit your public information</Card.Description>
+        </Card.Header>
+        <Card.Content>Body content</Card.Content>
+        <Card.Footer>
+          <Button>Save</Button>
+        </Card.Footer>
+      </Card.Root>
+      <Card.Root data-case="content">
+        <Card.Content>Content only</Card.Content>
+      </Card.Root>
+      <Card.Root data-case="header-footer">
+        <Card.Header>
+          <Card.Title level="3">Header only</Card.Title>
+        </Card.Header>
+        <Card.Footer>Footer text</Card.Footer>
+      </Card.Root>
+      <Card.Root data-case="long">
+        <Card.Header>
+          <Card.Title level="3">{cardLongText}</Card.Title>
+          <Card.Description>{cardLongText}</Card.Description>
+        </Card.Header>
+        <Card.Content>{cardLongText}</Card.Content>
+      </Card.Root>
+    </section>
+  );
+}
+
+const alertLongText =
+  'Unbroken_identifier_that_must_wrap_inside_the_alert and a long sentence describing what happened.';
+
+function AlertStates() {
+  return (
+    <section aria-label="Alert states">
+      {componentManifest.components.Alert.variants.flatMap((variant) => [
+        <Alert.Root key={`${variant}-icon`} variant={variant} data-case="icon">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="7" fill="currentColor" />
+          </svg>
+          <Alert.Title>Status {variant}</Alert.Title>
+          <Alert.Description>Description for {variant}</Alert.Description>
+        </Alert.Root>,
+        <Alert.Root key={`${variant}-long`} variant={variant} data-case="long">
+          <Alert.Title>{alertLongText}</Alert.Title>
+          <Alert.Description>{alertLongText}</Alert.Description>
+        </Alert.Root>,
+      ])}
+    </section>
+  );
+}
+
+// A wide image proves the avatar crops instead of stretching it.
+const avatarImage =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect width="200" height="100" fill="#3366cc"/><circle cx="100" cy="50" r="40" fill="#ffffff"/></svg>',
+  );
+
+function AvatarStates() {
+  return (
+    <section aria-label="Avatar states">
+      {componentManifest.components.Avatar.sizes.map((size) => (
+        <Avatar.Root key={`${size}-image`} size={size} data-case="image">
+          <Avatar.Image src={avatarImage} alt={`Image ${size}`} />
+          <Avatar.Fallback>IM</Avatar.Fallback>
+        </Avatar.Root>
+      ))}
+      {componentManifest.components.Avatar.sizes.map((size) => (
+        <Avatar.Root key={`${size}-fallback`} size={size} data-case="fallback">
+          <Avatar.Fallback>{size.toUpperCase()}</Avatar.Fallback>
+        </Avatar.Root>
+      ))}
+    </section>
+  );
+}
+
+function ProgressStates() {
+  return (
+    <section aria-label="Progress states">
+      {[0, 50, 100, null].map((value) => (
+        <Progress.Root
+          key={String(value)}
+          value={value}
+          label={value === null ? 'Working' : `Upload ${value}`}
+        >
+          <Progress.Value />
+          <Progress.Track>
+            <Progress.Indicator />
+          </Progress.Track>
+        </Progress.Root>
+      ))}
+    </section>
+  );
+}
+
+const tableColumns = [
+  'Name',
+  'Email address',
+  'Department',
+  'Location',
+  'Status',
+];
+
+function TableStates() {
+  return (
+    <section aria-label="Table states">
+      <Button>Before table</Button>
+      <Table.Container aria-label="Team members">
+        <Table.Root>
+          <Table.Caption>Team members</Table.Caption>
+          <Table.Header>
+            <Table.Row>
+              {tableColumns.map((column) => (
+                <Table.Head key={column} scope="col">
+                  {column}
+                </Table.Head>
+              ))}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {['Aya', 'Ken'].map((name) => (
+              <Table.Row key={name}>
+                <Table.Head scope="row">{name}</Table.Head>
+                {tableColumns.slice(1).map((column) => (
+                  <Table.Cell key={column}>
+                    {column} of {name} in the regional office
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      </Table.Container>
+      <Button>After table</Button>
+    </section>
+  );
+}
+
+function BreadcrumbStates() {
+  return (
+    <section aria-label="Breadcrumb states">
+      <Button>Before breadcrumb</Button>
+      <Breadcrumb.Root>
+        <Breadcrumb.List>
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href="#home">Home</Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Ellipsis />
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href="#catalog">
+              Catalog_of_regional_products_and_services
+            </Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Page>
+              Current_page_with_a_very_long_unbroken_title_for_wrapping
+            </Breadcrumb.Page>
+          </Breadcrumb.Item>
+        </Breadcrumb.List>
+      </Breadcrumb.Root>
+      <Button>After breadcrumb</Button>
+    </section>
+  );
+}
+
+function PaginationStates() {
+  const [clicks, setClicks] = useState(0);
+  return (
+    <section aria-label="Pagination states">
+      <Button>Before pagination</Button>
+      <Pagination.Root aria-label="Result pages">
+        <Pagination.List>
+          <Pagination.Item>
+            <Pagination.Previous
+              disabled
+              onClick={() => setClicks((n) => n + 1)}
+            >
+              Previous
+            </Pagination.Previous>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-1" active>
+              1
+            </Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-2">2</Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Ellipsis label="More pages" />
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-9">9</Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Next href="#page-next">Next</Pagination.Next>
+          </Pagination.Item>
+        </Pagination.List>
+      </Pagination.Root>
+      <Button>After pagination</Button>
+      <output aria-label="Pagination clicks">{clicks}</output>
+    </section>
+  );
+}
+
+function CollapsibleStates() {
+  return (
+    <section aria-label="Collapsible states">
+      <Button>Before collapsible</Button>
+      <Collapsible.Root>
+        <Collapsible.Trigger>Advanced settings</Collapsible.Trigger>
+        <Collapsible.Panel>
+          <p>Additional settings</p>
+          <Button>Panel action</Button>
+        </Collapsible.Panel>
+      </Collapsible.Root>
+      <Collapsible.Root>
+        <Collapsible.Trigger>Kept mounted</Collapsible.Trigger>
+        <Collapsible.Panel keepMounted>
+          <Button>Hidden action</Button>
+        </Collapsible.Panel>
+      </Collapsible.Root>
+      <Button>After collapsible</Button>
+    </section>
+  );
+}
+
+function AccordionStates() {
+  return (
+    <section aria-label="Accordion states">
+      <Button>Before accordion</Button>
+      <Accordion.Root>
+        {[
+          { value: 'account', title: 'Account', link: 'Account link' },
+          { value: 'billing', title: 'Billing', link: 'Billing link' },
+          { value: 'archive', title: 'Archive', link: 'Archive link' },
+        ].map((item) => (
+          <Accordion.Item
+            key={item.value}
+            value={item.value}
+            disabled={item.value === 'archive'}
+          >
+            <Accordion.Header level={3}>
+              <Accordion.Trigger>{item.title}</Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Panel>
+              <a href={`#${item.value}`}>{item.link}</a>
+            </Accordion.Panel>
+          </Accordion.Item>
+        ))}
+      </Accordion.Root>
+      <Button>After accordion</Button>
+    </section>
+  );
+}
+
+function TabsStates() {
+  return (
+    <section aria-label="Tabs states">
+      <Button>Before tabs</Button>
+      <Tabs.Root defaultValue="profile">
+        <Tabs.List aria-label="Account sections">
+          <Tabs.Tab value="profile">Profile</Tabs.Tab>
+          <Tabs.Tab value="billing">Billing</Tabs.Tab>
+          <Tabs.Tab value="team" disabled>
+            Team
+          </Tabs.Tab>
+          <Tabs.Tab value="security">Security</Tabs.Tab>
+        </Tabs.List>
+        {['profile', 'billing', 'team', 'security'].map((value) => (
+          <Tabs.Panel key={value} value={value}>
+            <Button>{value} action</Button>
+          </Tabs.Panel>
+        ))}
+      </Tabs.Root>
+      <Button>After tabs</Button>
+      <div className="fixture-tabs-wrap" data-case="wrap">
+        <Tabs.Root defaultValue="overview">
+          <Tabs.List aria-label="Wrapping sections">
+            {['overview', 'activity', 'reports', 'settings', 'billing'].map(
+              (value) => (
+                <Tabs.Tab key={value} value={value}>
+                  {value}
+                </Tabs.Tab>
+              ),
+            )}
+            <Tabs.Indicator />
+          </Tabs.List>
+          {['overview', 'activity', 'reports', 'settings', 'billing'].map(
+            (value) => (
+              <Tabs.Panel key={value} value={value}>
+                {value} panel
+              </Tabs.Panel>
+            ),
+          )}
+        </Tabs.Root>
+      </div>
+      <div className="fixture-tabs-vertical" data-case="vertical">
+        <Tabs.Root defaultValue="one" orientation="vertical">
+          <Tabs.List aria-label="Vertical sections">
+            {['one', 'two', 'three'].map((value) => (
+              <Tabs.Tab key={value} value={value}>
+                {value}
+              </Tabs.Tab>
+            ))}
+            <Tabs.Indicator />
+          </Tabs.List>
+          {['one', 'two', 'three'].map((value) => (
+            <Tabs.Panel key={value} value={value}>
+              {value} panel
+            </Tabs.Panel>
+          ))}
+        </Tabs.Root>
+      </div>
+    </section>
+  );
+}
+
+function ToggleStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  const { sizes, variants } = componentManifest.components.Toggle;
+  return (
+    <section aria-label="Toggle states">
+      <Button>Before toggle</Button>
+      <Toggle
+        onPressedChange={(pressed) =>
+          setChanges((previous) => [...previous, `Italic:${pressed}`])
+        }
+      >
+        Italic
+      </Toggle>
+      <Toggle disabled>Underline</Toggle>
+      <Button>After toggle</Button>
+      <output aria-label="Toggle changes">{JSON.stringify(changes)}</output>
+      <div className="fixture-toggles">
+        {sizes.flatMap((size) =>
+          variants.flatMap((variant) =>
+            [false, true].map((pressed) => (
+              <Toggle
+                key={`${size}-${variant}-${pressed}`}
+                size={size}
+                variant={variant}
+                defaultPressed={pressed}
+                data-case="visual"
+              >
+                {`Bold ${size} ${variant} ${pressed ? 'on' : 'off'}`}
+              </Toggle>
+            )),
+          ),
+        )}
+      </div>
+    </section>
+  );
+}
+
+const tooltipLong =
+  'Saves the draft to the shared workspace so that every collaborator can review the latest changes';
+
+function TooltipStates() {
+  return (
+    <section aria-label="Tooltip states">
+      <Button>Before tooltip</Button>
+      <Tooltip.Provider delay={100}>
+        <Tooltip.Root>
+          <Tooltip.Trigger render={<Button />}>Save</Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Positioner sideOffset={6}>
+              <Tooltip.Popup>{tooltipLong}</Tooltip.Popup>
+            </Tooltip.Positioner>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+        {/* Known-invalid control: Base UI accepts the prop the types omit. */}
+        <Tooltip.Root
+          {...({ disableHoverablePopup: true } as Record<string, unknown>)}
+        >
+          <Tooltip.Trigger render={<Button />}>Not hoverable</Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Positioner sideOffset={6}>
+              <Tooltip.Popup>Closes when the pointer leaves</Tooltip.Popup>
+            </Tooltip.Positioner>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+      </Tooltip.Provider>
+      <Button>After tooltip</Button>
+    </section>
+  );
+}
+
+function PopoverStates() {
+  return (
+    <section aria-label="Popover states">
+      <Button>Before popover</Button>
+      <Popover.Root>
+        <Popover.Trigger render={<Button variant="outline" />}>
+          Open options
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Positioner sideOffset={8}>
+            <Popover.Popup>
+              <Popover.Title>Options</Popover.Title>
+              <Popover.Description>Adjust the options.</Popover.Description>
+              <label>
+                Name <input type="text" defaultValue="Aya" />
+              </label>
+              <Popover.Close render={<Button variant="outline" />}>
+                Close options
+              </Popover.Close>
+            </Popover.Popup>
+          </Popover.Positioner>
+        </Popover.Portal>
+      </Popover.Root>
+      <Button>After popover</Button>
+    </section>
+  );
+}
+
+function MenuStates() {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  return (
+    <section aria-label="Menu states">
+      <Button>Before menu</Button>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger render={<Button variant="outline" />}>
+          Actions
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Positioner sideOffset={4}>
+            <DropdownMenu.Popup>
+              <DropdownMenu.Group>
+                <DropdownMenu.GroupLabel>Document</DropdownMenu.GroupLabel>
+                <DropdownMenu.Item onClick={record('Edit')}>
+                  Edit
+                </DropdownMenu.Item>
+                <DropdownMenu.Item onClick={record('Duplicate')}>
+                  Duplicate
+                </DropdownMenu.Item>
+              </DropdownMenu.Group>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item disabled onClick={record('Delete')}>
+                Delete
+              </DropdownMenu.Item>
+              <DropdownMenu.Item onClick={record('Share')}>
+                Share
+              </DropdownMenu.Item>
+            </DropdownMenu.Popup>
+          </DropdownMenu.Positioner>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+      <Button>After menu</Button>
+      <output aria-label="Menu actions">{JSON.stringify(actions)}</output>
+    </section>
+  );
+}
+
+function AlertDialogStates() {
+  const [deletions, setDeletions] = useState(0);
+  const [open, setOpen] = useState(false);
+  return (
+    <section aria-label="AlertDialog states">
+      <Button>Before alert dialog</Button>
+      <AlertDialog.Root open={open} onOpenChange={setOpen}>
+        <AlertDialog.Trigger render={<Button variant="outline" />}>
+          Delete file
+        </AlertDialog.Trigger>
+        <AlertDialog.Portal>
+          <AlertDialog.Backdrop />
+          <AlertDialog.Popup>
+            <AlertDialog.Title>Delete file?</AlertDialog.Title>
+            <AlertDialog.Description>
+              This cannot be undone.
+            </AlertDialog.Description>
+            <AlertDialog.Close render={<Button variant="outline" />}>
+              Cancel
+            </AlertDialog.Close>
+            <Button
+              onClick={() => {
+                setDeletions((count) => count + 1);
+                setOpen(false);
+              }}
+            >
+              Delete permanently
+            </Button>
+          </AlertDialog.Popup>
+        </AlertDialog.Portal>
+      </AlertDialog.Root>
+      <Button>After alert dialog</Button>
+      <output aria-label="Deletions">{deletions}</output>
+    </section>
+  );
+}
+
+function ToastList() {
+  const manager = useToastManager();
+  return manager.toasts.map((toast) => (
     <Toast.Root key={toast.id} toast={toast}>
       <Toast.Content>
         <Toast.Title />
@@ -57,38 +766,157 @@ function FixtureToasts() {
   ));
 }
 
-function ShowToast() {
+function ToastControls({ onUndo }: { onUndo: () => void }) {
   const manager = useToastManager();
+  const long =
+    'A long description that wraps over several lines so that a stack of toasts becomes taller than a short screen.';
   return (
-    <Button
-      onClick={() =>
-        manager.add({
-          title: 'Saved',
-          description: 'Your changes were applied.',
-          timeout: 0,
-          actionProps: { children: 'Undo' },
-        })
-      }
-    >
-      Show toast
-    </Button>
+    <>
+      <Button
+        onClick={() =>
+          manager.add({
+            title: 'Saved',
+            description: 'Your draft was saved.',
+            timeout: 800,
+          })
+        }
+      >
+        Add timed toast
+      </Button>
+      <Button
+        onClick={() =>
+          manager.add({
+            title: 'Item archived',
+            timeout: 0,
+            actionProps: { children: 'Undo', onClick: onUndo },
+          })
+        }
+      >
+        Add persistent toast
+      </Button>
+      <Button
+        onClick={() => {
+          for (let index = 1; index <= 5; index += 1)
+            manager.add({
+              title: `Notice ${index}`,
+              description: long,
+              timeout: 0,
+            });
+        }}
+      >
+        Add many toasts
+      </Button>
+    </>
   );
 }
 
-const avatarImage =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' fill='%232357c6'/%3E%3C/svg%3E";
+function ToastStates() {
+  const [undos, setUndos] = useState(0);
+  return (
+    <section aria-label="Toast states">
+      <Toast.Provider>
+        <Button>Before toast</Button>
+        <ToastControls onUndo={() => setUndos((count) => count + 1)} />
+        <output aria-label="Undo count">{undos}</output>
+        <Toast.Portal>
+          <Toast.Viewport>
+            <ToastList />
+          </Toast.Viewport>
+        </Toast.Portal>
+      </Toast.Provider>
+    </section>
+  );
+}
 
-/** Input, toggle and button groups; the counter exposes activations to the spec. */
-function GroupFixtures() {
+function ToggleGroupStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="ToggleGroup states">
+      <Button>Before groups</Button>
+      <ToggleGroup.Root
+        aria-label="Text format"
+        multiple
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `format:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="bold">Bold</ToggleGroup.Item>
+        <ToggleGroup.Item value="italic" disabled>
+          Italic
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="underline">Underline</ToggleGroup.Item>
+        <ToggleGroup.Item value="strike">Strike</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <ToggleGroup.Root
+        aria-label="Alignment"
+        orientation="vertical"
+        defaultValue={['center']}
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `align:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="left">Left</ToggleGroup.Item>
+        <ToggleGroup.Item value="center">Center</ToggleGroup.Item>
+        <ToggleGroup.Item value="right" disabled>
+          Right
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="justify">Justify</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <Button>After groups</Button>
+      <output aria-label="Group changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function ButtonGroupStates() {
+  return (
+    <section aria-label="ButtonGroup states">
+      <Button>Before button groups</Button>
+      <ButtonGroup aria-label="History actions" data-case="horizontal">
+        <Button variant="outline">Back</Button>
+        <Button variant="outline" disabled>
+          Forward
+        </Button>
+        <Button variant="outline">Copy</Button>
+        <Button variant="solid">Paste</Button>
+      </ButtonGroup>
+      <ButtonGroup
+        aria-label="Order actions"
+        orientation="vertical"
+        data-case="vertical"
+      >
+        <Button variant="outline">Top</Button>
+        <Button variant="outline" disabled>
+          Up
+        </Button>
+        <Button variant="outline">Down</Button>
+      </ButtonGroup>
+      <div className="fixture-button-group-wrap">
+        <ButtonGroup aria-label="Many actions" data-case="wrap">
+          {['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'].map(
+            (name) => (
+              <Button key={name} variant="outline">
+                {name}
+              </Button>
+            ),
+          )}
+        </ButtonGroup>
+      </div>
+      <Button>After button groups</Button>
+    </section>
+  );
+}
+
+function InputGroupStates() {
   const [searches, setSearches] = useState(0);
   const unitId = useId();
   return (
-    <section aria-label="Groups">
+    <section aria-label="InputGroup states">
       {/* The spec counts submit events; nothing here may submit by itself. */}
       <form>
         <Field.Root name="docs-query">
           <Field.Label>Search docs</Field.Label>
-          <InputGroup.Root>
+          <InputGroup.Root data-case="search">
             <InputGroup.Addon>
               <svg
                 aria-hidden="true"
@@ -108,80 +936,51 @@ function GroupFixtures() {
           </InputGroup.Root>
         </Field.Root>
       </form>
-      <p data-testid="group-counts">{`searches ${searches}`}</p>
+      <output aria-label="Search count">{searches}</output>
       <Field.Root name="parcel-weight" invalid>
         <Field.Label>Parcel weight</Field.Label>
-        <InputGroup.Root>
+        <InputGroup.Root data-case="invalid">
           <Input defaultValue="heavy" aria-describedby={unitId} />
           <InputGroup.Addon align="inline-end">
-            <InputGroup.Text id={unitId}>kilograms per parcel</InputGroup.Text>
+            <InputGroup.Text id={unitId}>
+              kilograms per parcel, entered as a decimal number
+            </InputGroup.Text>
           </InputGroup.Addon>
         </InputGroup.Root>
         <Field.Error match>Enter the weight as a number.</Field.Error>
       </Field.Root>
       <Field.Root name="mirror-site" disabled>
         <Field.Label>Mirror site</Field.Label>
-        <InputGroup.Root>
+        <InputGroup.Root data-case="disabled">
           <InputGroup.Addon>
             <InputGroup.Text>https://</InputGroup.Text>
           </InputGroup.Addon>
           <Input defaultValue="mirror.example" />
         </InputGroup.Root>
       </Field.Root>
+      <Field.Root name="license-key">
+        <Field.Label>License key</Field.Label>
+        <InputGroup.Root data-case="readonly">
+          <InputGroup.Addon>
+            <InputGroup.Text>KEY-</InputGroup.Text>
+          </InputGroup.Addon>
+          <Input defaultValue="0042" readOnly />
+        </InputGroup.Root>
+      </Field.Root>
       <Field.Root name="release-notes">
         <Field.Label>Release notes</Field.Label>
-        <InputGroup.Root>
+        <InputGroup.Root data-case="block">
           <InputGroup.Addon align="block-start">
             <InputGroup.Text>Markdown</InputGroup.Text>
           </InputGroup.Addon>
           <Textarea />
         </InputGroup.Root>
       </Field.Root>
-      <ToggleGroup.Root
-        multiple
-        aria-label="Text style"
-        defaultValue={['bold']}
-      >
-        {['Bold', 'Italic', 'Underline', 'Strike'].map((name) => (
-          <ToggleGroup.Item
-            key={name}
-            value={name.toLowerCase()}
-            variant="outline"
-            disabled={name === 'Underline'}
-          >
-            {name}
-          </ToggleGroup.Item>
-        ))}
-      </ToggleGroup.Root>
-      <ToggleGroup.Root aria-label="Layout" orientation="vertical">
-        <ToggleGroup.Item value="list">List</ToggleGroup.Item>
-        <ToggleGroup.Item value="grid">Grid</ToggleGroup.Item>
-        <ToggleGroup.Item value="board" size="sm">
-          Board
-        </ToggleGroup.Item>
-      </ToggleGroup.Root>
-      <ButtonGroup aria-label="History">
-        <Button variant="outline">Step back</Button>
-        <Button variant="outline">Step forward</Button>
-        <Button>Publish</Button>
-      </ButtonGroup>
-      <ButtonGroup aria-label="Zoom" orientation="vertical">
-        <Button variant="ghost" size="sm">
-          Zoom in
-        </Button>
-        <Button variant="outline" size="sm" disabled>
-          Zoom out
-        </Button>
-        <Button variant="outline" size="sm">
-          Reset zoom
-        </Button>
-      </ButtonGroup>
     </section>
   );
 }
 
 function Fixture() {
-  const planLabelId = useId();
   return (
     <main>
       <h1>Accessibility fixtures</h1>
@@ -232,375 +1031,149 @@ function Fixture() {
           <span>Settings</span>
         </div>
       </section>
-      <section aria-label="Data and navigation">
-        <Progress.Root value={45} label="Upload">
-          <Progress.Value />
-          <Progress.Track>
-            <Progress.Indicator />
-          </Progress.Track>
-        </Progress.Root>
-        <Progress.Root value={null} label="Sync">
-          <Progress.Track>
-            <Progress.Indicator />
-          </Progress.Track>
-        </Progress.Root>
-        <Table.Container aria-label="Invoices" style={{ maxWidth: '16rem' }}>
-          <Table.Root>
-            <Table.Caption>Invoices</Table.Caption>
-            <Table.Header>
-              <Table.Row>
-                <Table.Head scope="col">Number</Table.Head>
-                <Table.Head scope="col">Customer</Table.Head>
-                <Table.Head scope="col" data-align="end">
-                  Amount
-                </Table.Head>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              <Table.Row>
-                <Table.Head scope="row">INV-001</Table.Head>
-                <Table.Cell style={{ whiteSpace: 'nowrap' }}>
-                  Example Corporation International Holdings
-                </Table.Cell>
-                <Table.Cell data-align="end">1,000</Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          </Table.Root>
-        </Table.Container>
-        <Breadcrumb.Root aria-label="Breadcrumb">
-          <Breadcrumb.List>
-            <Breadcrumb.Item>
-              <Breadcrumb.Link href="#home">Home</Breadcrumb.Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Separator />
-            <Breadcrumb.Item>
-              <Breadcrumb.Link href="#account">Account</Breadcrumb.Link>
-            </Breadcrumb.Item>
-            <Breadcrumb.Separator />
-            <Breadcrumb.Item>
-              <Breadcrumb.Page>Settings</Breadcrumb.Page>
-            </Breadcrumb.Item>
-          </Breadcrumb.List>
-        </Breadcrumb.Root>
-        <Pagination.Root aria-label="Result pages">
-          <Pagination.List>
-            <Pagination.Item>
-              <Pagination.Previous disabled>Previous page</Pagination.Previous>
-            </Pagination.Item>
-            <Pagination.Item>
-              <Pagination.Link href="#page-1" active>
-                1
-              </Pagination.Link>
-            </Pagination.Item>
-            <Pagination.Item>
-              <Pagination.Ellipsis label="More pages" />
-            </Pagination.Item>
-            <Pagination.Item>
-              <Pagination.Next href="#page-2">Next page</Pagination.Next>
-            </Pagination.Item>
-          </Pagination.List>
-        </Pagination.Root>
+      <section aria-label="Input states">
+        {componentManifest.components.Input.sizes.map((size) => (
+          <div key={size} className="fixture-inputs">
+            <Field.Root name={`input-${size}`}>
+              <Field.Label>Input {size}</Field.Label>
+              <Input size={size} placeholder="Enter a value" />
+              <Field.Description>
+                Required contact information.
+              </Field.Description>
+            </Field.Root>
+            <Input
+              size={size}
+              aria-label={`Read only ${size}`}
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Input
+              size={size}
+              aria-label={`Disabled ${size}`}
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid {size}</Field.Label>
+              <Input size={size} defaultValue="Invalid value" />
+              <Field.Error match>Enter a valid contact value.</Field.Error>
+            </Field.Root>
+          </div>
+        ))}
       </section>
-      <section aria-label="Basic form controls">
-        <Field.Root name="reply-address">
-          <Field.Label>Reply address</Field.Label>
-          <Input type="email" autoComplete="email" />
-          <Field.Description>We reply to this address.</Field.Description>
-        </Field.Root>
-        <Field.Root name="notes">
-          <Field.Label>Notes</Field.Label>
-          <Textarea maxLength={200} />
-        </Field.Root>
-        <Field.Root name="country">
-          <Field.Label>Country</Field.Label>
-          <NativeSelect defaultValue="jp">
-            <option value="jp">Japan</option>
-            <option value="us">United States</option>
-          </NativeSelect>
-        </Field.Root>
-        <Field.Root name="terms" className="fixture-row">
-          <Checkbox.Root value="accepted">
-            <Checkbox.Indicator />
-          </Checkbox.Root>
-          <Field.Label>Accept terms</Field.Label>
-        </Field.Root>
-        <label className="fixture-row">
-          <Checkbox.Root indeterminate>
-            <Checkbox.Indicator />
-          </Checkbox.Root>
-          Select all
-        </label>
-        <Field.Root name="alerts" className="fixture-row">
-          <Switch.Root>
-            <Switch.Thumb />
-          </Switch.Root>
-          <Field.Label>Enable alerts</Field.Label>
-        </Field.Root>
+      <section aria-label="Textarea states">
+        {componentManifest.components.Textarea.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="notes">
+              <Field.Label>Notes {size}</Field.Label>
+              <Textarea size={size} maxLength={8} />
+              <Field.Description>
+                Up to 8 characters, including line breaks.
+              </Field.Description>
+            </Field.Root>
+            <Textarea
+              size={size}
+              aria-label={`Read only notes ${size}`}
+              name="readonly"
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Textarea
+              size={size}
+              aria-label={`Disabled notes ${size}`}
+              name="disabled"
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid notes {size}</Field.Label>
+              <Textarea size={size} defaultValue="Invalid note" />
+              <Field.Error match>Enter a valid note.</Field.Error>
+            </Field.Root>
+          </form>
+        ))}
       </section>
-      <section aria-label="Choice controls">
-        <p id={planLabelId}>Plan</p>
-        <RadioGroup.Root
-          name="plan"
-          defaultValue="free"
-          aria-labelledby={planLabelId}
-        >
-          <RadioGroup.Item value="free">
-            <RadioGroup.Indicator />
-            Free
-          </RadioGroup.Item>
-          <RadioGroup.Item value="team" disabled>
-            <RadioGroup.Indicator />
-            Team (unavailable)
-          </RadioGroup.Item>
-          <RadioGroup.Item value="pro">
-            <RadioGroup.Indicator />
-            Pro
-          </RadioGroup.Item>
-        </RadioGroup.Root>
-        <Select.Root
-          name="theme"
-          defaultValue="system"
-          items={[
-            { value: 'system', label: 'System' },
-            { value: 'dark', label: 'Dark' },
-            { value: 'light', label: 'Light' },
-          ]}
-        >
-          <Select.Label>Theme</Select.Label>
-          <Select.Trigger>
-            <Select.Value placeholder="Choose a theme" />
-            <Select.Icon />
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Positioner>
-              <Select.Popup>
-                <Select.List>
-                  <Select.Item value="system">
-                    <Select.ItemText>System</Select.ItemText>
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                  <Select.Item value="dark" disabled>
-                    <Select.ItemText>Dark</Select.ItemText>
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                  <Select.Item value="light">
-                    <Select.ItemText>Light</Select.ItemText>
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                </Select.List>
-              </Select.Popup>
-            </Select.Positioner>
-          </Select.Portal>
-        </Select.Root>
-        <Slider.Root name="volume" defaultValue={50} step={5}>
-          <Slider.Label>Volume</Slider.Label>
-          <Slider.Value />
-          <Slider.Control>
-            <Slider.Track>
-              <Slider.Indicator />
-              <Slider.Thumb getAriaValueText={(value) => `${value} percent`} />
-            </Slider.Track>
-          </Slider.Control>
-        </Slider.Root>
-      </section>
-      <section aria-label="Disclosure">
-        <Collapsible.Root>
-          <Collapsible.Trigger>Advanced settings</Collapsible.Trigger>
-          <Collapsible.Panel>
-            <a href="#advanced-help">Advanced settings help</a>
-          </Collapsible.Panel>
-        </Collapsible.Root>
-        <Accordion.Root>
-          {['Shipping', 'Returns'].map((item) => (
-            <Accordion.Item key={item} value={item}>
-              <Accordion.Header level={2}>
-                <Accordion.Trigger>{item}</Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Panel>
-                <a href={`#${item}-policy`}>{item} policy</a>
-              </Accordion.Panel>
-            </Accordion.Item>
-          ))}
-        </Accordion.Root>
-        <Tabs.Root defaultValue="profile">
-          <Tabs.List aria-label="Account">
-            <Tabs.Tab value="profile">Profile</Tabs.Tab>
-            <Tabs.Tab value="billing" disabled>
-              Billing
-            </Tabs.Tab>
-            <Tabs.Tab value="security">Security</Tabs.Tab>
-            <Tabs.Indicator />
-          </Tabs.List>
-          <Tabs.Panel value="profile">Profile settings</Tabs.Panel>
-          <Tabs.Panel value="billing">Billing settings</Tabs.Panel>
-          <Tabs.Panel value="security">Security settings</Tabs.Panel>
-        </Tabs.Root>
-        <div className="fixture-row">
-          {(['outline', 'ghost'] as const).flatMap((variant) =>
-            (['sm', 'md', 'lg'] as const).map((size) => (
-              <Toggle key={`${variant}-${size}`} variant={variant} size={size}>
-                {`Toggle ${variant} ${size}`}
-              </Toggle>
-            )),
-          )}
-          <Toggle iconOnly aria-label="Bold" variant="outline" defaultPressed>
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
-              <path d="M4 2h5a3 3 0 0 1 0 6H4zM4 8h6a3 3 0 0 1 0 6H4z" />
-            </svg>
-          </Toggle>
-          <Toggle disabled>Toggle disabled</Toggle>
-        </div>
-      </section>
-      <section aria-label="Floating overlays">
-        <Tooltip.Provider>
-          <Tooltip.Root>
-            <Tooltip.Trigger
-              render={<Button iconOnly aria-label="Copy link" />}
+      <section aria-label="NativeSelect states">
+        {componentManifest.components.NativeSelect.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="country">
+              <Field.Label>Country {size}</Field.Label>
+              <NativeSelect size={size} defaultValue="jp">
+                <option value="jp">Japan</option>
+                <option value="ca" disabled>
+                  Canada
+                </option>
+                <optgroup label="Other countries">
+                  <option value="us">United States</option>
+                </optgroup>
+              </NativeSelect>
+              <Field.Description>Used for shipping.</Field.Description>
+            </Field.Root>
+            <NativeSelect
+              size={size}
+              disabled
+              name="disabled"
+              aria-label={`Disabled country ${size}`}
             >
-              <svg
-                aria-hidden="true"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-              >
-                <rect
-                  x="4"
-                  y="4"
-                  width="9"
-                  height="9"
-                  fill="none"
-                  stroke="currentColor"
-                />
-              </svg>
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-              <Tooltip.Positioner sideOffset={6}>
-                <Tooltip.Popup>
-                  Copy the page link to the clipboard
-                </Tooltip.Popup>
-                <Tooltip.Arrow />
-              </Tooltip.Positioner>
-            </Tooltip.Portal>
-          </Tooltip.Root>
-        </Tooltip.Provider>
-        <Popover.Root>
-          <Popover.Trigger render={<Button variant="outline" />}>
-            Display settings
-          </Popover.Trigger>
-          <Popover.Portal>
-            <Popover.Positioner sideOffset={8}>
-              <Popover.Popup>
-                <Popover.Title>Display</Popover.Title>
-                <Popover.Description>Adjust the text size.</Popover.Description>
-                <Field.Root>
-                  <Field.Label>Text size</Field.Label>
-                  <Field.Control type="number" defaultValue={16} />
-                </Field.Root>
-                <Popover.Close render={<Button />}>
-                  Close display settings
-                </Popover.Close>
-              </Popover.Popup>
-            </Popover.Positioner>
-          </Popover.Portal>
-        </Popover.Root>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger render={<Button variant="outline" />}>
-            Document actions
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <DropdownMenu.Positioner sideOffset={4}>
-              <DropdownMenu.Popup>
-                <DropdownMenu.Group>
-                  <DropdownMenu.GroupLabel>Document</DropdownMenu.GroupLabel>
-                  <DropdownMenu.Item>Edit</DropdownMenu.Item>
-                  <DropdownMenu.Item>Duplicate</DropdownMenu.Item>
-                </DropdownMenu.Group>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item disabled>Delete</DropdownMenu.Item>
-                <DropdownMenu.Item>Share</DropdownMenu.Item>
-              </DropdownMenu.Popup>
-            </DropdownMenu.Positioner>
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+              <option value="jp">Japan</option>
+            </NativeSelect>
+            <Field.Root invalid>
+              <Field.Label>Invalid country {size}</Field.Label>
+              <NativeSelect size={size}>
+                <option value="">Choose a country</option>
+              </NativeSelect>
+              <Field.Error match>Choose a valid country.</Field.Error>
+            </Field.Root>
+            <Button type="reset">Reset country {size}</Button>
+          </form>
+        ))}
       </section>
-      <section aria-label="Notifications">
-        <AlertDialog.Root>
-          <AlertDialog.Trigger render={<Button />}>
-            Delete file
-          </AlertDialog.Trigger>
-          <AlertDialog.Portal>
-            <AlertDialog.Backdrop />
-            <AlertDialog.Popup>
-              <AlertDialog.Title>Delete file?</AlertDialog.Title>
-              <AlertDialog.Description>
-                This cannot be undone.
-              </AlertDialog.Description>
-              <AlertDialog.Close render={<Button variant="outline" />}>
-                Cancel
-              </AlertDialog.Close>
-              <AlertDialog.Close render={<Button />}>
-                Delete permanently
-              </AlertDialog.Close>
-            </AlertDialog.Popup>
-          </AlertDialog.Portal>
-        </AlertDialog.Root>
-        <Toast.Provider>
-          <ShowToast />
-          <Toast.Portal>
-            <Toast.Viewport aria-label="Status messages">
-              <FixtureToasts />
-            </Toast.Viewport>
-          </Toast.Portal>
-        </Toast.Provider>
+      <section aria-label="Checkbox reset">
+        {[false, true].flatMap((canceled) =>
+          [false, true].map((defaultChecked) => {
+            const name = `Reset ${canceled ? 'canceled' : 'allowed'} default ${defaultChecked}`;
+            return (
+              <form key={name} ref={canceled ? cancelResetRef : undefined}>
+                <Checkbox.Root
+                  aria-label={name}
+                  name="choice"
+                  value="yes"
+                  defaultChecked={defaultChecked}
+                >
+                  <Checkbox.Indicator />
+                </Checkbox.Root>
+                <Button type="reset">{name}</Button>
+              </form>
+            );
+          }),
+        )}
       </section>
-      <section aria-label="Display">
-        <p>
-          {componentManifest.components.Badge.variants.map((variant) => (
-            <Badge key={variant} variant={variant}>
-              {variant} badge
-            </Badge>
-          ))}
-        </p>
-        <div aria-busy="true" className="fixture-row">
-          <Skeleton shape="circle" />
-          <Skeleton style={{ width: 160, height: 16 }} />
-        </div>
-        <p role="status">Loading profile</p>
-        <Spinner label="Loading" />
-        <Button disabled>
-          <Spinner size="sm" decorative />
-          Saving
-        </Button>
-        <Card.Root>
-          <Card.Header>
-            <Card.Title level="2">Card title</Card.Title>
-            <Card.Description>Card description.</Card.Description>
-          </Card.Header>
-          <Card.Content>Card content</Card.Content>
-          <Card.Footer>
-            <Button>Card action</Button>
-          </Card.Footer>
-        </Card.Root>
-        <Alert.Root>
-          <Alert.Title>Notice: maintenance</Alert.Title>
-          <Alert.Description>Service stops at 22:00.</Alert.Description>
-        </Alert.Root>
-        <Alert.Root variant="destructive" role="alert">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
-            <circle cx="8" cy="8" r="7" fill="currentColor" />
-          </svg>
-          <Alert.Title>Error: could not save</Alert.Title>
-        </Alert.Root>
-        <Avatar.Root>
-          <Avatar.Image src={avatarImage} alt="Aya" />
-          <Avatar.Fallback>A</Avatar.Fallback>
-        </Avatar.Root>
-        <Avatar.Root size="sm">
-          <Avatar.Image src="/missing-avatar.png" alt="Ken" />
-          <Avatar.Fallback>K</Avatar.Fallback>
-        </Avatar.Root>
-      </section>
-      <GroupFixtures />
+      <SwitchStates />
+      <RadioGroupStates />
+      <SelectStates />
+      <SliderStates />
+      <BadgeStates />
+      <SkeletonStates />
+      <SpinnerStates />
+      <CardStates />
+      <AlertStates />
+      <AvatarStates />
+      <ProgressStates />
+      <TableStates />
+      <BreadcrumbStates />
+      <PaginationStates />
+      <CollapsibleStates />
+      <AccordionStates />
+      <TabsStates />
+      <ToggleStates />
+      <TooltipStates />
+      <PopoverStates />
+      <MenuStates />
+      <AlertDialogStates />
+      <ToastStates />
+      <ToggleGroupStates />
+      <ButtonGroupStates />
+      <InputGroupStates />
     </main>
   );
 }

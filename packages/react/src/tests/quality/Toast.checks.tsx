@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { expect, vi } from 'vitest';
 import { Button } from '../../components/Button.js';
 import { Toast, useToastManager } from '../../components/Toast.js';
@@ -99,24 +99,6 @@ export const toastChecks: Record<string, QualityCheck> = {
       await advance(1100);
       expect(screen.queryByText('Second')).not.toBeInTheDocument();
     }),
-  'toast.pause-on-hover-focus': () =>
-    withFakeTimers(async () => {
-      const { add } = renderToasts(1000);
-      const region = screen.getByRole('region', { name: 'Notifications' });
-      add({ title: 'Hovered' });
-      fireEvent.mouseEnter(region);
-      await advance(3000);
-      expect(screen.getByText('Hovered')).toBeInTheDocument();
-      fireEvent.mouseLeave(region);
-      await advance(1100);
-      expect(screen.queryByText('Hovered')).not.toBeInTheDocument();
-      add({ title: 'Focused' });
-      // F6 is Base UI's shortcut to move keyboard focus into the viewport.
-      fireEvent.keyDown(window, { key: 'F6' });
-      expect(region).toHaveFocus();
-      await advance(3000);
-      expect(screen.getByText('Focused')).toBeInTheDocument();
-    }),
   'toast.persistent-timeout': () =>
     withFakeTimers(async () => {
       const { add } = renderToasts();
@@ -124,31 +106,4 @@ export const toastChecks: Record<string, QualityCheck> = {
       await advance(60_000);
       expect(screen.getByText('Connection lost')).toBeInTheDocument();
     }),
-  'toast.close-action-keyboard': async () => {
-    const undo = vi.fn();
-    const { add } = renderToasts();
-    add({
-      title: 'Item archived',
-      timeout: 0,
-      actionProps: { children: 'Undo', onClick: undo },
-    });
-    const action = await screen.findByRole('button', { name: 'Undo' });
-    action.focus();
-    fireEvent.click(action);
-    expect(undo).toHaveBeenCalledTimes(1);
-    // Base UI exposes Close to assistive technology once it is focused or the
-    // viewport is expanded, so a keyboard user reaches a named button.
-    act(() => screen.getByText('Dismiss', { selector: 'button' }).focus());
-    const close = screen.getByRole('button', { name: 'Dismiss' });
-    expect(close).toHaveFocus();
-    fireEvent.click(close);
-    await act(async () => {});
-    expect(screen.queryByText('Item archived')).not.toBeInTheDocument();
-    add({ title: 'Escape me', timeout: 0 });
-    const toast = await screen.findByRole('dialog', { name: 'Escape me' });
-    toast.focus();
-    fireEvent.keyDown(toast, { key: 'Escape' });
-    await act(async () => {});
-    expect(screen.queryByText('Escape me')).not.toBeInTheDocument();
-  },
 };

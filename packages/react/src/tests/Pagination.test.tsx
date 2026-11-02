@@ -26,7 +26,13 @@ const disabledWithHref: PaginationDirectionProps = {
 // @ts-expect-error The current page is set with active, not aria-current.
 const rawCurrent: PaginationLinkProps = { href: '?', 'aria-current': 'page' };
 void [page, enabled, disabled, pageWithoutHref, enabledWithoutHref];
-void [disabledWithHref, rawCurrent];
+const currentProps = { href: '?', 'aria-current': 'page' as const };
+// @ts-expect-error Spreads cannot set aria-current directly.
+const spreadCurrent = <Pagination.Link {...currentProps} />;
+const disabledProps = { href: '?', 'aria-disabled': false as const };
+// @ts-expect-error Spreads cannot override the managed disabled state.
+const spreadDisabled = <Pagination.Next {...disabledProps} />;
+void [disabledWithHref, rawCurrent, spreadCurrent, spreadDisabled];
 
 afterEach(cleanup);
 
