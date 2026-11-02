@@ -63,6 +63,26 @@ export const unsupportedKbd = <Kbd size="lg">K</Kbd>;
 export const divider = <Separator decorative={false} orientation="vertical" />;
 // @ts-expect-error Separator semantics are controlled by decorative.
 export const separatorRole = <Separator role="presentation" />;
+// @ts-expect-error Decorative separators cannot receive focus.
+export const focusableSeparator = <Separator tabIndex={0} />;
+// @ts-expect-error Semantic separators are static rather than resizable widgets.
+export const focusableSemanticSeparator = <Separator decorative={false} tabIndex={0} />;
+const focusableDividerProps = { tabIndex: 0 };
+// @ts-expect-error Spreads cannot bypass the static separator contract.
+export const focusableSeparatorSpread = <Separator {...focusableDividerProps} />;
+// @ts-expect-error Editable separators would introduce keyboard focus.
+export const editableSeparator = <Separator contentEditable />;
+// @ts-expect-error Display-only keys cannot receive keyboard focus.
+export const focusableKbd = <Kbd tabIndex={0}>K</Kbd>;
+// @ts-expect-error Display-only groups cannot intercept keyboard events.
+export const keyboardGroup = <KbdGroup onKeyDown={() => {}}>K</KbdGroup>;
+const interactiveKeyProps = { tabIndex: 0, onKeyUp: () => {} };
+// @ts-expect-error Spreads cannot bypass the display-only key contract.
+export const interactiveKbdSpread = <Kbd {...interactiveKeyProps}>K</Kbd>;
+// @ts-expect-error Spreads cannot bypass the display-only group contract.
+export const interactiveGroupSpread = <KbdGroup {...interactiveKeyProps}>K</KbdGroup>;
+// @ts-expect-error Editable keys would introduce keyboard interaction.
+export const editableKbd = <Kbd contentEditable>K</Kbd>;
 `,
   );
   run(process.execPath, [
