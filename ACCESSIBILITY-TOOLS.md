@@ -16,7 +16,7 @@
 - `pnpm lint`: 既存 Biome の推奨ルール（a11y を含む）。
 - `pnpm lint:markup`: 部品ソース、docs の TSX 例、ブラウザー fixture の静的検査。正常 JSX、代替テキスト欠落、ボタンの不正な入れ子で検出器を検証する。意図的に不正な既存 Vitest fixture は対象にしない。
 - `pnpm test:a11y`: 既存 jsdom / axe と品質ルールの回帰検査。
-- `pnpm test:a11y:browser`: 組み込みテーマ light/dark、全 Button variant/size、名前付き icon button、disabled、ラベル・説明付き Field、開閉する Dialog。描画後の axe（コントラストを無効化しない）、名前・説明、Tab / Shift+Tab / Enter / Space / Escape、フォーカス復帰を検証する。名前欠落・低コントラストの既知の不正例でも検出を確認する。
+- `pnpm test:a11y:browser`: 組み込みテーマ light/dark、全 Button variant/size、名前付き icon button、disabled、ラベル・説明付き Field、開閉する Dialog に加え、Kbd・Separator、表示系（Badge・Skeleton・Spinner・Card・Alert・Avatar）、データ・ナビゲーション（Progress・Table・Breadcrumb・Pagination）、フォーム（Input・Textarea・NativeSelect・Checkbox・Switch・RadioGroup・Select・Slider）、開閉系（Collapsible・Accordion・Tabs・Toggle）、グループ（InputGroup・ToggleGroup・ButtonGroup）、オーバーレイ（Tooltip・Popover・DropdownMenu・AlertDialog・Toast）のフィクスチャー。描画後の axe（コントラストを無効化しない）、名前・説明、Tab / Shift+Tab / Enter / Space / Escape / 矢印キー / Home / End / Page Up/Down / F6 の実キー入力、フォーカス復帰、一部の対象サイズと emulate した reduced motion を検証する。名前欠落・低コントラストの既知の不正例でも検出を確認する。
 - 既存の pack 済み公開 `.d.ts` の正/負の利用例検査も継続する。
 
 開発には Node.js 24.16.0 以降の 24.x または 26.3.0 以上を使う（Markuplint の optional Astro parser を含む依存要件）。ブラウザー検査は `pnpm exec playwright install chromium` 後に実行する。CI は Linux の Chromium、ローカル実行はホスト OS の Chromium を使う。HTML レポートの添付情報にブラウザーのバージョン・実行条件、axe JSON に検査器と対象 DOM の結果を残す。CI の成果物名にコミット SHA を含め、結果・失敗時 screenshot/trace を14日保存する。skip・fixme・期待された失敗も必須ゲートでは未検証として失敗にする。
@@ -24,6 +24,8 @@
 fallow には HTML から起動する `tests/browser/main.tsx` をエントリとして登録する。`.markuplintrc.json` から動的ロードする parser/spec の2依存だけを未使用依存検出から除外する。
 
 ## 検査範囲と残る確認
+
+`input-group.keyboard` と `input-group.visual-states` は Chromium light/dark の必須 browser ルールです。前者は実際の Tab と入力で、フレームにコントロールのフォーカスが表示されること、入力中の Enter は単一フィールドのフォームの暗黙送信であってアドオンボタンは作動しないこと、Tab でアドオンボタンへ移り Enter・Space で2回作動してもフォームは送信されないこと、ボタンが入力の後ろに並ぶことを検証します。後者は無効・読み取り専用・不正の各フレームが罫線の色・線種・カーソルで区別され不正は Field.Error の文章を伴うこと、アドオンが入力と重ならないこと、アドオン文字が 4.5:1 以上であること、幅320px とルート文字サイズ200% でクリップやはみ出しがないこと、強制配色でフォーカス中のフレームに 2px 以上の実線の outline が残ることを検証します。ボタンの submit 化・アドオンの重なり・フォーカス枠の除去の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `input-group.zoom-theme` に未検証として残ります。
 
 `button-group.keyboard` と `button-group.visual-layout` は Chromium light/dark の必須 browser ルールです。前者は横向き・縦向きのグループで、実際の Tab と Shift+Tab が有効なボタンを見た目の順に1つずつ訪れ無効なボタンを飛ばすこと、フォーカス中のボタンが隣接ボタンより前面に積まれてフォーカスリングが隠れないこと（`position: relative` と `z-index`）を検証します。後者は結合したボタンの内側の角丸が 0 で外側の端だけ丸いこと、隣接ボタンが枠線1px分重なること（横向き・縦向き）、長い横向きグループが幅320px とルート文字サイズ200% でクリップやはみ出しなく折り返すこと、強制配色でフォーカス中のボタンに 2px 以上の実線の outline が残ることを検証します。フォーカスの前面化の除去・角丸の結合の除去・折り返し無効の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `button-group.zoom-theme` に未検証として残ります。
 
@@ -94,5 +96,9 @@ Markuplint は任意の React 合成や Base UI の polymorphic `render` の描�
 SPA の `tests/browser/index.html` に限り `require-h1` を無効化する。h1 は React で描画し、ブラウザーテストで存在を明示検証する。他の規則・ファイルへ例外を広げない。
 
 開いた Dialog の axe は可視 popup の部分木を対象にする。Base UI が管理する背景とフォーカスガードはこの axe の対象外で、フォーカスが popup 内に留まることをキー入力で別に検査する。全ページの開いた modal に対する axe 合格とは称さない。対象範囲内の `violations` と `incomplete` はどちらも失敗にし、未判定を合格へ読み替えない。
+
+Popover・DropdownMenu・Select・AlertDialog の開いた popup も同様に popup 部分木を対象にし、CSS の表示遷移が終わってから axe を実行する。Toast は `.ui-toast__viewport` ではなく表示中の `.ui-toast` を対象にする。viewport には Base UI のフォーカスガード（`aria-hidden="true"` かつ `tabindex="0"` の span）があり、axe は `aria-hidden-focus` を `incomplete` と報告する。これは合格扱いにせず、フォーカスガードの読み上げ・移動への影響を実ブラウザーとスクリーンリーダーで確認する残課題として未検証のまま残す。
+
+フィクスチャーの icon-only Toggle は SVG アイコンを使う。表示文字（例：`B`）を `aria-hidden` にして別名を付ける構成は axe の `label-content-name-mismatch` が判定できず、ラベルと名前の一致（2.5.3）は手動確認の対象になる。
 
 Firefox/WebKit、実際のスクリーンリーダー・点字出力、拡大・リフロー、全状態の focus の見やすさ、強制配色、動きの抑制、物理デバイスでの操作、独自 CSS、利用者のページ構成は今回の検証範囲外。既存の手動品質ルールを自動合格へ変更しない。全 WCAG 適合の証明にはならない。

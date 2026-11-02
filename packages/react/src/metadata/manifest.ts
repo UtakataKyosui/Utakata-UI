@@ -10,6 +10,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
+import { inputGroupManifest } from './components/InputGroup.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
@@ -157,6 +158,7 @@ export const componentManifest = {
     DropdownMenu: dropdownMenuManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
+    InputGroup: inputGroupManifest,
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
   },

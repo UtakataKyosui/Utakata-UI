@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Accordion,
@@ -16,6 +16,7 @@ import {
   DropdownMenu,
   Field,
   Input,
+  InputGroup,
   Kbd,
   KbdGroup,
   NativeSelect,
@@ -906,6 +907,79 @@ function ButtonGroupStates() {
   );
 }
 
+function InputGroupStates() {
+  const [searches, setSearches] = useState(0);
+  const unitId = useId();
+  return (
+    <section aria-label="InputGroup states">
+      {/* The spec counts submit events; nothing here may submit by itself. */}
+      <form>
+        <Field.Root name="docs-query">
+          <Field.Label>Search docs</Field.Label>
+          <InputGroup.Root data-case="search">
+            <InputGroup.Addon>
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+              >
+                <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" />
+              </svg>
+            </InputGroup.Addon>
+            <Input type="search" />
+            <InputGroup.Addon align="inline-end">
+              <InputGroup.Button onClick={() => setSearches((n) => n + 1)}>
+                Run search
+              </InputGroup.Button>
+            </InputGroup.Addon>
+          </InputGroup.Root>
+        </Field.Root>
+      </form>
+      <output aria-label="Search count">{searches}</output>
+      <Field.Root name="parcel-weight" invalid>
+        <Field.Label>Parcel weight</Field.Label>
+        <InputGroup.Root data-case="invalid">
+          <Input defaultValue="heavy" aria-describedby={unitId} />
+          <InputGroup.Addon align="inline-end">
+            <InputGroup.Text id={unitId}>
+              kilograms per parcel, entered as a decimal number
+            </InputGroup.Text>
+          </InputGroup.Addon>
+        </InputGroup.Root>
+        <Field.Error match>Enter the weight as a number.</Field.Error>
+      </Field.Root>
+      <Field.Root name="mirror-site" disabled>
+        <Field.Label>Mirror site</Field.Label>
+        <InputGroup.Root data-case="disabled">
+          <InputGroup.Addon>
+            <InputGroup.Text>https://</InputGroup.Text>
+          </InputGroup.Addon>
+          <Input defaultValue="mirror.example" />
+        </InputGroup.Root>
+      </Field.Root>
+      <Field.Root name="license-key">
+        <Field.Label>License key</Field.Label>
+        <InputGroup.Root data-case="readonly">
+          <InputGroup.Addon>
+            <InputGroup.Text>KEY-</InputGroup.Text>
+          </InputGroup.Addon>
+          <Input defaultValue="0042" readOnly />
+        </InputGroup.Root>
+      </Field.Root>
+      <Field.Root name="release-notes">
+        <Field.Label>Release notes</Field.Label>
+        <InputGroup.Root data-case="block">
+          <InputGroup.Addon align="block-start">
+            <InputGroup.Text>Markdown</InputGroup.Text>
+          </InputGroup.Addon>
+          <Textarea />
+        </InputGroup.Root>
+      </Field.Root>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -1099,6 +1173,7 @@ function Fixture() {
       <ToastStates />
       <ToggleGroupStates />
       <ButtonGroupStates />
+      <InputGroupStates />
     </main>
   );
 }

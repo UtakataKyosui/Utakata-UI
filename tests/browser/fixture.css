@@ -196,3 +196,14 @@ section[aria-label="ButtonGroup states"] {
 .fixture-button-group-wrap {
   inline-size: 240px;
 }
+
+section[aria-label="InputGroup states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="InputGroup states"] .ui-field,
+section[aria-label="InputGroup states"] form {
+  inline-size: 240px;
+}

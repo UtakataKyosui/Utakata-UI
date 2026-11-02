@@ -198,6 +198,7 @@
     min-block-size: 1em;
   }
 
+  /* static */
   .ui-badge {
     align-items: center;
     border: 1px solid transparent;
@@ -441,6 +442,7 @@
     line-height: 1;
   }
 
+  /* data-nav */
   .ui-progress {
     align-items: baseline;
     color: var(--ui-color-text);
@@ -577,6 +579,7 @@
     text-decoration-thickness: 2px;
   }
 
+  /* Current page: not underlined and bold, so not conveyed by color alone. */
   .ui-breadcrumb__page {
     color: var(--ui-color-text);
     font-weight: 600;
@@ -633,6 +636,7 @@
     white-space: nowrap;
   }
 
+  /* forms-basic */
   .ui-input,
   .ui-textarea,
   .ui-native-select__control {
@@ -652,6 +656,7 @@
     opacity: 1;
   }
 
+  /* Transparent outlines become visible system colors in forced colors. */
   .ui-input:focus-visible,
   .ui-textarea:focus-visible,
   .ui-native-select__control:focus-visible,
@@ -785,6 +790,7 @@
     line-height: 1;
   }
 
+  /* Shape marks keep checked and mixed states distinguishable without color. */
   .ui-checkbox__indicator:empty::before {
     block-size: 0.75rem;
     border: solid currentColor;
@@ -831,6 +837,7 @@
     transition: margin-inline-start 150ms ease;
   }
 
+  /* Thumb position is the non-color state cue; margin keeps RTL correct. */
   .ui-switch__thumb[data-checked] {
     margin-inline-start: calc(1.25rem + 2px);
   }
@@ -846,6 +853,7 @@
     cursor: default;
   }
 
+  /* forms-complex */
   .ui-radio-group {
     display: grid;
     gap: 0.5rem;
@@ -896,6 +904,7 @@
     border-color: var(--ui-color-primary);
   }
 
+  /* The filled dot, not only the border color, marks the checked item. */
   .ui-radio-group__indicator[data-checked]::after {
     background: var(--ui-color-primary);
     border-radius: 50%;
@@ -997,6 +1006,7 @@
     opacity: 0.55;
   }
 
+  /* Default selection mark when ItemIndicator has no children. */
   .ui-select__item-indicator:empty::before {
     content: "✓" / "";
   }
@@ -1067,6 +1077,7 @@
     inline-size: 1.25rem;
   }
 
+  /* Enlarges the operable area to 28x28 CSS px beyond the visual thumb. */
   .ui-slider__thumb::before {
     content: "";
     inset: -0.25rem;
@@ -1085,6 +1096,8 @@
     cursor: not-allowed;
   }
 
+  /* disclosure */
+  /* Disclosure: shared trigger look for Collapsible/Accordion */
   .ui-collapsible__trigger,
   .ui-accordion__trigger {
     align-items: center;
@@ -1104,6 +1117,7 @@
     width: 100%;
   }
 
+  /* Chevron shows open state by shape/rotation, not color */
   .ui-collapsible__trigger::after,
   .ui-accordion__trigger::after {
     block-size: 0.5em;
@@ -1125,6 +1139,7 @@
   .ui-accordion__trigger:focus-visible,
   .ui-tabs__tab:focus-visible,
   .ui-toggle:focus-visible {
+    /* Transparent outline becomes visible in forced colors, where box-shadow is removed. */
     outline: 2px solid transparent;
     outline-offset: 2px;
     box-shadow: var(--ui-focus-ring);
@@ -1188,6 +1203,7 @@
     padding-block-end: 0.75rem;
   }
 
+  /* Tabs */
   .ui-tabs {
     display: flex;
     flex-direction: column;
@@ -1232,6 +1248,7 @@
     text-align: start;
   }
 
+  /* Selection: underline + weight, not color alone */
   .ui-tabs__tab[data-active] {
     border-color: var(--ui-color-primary);
     color: var(--ui-color-text);
@@ -1271,6 +1288,7 @@
     box-shadow: var(--ui-focus-ring);
   }
 
+  /* Toggle */
   .ui-toggle {
     align-items: center;
     background: transparent;
@@ -1310,6 +1328,7 @@
     padding: 0.75rem 1rem;
   }
 
+  /* Pressed: fill + thicker border (not color alone); focus ring stays a separate shadow */
   .ui-toggle[data-pressed] {
     background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
     border-color: var(--ui-color-primary);
@@ -1322,6 +1341,7 @@
       var(--ui-focus-ring);
   }
 
+  /* Toggle group: layout only; items keep the Toggle look and focus ring */
   .ui-toggle-group {
     display: inline-flex;
     flex-wrap: wrap;
@@ -1333,6 +1353,7 @@
     flex-wrap: nowrap;
   }
 
+  /* Button group: joins borders and end radii; buttons keep every other style */
   .ui-button-group {
     display: inline-flex;
     flex-wrap: wrap;
@@ -1344,6 +1365,7 @@
     flex-wrap: nowrap;
   }
 
+  /* Raise the focused button so neighbors never cover its focus ring. */
   .ui-button-group > .ui-button:focus-visible {
     position: relative;
     z-index: 1;
@@ -1371,6 +1393,85 @@
     border-end-start-radius: 0;
   }
 
+  /* Input group: the root draws the field frame around one Input/Textarea */
+  .ui-input-group {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-wrap: wrap;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-input-group > .ui-input,
+  .ui-input-group > .ui-textarea {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    flex: 1 1 6rem;
+    inline-size: auto;
+    outline: none;
+  }
+
+  .ui-input-group > .ui-textarea {
+    flex-basis: 100%;
+  }
+
+  /* Focus, read-only, disabled and invalid states of the control move to the frame. */
+  .ui-input-group:has(> .ui-input:focus-visible, > .ui-textarea:focus-visible) {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .ui-input-group:has(> .ui-input:read-only, > .ui-textarea:read-only) {
+    border-style: dashed;
+  }
+
+  /* Only the control fades (as outside the group) so addon text keeps its contrast. */
+  .ui-input-group:has(> .ui-input:disabled, > .ui-textarea:disabled) {
+    border-color: color-mix(in srgb, var(--ui-color-border) 55%, transparent);
+    border-style: solid;
+    cursor: not-allowed;
+  }
+
+  .ui-input-group:has(> [data-invalid], > [aria-invalid="true"]) {
+    border-color: var(--ui-color-danger);
+  }
+
+  .ui-input-group__addon {
+    align-items: center;
+    color: var(--ui-color-muted);
+    display: flex;
+    flex: 0 1 auto;
+    gap: 0.25rem;
+    min-inline-size: 0;
+    padding: 0.25rem;
+  }
+
+  .ui-input-group__addon--inline-start {
+    padding-inline-start: 0.75rem;
+  }
+
+  .ui-input-group__addon--inline-end {
+    padding-inline-end: 0.25rem;
+  }
+
+  .ui-input-group__addon--block-start,
+  .ui-input-group__addon--block-end {
+    flex-basis: 100%;
+    padding-inline: 0.75rem;
+  }
+
+  .ui-input-group__text {
+    overflow-wrap: anywhere;
+  }
+
+  /* overlays-floating */
   .ui-tooltip__positioner,
   .ui-popover__positioner,
   .ui-dropdown-menu__positioner {
@@ -1538,6 +1639,7 @@
     margin: 0.25rem 0;
   }
 
+  /* overlays-modal */
   .ui-alert-dialog__popup {
     max-width: min(90vw, 28rem);
   }
@@ -1579,6 +1681,7 @@
     display: none;
   }
 
+  /* Supplements the title text; the type is never conveyed by color alone. */
   .ui-toast[data-type="error"] {
     border-inline-start: 0.25rem solid var(--ui-color-danger);
   }
@@ -1777,6 +1880,17 @@
       forced-color-adjust: none;
     }
 
+    .ui-input-group:has(
+        > .ui-input:focus-visible,
+        > .ui-textarea:focus-visible
+      ) {
+      outline-color: Highlight;
+    }
+
+    .ui-input-group:has(> .ui-input:disabled, > .ui-textarea:disabled) {
+      border-color: GrayText;
+    }
+
     .ui-tooltip__popup,
     .ui-popover__popup,
     .ui-dropdown-menu__popup {
@@ -1831,6 +1945,7 @@
       transition: none;
     }
 
+    /* Static stripes keep indeterminate distinct from 0% without motion or color. */
     .ui-progress[data-indeterminate] .ui-progress__indicator {
       animation: none;
       background: repeating-linear-gradient(

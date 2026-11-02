@@ -163,6 +163,8 @@ export async function measureOverflow(
         [root, ...root.querySelectorAll<HTMLElement>('*')].some((node) => {
           const box = node.getBoundingClientRect();
           if (box.width <= 1 && box.height <= 1) return false;
+          // Text controls scroll a long value internally by design.
+          if (node.matches('input, textarea')) return false;
           return (
             node.scrollWidth > node.clientWidth + 1 &&
             getComputedStyle(node).display !== 'inline'

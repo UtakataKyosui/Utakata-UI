@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -404,6 +404,24 @@ function ButtonGroupWrapper(props: ButtonGroupProps) { return <ButtonGroup {...p
 export const wrappedButtonGroup = <ButtonGroupWrapper aria-label="History" />;
 // @ts-expect-error Wrappers must preserve the required group name.
 export const wrappedButtonGroupInvalid = <ButtonGroupWrapper />;
+export const inputGroupAddon: InputGroupAddonProps = { align: 'block-end' };
+export const inputGroupIconButton: InputGroupButtonProps = { iconOnly: true, 'aria-label': 'Clear' };
+export const inputGroup = <Field.Root><Field.Label>Search</Field.Label><InputGroup.Root><Input type="search" /><InputGroup.Addon {...inputGroupAddon}><InputGroup.Button {...inputGroupIconButton} /></InputGroup.Addon></InputGroup.Root></Field.Root>;
+// @ts-expect-error Addon alignments are limited to the manifest in shipped declarations.
+export const inputGroupUnsupportedAlign: InputGroupAddonProps = { align: 'center' };
+// @ts-expect-error Icon-only addon buttons keep the Button name requirement in shipped declarations.
+export const inputGroupUnnamedIcon: InputGroupButtonProps = { iconOnly: true };
+// @ts-expect-error className is a string, not a Base UI state callback, in shipped declarations.
+export const inputGroupFunctionClass: InputGroupButtonProps = { className: () => 'x' };
+// @ts-expect-error JSX usage must also name icon-only addon buttons.
+export const inputGroupUnnamedIconJsx = <InputGroup.Button iconOnly />;
+const inputGroupUnnamedProps = { iconOnly: true as const };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const inputGroupSpreadUnnamed = <InputGroup.Button {...inputGroupUnnamedProps} />;
+function InputGroupButtonWrapper(props: InputGroupButtonProps) { return <InputGroup.Button {...props} />; }
+export const wrappedInputGroupButton = <InputGroupButtonWrapper iconOnly aria-label="Clear" />;
+// @ts-expect-error Wrappers must preserve the required name.
+export const wrappedInputGroupButtonInvalid = <InputGroupButtonWrapper iconOnly />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
