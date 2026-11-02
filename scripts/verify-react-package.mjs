@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps } from '@utakata-ui/react';
+import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -285,6 +285,25 @@ function TabsWrapper(props: TabsRootProps) { return <Tabs.Root {...props} />; }
 export const wrappedTabs = <TabsWrapper defaultValue="a" />;
 // @ts-expect-error Wrappers must preserve the explicit initial tab.
 export const wrappedTabsInvalid = <TabsWrapper />;
+export const toggleNamedIcon: ToggleProps = { iconOnly: true, 'aria-label': 'Bold' };
+export const toggleReferencedIcon: ToggleProps = { iconOnly: true, 'aria-labelledby': 'bold-label' };
+export const toggle = <Toggle size="sm" variant="outline" defaultPressed>Bold</Toggle>;
+export const toggleIcon = <Toggle {...toggleNamedIcon} />;
+// @ts-expect-error Icon-only toggles require an explicit name source in shipped declarations.
+export const toggleUnnamedIcon: ToggleProps = { iconOnly: true };
+// @ts-expect-error JSX usage must also provide a name for icon-only toggles.
+export const toggleUnnamedIconJsx = <Toggle iconOnly />;
+// @ts-expect-error Toggle variants are limited to the manifest in shipped declarations.
+export const toggleUnsupportedVariant: ToggleProps = { variant: 'solid' };
+// @ts-expect-error Toggle sizes are limited to the manifest in shipped declarations.
+export const toggleUnsupportedSize: ToggleProps = { size: 'xl' };
+const toggleUnnamedProps = { iconOnly: true as const };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const toggleSpreadUnnamed = <Toggle {...toggleUnnamedProps} />;
+function ToggleWrapper(props: ToggleProps) { return <Toggle {...props} />; }
+export const wrappedToggle = <ToggleWrapper iconOnly aria-label="Bold" />;
+// @ts-expect-error Wrappers must preserve the required name contract.
+export const wrappedToggleInvalid = <ToggleWrapper iconOnly />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

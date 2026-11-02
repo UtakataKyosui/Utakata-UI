@@ -17,6 +17,7 @@ export type RenderedColors = {
   trackBorderStyle: string;
   opacity: number;
   backgroundImage: string;
+  boxShadow: string;
   animationName: string;
   animationPlayState: string;
   animationDuration: string;
@@ -118,6 +119,7 @@ export async function measureRenderedColors(
         trackBorderStyle: style.borderRightStyle,
         opacity: Number.parseFloat(style.opacity),
         backgroundImage: style.backgroundImage,
+        boxShadow: style.boxShadow,
         animationName: style.animationName,
         animationPlayState: style.animationPlayState,
         animationDuration: style.animationDuration,

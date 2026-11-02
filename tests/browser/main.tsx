@@ -28,6 +28,7 @@ import {
   Table,
   Tabs,
   Textarea,
+  Toggle,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -567,6 +568,43 @@ function TabsStates() {
   );
 }
 
+function ToggleStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  const { sizes, variants } = componentManifest.components.Toggle;
+  return (
+    <section aria-label="Toggle states">
+      <Button>Before toggle</Button>
+      <Toggle
+        onPressedChange={(pressed) =>
+          setChanges((previous) => [...previous, `Italic:${pressed}`])
+        }
+      >
+        Italic
+      </Toggle>
+      <Toggle disabled>Underline</Toggle>
+      <Button>After toggle</Button>
+      <output aria-label="Toggle changes">{JSON.stringify(changes)}</output>
+      <div className="fixture-toggles">
+        {sizes.flatMap((size) =>
+          variants.flatMap((variant) =>
+            [false, true].map((pressed) => (
+              <Toggle
+                key={`${size}-${variant}-${pressed}`}
+                size={size}
+                variant={variant}
+                defaultPressed={pressed}
+                data-case="visual"
+              >
+                {`Bold ${size} ${variant} ${pressed ? 'on' : 'off'}`}
+              </Toggle>
+            )),
+          ),
+        )}
+      </div>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -752,6 +790,7 @@ function Fixture() {
       <CollapsibleStates />
       <AccordionStates />
       <TabsStates />
+      <ToggleStates />
     </main>
   );
 }

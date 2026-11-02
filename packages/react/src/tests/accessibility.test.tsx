@@ -42,6 +42,7 @@ import { switchChecks } from './quality/Switch.checks.js';
 import { tableChecks } from './quality/Table.checks.js';
 import { tabsChecks } from './quality/Tabs.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
+import { toggleChecks } from './quality/Toggle.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
 describe('accessibility regression checks', () => {
@@ -152,6 +153,7 @@ describe('accessibility regression checks', () => {
       ...collapsibleChecks,
       ...accordionChecks,
       ...tabsChecks,
+      ...toggleChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [
