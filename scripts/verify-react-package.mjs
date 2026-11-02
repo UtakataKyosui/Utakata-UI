@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -340,6 +340,22 @@ function AlertDialogWrapper(props: AlertDialogRootProps) { return <AlertDialog.R
 export const wrappedAlertDialog = <AlertDialogWrapper defaultOpen />;
 // @ts-expect-error Wrappers must preserve the modal contract.
 export const wrappedAlertDialogInvalid = <AlertDialogWrapper modal={false} />;
+export const toastTextClose: ToastCloseProps = { children: 'Dismiss' };
+export const toastLabelledClose: ToastCloseProps = { 'aria-label': 'Close notification' };
+export const toastClose = <Toast.Close {...toastTextClose} />;
+// @ts-expect-error An empty Close button has no accessible name in shipped declarations.
+export const toastEmptyClose: ToastCloseProps = {};
+// @ts-expect-error JSX usage must also provide a name for Close.
+export const toastEmptyCloseJsx = <Toast.Close />;
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const toastFunctionClass: ToastCloseProps = { children: 'x', className: () => 'x' };
+const toastEmptyProps = { id: 'close' };
+// @ts-expect-error Spreads cannot create an unnamed Close button.
+export const toastSpreadEmptyClose = <Toast.Close {...toastEmptyProps} />;
+function ToastCloseWrapper(props: ToastCloseProps) { return <Toast.Close {...props} />; }
+export const wrappedToastClose = <ToastCloseWrapper aria-label="Close" />;
+// @ts-expect-error Wrappers must preserve the required name.
+export const wrappedToastCloseInvalid = <ToastCloseWrapper />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

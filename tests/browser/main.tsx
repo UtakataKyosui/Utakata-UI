@@ -31,8 +31,10 @@ import {
   Table,
   Tabs,
   Textarea,
+  Toast,
   Toggle,
   Tooltip,
+  useToastManager,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -747,6 +749,82 @@ function AlertDialogStates() {
   );
 }
 
+function ToastList() {
+  const manager = useToastManager();
+  return manager.toasts.map((toast) => (
+    <Toast.Root key={toast.id} toast={toast}>
+      <Toast.Content>
+        <Toast.Title />
+        <Toast.Description />
+        <Toast.Action />
+        <Toast.Close>Dismiss</Toast.Close>
+      </Toast.Content>
+    </Toast.Root>
+  ));
+}
+
+function ToastControls({ onUndo }: { onUndo: () => void }) {
+  const manager = useToastManager();
+  const long =
+    'A long description that wraps over several lines so that a stack of toasts becomes taller than a short screen.';
+  return (
+    <>
+      <Button
+        onClick={() =>
+          manager.add({
+            title: 'Saved',
+            description: 'Your draft was saved.',
+            timeout: 800,
+          })
+        }
+      >
+        Add timed toast
+      </Button>
+      <Button
+        onClick={() =>
+          manager.add({
+            title: 'Item archived',
+            timeout: 0,
+            actionProps: { children: 'Undo', onClick: onUndo },
+          })
+        }
+      >
+        Add persistent toast
+      </Button>
+      <Button
+        onClick={() => {
+          for (let index = 1; index <= 5; index += 1)
+            manager.add({
+              title: `Notice ${index}`,
+              description: long,
+              timeout: 0,
+            });
+        }}
+      >
+        Add many toasts
+      </Button>
+    </>
+  );
+}
+
+function ToastStates() {
+  const [undos, setUndos] = useState(0);
+  return (
+    <section aria-label="Toast states">
+      <Toast.Provider>
+        <Button>Before toast</Button>
+        <ToastControls onUndo={() => setUndos((count) => count + 1)} />
+        <output aria-label="Undo count">{undos}</output>
+        <Toast.Portal>
+          <Toast.Viewport>
+            <ToastList />
+          </Toast.Viewport>
+        </Toast.Portal>
+      </Toast.Provider>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -937,6 +1015,7 @@ function Fixture() {
       <PopoverStates />
       <MenuStates />
       <AlertDialogStates />
+      <ToastStates />
     </main>
   );
 }

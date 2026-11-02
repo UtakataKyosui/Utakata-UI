@@ -174,3 +174,9 @@ section[aria-label="AlertDialog states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+section[aria-label="Toast states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}

@@ -1493,6 +1493,92 @@
     max-width: min(90vw, 28rem);
   }
 
+  .ui-toast__viewport {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    inset: auto 1rem 1rem auto;
+    /* Bounded to the screen so tall stacks scroll instead of leaving the top unreachable. */
+    max-block-size: calc(100dvh - 2rem);
+    max-width: calc(100vw - 2rem);
+    overflow-y: auto;
+    position: fixed;
+    width: 24rem;
+    z-index: 50;
+  }
+
+  .ui-toast {
+    background: var(--ui-color-surface);
+    flex-shrink: 0;
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.75rem;
+    box-shadow: var(--ui-shadow-popup);
+    color: var(--ui-color-text);
+    padding: 0.75rem 1rem;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+
+  .ui-toast[data-starting-style],
+  .ui-toast[data-ending-style] {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  .ui-toast[data-limited] {
+    display: none;
+  }
+
+  .ui-toast[data-type="error"] {
+    border-inline-start: 0.25rem solid var(--ui-color-danger);
+  }
+
+  .ui-toast__viewport:focus-visible,
+  .ui-toast:focus-visible,
+  .ui-toast__action:focus-visible,
+  .ui-toast__close:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-toast__content {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+  }
+
+  .ui-toast__title,
+  .ui-toast__description {
+    flex-basis: 100%;
+    margin: 0;
+  }
+
+  .ui-toast__title {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .ui-toast__description {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+  }
+
+  .ui-toast__action,
+  .ui-toast__close {
+    background: transparent;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    font: inherit;
+    margin-block-start: 0.25rem;
+    min-height: 2rem;
+    min-width: 2rem;
+    padding: 0.25rem 0.625rem;
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;
@@ -1667,6 +1753,19 @@
     .ui-dropdown-menu__separator {
       background: CanvasText;
     }
+
+    .ui-toast,
+    .ui-toast__action,
+    .ui-toast__close {
+      border-color: CanvasText;
+    }
+
+    .ui-toast__viewport:focus-visible,
+    .ui-toast:focus-visible,
+    .ui-toast__action:focus-visible,
+    .ui-toast__close:focus-visible {
+      outline: 2px solid Highlight;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1710,6 +1809,10 @@
     .ui-tooltip__popup,
     .ui-popover__popup,
     .ui-dropdown-menu__popup {
+      transition: none;
+    }
+
+    .ui-toast {
       transition: none;
     }
   }

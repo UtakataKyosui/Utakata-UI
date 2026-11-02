@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Toast timers, keyboard and layout and keeps platform checks manual', () => {
+    const rules = getComponent('Toast')?.qualityRules ?? [];
+    for (const id of [
+      'toast.pause-on-hover-focus',
+      'toast.close-action-keyboard',
+      'toast.viewport-layout',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'toast.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for AlertDialog focus and dismissal and keeps platform checks manual', () => {
     const rules = getComponent('AlertDialog')?.qualityRules ?? [];
     for (const id of [
@@ -464,6 +485,7 @@ describe('manifest tools', () => {
       'Popover',
       'DropdownMenu',
       'AlertDialog',
+      'Toast',
     ]);
   });
 
