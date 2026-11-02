@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('exposes the required Checkbox reset browser rule', () => {
+    expect(getComponent('Checkbox')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'checkbox.reset-browser',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
   it('exposes NativeSelect browser coverage separately from platform evidence', () => {
     expect(getComponent('NativeSelect')?.qualityRules).toEqual(
       expect.arrayContaining([

@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import {
   Button,
+  Checkbox,
   Dialog,
   Field,
   Input,
@@ -13,6 +14,13 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+
+function cancelResetRef(form: HTMLFormElement | null) {
+  if (!form) return;
+  const cancel = (event: Event) => event.preventDefault();
+  form.addEventListener('reset', cancel);
+  return () => form.removeEventListener('reset', cancel);
+}
 
 function Fixture() {
   return (
@@ -161,6 +169,26 @@ function Fixture() {
             <Button type="reset">Reset country {size}</Button>
           </form>
         ))}
+      </section>
+      <section aria-label="Checkbox reset">
+        {[false, true].flatMap((canceled) =>
+          [false, true].map((defaultChecked) => {
+            const name = `Reset ${canceled ? 'canceled' : 'allowed'} default ${defaultChecked}`;
+            return (
+              <form key={name} ref={canceled ? cancelResetRef : undefined}>
+                <Checkbox.Root
+                  aria-label={name}
+                  name="choice"
+                  value="yes"
+                  defaultChecked={defaultChecked}
+                >
+                  <Checkbox.Indicator />
+                </Checkbox.Root>
+                <Button type="reset">{name}</Button>
+              </form>
+            );
+          }),
+        )}
       </section>
     </main>
   );

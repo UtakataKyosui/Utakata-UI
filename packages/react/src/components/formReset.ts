@@ -18,7 +18,11 @@ export function useFormResetKey(inputRef: Ref<HTMLInputElement> | undefined) {
       const form = input?.form;
       if (!form) return;
       // The reset event fires before the form restores its controls.
-      const onReset = () => setTimeout(() => setKey((value) => value + 1), 0);
+      const onReset = (event: Event) =>
+        setTimeout(() => {
+          // Ancestor/React reset handlers run after this native listener.
+          if (!event.defaultPrevented) setKey((value) => value + 1);
+        }, 0);
       form.addEventListener('reset', onReset);
       cleanup.current = () => form.removeEventListener('reset', onReset);
     },
