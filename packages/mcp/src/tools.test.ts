@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Switch keyboard interaction', () => {
+    expect(getComponent('Switch')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'switch.keyboard-pointer',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
   it('exposes the required Checkbox reset browser rule', () => {
     expect(getComponent('Checkbox')?.qualityRules).toEqual(
       expect.arrayContaining([
