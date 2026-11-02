@@ -1085,7 +1085,8 @@
     cursor: not-allowed;
   }
 
-  .ui-collapsible__trigger {
+  .ui-collapsible__trigger,
+  .ui-accordion__trigger {
     align-items: center;
     background: transparent;
     border: 1px solid transparent;
@@ -1103,7 +1104,8 @@
     width: 100%;
   }
 
-  .ui-collapsible__trigger::after {
+  .ui-collapsible__trigger::after,
+  .ui-accordion__trigger::after {
     block-size: 0.5em;
     border-block-end: 2px solid currentColor;
     border-inline-end: 2px solid currentColor;
@@ -1114,22 +1116,26 @@
     transition: transform 150ms ease;
   }
 
-  .ui-collapsible__trigger[data-panel-open]::after {
+  .ui-collapsible__trigger[data-panel-open]::after,
+  .ui-accordion__trigger[data-panel-open]::after {
     transform: rotate(-135deg);
   }
 
-  .ui-collapsible__trigger:focus-visible {
+  .ui-collapsible__trigger:focus-visible,
+  .ui-accordion__trigger:focus-visible {
     outline: 2px solid transparent;
     outline-offset: 2px;
     box-shadow: var(--ui-focus-ring);
   }
 
-  .ui-collapsible__trigger[data-disabled] {
+  .ui-collapsible__trigger[data-disabled],
+  .ui-accordion__trigger[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
 
-  .ui-collapsible__panel {
+  .ui-collapsible__panel,
+  .ui-accordion__panel {
     color: var(--ui-color-text);
     overflow: hidden;
     transition: height 150ms ease;
@@ -1139,18 +1145,41 @@
     height: var(--collapsible-panel-height);
   }
 
+  .ui-accordion__panel {
+    height: var(--accordion-panel-height);
+  }
+
   .ui-collapsible__panel[data-starting-style],
-  .ui-collapsible__panel[data-ending-style] {
+  .ui-collapsible__panel[data-ending-style],
+  .ui-accordion__panel[data-starting-style],
+  .ui-accordion__panel[data-ending-style] {
     height: 0;
   }
 
-  .ui-collapsible__panel > * {
+  .ui-collapsible__panel > *,
+  .ui-accordion__panel > * {
     margin-block: 0;
   }
 
-  .ui-collapsible__panel {
+  .ui-collapsible__panel,
+  .ui-accordion__panel {
     padding-inline: 0.75rem;
   }
+
+  .ui-accordion {
+    border-block-start: 1px solid var(--ui-color-border);
+  }
+
+  .ui-accordion__item {
+    border-block-end: 1px solid var(--ui-color-border);
+  }
+
+  .ui-accordion__header {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .ui-accordion__panel > :last-child,
   .ui-collapsible__panel > :last-child {
     padding-block-end: 0.75rem;
   }
@@ -1298,7 +1327,9 @@
     }
 
     .ui-collapsible__panel,
-    .ui-collapsible__trigger::after {
+    .ui-accordion__panel,
+    .ui-collapsible__trigger::after,
+    .ui-accordion__trigger::after {
       transition: none;
     }
   }

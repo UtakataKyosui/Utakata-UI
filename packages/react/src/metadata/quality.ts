@@ -1,3 +1,4 @@
+import { accordionQualityRules } from './components/Accordion.js';
 import { alertQualityRules } from './components/Alert.js';
 import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
@@ -103,6 +104,7 @@ export const qualityRules = {
   Select: selectQualityRules,
   Slider: sliderQualityRules,
   Collapsible: collapsibleQualityRules,
+  Accordion: accordionQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

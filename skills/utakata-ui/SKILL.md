@@ -35,6 +35,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 - Use `Select` for a styled single-value listbox: `Root` (pass `items` so the trigger shows labels) > `Label`, `Trigger` (`Value placeholder`, `Icon`) and `Portal > Positioner > Popup > List > Item > ItemText` (+ optional `ItemIndicator`). The selected value is not a name; use `Select.Label`, `Field.Label` or `aria-label`. Use `NativeSelect` for native pickers. No multiple selection or search.
 - Use `Slider` with one `Thumb`: `Root` (number `value`/`defaultValue`, `min`/`max`/`step`, `onValueCommitted` for final values) > `Label`, `Value`, `Control > Track > Indicator + Thumb`. Use `format` or `getAriaValueText` when the bare number is not understandable.
 - Use `Collapsible.Root` > `Collapsible.Trigger` (visible text) + `Collapsible.Panel` for one show/hide region. Control with `open`/`onOpenChange`; do not mirror state in `useState`. Closed content is unmounted (or hidden with `keepMounted`).
+- Compose `Accordion.Root` > `Accordion.Item value` > `Accordion.Header level` > `Accordion.Trigger`, plus `Accordion.Panel`. `value`/`defaultValue` are arrays even in single mode; set `multiple` for independent items. Pick `level` (2–6, default 3) to fit the heading outline. Base UI 1.9 provides no arrow-key movement between accordion triggers; Tab moves between them.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 

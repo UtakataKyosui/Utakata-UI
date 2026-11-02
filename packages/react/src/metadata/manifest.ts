@@ -1,3 +1,4 @@
+import { accordionManifest } from './components/Accordion.js';
 import { alertManifest } from './components/Alert.js';
 import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
@@ -139,6 +140,7 @@ export const componentManifest = {
     Select: selectManifest,
     Slider: sliderManifest,
     Collapsible: collapsibleManifest,
+    Accordion: accordionManifest,
   },
 } as const;
 

@@ -42,6 +42,7 @@ describe('manifest tools', () => {
       'Select',
       'Slider',
       'Collapsible',
+      'Accordion',
     ]);
   });
 
