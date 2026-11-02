@@ -29,7 +29,7 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 docs と MCP は UI 本体をワークスペース依存として参照します。UI 本体は docs・MCP に依存しません。
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。初期コンポーネントとして Button、Field、Dialog を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
 
 ```tsx
 import { Button, Dialog, Field } from '@utakata-ui/react';
@@ -66,7 +66,7 @@ function Example() {
 
 Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS MEDIAの解説](https://ics.media/entry/240411/)に沿って、長いURLの折り返しと日本語の厳格な禁則処理を適用します。
 
-既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のButton・Field・Dialogを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
+既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のコンポーネントを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
 
 プレビュー専用のCSSは `packages/docs/examples.css` から読み込み、Blumeの `examples.css` 設定でiframe内に隔離します。サンプルのTSXからグローバルCSSをimportするとドキュメント本体にも混入するため、CSSのimportはこの専用ファイルにまとめてください。利用側のアプリでは通常どおり `@utakata-ui/react/styles.css` を読み込みます。
 
@@ -194,7 +194,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 `packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。MCP のコンポーネント取得・検索結果には、共通ルールも含めて返します。
 
-`pnpm test:a11y` は登録された自動ルールを検証します。Button の名前と無効化、Field のラベル・説明の関連付け、Dialog の名前・説明と Escape による閉鎖・フォーカス復帰を対象とします。必須の自動ルールが失敗、または検証処理が未登録なら CI が失敗します。ルール ID の重複や、存在しないルールに対する検証処理もエラーです。失敗時のレポートにはルール ID・要件・修正方法を含めます。コンポーネント追加・変更時は、ルールと `accessibility.test.tsx` の検証処理を一緒に更新してください。
+`pnpm test:a11y` は登録された自動ルールを検証します。Button の名前と無効化、Field のラベル・説明の関連付け、Dialog の名前・説明と Escape による閉鎖・フォーカス復帰をはじめ、各コンポーネントの metadata に登録した自動ルールを対象とします。必須の自動ルールが失敗、または検証処理が未登録なら CI が失敗します。ルール ID の重複や、存在しないルールに対する検証処理もエラーです。失敗時のレポートにはルール ID・要件・修正方法を含めます。コンポーネント追加・変更時は、ルールと `accessibility.test.tsx` の検証処理を一緒に更新してください。
 
 公開 API の `evaluateQuality(rules, checks)` は各ルールを `passed` / `failed` / `unverified` で返します。`automatedPassed` は必須の自動検証がすべて成功したこと、`complete` は手動項目を含めて全ルールが成功したことを表します。警告の失敗は自動検証の合格を妨げません。手動項目は常に `unverified` として残し、CI の成功をアクセシビリティ全体の合格とは扱いません。現段階では手動確認結果の記録・承認機能はなく、リリース時に実行環境と確認結果を別途記録してください。
 
@@ -214,14 +214,14 @@ node packages/mcp/dist/server.js
 ## 設計方針
 
 - **Foundation:** Lism CSS の Box、Stack、Flex、Grid、Container、Text、Heading と CSS カスタムプロパティを利用します。
-- **Behavior:** Button、Field、Dialog のフォーカス・キーボード・ARIA 挙動は Base UI に委ねます。
+- **Behavior:** 操作を伴うコンポーネントのフォーカス・キーボード・ARIA 挙動は Base UI に委ねます。
 - **Composition:** Field と Dialog は Base UI の compound parts を公開し、意味のある HTML と柔軟な合成を優先します。
 - **AI Interface:** manifest は機械可読な公開仕様で、Agent Skill と MCP の `list_components`、`get_component`、`search_components` ツールから参照できます。`llms.txt` は入口を示します。
 - **Quality:** Vitest、Testing Library、axe-core で代表コンポーネントを検証します。自動検査は手動のアクセシビリティ確認に代わるものではありません。
 
 ## 初期スコープとトレードオフ
 
-最初のリリースでは Button、Field、Dialog と Lism CSS の基礎プリミティブに集中します。色・サイズは CSS カスタムプロパティで上書きでき、実行時 CSS-in-JS は使いません。Manifest は公開 API の初期契約であり、Props や構成を追加するときは実装・テストと同時に更新します。残るコンポーネント群、Storybook、Playwright、ビジュアル回帰、SSR の専用検証は、基礎 API の利用結果を踏まえて段階的に追加します。
+Base UI を包むコンポーネント群と Lism CSS の基礎プリミティブを提供します。色・サイズは CSS カスタムプロパティで上書きでき、実行時 CSS-in-JS は使いません。Manifest は公開 API の初期契約であり、Props や構成を追加するときは実装・テストと同時に更新します。Storybook、Playwright、ビジュアル回帰、SSR の専用検証は、基礎 API の利用結果を踏まえて段階的に追加します。
 
 ### CI の静的解析と Action ロック
 

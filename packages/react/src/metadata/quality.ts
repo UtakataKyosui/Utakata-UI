@@ -4,11 +4,13 @@ import { alertDialogQualityRules } from './components/AlertDialog.js';
 import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
+import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
+import { inputGroupQualityRules } from './components/InputGroup.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
@@ -26,6 +28,7 @@ import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
 import { toastQualityRules } from './components/Toast.js';
 import { toggleQualityRules } from './components/Toggle.js';
+import { toggleGroupQualityRules } from './components/ToggleGroup.js';
 import { tooltipQualityRules } from './components/Tooltip.js';
 
 export interface QualityRule {
@@ -119,6 +122,9 @@ export const qualityRules = {
   DropdownMenu: dropdownMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
+  InputGroup: inputGroupQualityRules,
+  ToggleGroup: toggleGroupQualityRules,
+  ButtonGroup: buttonGroupQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

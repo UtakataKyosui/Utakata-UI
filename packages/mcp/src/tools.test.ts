@@ -2,6 +2,57 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for InputGroup keyboard and states and keeps zoom manual', () => {
+    const rules = getComponent('InputGroup')?.qualityRules ?? [];
+    for (const id of ['input-group.keyboard', 'input-group.visual-states'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input-group.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for ButtonGroup keyboard and layout and keeps zoom manual', () => {
+    const rules = getComponent('ButtonGroup')?.qualityRules ?? [];
+    for (const id of ['button-group.keyboard', 'button-group.visual-layout'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'button-group.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
+    const rules = getComponent('ToggleGroup')?.qualityRules ?? [];
+    for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'toggle-group.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Toast timers, keyboard and layout and keeps platform checks manual', () => {
     const rules = getComponent('Toast')?.qualityRules ?? [];
     for (const id of [
@@ -486,6 +537,9 @@ describe('manifest tools', () => {
       'DropdownMenu',
       'AlertDialog',
       'Toast',
+      'InputGroup',
+      'ToggleGroup',
+      'ButtonGroup',
     ]);
   });
 

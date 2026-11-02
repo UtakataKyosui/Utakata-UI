@@ -43,7 +43,8 @@ export type {
   ButtonProps,
 } from './components/Button.js';
 export { Button } from './components/Button.js';
-
+export type { ButtonGroupProps } from './components/ButtonGroup.js';
+export { ButtonGroup } from './components/ButtonGroup.js';
 export type {
   CardContentProps,
   CardDescriptionProps,
@@ -69,7 +70,13 @@ export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
 export type { InputProps } from './components/Input.js';
 export { Input } from './components/Input.js';
-
+export type {
+  InputGroupAddonProps,
+  InputGroupButtonProps,
+  InputGroupRootProps,
+  InputGroupTextProps,
+} from './components/InputGroup.js';
+export { InputGroup } from './components/InputGroup.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
@@ -137,7 +144,11 @@ export type {
 export { Toast, useToastManager } from './components/Toast.js';
 export type { ToggleProps } from './components/Toggle.js';
 export { Toggle } from './components/Toggle.js';
-
+export type {
+  ToggleGroupItemProps,
+  ToggleGroupRootProps,
+} from './components/ToggleGroup.js';
+export { ToggleGroup } from './components/ToggleGroup.js';
 export type {
   TooltipPopupProps,
   TooltipRootProps,
@@ -148,10 +159,10 @@ export type { AccordionHeadingLevel } from './metadata/components/Accordion.js';
 export type { AlertVariant } from './metadata/components/Alert.js';
 export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
-
+export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
 export type { InputSize } from './metadata/components/Input.js';
-
+export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
@@ -161,7 +172,7 @@ export type {
   ToggleSize,
   ToggleVariant,
 } from './metadata/components/Toggle.js';
-
+export type { ToggleGroupOrientation } from './metadata/components/ToggleGroup.js';
 export type {
   ButtonSize,
   ButtonVariant,

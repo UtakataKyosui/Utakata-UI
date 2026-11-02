@@ -12,7 +12,9 @@ export default defineConfig({
   testDir: './tests/browser',
   forbidOnly: true,
   retries: 0,
-  globalTimeout: 300_000,
+  // The required suite grows with every component; two workers keep CI within the job timeout.
+  ...(process.env.CI ? { workers: 2 } : {}),
+  globalTimeout: 420_000,
   reporter: [
     ['list'],
     ['html', { open: 'never' }],

@@ -4,11 +4,13 @@ import { alertDialogManifest } from './components/AlertDialog.js';
 import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
+import { buttonGroupManifest } from './components/ButtonGroup.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
+import { inputGroupManifest } from './components/InputGroup.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
@@ -26,6 +28,7 @@ import { tabsManifest } from './components/Tabs.js';
 import { textareaManifest } from './components/Textarea.js';
 import { toastManifest } from './components/Toast.js';
 import { toggleManifest } from './components/Toggle.js';
+import { toggleGroupManifest } from './components/ToggleGroup.js';
 import { tooltipManifest } from './components/Tooltip.js';
 import { qualityRules } from './quality.js';
 
@@ -155,6 +158,9 @@ export const componentManifest = {
     DropdownMenu: dropdownMenuManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
+    InputGroup: inputGroupManifest,
+    ToggleGroup: toggleGroupManifest,
+    ButtonGroup: buttonGroupManifest,
   },
 } as const;
 

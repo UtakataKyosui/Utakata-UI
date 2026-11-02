@@ -268,3 +268,26 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="toast" />
 
+## InputGroup
+
+詳しい使い方とAPIは[InputGroup](./components/inputgroup)を参照してください。
+
+既存の`Input`・`Textarea`の前後や上下に、アイコン・単位・ボタンを添えます。ラベルは`Field.Label`で付け、装飾アイコンは`aria-hidden`、単位など意味のある文字は`aria-describedby`で入力欄に関連付けます。`align`は配置の指定で表示順を入れ替えないため、DOMの順序を見た目の順序に合わせて書きます。付属ボタンは既定で`type="button"`のため、押してもフォームは送信されません。
+
+<Component path="inputgroup" />
+
+## ToggleGroup
+
+詳しい使い方とAPIは[ToggleGroup](./components/togglegroup)を参照してください。
+
+`Toggle`をまとめ、Tabキーでグループへ1回だけ入り、`orientation`に応じた矢印キー・Home・Endで項目間を移動します。既定では1つだけ押下でき、`multiple`で個別に押下できます。どちらも未選択に戻せるため、必ず1つ選ぶ場合は`RadioGroup`を使います。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
+
+<Component path="togglegroup" />
+
+## ButtonGroup
+
+詳しい使い方とAPIは[ButtonGroup](./components/buttongroup)を参照してください。
+
+関連する`Button`の境界と角丸をつなげて表示します。各ボタンは通常どおりTabキーで1つずつ移動し、variant・size・無効状態・typeはボタン側の指定のままです。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
+
+<Component path="buttongroup" />

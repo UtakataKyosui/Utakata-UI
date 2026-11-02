@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Accordion,
@@ -8,6 +8,7 @@ import {
   Badge,
   Breadcrumb,
   Button,
+  ButtonGroup,
   Card,
   Checkbox,
   Collapsible,
@@ -15,6 +16,7 @@ import {
   DropdownMenu,
   Field,
   Input,
+  InputGroup,
   Kbd,
   KbdGroup,
   NativeSelect,
@@ -33,6 +35,7 @@ import {
   Textarea,
   Toast,
   Toggle,
+  ToggleGroup,
   Tooltip,
   useToastManager,
 } from '../../packages/react/src/index.js';
@@ -825,6 +828,158 @@ function ToastStates() {
   );
 }
 
+function ToggleGroupStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="ToggleGroup states">
+      <Button>Before groups</Button>
+      <ToggleGroup.Root
+        aria-label="Text format"
+        multiple
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `format:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="bold">Bold</ToggleGroup.Item>
+        <ToggleGroup.Item value="italic" disabled>
+          Italic
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="underline">Underline</ToggleGroup.Item>
+        <ToggleGroup.Item value="strike">Strike</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <ToggleGroup.Root
+        aria-label="Alignment"
+        orientation="vertical"
+        defaultValue={['center']}
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `align:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="left">Left</ToggleGroup.Item>
+        <ToggleGroup.Item value="center">Center</ToggleGroup.Item>
+        <ToggleGroup.Item value="right" disabled>
+          Right
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="justify">Justify</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <Button>After groups</Button>
+      <output aria-label="Group changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function ButtonGroupStates() {
+  return (
+    <section aria-label="ButtonGroup states">
+      <Button>Before button groups</Button>
+      <ButtonGroup aria-label="History actions" data-case="horizontal">
+        <Button variant="outline">Back</Button>
+        <Button variant="outline" disabled>
+          Forward
+        </Button>
+        <Button variant="outline">Copy</Button>
+        <Button variant="solid">Paste</Button>
+      </ButtonGroup>
+      <ButtonGroup
+        aria-label="Order actions"
+        orientation="vertical"
+        data-case="vertical"
+      >
+        <Button variant="outline">Top</Button>
+        <Button variant="outline" disabled>
+          Up
+        </Button>
+        <Button variant="outline">Down</Button>
+      </ButtonGroup>
+      <div className="fixture-button-group-wrap">
+        <ButtonGroup aria-label="Many actions" data-case="wrap">
+          {['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth'].map(
+            (name) => (
+              <Button key={name} variant="outline">
+                {name}
+              </Button>
+            ),
+          )}
+        </ButtonGroup>
+      </div>
+      <Button>After button groups</Button>
+    </section>
+  );
+}
+
+function InputGroupStates() {
+  const [searches, setSearches] = useState(0);
+  const unitId = useId();
+  return (
+    <section aria-label="InputGroup states">
+      {/* The spec counts submit events; nothing here may submit by itself. */}
+      <form>
+        <Field.Root name="docs-query">
+          <Field.Label>Search docs</Field.Label>
+          <InputGroup.Root data-case="search">
+            <InputGroup.Addon>
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+              >
+                <circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" />
+              </svg>
+            </InputGroup.Addon>
+            <Input type="search" />
+            <InputGroup.Addon align="inline-end">
+              <InputGroup.Button onClick={() => setSearches((n) => n + 1)}>
+                Run search
+              </InputGroup.Button>
+            </InputGroup.Addon>
+          </InputGroup.Root>
+        </Field.Root>
+      </form>
+      <output aria-label="Search count">{searches}</output>
+      <Field.Root name="parcel-weight" invalid>
+        <Field.Label>Parcel weight</Field.Label>
+        <InputGroup.Root data-case="invalid">
+          <Input defaultValue="heavy" aria-describedby={unitId} />
+          <InputGroup.Addon align="inline-end">
+            <InputGroup.Text id={unitId}>
+              kilograms per parcel, entered as a decimal number
+            </InputGroup.Text>
+          </InputGroup.Addon>
+        </InputGroup.Root>
+        <Field.Error match>Enter the weight as a number.</Field.Error>
+      </Field.Root>
+      <Field.Root name="mirror-site" disabled>
+        <Field.Label>Mirror site</Field.Label>
+        <InputGroup.Root data-case="disabled">
+          <InputGroup.Addon>
+            <InputGroup.Text>https://</InputGroup.Text>
+          </InputGroup.Addon>
+          <Input defaultValue="mirror.example" />
+        </InputGroup.Root>
+      </Field.Root>
+      <Field.Root name="license-key">
+        <Field.Label>License key</Field.Label>
+        <InputGroup.Root data-case="readonly">
+          <InputGroup.Addon>
+            <InputGroup.Text>KEY-</InputGroup.Text>
+          </InputGroup.Addon>
+          <Input defaultValue="0042" readOnly />
+        </InputGroup.Root>
+      </Field.Root>
+      <Field.Root name="release-notes">
+        <Field.Label>Release notes</Field.Label>
+        <InputGroup.Root data-case="block">
+          <InputGroup.Addon align="block-start">
+            <InputGroup.Text>Markdown</InputGroup.Text>
+          </InputGroup.Addon>
+          <Textarea />
+        </InputGroup.Root>
+      </Field.Root>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -1016,6 +1171,9 @@ function Fixture() {
       <MenuStates />
       <AlertDialogStates />
       <ToastStates />
+      <ToggleGroupStates />
+      <ButtonGroupStates />
+      <InputGroupStates />
     </main>
   );
 }
