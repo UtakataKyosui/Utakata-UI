@@ -1,15 +1,52 @@
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Button,
+  Checkbox,
   Dialog,
   Field,
+  Input,
   Kbd,
   KbdGroup,
+  NativeSelect,
   Separator,
+  Switch,
+  Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+
+function cancelResetRef(form: HTMLFormElement | null) {
+  if (!form) return;
+  const cancel = (event: Event) => event.preventDefault();
+  form.addEventListener('reset', cancel);
+  return () => form.removeEventListener('reset', cancel);
+}
+
+function SwitchStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="Switch input">
+      <Button>Before switches</Button>
+      {['Enabled', 'Disabled', 'Read only'].map((state) => (
+        <label key={state}>
+          <Switch.Root
+            disabled={state === 'Disabled'}
+            readOnly={state === 'Read only'}
+            onCheckedChange={(checked) =>
+              setChanges((previous) => [...previous, `${state}:${checked}`])
+            }
+          >
+            <Switch.Thumb />
+          </Switch.Root>
+          <span>{state} switch</span>
+        </label>
+      ))}
+      <output aria-label="Switch changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
 
 function Fixture() {
   return (
@@ -62,6 +99,124 @@ function Fixture() {
           <span>Settings</span>
         </div>
       </section>
+      <section aria-label="Input states">
+        {componentManifest.components.Input.sizes.map((size) => (
+          <div key={size} className="fixture-inputs">
+            <Field.Root name={`input-${size}`}>
+              <Field.Label>Input {size}</Field.Label>
+              <Input size={size} placeholder="Enter a value" />
+              <Field.Description>
+                Required contact information.
+              </Field.Description>
+            </Field.Root>
+            <Input
+              size={size}
+              aria-label={`Read only ${size}`}
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Input
+              size={size}
+              aria-label={`Disabled ${size}`}
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid {size}</Field.Label>
+              <Input size={size} defaultValue="Invalid value" />
+              <Field.Error match>Enter a valid contact value.</Field.Error>
+            </Field.Root>
+          </div>
+        ))}
+      </section>
+      <section aria-label="Textarea states">
+        {componentManifest.components.Textarea.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="notes">
+              <Field.Label>Notes {size}</Field.Label>
+              <Textarea size={size} maxLength={8} />
+              <Field.Description>
+                Up to 8 characters, including line breaks.
+              </Field.Description>
+            </Field.Root>
+            <Textarea
+              size={size}
+              aria-label={`Read only notes ${size}`}
+              name="readonly"
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Textarea
+              size={size}
+              aria-label={`Disabled notes ${size}`}
+              name="disabled"
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid notes {size}</Field.Label>
+              <Textarea size={size} defaultValue="Invalid note" />
+              <Field.Error match>Enter a valid note.</Field.Error>
+            </Field.Root>
+          </form>
+        ))}
+      </section>
+      <section aria-label="NativeSelect states">
+        {componentManifest.components.NativeSelect.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="country">
+              <Field.Label>Country {size}</Field.Label>
+              <NativeSelect size={size} defaultValue="jp">
+                <option value="jp">Japan</option>
+                <option value="ca" disabled>
+                  Canada
+                </option>
+                <optgroup label="Other countries">
+                  <option value="us">United States</option>
+                </optgroup>
+              </NativeSelect>
+              <Field.Description>Used for shipping.</Field.Description>
+            </Field.Root>
+            <NativeSelect
+              size={size}
+              disabled
+              name="disabled"
+              aria-label={`Disabled country ${size}`}
+            >
+              <option value="jp">Japan</option>
+            </NativeSelect>
+            <Field.Root invalid>
+              <Field.Label>Invalid country {size}</Field.Label>
+              <NativeSelect size={size}>
+                <option value="">Choose a country</option>
+              </NativeSelect>
+              <Field.Error match>Choose a valid country.</Field.Error>
+            </Field.Root>
+            <Button type="reset">Reset country {size}</Button>
+          </form>
+        ))}
+      </section>
+      <section aria-label="Checkbox reset">
+        {[false, true].flatMap((canceled) =>
+          [false, true].map((defaultChecked) => {
+            const name = `Reset ${canceled ? 'canceled' : 'allowed'} default ${defaultChecked}`;
+            return (
+              <form key={name} ref={canceled ? cancelResetRef : undefined}>
+                <Checkbox.Root
+                  aria-label={name}
+                  name="choice"
+                  value="yes"
+                  defaultChecked={defaultChecked}
+                >
+                  <Checkbox.Indicator />
+                </Checkbox.Root>
+                <Button type="reset">{name}</Button>
+              </form>
+            );
+          }),
+        )}
+      </section>
+      <SwitchStates />
     </main>
   );
 }

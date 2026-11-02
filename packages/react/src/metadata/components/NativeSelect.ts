@@ -28,9 +28,18 @@ export const nativeSelectQualityRules = [
     remediation: 'Use the native disabled attribute or Field.Root disabled.',
   },
   {
+    id: 'native-select.browser-behavior',
+    requirement:
+      'Chromium light/dark verifies every size, label/description/error associations, keyboard selection, disabled Tab exclusion, form values/reset, target dimensions and rendered text/border/focus/arrow contrast.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Run native-select.browser-behavior in the required browser gate and preserve native select behavior and visible styling.',
+  },
+  {
     id: 'native-select.platform-picker',
     requirement:
-      'The OS/browser option picker, keyboard selection and forced-colors rendering work on each supported platform, and the arrow stays visible in every theme.',
+      'Verify platform option pickers, physical forced colors, actual text zoom and screen-reader announcements on supported Windows, macOS and iOS configurations.',
     verification: 'manual',
     severity: 'warning',
     remediation:

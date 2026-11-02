@@ -37,10 +37,33 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Kbd, KbdGroup, Separator, type ButtonProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
+export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;
+// @ts-expect-error Numeric listbox size is excluded from the shipped API.
+export const nativeSelectNumericSize: NativeSelectProps = { size: 4 };
+// @ts-expect-error Multiple selection is not supported.
+export const nativeSelectMultiple = <NativeSelect multiple aria-label="Country" />;
+const multipleSelectProps = { multiple: true, className: 'country' };
+// @ts-expect-error Spreads must preserve the single-selection contract.
+export const nativeSelectMultipleSpread = <NativeSelect {...multipleSelectProps} aria-label="Country" />;
+export const textareaProps: TextareaProps = { size: 'sm', rows: 4, maxLength: 500, className: 'notes' };
+export const notes = <Field.Root><Field.Label>Notes</Field.Label><Textarea {...textareaProps} /></Field.Root>;
+// @ts-expect-error Unsupported Textarea sizes fail against shipped declarations.
+export const textareaUnsupportedSize: TextareaProps = { size: 'xl' };
+// @ts-expect-error Textarea className must be a string.
+export const textareaFunctionClass = <Textarea aria-label="Notes" className={() => 'x'} />;
+export const inputProps: InputProps = { size: 'lg', type: 'email', readOnly: true, className: 'email' };
+export const input = <Field.Root><Field.Label>Email</Field.Label><Input {...inputProps} /></Field.Root>;
+// @ts-expect-error Input visual sizes replace the numeric native size.
+export const inputNativeSize: InputProps = { size: 20 };
+// @ts-expect-error Unsupported sizes must fail in shipped declarations.
+export const inputUnsupportedSize = <Input aria-label="Email" size="xl" />;
+// @ts-expect-error Input className must be a string.
+export const inputFunctionClass: InputProps = { className: () => 'x' };
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
@@ -63,6 +86,26 @@ export const unsupportedKbd = <Kbd size="lg">K</Kbd>;
 export const divider = <Separator decorative={false} orientation="vertical" />;
 // @ts-expect-error Separator semantics are controlled by decorative.
 export const separatorRole = <Separator role="presentation" />;
+// @ts-expect-error Decorative separators cannot receive focus.
+export const focusableSeparator = <Separator tabIndex={0} />;
+// @ts-expect-error Semantic separators are static rather than resizable widgets.
+export const focusableSemanticSeparator = <Separator decorative={false} tabIndex={0} />;
+const focusableDividerProps = { tabIndex: 0 };
+// @ts-expect-error Spreads cannot bypass the static separator contract.
+export const focusableSeparatorSpread = <Separator {...focusableDividerProps} />;
+// @ts-expect-error Editable separators would introduce keyboard focus.
+export const editableSeparator = <Separator contentEditable />;
+// @ts-expect-error Display-only keys cannot receive keyboard focus.
+export const focusableKbd = <Kbd tabIndex={0}>K</Kbd>;
+// @ts-expect-error Display-only groups cannot intercept keyboard events.
+export const keyboardGroup = <KbdGroup onKeyDown={() => {}}>K</KbdGroup>;
+const interactiveKeyProps = { tabIndex: 0, onKeyUp: () => {} };
+// @ts-expect-error Spreads cannot bypass the display-only key contract.
+export const interactiveKbdSpread = <Kbd {...interactiveKeyProps}>K</Kbd>;
+// @ts-expect-error Spreads cannot bypass the display-only group contract.
+export const interactiveGroupSpread = <KbdGroup {...interactiveKeyProps}>K</KbdGroup>;
+// @ts-expect-error Editable keys would introduce keyboard interaction.
+export const editableKbd = <Kbd contentEditable>K</Kbd>;
 `,
   );
   run(process.execPath, [
