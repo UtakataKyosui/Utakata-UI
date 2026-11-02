@@ -4,6 +4,7 @@ import { alertDialogManifest } from './components/AlertDialog.js';
 import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
+import { buttonGroupManifest } from './components/ButtonGroup.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
@@ -157,6 +158,7 @@ export const componentManifest = {
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
     ToggleGroup: toggleGroupManifest,
+    ButtonGroup: buttonGroupManifest,
   },
 } as const;
 

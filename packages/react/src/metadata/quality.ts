@@ -4,6 +4,7 @@ import { alertDialogQualityRules } from './components/AlertDialog.js';
 import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
+import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
@@ -121,6 +122,7 @@ export const qualityRules = {
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
   ToggleGroup: toggleGroupQualityRules,
+  ButtonGroup: buttonGroupQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

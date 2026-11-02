@@ -43,7 +43,8 @@ export type {
   ButtonProps,
 } from './components/Button.js';
 export { Button } from './components/Button.js';
-
+export type { ButtonGroupProps } from './components/ButtonGroup.js';
+export { ButtonGroup } from './components/ButtonGroup.js';
 export type {
   CardContentProps,
   CardDescriptionProps,
@@ -152,7 +153,7 @@ export type { AccordionHeadingLevel } from './metadata/components/Accordion.js';
 export type { AlertVariant } from './metadata/components/Alert.js';
 export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
-
+export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
 export type { InputSize } from './metadata/components/Input.js';
 
