@@ -29,22 +29,40 @@ export const tabsQualityRules = [
       'Pass value or defaultValue (required by the types), use onValueChange for controlled state and do not reveal inactive panels with custom CSS.',
   },
   {
-    id: 'tabs.real-keyboard',
+    id: 'tabs.keyboard',
     requirement:
-      'With real keyboard input, Tab enters the selected tab, arrow keys move between tabs, Enter/Space activate in manual mode and Tab then moves into the panel.',
-    verification: 'manual',
+      'In a real browser Tab enters the selected tab, arrow keys move focus between tabs (disabled tabs stay focusable but cannot be selected), Home and End move to the first and last tab, Enter and Space select in manual mode while focus alone does not, and Tab then moves into the active panel.',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify in each supported browser and with a screen reader; record the results.',
+      'Preserve Base UI Tabs keyboard handling; do not add custom key handlers or tabindex values.',
   },
   {
-    id: 'tabs.visual-states',
+    id: 'tabs.indicator-layout',
     requirement:
-      'Selection is shown by an underline and weight rather than color alone and stays distinct from the focus ring in horizontal and vertical layouts, every theme, forced colors and 200% zoom.',
+      'In a real browser the selected tab differs from the others by weight and an underline rather than color alone, and the indicator stays aligned with the selected tab when the tab list wraps onto several rows and in the vertical orientation.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the indicator anchored with --active-tab-left/top/width/height and the selected tab weight and underline.',
+  },
+  {
+    id: 'tabs.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the tabs, indicator and focus ring stay distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast, overflow at narrow widths, forced colors and reduced motion in a real browser.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
+  },
+  {
+    id: 'tabs.screen-reader',
+    requirement:
+      'Screen readers announce the tab list name, each tab name, position and selected state, and the panel content after activation.',
+    verification: 'manual',
+    severity: 'warning',
+    remediation:
+      'Record NVDA + Firefox and VoiceOver + Safari results; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

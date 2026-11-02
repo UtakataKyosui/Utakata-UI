@@ -124,3 +124,17 @@ section[aria-label="Accordion states"] {
 section[aria-label="Accordion states"] .ui-accordion {
   inline-size: 240px;
 }
+
+section[aria-label="Tabs states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fixture-tabs-wrap {
+  inline-size: 200px;
+}
+
+.fixture-tabs-vertical {
+  inline-size: 240px;
+}

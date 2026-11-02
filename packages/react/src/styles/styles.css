@@ -1239,11 +1239,13 @@
   .ui-tabs__indicator {
     background: var(--ui-color-primary);
     block-size: 2px;
-    inset-block-end: -1px;
+    inset-block-start: 0;
     inset-inline-start: 0;
     inline-size: var(--active-tab-width);
     position: absolute;
-    translate: var(--active-tab-left) 0;
+    /* Follows the selected tab's own row when the list wraps. */
+    translate: var(--active-tab-left)
+      calc(var(--active-tab-top) + var(--active-tab-height) - 2px);
     transition:
       translate 150ms ease,
       inline-size 150ms ease;
