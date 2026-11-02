@@ -14,7 +14,13 @@ export type {
 export { Button } from './components/Button.js';
 export { Dialog } from './components/Dialog.js';
 export { Field } from './components/Field.js';
-export type { ButtonSize, ButtonVariant } from './metadata/manifest.js';
+export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
+export { Kbd, KbdGroup } from './components/Kbd.js';
+export type {
+  ButtonSize,
+  ButtonVariant,
+  KbdSize,
+} from './metadata/manifest.js';
 export { componentManifest } from './metadata/manifest.js';
 export type {
   QualityCheck,

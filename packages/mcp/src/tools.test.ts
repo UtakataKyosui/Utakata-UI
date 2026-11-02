@@ -21,6 +21,7 @@ describe('manifest tools', () => {
       'Button',
       'Field',
       'Dialog',
+      'Kbd',
     ]);
   });
 

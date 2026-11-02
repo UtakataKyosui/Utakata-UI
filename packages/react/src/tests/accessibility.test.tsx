@@ -5,7 +5,6 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import axe from 'axe-core';
 import {
   afterEach,
   beforeEach,
@@ -25,13 +24,8 @@ import {
   type QualityCheck,
   type QualityRule,
 } from '../metadata/quality.js';
-
-async function audit(element: HTMLElement) {
-  // jsdom has no layout engine; verify contrast in a real browser manually.
-  return axe.run(element, {
-    rules: { 'color-contrast': { enabled: false } },
-  });
-}
+import { audit } from './audit.js';
+import { kbdChecks } from './quality/Kbd.checks.js';
 
 describe('accessibility regression checks', () => {
   let warnings: MockInstance<typeof console.warn>;
@@ -118,6 +112,7 @@ describe('accessibility regression checks', () => {
         );
         await waitFor(() => expect(trigger).toHaveFocus());
       },
+      ...kbdChecks,
     };
     const isolatedChecks = Object.fromEntries(
       Object.entries(checks).map(([id, check]) => [
