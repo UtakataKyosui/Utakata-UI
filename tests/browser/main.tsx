@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
+  Badge,
   Button,
   Checkbox,
   Dialog,
@@ -171,6 +172,32 @@ function SliderStates() {
         </Slider.Control>
       </Slider.Root>
       <output aria-label="Slider events">{JSON.stringify(events)}</output>
+    </section>
+  );
+}
+
+const badgeLongText =
+  'Awaiting approval from the regional administration team before publication';
+
+function BadgeStates() {
+  return (
+    <section aria-label="Badge states">
+      {componentManifest.components.Badge.variants.map((variant) => (
+        <div key={variant} className="fixture-badges">
+          <Badge variant={variant} data-case="short">
+            Active {variant}
+          </Badge>
+          <Badge variant={variant} data-case="long">
+            {badgeLongText} {variant}
+          </Badge>
+          <Badge variant={variant} data-case="icon">
+            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+              <circle cx="6" cy="6" r="5" fill="currentColor" />
+            </svg>
+            Icon {variant}
+          </Badge>
+        </div>
+      ))}
     </section>
   );
 }
@@ -347,6 +374,7 @@ function Fixture() {
       <RadioGroupStates />
       <SelectStates />
       <SliderStates />
+      <BadgeStates />
     </main>
   );
 }

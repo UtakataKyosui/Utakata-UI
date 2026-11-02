@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`badge.visual-theme` は全バリアント（solid/outline/subtle/destructive）と短文・長文・アイコン付きの組み合わせを Chromium light/dark で実測する必須 browser ルールです。canvas で解決した RGBA を親の背景へ合成した実効背景に対し文字 4.5:1、長文の折り返しとクリップ・親/ビューポートからのはみ出しがないこと（通常、幅320px、ルート文字サイズ200%）、強制配色での文字コントラストと境界線を検証します。これはブラウザーのズーム操作ではなくルート文字サイズの拡大です。低コントラストの上書きとクリップ指定の対照例では検証が失敗することを確認します。`badge-evidence` と `badge-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームと支援技術の読み上げは `badge.zoom-assistive` の手動確認に残ります。
+
 `slider.keyboard` と `slider.pointer` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で、実際の Tab による単一進入、矢印・Page Up/Down・Home/End と小数ステップの範囲内動作、トラック押下による位置移動、サムのドラッグによる連続変更と `onValueCommitted` の解放時1回の通知を検証します。キーとポインター押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話は `slider.screen-reader`、視覚状態・実際のズーム・強制配色は `slider.visual-state` の手動確認に残ります。
 
 `select.keyboard-selection`、`select.escape-focus-return`、`select.popup-position-dismiss` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で実際のキーとマウスを使い、ArrowDown での展開、矢印・先頭文字による移動、disabled 項目が選べないこと、Enter での選択とフォーカス復帰、Escape で値を変えず閉じてフォーカスがトリガーへ戻ること、ポップアップがビューポート内かつトリガー近傍に配置されること、外側押下で値を変えず閉じることを検証します。Escape と外側押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話と長いリストのスクロールは `select.screen-reader`、視覚状態・実際のズーム・強制配色は `select.visual-state` の手動確認に残ります。

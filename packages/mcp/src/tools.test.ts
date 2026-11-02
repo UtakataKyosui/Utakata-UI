@@ -2,6 +2,22 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Badge visuals and keeps zoom and speech manual', () => {
+    const rules = getComponent('Badge')?.qualityRules ?? [];
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'badge.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'badge.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Slider keyboard and pointer and keeps speech manual', () => {
     const rules = getComponent('Slider')?.qualityRules ?? [];
     for (const id of ['slider.keyboard', 'slider.pointer'])

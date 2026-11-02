@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Slider, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
+import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Slider, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -86,6 +86,14 @@ export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider
 export const sliderStringValue: SliderRootProps = { defaultValue: '50' };
 // @ts-expect-error Slider className must be a string in shipped declarations.
 export const sliderFunctionClass: SliderRootProps = { className: () => 'x' };
+export const badgeProps: BadgeProps = { variant: 'outline', children: 'Draft' };
+export const badge = <Badge {...badgeProps} />;
+// @ts-expect-error Badge variants are limited to the manifest in shipped declarations.
+export const badgeUnsupportedVariant = <Badge variant="loud">Draft</Badge>;
+// @ts-expect-error Badge requires visible text children in shipped declarations.
+export const badgeMissingText = <Badge />;
+// @ts-expect-error Badge className must be a string in shipped declarations.
+export const badgeFunctionClass = <Badge className={() => 'x'}>Draft</Badge>;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
