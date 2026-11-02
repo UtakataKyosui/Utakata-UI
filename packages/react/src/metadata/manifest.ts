@@ -1,4 +1,5 @@
 import { badgeManifest } from './components/Badge.js';
+import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
@@ -115,6 +116,7 @@ export const componentManifest = {
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,
+    Card: cardManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,

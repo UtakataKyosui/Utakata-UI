@@ -316,6 +316,44 @@
     }
   }
 
+  .ui-card {
+    background: var(--ui-card-background, var(--ui-color-surface));
+    border: var(--ui-card-border, 1px solid var(--ui-color-border));
+    border-radius: 0.75rem;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-card-gap, 1rem);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding: var(--ui-card-padding, 1.25rem);
+  }
+
+  .ui-card__header {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .ui-card__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ui-card__description {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .ui-card__footer {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
   .ui-input,
   .ui-textarea,
   .ui-native-select__control {

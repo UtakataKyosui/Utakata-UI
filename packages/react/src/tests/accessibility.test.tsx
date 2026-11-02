@@ -20,6 +20,7 @@ import {
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
 import { badgeChecks } from './quality/Badge.checks.js';
+import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
@@ -124,6 +125,7 @@ describe('accessibility regression checks', () => {
       ...badgeChecks,
       ...skeletonChecks,
       ...spinnerChecks,
+      ...cardChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

@@ -18,6 +18,15 @@ export type {
 export { Button } from './components/Button.js';
 
 export type {
+  CardContentProps,
+  CardDescriptionProps,
+  CardFooterProps,
+  CardHeaderProps,
+  CardRootProps,
+  CardTitleProps,
+} from './components/Card.js';
+export { Card } from './components/Card.js';
+export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,
 } from './components/Checkbox.js';
@@ -60,6 +69,7 @@ export { Textarea } from './components/Textarea.js';
 
 export type { BadgeVariant } from './metadata/components/Badge.js';
 
+export type { CardTitleLevel } from './metadata/components/Card.js';
 export type { InputSize } from './metadata/components/Input.js';
 
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
