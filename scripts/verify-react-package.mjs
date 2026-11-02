@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps } from '@utakata-ui/react';
+import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, Tooltip, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -304,6 +304,23 @@ function ToggleWrapper(props: ToggleProps) { return <Toggle {...props} />; }
 export const wrappedToggle = <ToggleWrapper iconOnly aria-label="Bold" />;
 // @ts-expect-error Wrappers must preserve the required name contract.
 export const wrappedToggleInvalid = <ToggleWrapper iconOnly />;
+export const tooltipText: TooltipPopupProps = { children: 'Copy to clipboard' };
+export const tooltip = <Tooltip.Provider><Tooltip.Root><Tooltip.Trigger render={<Button />}>Copy</Tooltip.Trigger><Tooltip.Portal><Tooltip.Positioner><Tooltip.Popup {...tooltipText} /></Tooltip.Positioner></Tooltip.Portal></Tooltip.Root></Tooltip.Provider>;
+// @ts-expect-error Tooltips hold plain text; interactive content belongs in Popover.
+export const tooltipElementPopup: TooltipPopupProps = { children: <a href="/">Help</a> };
+// @ts-expect-error The popup must stay hoverable (WCAG 1.4.13) in shipped declarations.
+export const tooltipNonHoverable: TooltipRootProps = { disableHoverablePopup: true };
+// @ts-expect-error className is a string, not a Base UI state function, in shipped declarations.
+export const tooltipStateClass: TooltipPopupProps = { children: 'x', className: () => 'x' };
+// @ts-expect-error JSX usage must also keep the popup hoverable.
+export const tooltipNonHoverableJsx = <Tooltip.Root disableHoverablePopup />;
+const tooltipPopupProps = { children: <a href="/">Help</a> };
+// @ts-expect-error Spreads cannot put interactive content into a tooltip.
+export const tooltipSpreadElement = <Tooltip.Popup {...tooltipPopupProps} />;
+function TooltipWrapper(props: TooltipPopupProps) { return <Tooltip.Popup {...props} />; }
+export const wrappedTooltip = <TooltipWrapper>Copy</TooltipWrapper>;
+// @ts-expect-error Wrappers must preserve the plain-text contract.
+export const wrappedTooltipInvalid = <TooltipWrapper><a href="/">Help</a></TooltipWrapper>;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

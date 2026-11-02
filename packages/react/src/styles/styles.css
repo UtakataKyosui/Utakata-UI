@@ -1322,6 +1322,65 @@
       var(--ui-focus-ring);
   }
 
+  .ui-tooltip__positioner {
+    z-index: var(--ui-z-floating, 50);
+  }
+
+  .ui-tooltip__trigger:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-tooltip__popup {
+    transform-origin: var(--transform-origin);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+
+  .ui-tooltip__popup[data-starting-style],
+  .ui-tooltip__popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  .ui-tooltip__popup {
+    background: var(--ui-tooltip-background, var(--ui-color-text));
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-tooltip-color, var(--ui-color-surface));
+    font-size: 0.875rem;
+    line-height: 1.4;
+    max-inline-size: min(20rem, calc(100vw - 1rem));
+    overflow-wrap: anywhere;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .ui-tooltip__arrow {
+    background: var(--ui-tooltip-background, var(--ui-color-text));
+    block-size: 0.5rem;
+    inline-size: 0.5rem;
+    rotate: 45deg;
+  }
+
+  .ui-tooltip__arrow[data-side="top"] {
+    bottom: -0.25rem;
+  }
+
+  .ui-tooltip__arrow[data-side="bottom"] {
+    top: -0.25rem;
+  }
+
+  .ui-tooltip__arrow[data-side="left"],
+  .ui-tooltip__arrow[data-side="inline-start"] {
+    right: -0.25rem;
+  }
+
+  .ui-tooltip__arrow[data-side="right"],
+  .ui-tooltip__arrow[data-side="inline-end"] {
+    left: -0.25rem;
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;
@@ -1432,6 +1491,7 @@
     }
 
     .ui-table-container:focus-visible,
+    .ui-tooltip__trigger:focus-visible,
     .ui-breadcrumb__link:focus-visible,
     .ui-pagination__link:focus-visible,
     .ui-radio-group__item:focus-visible,
@@ -1461,6 +1521,14 @@
       border-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
+    }
+
+    .ui-tooltip__popup {
+      border-color: CanvasText;
+    }
+
+    .ui-tooltip__arrow {
+      display: none;
     }
   }
 
@@ -1499,6 +1567,10 @@
     .ui-accordion__trigger::after,
     .ui-tabs__indicator,
     .ui-toggle {
+      transition: none;
+    }
+
+    .ui-tooltip__popup {
       transition: none;
     }
   }

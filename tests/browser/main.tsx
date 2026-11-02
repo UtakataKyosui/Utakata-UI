@@ -29,6 +29,7 @@ import {
   Tabs,
   Textarea,
   Toggle,
+  Tooltip,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -605,6 +606,39 @@ function ToggleStates() {
   );
 }
 
+const tooltipLong =
+  'Saves the draft to the shared workspace so that every collaborator can review the latest changes';
+
+function TooltipStates() {
+  return (
+    <section aria-label="Tooltip states">
+      <Button>Before tooltip</Button>
+      <Tooltip.Provider delay={100}>
+        <Tooltip.Root>
+          <Tooltip.Trigger render={<Button />}>Save</Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Positioner sideOffset={6}>
+              <Tooltip.Popup>{tooltipLong}</Tooltip.Popup>
+            </Tooltip.Positioner>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+        {/* Known-invalid control: Base UI accepts the prop the types omit. */}
+        <Tooltip.Root
+          {...({ disableHoverablePopup: true } as Record<string, unknown>)}
+        >
+          <Tooltip.Trigger render={<Button />}>Not hoverable</Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Positioner sideOffset={6}>
+              <Tooltip.Popup>Closes when the pointer leaves</Tooltip.Popup>
+            </Tooltip.Positioner>
+          </Tooltip.Portal>
+        </Tooltip.Root>
+      </Tooltip.Provider>
+      <Button>After tooltip</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -791,6 +825,7 @@ function Fixture() {
       <AccordionStates />
       <TabsStates />
       <ToggleStates />
+      <TooltipStates />
     </main>
   );
 }
