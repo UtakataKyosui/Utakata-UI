@@ -46,6 +46,7 @@ describe('manifest tools', () => {
       'Tabs',
       'Toggle',
       'Tooltip',
+      'Popover',
     ]);
   });
 
@@ -76,6 +77,7 @@ describe('manifest tools', () => {
   it('searches names and component guidance', () => {
     expect(searchComponents('modal').map(({ name }) => name)).toEqual([
       'Dialog',
+      'Popover',
     ]);
     expect(searchComponents('   ')).toEqual([]);
   });

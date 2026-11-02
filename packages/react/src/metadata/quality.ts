@@ -10,6 +10,7 @@ import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
+import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
@@ -111,6 +112,7 @@ export const qualityRules = {
   Tabs: tabsQualityRules,
   Toggle: toggleQualityRules,
   Tooltip: tooltipQualityRules,
+  Popover: popoverQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

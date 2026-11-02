@@ -80,7 +80,7 @@ export type {
   PaginationRootProps,
 } from './components/Pagination.js';
 export { Pagination } from './components/Pagination.js';
-
+export { Popover } from './components/Popover.js';
 export type {
   ProgressAccessibilityProps,
   ProgressIndicatorProps,

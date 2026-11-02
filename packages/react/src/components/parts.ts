@@ -6,6 +6,7 @@ import {
   forwardRef,
   type RefAttributes,
 } from 'react';
+import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
 
 /** Base UI part props with the Utakata-UI string-only className convention. */
@@ -22,6 +23,8 @@ type FloatingPart<T extends ElementType> = ForwardRefExoticComponent<
 
 type ClassNameProps = { className?: string };
 
+type DiagnosticTarget = Parameters<typeof useAccessibilityRef>[0];
+
 /** Wraps a Base UI part, forwarding its ref and merging the ui-* class. */
 export function classedPart<T extends ElementType>(
   Part: T,
@@ -37,5 +40,23 @@ export function classedPart<T extends ElementType>(
       }),
   );
   Component.displayName = displayName;
+  return Component as FloatingPart<T>;
+}
+
+/** Like classedPart, and also runs development accessible-name diagnostics. */
+export function namedPart<T extends ElementType>(
+  Part: T,
+  baseClassName: string,
+  target: Exclude<DiagnosticTarget, string>,
+) {
+  const Component = forwardRef<HTMLElement, ClassNameProps>(
+    ({ className, ...props }, ref) =>
+      createElement(Part, {
+        ...props,
+        ref: useAccessibilityRef(target, ref),
+        className: withClassName(baseClassName, className),
+      }),
+  );
+  Component.displayName = target.name;
   return Component as FloatingPart<T>;
 }

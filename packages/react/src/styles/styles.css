@@ -1320,16 +1320,20 @@
       var(--ui-focus-ring);
   }
 
-  .ui-tooltip__positioner {
+  .ui-tooltip__positioner,
+  .ui-popover__positioner {
     z-index: var(--ui-z-floating, 50);
   }
 
-  .ui-tooltip__trigger:focus-visible {
+  .ui-tooltip__trigger:focus-visible,
+  .ui-popover__trigger:focus-visible,
+  .ui-popover__popup :focus-visible {
     outline: none;
     box-shadow: var(--ui-focus-ring);
   }
 
-  .ui-tooltip__popup {
+  .ui-tooltip__popup,
+  .ui-popover__popup {
     transform-origin: var(--transform-origin);
     transition:
       opacity 150ms ease,
@@ -1337,7 +1341,9 @@
   }
 
   .ui-tooltip__popup[data-starting-style],
-  .ui-tooltip__popup[data-ending-style] {
+  .ui-tooltip__popup[data-ending-style],
+  .ui-popover__popup[data-starting-style],
+  .ui-popover__popup[data-ending-style] {
     opacity: 0;
     transform: scale(0.96);
   }
@@ -1377,6 +1383,57 @@
   .ui-tooltip__arrow[data-side="right"],
   .ui-tooltip__arrow[data-side="inline-end"] {
     left: -0.25rem;
+  }
+
+  .ui-popover__popup {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--ui-shadow-popup);
+    color: var(--ui-color-text);
+    max-block-size: var(--available-height);
+    overflow: auto;
+  }
+
+  .ui-popover__popup {
+    max-inline-size: min(24rem, var(--available-width), calc(100vw - 1rem));
+    padding: 1rem;
+  }
+
+  .ui-popover__popup:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-popover__arrow {
+    background: var(--ui-color-surface);
+    block-size: 0.625rem;
+    border: 1px solid var(--ui-color-border);
+    inline-size: 0.625rem;
+    rotate: 45deg;
+  }
+
+  .ui-popover__arrow[data-side="top"] {
+    border-block-start: 0;
+    border-inline-start: 0;
+    bottom: -0.375rem;
+  }
+
+  .ui-popover__arrow[data-side="bottom"] {
+    border-block-end: 0;
+    border-inline-end: 0;
+    top: -0.375rem;
+  }
+
+  .ui-popover__title {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .ui-popover__description {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    margin: 0;
   }
 
   @media (forced-colors: active) {
@@ -1514,11 +1571,13 @@
       forced-color-adjust: none;
     }
 
-    .ui-tooltip__popup {
+    .ui-tooltip__popup,
+    .ui-popover__popup {
       border-color: CanvasText;
     }
 
-    .ui-tooltip__arrow {
+    .ui-tooltip__arrow,
+    .ui-popover__arrow {
       display: none;
     }
   }
@@ -1561,7 +1620,8 @@
       transition: none;
     }
 
-    .ui-tooltip__popup {
+    .ui-tooltip__popup,
+    .ui-popover__popup {
       transition: none;
     }
   }
