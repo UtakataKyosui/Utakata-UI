@@ -37,10 +37,18 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Kbd, KbdGroup, Separator, type ButtonProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, Separator, type ButtonProps, type InputProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const inputProps: InputProps = { size: 'lg', type: 'email', readOnly: true, className: 'email' };
+export const input = <Field.Root><Field.Label>Email</Field.Label><Input {...inputProps} /></Field.Root>;
+// @ts-expect-error Input visual sizes replace the numeric native size.
+export const inputNativeSize: InputProps = { size: 20 };
+// @ts-expect-error Unsupported sizes must fail in shipped declarations.
+export const inputUnsupportedSize = <Input aria-label="Email" size="xl" />;
+// @ts-expect-error Input className must be a string.
+export const inputFunctionClass: InputProps = { className: () => 'x' };
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

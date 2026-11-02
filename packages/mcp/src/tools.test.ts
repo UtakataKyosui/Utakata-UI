@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('distinguishes required Input browser checks from residual manual evidence', () => {
+    expect(getComponent('Input')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'input.zoom-assistive-output',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('exposes component and shared review rules to agents', () => {
     expect(getComponent('Dialog')?.qualityRules.map(({ id }) => id)).toEqual(
       expect.arrayContaining([
