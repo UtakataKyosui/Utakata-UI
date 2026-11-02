@@ -44,7 +44,8 @@ export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
-
+export type { SkeletonProps } from './components/Skeleton.js';
+export { Skeleton } from './components/Skeleton.js';
 export { Slider } from './components/Slider.js';
 
 export type { SwitchRootProps, SwitchThumbProps } from './components/Switch.js';
@@ -59,6 +60,7 @@ export type { InputSize } from './metadata/components/Input.js';
 
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
+export type { SkeletonShape } from './metadata/components/Skeleton.js';
 
 export type { TextareaSize } from './metadata/components/Textarea.js';
 

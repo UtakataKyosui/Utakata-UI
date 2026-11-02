@@ -42,3 +42,9 @@ section[aria-label="Badge states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+.fixture-skeletons {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}

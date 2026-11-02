@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`skeleton.motion-theme` は Chromium light/dark の必須 browser ルールです。既定でパルスのアニメーションが実行中であること、`prefers-reduced-motion: reduce` のエミュレーションでアニメーションが `none` になること、プレースホルダーの塗りが背景面と 1.1:1 以上で区別できること、強制配色で 1px 以上の実線境界が背景に対し 3:1 以上あることを算出色で検証します（canvas で解決した RGBA を親背景へ合成）。縮小モーションの上書き削除と透明化の対照例では検証が失敗することを確認します。`skeleton-evidence` と `skeleton-axe` を既存のコミット付き CI 成果物へ添付します。エミュレーションは OS 設定の代替ではなく、実際の OS の縮小モーション・ハイコントラスト確認は `skeleton.os-reduced-motion` に未検証として残ります。
+
 `badge.visual-theme` は全バリアント（solid/outline/subtle/destructive）と短文・長文・アイコン付きの組み合わせを Chromium light/dark で実測する必須 browser ルールです。canvas で解決した RGBA を親の背景へ合成した実効背景に対し文字 4.5:1、長文の折り返しとクリップ・親/ビューポートからのはみ出しがないこと（通常、幅320px、ルート文字サイズ200%）、強制配色での文字コントラストと境界線を検証します。これはブラウザーのズーム操作ではなくルート文字サイズの拡大です。低コントラストの上書きとクリップ指定の対照例では検証が失敗することを確認します。`badge-evidence` と `badge-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームと支援技術の読み上げは `badge.zoom-assistive` の手動確認に残ります。
 
 `slider.keyboard` と `slider.pointer` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で、実際の Tab による単一進入、矢印・Page Up/Down・Home/End と小数ステップの範囲内動作、トラック押下による位置移動、サムのドラッグによる連続変更と `onValueCommitted` の解放時1回の通知を検証します。キーとポインター押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話は `slider.screen-reader`、視覚状態・実際のズーム・強制配色は `slider.visual-state` の手動確認に残ります。
