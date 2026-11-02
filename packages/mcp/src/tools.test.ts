@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Progress visuals and keeps OS checks manual', () => {
+    expect(getComponent('Progress')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'progress.visual-motion',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'progress.os-reduced-motion',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Avatar visuals and keeps zoom manual', () => {
     expect(getComponent('Avatar')?.qualityRules).toEqual(
       expect.arrayContaining([

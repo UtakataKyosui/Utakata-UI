@@ -13,6 +13,7 @@ import {
   Kbd,
   KbdGroup,
   NativeSelect,
+  Progress,
   RadioGroup,
   Select,
   Separator,
@@ -313,6 +314,25 @@ function AvatarStates() {
   );
 }
 
+function ProgressStates() {
+  return (
+    <section aria-label="Progress states">
+      {[0, 50, 100, null].map((value) => (
+        <Progress.Root
+          key={String(value)}
+          value={value}
+          label={value === null ? 'Working' : `Upload ${value}`}
+        >
+          <Progress.Value />
+          <Progress.Track>
+            <Progress.Indicator />
+          </Progress.Track>
+        </Progress.Root>
+      ))}
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -491,6 +511,7 @@ function Fixture() {
       <CardStates />
       <AlertStates />
       <AvatarStates />
+      <ProgressStates />
     </main>
   );
 }
