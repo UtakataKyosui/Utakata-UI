@@ -29,6 +29,7 @@ describe('manifest tools', () => {
       'Checkbox',
       'Switch',
       'RadioGroup',
+      'Select',
     ]);
   });
 

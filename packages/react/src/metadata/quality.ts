@@ -3,6 +3,7 @@ import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { switchQualityRules } from './components/Switch.js';
 import { textareaQualityRules } from './components/Textarea.js';
@@ -77,6 +78,7 @@ export const qualityRules = {
   Checkbox: checkboxQualityRules,
   Switch: switchQualityRules,
   RadioGroup: radioGroupQualityRules,
+  Select: selectQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
