@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Spinner motion and keeps OS checks manual', () => {
+    expect(getComponent('Spinner')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'spinner.motion-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'spinner.os-reduced-motion',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Skeleton motion and keeps OS checks manual', () => {
     expect(getComponent('Skeleton')?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -168,6 +183,7 @@ describe('manifest tools', () => {
       'Separator',
       'Badge',
       'Skeleton',
+      'Spinner',
       'Input',
       'Textarea',
       'NativeSelect',

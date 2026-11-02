@@ -7,8 +7,14 @@ export type RenderedColors = {
   fill: number;
   /** Contrast of the border against what is behind the element. */
   border: number;
+  /** Contrast of the right border (the ring track) against what is behind the element. */
+  trackBorder: number;
+  /** Contrast between the top border and the right border. */
+  arcVsTrack: number;
   borderWidth: number;
   borderStyle: string;
+  /** Style of the right border (the ring track). */
+  trackBorderStyle: string;
   opacity: number;
   animationName: string;
   animationPlayState: string;
@@ -99,12 +105,16 @@ export async function measureRenderedColors(
       const fill = over(rgba(style.backgroundColor), back);
       const text = over(rgba(style.color), [fill[0], fill[1], fill[2], 1]);
       const border = over(rgba(style.borderTopColor), back);
+      const track = over(rgba(style.borderRightColor), back);
       return {
         text: contrast(text, [fill[0], fill[1], fill[2], 1]),
         fill: contrast([fill[0], fill[1], fill[2], 1], back),
         border: contrast(border, back),
+        trackBorder: contrast(track, back),
+        arcVsTrack: contrast(border, track),
         borderWidth: Number.parseFloat(style.borderTopWidth),
         borderStyle: style.borderTopStyle,
+        trackBorderStyle: style.borderRightStyle,
         opacity: Number.parseFloat(style.opacity),
         animationName: style.animationName,
         animationPlayState: style.animationPlayState,

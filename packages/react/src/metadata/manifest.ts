@@ -8,6 +8,7 @@ import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
 import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
+import { spinnerManifest } from './components/Spinner.js';
 import { switchManifest } from './components/Switch.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
@@ -113,6 +114,7 @@ export const componentManifest = {
     Separator: separatorManifest,
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
+    Spinner: spinnerManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,

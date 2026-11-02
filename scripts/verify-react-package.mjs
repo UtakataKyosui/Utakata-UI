@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type TextareaProps } from '@utakata-ui/react';
+import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -106,6 +106,27 @@ export const skeletonFocusSpread = <Skeleton {...skeletonFocusProps} />;
 const skeletonContentProps = { children: 'Loading' };
 // @ts-expect-error Spreads cannot give a Skeleton content in shipped declarations.
 export const skeletonContentSpread = <Skeleton {...skeletonContentProps} />;
+export const spinnerProps: SpinnerProps = { label: 'Uploading', size: 'sm' };
+export const spinner = <Spinner {...spinnerProps} />;
+export const decorativeSpinner = <Button><Spinner decorative />Saving</Button>;
+// @ts-expect-error Decorative spinners announce nothing, so a label is invalid in shipped declarations.
+export const spinnerLabelledDecorative: SpinnerProps = { decorative: true, label: 'Saving' };
+// @ts-expect-error The status role is managed by Spinner in shipped declarations.
+export const spinnerRole: SpinnerProps = { role: 'progressbar' };
+// @ts-expect-error The name comes from label, including hyphenated JSX attributes.
+export const spinnerAriaLabel = <Spinner aria-label="Loading" />;
+// @ts-expect-error Spinner sizes are limited to the manifest in shipped declarations.
+export const spinnerUnsupportedSize: SpinnerProps = { size: 'xl' };
+const spinnerRoleProps = { role: 'progressbar' };
+// @ts-expect-error Spreads cannot override the managed status role.
+export const spinnerRoleSpread = <Spinner {...spinnerRoleProps} />;
+const spinnerNameProps = { 'aria-label': 'Loading' };
+// @ts-expect-error Spreads cannot add a second accessible name.
+export const spinnerNameSpread = <Spinner {...spinnerNameProps} />;
+function SpinnerWrapper(props: SpinnerProps) { return <Spinner {...props} />; }
+export const wrappedSpinner = <SpinnerWrapper label="Uploading" />;
+// @ts-expect-error Wrappers must preserve the decorative and label exclusion.
+export const wrappedSpinnerInvalid = <SpinnerWrapper decorative label="Uploading" />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
