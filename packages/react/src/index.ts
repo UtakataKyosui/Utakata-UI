@@ -22,6 +22,8 @@ export { Input } from './components/Input.js';
 
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
+export type { NativeSelectProps } from './components/NativeSelect.js';
+export { NativeSelect } from './components/NativeSelect.js';
 
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
@@ -30,6 +32,8 @@ export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 
 export type { InputSize } from './metadata/components/Input.js';
+
+export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 
 export type { TextareaSize } from './metadata/components/Textarea.js';
 

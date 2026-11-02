@@ -25,6 +25,7 @@ describe('manifest tools', () => {
       'Separator',
       'Input',
       'Textarea',
+      'NativeSelect',
     ]);
   });
 
