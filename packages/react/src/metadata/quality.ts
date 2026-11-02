@@ -11,7 +11,7 @@ import { textareaQualityRules } from './components/Textarea.js';
 export interface QualityRule {
   id: string;
   requirement: string;
-  verification: 'automated' | 'manual';
+  verification: 'automated' | 'browser' | 'manual';
   severity: 'error' | 'warning';
   remediation: string;
 }
@@ -147,7 +147,7 @@ export async function evaluateQuality(
     results,
     automatedPassed: results.every(
       (result) =>
-        result.verification !== 'automated' ||
+        result.verification === 'manual' ||
         result.severity !== 'error' ||
         result.status === 'passed',
     ),

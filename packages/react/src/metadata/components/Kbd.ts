@@ -17,7 +17,7 @@ export const kbdQualityRules = [
     verification: 'automated',
     severity: 'error',
     remediation:
-      'Register shortcuts in application code; do not add tabindex or key handlers to Kbd.',
+      'Register shortcuts in application code; do not add tabIndex, contentEditable or keyboard handlers to Kbd or KbdGroup.',
   },
   {
     id: 'kbd.wrapping-theme',
@@ -36,8 +36,9 @@ export const kbdManifest = {
     'Displays a keyboard key or a key combination using the native kbd element.',
   parts: ['Kbd', 'KbdGroup'],
   partProps: {
-    Kbd: 'native kbd props + size',
-    KbdGroup: 'native span props; renders role="group"',
+    Kbd: 'native kbd props + size; excludes tabIndex, contentEditable and keyboard handlers',
+    KbdGroup:
+      'native span props excluding tabIndex, contentEditable and keyboard handlers; renders role="group"',
   },
   props: {
     size: { type: 'sm | md', default: 'md' },

@@ -5,7 +5,6 @@ import { Field } from '../../components/Field.js';
 import { Switch } from '../../components/Switch.js';
 import type { QualityCheck } from '../../metadata/quality.js';
 import { audit } from '../audit.js';
-import { pressSpace } from '../quality-helpers.js';
 
 function ControlledSwitch() {
   const [checked, setChecked] = useState(false);
@@ -47,40 +46,6 @@ export const switchChecks: Record<string, QualityCheck> = {
       control,
     );
     expect((await audit(container)).violations).toEqual([]);
-  },
-  'switch.keyboard-pointer': () => {
-    const changes: boolean[] = [];
-    render(
-      <>
-        <Field.Root>
-          <Switch.Root onCheckedChange={(checked) => changes.push(checked)}>
-            <Switch.Thumb />
-          </Switch.Root>
-          <Field.Label>Wi-Fi</Field.Label>
-        </Field.Root>
-        <label>
-          <Switch.Root disabled onCheckedChange={() => changes.push(false)} />
-          Disabled
-        </label>
-        <label>
-          <Switch.Root readOnly onCheckedChange={() => changes.push(false)} />
-          Read only
-        </label>
-      </>,
-    );
-    const control = screen.getByRole('switch', { name: 'Wi-Fi' });
-    pressSpace(control);
-    expect(control).toHaveAttribute('aria-checked', 'true');
-    fireEvent.click(control);
-    expect(control).toHaveAttribute('aria-checked', 'false');
-    expect(changes).toEqual([true, false]);
-    for (const name of ['Disabled', 'Read only']) {
-      const locked = screen.getByRole('switch', { name });
-      pressSpace(locked);
-      fireEvent.click(locked);
-      expect(locked).toHaveAttribute('aria-checked', 'false');
-    }
-    expect(changes).toEqual([true, false]);
   },
   'switch.form': async () => {
     const { container } = render(
