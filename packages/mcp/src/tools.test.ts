@@ -28,6 +28,7 @@ describe('manifest tools', () => {
       'NativeSelect',
       'Checkbox',
       'Switch',
+      'RadioGroup',
     ]);
   });
 

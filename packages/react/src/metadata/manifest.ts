@@ -2,6 +2,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
+import { radioGroupManifest } from './components/RadioGroup.js';
 import { separatorManifest } from './components/Separator.js';
 import { switchManifest } from './components/Switch.js';
 import { textareaManifest } from './components/Textarea.js';
@@ -111,6 +112,7 @@ export const componentManifest = {
     NativeSelect: nativeSelectManifest,
     Checkbox: checkboxManifest,
     Switch: switchManifest,
+    RadioGroup: radioGroupManifest,
   },
 } as const;
 
