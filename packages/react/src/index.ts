@@ -7,7 +7,14 @@ export {
   Stack,
   Text,
 } from 'lism-css/react';
-
+export type {
+  AccordionHeaderProps,
+  AccordionItemProps,
+  AccordionPanelProps,
+  AccordionRootProps,
+  AccordionTriggerProps,
+} from './components/Accordion.js';
+export { Accordion } from './components/Accordion.js';
 export type {
   AlertDescriptionProps,
   AlertRootProps,
@@ -113,6 +120,7 @@ export { Table } from './components/Table.js';
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 
+export type { AccordionHeadingLevel } from './metadata/components/Accordion.js';
 export type { AlertVariant } from './metadata/components/Alert.js';
 export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';

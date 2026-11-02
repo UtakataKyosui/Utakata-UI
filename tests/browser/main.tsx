@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
+  Accordion,
   Alert,
   Avatar,
   Badge,
@@ -474,6 +475,35 @@ function CollapsibleStates() {
   );
 }
 
+function AccordionStates() {
+  return (
+    <section aria-label="Accordion states">
+      <Button>Before accordion</Button>
+      <Accordion.Root>
+        {[
+          { value: 'account', title: 'Account', link: 'Account link' },
+          { value: 'billing', title: 'Billing', link: 'Billing link' },
+          { value: 'archive', title: 'Archive', link: 'Archive link' },
+        ].map((item) => (
+          <Accordion.Item
+            key={item.value}
+            value={item.value}
+            disabled={item.value === 'archive'}
+          >
+            <Accordion.Header level={3}>
+              <Accordion.Trigger>{item.title}</Accordion.Trigger>
+            </Accordion.Header>
+            <Accordion.Panel>
+              <a href={`#${item.value}`}>{item.link}</a>
+            </Accordion.Panel>
+          </Accordion.Item>
+        ))}
+      </Accordion.Root>
+      <Button>After accordion</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -657,6 +687,7 @@ function Fixture() {
       <BreadcrumbStates />
       <PaginationStates />
       <CollapsibleStates />
+      <AccordionStates />
     </main>
   );
 }

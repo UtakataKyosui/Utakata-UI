@@ -19,6 +19,7 @@ import {
   type QualityRule,
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
+import { accordionChecks } from './quality/Accordion.checks.js';
 import { alertChecks } from './quality/Alert.checks.js';
 import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
@@ -148,6 +149,7 @@ describe('accessibility regression checks', () => {
       ...selectChecks,
       ...sliderChecks,
       ...collapsibleChecks,
+      ...accordionChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [
