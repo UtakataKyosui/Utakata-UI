@@ -784,6 +784,9 @@
     .ui-spinner__ring {
       border-color: GrayText;
       border-block-start-color: CanvasText;
+      /* The track is dotted so the arc is distinct without relying on color. */
+      border-style: dotted;
+      border-block-start-style: solid;
       forced-color-adjust: none;
     }
 

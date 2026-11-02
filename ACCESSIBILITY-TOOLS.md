@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`spinner.motion-theme` は sm/md/lg を Chromium light/dark で実測する必須 browser ルールです。既定で回転アニメーションが実行中であること、`prefers-reduced-motion: reduce` のエミュレーションで `none` になり静止した部分リングが残ること、円弧が背景に対し 3:1 以上で、トラックとも 1.5:1 以上の輝度差または線種の違いで区別できること（強制配色ではトラックを点線にして色相だけに頼らない）、サイズが昇順で互いに異なることを算出色とレイアウト寸法（回転の影響を受けない clientWidth）で検証します。縮小モーションの上書き削除と円弧とトラックの同色化の対照例では検証が失敗することを確認します。`spinner-evidence` と `spinner-axe` を既存のコミット付き CI 成果物へ添付します。実際の OS 設定とハイコントラストは `spinner.os-reduced-motion`、スクリーンリーダーの通知は `spinner.announcement` に未検証として残ります。
+
 `skeleton.motion-theme` は Chromium light/dark の必須 browser ルールです。既定でパルスのアニメーションが実行中であること、`prefers-reduced-motion: reduce` のエミュレーションでアニメーションが `none` になること、プレースホルダーの塗りが背景面と 1.1:1 以上で区別できること、強制配色で 1px 以上の実線境界が背景に対し 3:1 以上あることを算出色で検証します（canvas で解決した RGBA を親背景へ合成）。縮小モーションの上書き削除と透明化の対照例では検証が失敗することを確認します。`skeleton-evidence` と `skeleton-axe` を既存のコミット付き CI 成果物へ添付します。エミュレーションは OS 設定の代替ではなく、実際の OS の縮小モーション・ハイコントラスト確認は `skeleton.os-reduced-motion` に未検証として残ります。
 
 `badge.visual-theme` は全バリアント（solid/outline/subtle/destructive）と短文・長文・アイコン付きの組み合わせを Chromium light/dark で実測する必須 browser ルールです。canvas で解決した RGBA を親の背景へ合成した実効背景に対し文字 4.5:1、長文の折り返しとクリップ・親/ビューポートからのはみ出しがないこと（通常、幅320px、ルート文字サイズ200%）、強制配色での文字コントラストと境界線を検証します。これはブラウザーのズーム操作ではなくルート文字サイズの拡大です。低コントラストの上書きとクリップ指定の対照例では検証が失敗することを確認します。`badge-evidence` と `badge-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームと支援技術の読み上げは `badge.zoom-assistive` の手動確認に残ります。

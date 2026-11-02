@@ -15,6 +15,7 @@ import {
   Separator,
   Skeleton,
   Slider,
+  Spinner,
   Switch,
   Textarea,
 } from '../../packages/react/src/index.js';
@@ -215,6 +216,16 @@ function SkeletonStates() {
   );
 }
 
+function SpinnerStates() {
+  return (
+    <section aria-label="Spinner states">
+      {componentManifest.components.Spinner.sizes.map((size) => (
+        <Spinner key={size} size={size} label={`Loading ${size}`} />
+      ))}
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -389,6 +400,7 @@ function Fixture() {
       <SliderStates />
       <BadgeStates />
       <SkeletonStates />
+      <SpinnerStates />
     </main>
   );
 }
