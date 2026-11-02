@@ -3,7 +3,37 @@ import { type ForwardedRef, useCallback, useRef } from 'react';
 // Replaced by consumer bundlers, as with React; no Node typings at runtime.
 declare const process: { env: { NODE_ENV?: string } };
 
-type Component = 'Button' | 'Field.Control' | 'Dialog.Popup';
+/** Describes a control whose accessible name is checked in development. */
+interface DiagnosticTarget {
+  /** Public part name used in warning messages, e.g. "Input". */
+  name: string;
+  /** Remediation appended to a missing-name warning. */
+  fix: string;
+  /** Whether visible text content is a valid name source, as for buttons. */
+  nameFromContent?: boolean;
+}
+
+const builtInTargets = {
+  Button: {
+    name: 'Button',
+    fix: 'Provide visible text, aria-label, or a valid aria-labelledby.',
+    nameFromContent: true,
+  },
+  'Field.Control': {
+    name: 'Field.Control',
+    fix: 'Associate a Field.Label or another accessible label.',
+  },
+  'Dialog.Popup': {
+    name: 'Dialog.Popup',
+    fix: 'Provide a Dialog.Title or another accessible label.',
+  },
+} as const satisfies Record<string, DiagnosticTarget>;
+
+type Component = keyof typeof builtInTargets | DiagnosticTarget;
+
+function resolveTarget(component: Component): DiagnosticTarget {
+  return typeof component === 'string' ? builtInTargets[component] : component;
+}
 
 // Checks common name sources, not the complete Accessible Name algorithm.
 // Browser/axe checks remain necessary for complex markup and CSS content.
@@ -31,33 +61,39 @@ function textAlternative(element: Element, referenced = false): string {
     .trim();
 }
 
-function nameSource(element: HTMLElement, component: Component): string {
+function joinText(nodes: Iterable<Element>): string {
+  return Array.from(nodes, (node) => textAlternative(node, true))
+    .join(' ')
+    .trim();
+}
+
+function labelledByName(element: HTMLElement): string | undefined {
   const doc = element.ownerDocument;
   const references = (element.getAttribute('aria-labelledby') ?? '')
     .trim()
     .split(/\s+/)
     .map((id) => doc.getElementById(id))
     .filter((node): node is HTMLElement => node !== null);
-  if (references.length) {
-    return references
-      .map((node) => textAlternative(node, true))
-      .join(' ')
-      .trim();
-  }
-  let name = element.getAttribute('aria-label')?.trim() ?? '';
-  if (!name && 'labels' in element)
-    name = Array.from(
-      (element.labels as NodeListOf<HTMLLabelElement> | null) ?? [],
-    )
-      .map((label) => textAlternative(label, true))
-      .join(' ')
-      .trim();
-  if (!name && component === 'Button') name = textAlternative(element);
-  if (!name) name = element.getAttribute('title')?.trim() ?? '';
-  return name;
+  return references.length ? joinText(references) : undefined;
 }
 
-function diagnose(element: HTMLElement, component: Component): string {
+function nameSource(element: HTMLElement, target: DiagnosticTarget): string {
+  const referenced = labelledByName(element);
+  if (referenced !== undefined) return referenced;
+  const labels =
+    'labels' in element
+      ? (element.labels as NodeListOf<HTMLLabelElement> | null)
+      : null;
+  return (
+    element.getAttribute('aria-label')?.trim() ||
+    joinText(labels ?? []) ||
+    (target.nameFromContent ? textAlternative(element) : '') ||
+    element.getAttribute('title')?.trim() ||
+    ''
+  );
+}
+
+function diagnose(element: HTMLElement, target: DiagnosticTarget): string {
   const issues: string[] = [];
   const doc = element.ownerDocument;
   for (const attribute of ['aria-labelledby', 'aria-describedby']) {
@@ -69,15 +105,8 @@ function diagnose(element: HTMLElement, component: Component): string {
         `${attribute} must reference existing elements with nonempty IDs.`,
       );
   }
-  const name = nameSource(element, component);
-  if (!name) {
-    const fix = {
-      Button: 'Provide visible text, aria-label, or a valid aria-labelledby.',
-      'Field.Control': 'Associate a Field.Label or another accessible label.',
-      'Dialog.Popup': 'Provide a Dialog.Title or another accessible label.',
-    }[component];
-    issues.push(`No accessible name source was found. ${fix}`);
-  }
+  const name = nameSource(element, target);
+  if (!name) issues.push(`No accessible name source was found. ${target.fix}`);
   return issues.join(' ');
 }
 
@@ -89,14 +118,14 @@ type Watch = {
 // One development-only observer per document also handles external labels/portals.
 const documents = new WeakMap<Document, Watch>();
 
-function observe(element: HTMLElement, component: Component) {
+function observe(element: HTMLElement, target: DiagnosticTarget) {
   const doc = element.ownerDocument;
   let previous = '';
   const check = () => {
     if (!element.isConnected) return;
-    const message = diagnose(element, component);
+    const message = diagnose(element, target);
     if (message && message !== previous)
-      console.warn(`[Utakata-UI a11y] ${component}: ${message}`);
+      console.warn(`[Utakata-UI a11y] ${target.name}: ${message}`);
     previous = message;
   };
   let entry = documents.get(doc);
@@ -167,7 +196,7 @@ export function useAccessibilityRef<T extends HTMLElement>(
         }
       } else if (forwardedRef) forwardedRef.current = element;
       if (element && process.env.NODE_ENV !== 'production')
-        cleanup.current = observe(element, component);
+        cleanup.current = observe(element, resolveTarget(component));
     },
     [component, forwardedRef],
   );

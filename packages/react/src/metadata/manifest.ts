@@ -1,3 +1,4 @@
+import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { separatorManifest } from './components/Separator.js';
 import { qualityRules } from './quality.js';
@@ -101,6 +102,7 @@ export const componentManifest = {
     },
     Kbd: kbdManifest,
     Separator: separatorManifest,
+    Input: inputManifest,
   },
 } as const;
 

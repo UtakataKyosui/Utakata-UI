@@ -7,17 +7,27 @@ export {
   Stack,
   Text,
 } from 'lism-css/react';
+
 export type {
   ButtonAccessibilityProps,
   ButtonProps,
 } from './components/Button.js';
 export { Button } from './components/Button.js';
+
 export { Dialog } from './components/Dialog.js';
+
 export { Field } from './components/Field.js';
+export type { InputProps } from './components/Input.js';
+export { Input } from './components/Input.js';
+
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
+
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
+
+export type { InputSize } from './metadata/components/Input.js';
+
 export type {
   ButtonSize,
   ButtonVariant,

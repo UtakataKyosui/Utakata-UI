@@ -13,6 +13,7 @@
     --ui-color-border: #8c96a8;
     --ui-color-danger: #b42318;
     --ui-radius-control: 0.375rem;
+    --ui-shadow-popup: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
     --ui-focus-ring: 0 0 0 3px
       color-mix(in srgb, var(--ui-color-primary) 35%, transparent);
   }
@@ -195,6 +196,69 @@
     align-self: stretch;
     inline-size: var(--ui-separator-size, 1px);
     min-block-size: 1em;
+  }
+
+  .ui-input {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    font: inherit;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-input::placeholder {
+    color: var(--ui-color-muted);
+    opacity: 1;
+  }
+
+  .ui-input:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .ui-input:read-only {
+    border-style: dashed;
+  }
+
+  .ui-input:disabled {
+    border-style: solid;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-input[data-invalid],
+  .ui-input[aria-invalid="true"] {
+    border-color: var(--ui-color-danger);
+  }
+
+  .ui-input--sm {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .ui-input--md {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .ui-input--lg {
+    font-size: 1.125rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .ui-input--sm {
+    min-block-size: 2rem;
+  }
+
+  .ui-input--md {
+    min-block-size: 2.5rem;
+  }
+
+  .ui-input--lg {
+    min-block-size: 3rem;
   }
 
   @media (forced-colors: active) {

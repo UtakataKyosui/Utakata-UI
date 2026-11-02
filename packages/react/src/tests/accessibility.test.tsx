@@ -1,10 +1,4 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import {
   afterEach,
   beforeEach,
@@ -25,8 +19,10 @@ import {
   type QualityRule,
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
+import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
+import { isolateChecks } from './quality-helpers.js';
 
 describe('accessibility regression checks', () => {
   let warnings: MockInstance<typeof console.warn>;
@@ -115,19 +111,9 @@ describe('accessibility regression checks', () => {
       },
       ...kbdChecks,
       ...separatorChecks,
+      ...inputChecks,
     };
-    const isolatedChecks = Object.fromEntries(
-      Object.entries(checks).map(([id, check]) => [
-        id,
-        async () => {
-          try {
-            await check();
-          } finally {
-            cleanup();
-          }
-        },
-      ]),
-    );
+    const isolatedChecks = isolateChecks(checks);
     const rules = [
       ...Object.values(componentManifest.components).flatMap<QualityRule>(
         (component) => component.qualityRules,
@@ -139,7 +125,8 @@ describe('accessibility regression checks', () => {
     console.info(output);
     expect(report.automatedPassed, output).toBe(true);
     expect(report.complete).toBe(false);
-  });
+    // Runs every registered component's checks (many axe audits) in sequence.
+  }, 120_000);
 
   it('detects an unnamed button (audit harness control)', async () => {
     const { container } = render(<button type="button" />);

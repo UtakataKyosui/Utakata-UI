@@ -1,3 +1,4 @@
+import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { separatorQualityRules } from './components/Separator.js';
 
@@ -65,6 +66,7 @@ export const qualityRules = {
   ],
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
+  Input: inputQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
