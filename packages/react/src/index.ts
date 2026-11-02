@@ -127,6 +127,9 @@ export { Tabs } from './components/Tabs.js';
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 
+export type { ToggleProps } from './components/Toggle.js';
+export { Toggle } from './components/Toggle.js';
+
 export type { AccordionHeadingLevel } from './metadata/components/Accordion.js';
 export type { AlertVariant } from './metadata/components/Alert.js';
 export type { AvatarSize } from './metadata/components/Avatar.js';
@@ -140,6 +143,10 @@ export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js'
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
 export type { SpinnerSize } from './metadata/components/Spinner.js';
 export type { TextareaSize } from './metadata/components/Textarea.js';
+export type {
+  ToggleSize,
+  ToggleVariant,
+} from './metadata/components/Toggle.js';
 
 export type {
   ButtonSize,

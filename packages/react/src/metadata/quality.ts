@@ -21,6 +21,7 @@ import { switchQualityRules } from './components/Switch.js';
 import { tableQualityRules } from './components/Table.js';
 import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
+import { toggleQualityRules } from './components/Toggle.js';
 
 export interface QualityRule {
   id: string;
@@ -107,6 +108,7 @@ export const qualityRules = {
   Collapsible: collapsibleQualityRules,
   Accordion: accordionQualityRules,
   Tabs: tabsQualityRules,
+  Toggle: toggleQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
