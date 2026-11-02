@@ -8,6 +8,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Collapsible,
   Dialog,
   Field,
   Input,
@@ -451,6 +452,28 @@ function PaginationStates() {
   );
 }
 
+function CollapsibleStates() {
+  return (
+    <section aria-label="Collapsible states">
+      <Button>Before collapsible</Button>
+      <Collapsible.Root>
+        <Collapsible.Trigger>Advanced settings</Collapsible.Trigger>
+        <Collapsible.Panel>
+          <p>Additional settings</p>
+          <Button>Panel action</Button>
+        </Collapsible.Panel>
+      </Collapsible.Root>
+      <Collapsible.Root>
+        <Collapsible.Trigger>Kept mounted</Collapsible.Trigger>
+        <Collapsible.Panel keepMounted>
+          <Button>Hidden action</Button>
+        </Collapsible.Panel>
+      </Collapsible.Root>
+      <Button>After collapsible</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -633,6 +656,7 @@ function Fixture() {
       <TableStates />
       <BreadcrumbStates />
       <PaginationStates />
+      <CollapsibleStates />
     </main>
   );
 }

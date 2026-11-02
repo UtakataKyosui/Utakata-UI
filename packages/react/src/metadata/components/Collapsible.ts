@@ -31,20 +31,29 @@ export const collapsibleQualityRules = [
   {
     id: 'collapsible.keyboard-focus',
     requirement:
-      'Enter and Space toggle the trigger with real keyboard input, focus stays on the trigger after closing, and the panel height change does not hide focus.',
-    verification: 'manual',
+      'In a real browser Tab reaches the trigger, Enter opens and Space closes the panel, focus stays on the trigger, closed panel content (including with keepMounted) is skipped by Tab while open content is reached, and the focused trigger stays inside the viewport with a visible focus indicator.',
+    verification: 'browser',
     severity: 'error',
     remediation:
-      'Verify with real keyboard input in each supported browser and record the results.',
+      'Preserve Base UI Collapsible keyboard and hidden-state handling; do not force display on a closed panel or remove the focus indicator.',
   },
   {
-    id: 'collapsible.motion-theme',
+    id: 'collapsible.motion-forced',
     requirement:
-      'The open/closed indicator does not rely on color, height animation is removed under prefers-reduced-motion, and content reflows at 200% zoom in every theme and forced colors.',
+      'In a real browser the open/closed indicator changes by rotation rather than color, the height and indicator transitions run by default and are removed under prefers-reduced-motion, and in forced colors the focused trigger keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the prefers-reduced-motion override, the rotating indicator and the transparent focus outline that forced colors expose.',
+  },
+  {
+    id: 'collapsible.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the trigger and panel content reflow without loss.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check reduced motion, zoom, dark theme and forced colors in a real browser.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 
