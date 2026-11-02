@@ -1489,6 +1489,10 @@
     margin: 0.25rem 0;
   }
 
+  .ui-alert-dialog__popup {
+    max-width: min(90vw, 28rem);
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;

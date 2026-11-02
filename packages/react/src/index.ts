@@ -21,7 +21,8 @@ export type {
   AlertTitleProps,
 } from './components/Alert.js';
 export { Alert } from './components/Alert.js';
-
+export type { AlertDialogPopupProps } from './components/AlertDialog.js';
+export { AlertDialog } from './components/AlertDialog.js';
 export type {
   AvatarFallbackProps,
   AvatarImageProps,

@@ -1,5 +1,6 @@
 import { accordionQualityRules } from './components/Accordion.js';
 import { alertQualityRules } from './components/Alert.js';
+import { alertDialogQualityRules } from './components/AlertDialog.js';
 import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
@@ -115,6 +116,7 @@ export const qualityRules = {
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
+  AlertDialog: alertDialogQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

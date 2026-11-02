@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for AlertDialog focus and dismissal and keeps platform checks manual', () => {
+    const rules = getComponent('AlertDialog')?.qualityRules ?? [];
+    for (const id of [
+      'alert-dialog.initial-focus-containment',
+      'alert-dialog.dismissal-focus-return',
+      'alert-dialog.forced-focus',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'alert-dialog.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
     const rules = getComponent('DropdownMenu')?.qualityRules ?? [];
     for (const id of [
@@ -442,6 +463,7 @@ describe('manifest tools', () => {
       'Tooltip',
       'Popover',
       'DropdownMenu',
+      'AlertDialog',
     ]);
   });
 
@@ -474,6 +496,7 @@ describe('manifest tools', () => {
       'Dialog',
       'Popover',
       'DropdownMenu',
+      'AlertDialog',
     ]);
     expect(searchComponents('   ')).toEqual([]);
   });

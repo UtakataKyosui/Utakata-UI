@@ -21,6 +21,7 @@ import {
 import { audit } from './audit.js';
 import { accordionChecks } from './quality/Accordion.checks.js';
 import { alertChecks } from './quality/Alert.checks.js';
+import { alertDialogChecks } from './quality/AlertDialog.checks.js';
 import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
 import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
@@ -160,6 +161,7 @@ describe('accessibility regression checks', () => {
       ...tooltipChecks,
       ...popoverChecks,
       ...dropdownMenuChecks,
+      ...alertDialogChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

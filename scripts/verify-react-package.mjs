@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, Tooltip, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toggle, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -321,6 +321,25 @@ function TooltipWrapper(props: TooltipPopupProps) { return <Tooltip.Popup {...pr
 export const wrappedTooltip = <TooltipWrapper>Copy</TooltipWrapper>;
 // @ts-expect-error Wrappers must preserve the plain-text contract.
 export const wrappedTooltipInvalid = <TooltipWrapper><a href="/">Help</a></TooltipWrapper>;
+type AlertDialogRootProps = ComponentProps<typeof AlertDialog.Root>;
+export const alertDialogRoot: AlertDialogRootProps = { defaultOpen: true };
+export const alertDialogPopup: AlertDialogPopupProps = { className: 'confirm' };
+export const alertDialog = <AlertDialog.Root {...alertDialogRoot}><AlertDialog.Trigger>Delete</AlertDialog.Trigger><AlertDialog.Portal><AlertDialog.Backdrop /><AlertDialog.Popup {...alertDialogPopup}><AlertDialog.Title>Delete file?</AlertDialog.Title><AlertDialog.Description>This cannot be undone.</AlertDialog.Description><AlertDialog.Close>Cancel</AlertDialog.Close></AlertDialog.Popup></AlertDialog.Portal></AlertDialog.Root>;
+// @ts-expect-error Outside-press dismissal is not configurable on AlertDialog in shipped declarations.
+export const alertDialogDismissible: AlertDialogRootProps = { disablePointerDismissal: false };
+// @ts-expect-error AlertDialog is always modal in shipped declarations.
+export const alertDialogNonModal: AlertDialogRootProps = { modal: false };
+// @ts-expect-error JSX usage must also keep the dialog modal.
+export const alertDialogNonModalJsx = <AlertDialog.Root modal={false} />;
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const alertDialogPopupClass: AlertDialogPopupProps = { className: () => 'x' };
+const alertDialogUnsafeProps = { modal: false };
+// @ts-expect-error Spreads cannot make the dialog non-modal.
+export const alertDialogSpreadNonModal = <AlertDialog.Root {...alertDialogUnsafeProps} />;
+function AlertDialogWrapper(props: AlertDialogRootProps) { return <AlertDialog.Root {...props} />; }
+export const wrappedAlertDialog = <AlertDialogWrapper defaultOpen />;
+// @ts-expect-error Wrappers must preserve the modal contract.
+export const wrappedAlertDialogInvalid = <AlertDialogWrapper modal={false} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
