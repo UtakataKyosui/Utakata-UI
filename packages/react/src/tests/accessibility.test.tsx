@@ -22,6 +22,7 @@ import { audit } from './audit.js';
 import { alertChecks } from './quality/Alert.checks.js';
 import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
+import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
@@ -134,6 +135,7 @@ describe('accessibility regression checks', () => {
       ...avatarChecks,
       ...progressChecks,
       ...tableChecks,
+      ...breadcrumbChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

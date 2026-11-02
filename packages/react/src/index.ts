@@ -23,7 +23,13 @@ export type {
 export { Avatar } from './components/Avatar.js';
 export type { BadgeProps } from './components/Badge.js';
 export { Badge } from './components/Badge.js';
-
+export type {
+  BreadcrumbDecorationProps,
+  BreadcrumbLinkProps,
+  BreadcrumbPageProps,
+  BreadcrumbRootProps,
+} from './components/Breadcrumb.js';
+export { Breadcrumb } from './components/Breadcrumb.js';
 export type {
   ButtonAccessibilityProps,
   ButtonProps,

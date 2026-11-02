@@ -1,6 +1,7 @@
 import { alertQualityRules } from './components/Alert.js';
 import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
+import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
@@ -89,6 +90,7 @@ export const qualityRules = {
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
   Table: tableQualityRules,
+  Breadcrumb: breadcrumbQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

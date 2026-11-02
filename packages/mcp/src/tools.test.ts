@@ -31,6 +31,7 @@ describe('manifest tools', () => {
       'Avatar',
       'Progress',
       'Table',
+      'Breadcrumb',
       'Input',
       'Textarea',
       'NativeSelect',
