@@ -1,0 +1,100 @@
+---
+title: テーマカラー
+description: CSS変数でテーマカラーを変更し、アプリに反映する
+---
+
+Utakata UI の色は CSS カスタムプロパティで変更できます。コンポーネントを書き換えたり、新しいスタイリングライブラリを追加する必要はありません。
+
+## 色を試す
+
+メインカラーと、その上に表示する文字色を変更できます。Preview 内の例に反映され、下にコピー用の CSS が表示されます。docs 全体の配色には影響せず、リロードすると標準色に戻ります。
+
+<Component path="theme" />
+
+## アプリに反映する
+
+グローバル CSS でライブラリのスタイルを読み込み、その後に上書きを記述します。registry から導入した場合は import を `src/components/utakata/styles/styles.css` の実際の配置先への相対パスに置き換えます。
+
+```css
+@import "@utakata-ui/react/styles.css";
+
+:root {
+  --ui-color-primary: #6d28d9;
+  --ui-color-on-primary: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ui-color-primary: #c4b5fd;
+    --ui-color-on-primary: #1e1535;
+  }
+}
+```
+
+標準では OS の明暗設定に追従します。上書きする場合も明暗それぞれの文字色・背景色を組で設定してください。CSS のレイヤー外の上書きは、ライブラリの `utakata.tokens` レイヤーより優先されます。
+
+## 変更できる変数
+
+| 変数 | 用途 |
+| --- | --- |
+| `--ui-color-primary` | 主な操作・選択状態 |
+| `--ui-color-on-primary` | メインカラー上の文字・アイコン |
+| `--ui-color-surface` | 入力欄・ポップアップ等の背景 |
+| `--ui-color-text` | 本文・ラベル |
+| `--ui-color-muted` | 補足説明 |
+| `--ui-color-border` | 枠線 |
+| `--ui-color-danger` | エラー・危険な状態 |
+| `--ui-focus-ring` | フォーカスの box-shadow |
+| `--ui-radius-control` | コントロールの角丸 |
+| `--ui-shadow-popup` | ポップアップの影 |
+
+アプリのページ背景と本文色も必要に応じて指定します。
+
+```css
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
+```
+
+## ユーザーがテーマを選べるアプリ
+
+設定画面の選択に応じて `document.documentElement.dataset.brand` を更新し、ルート要素で色を切り替えます。ルートに設定することで、Dialog など body 配下に表示する Portal にも色が届きます。SSR の初期描画は固定値にし、ブラウザー API はイベントハンドラーやクライアント側の処理で参照してください。
+
+```tsx
+<label htmlFor="brand">テーマカラー</label>
+<select
+  id="brand"
+  defaultValue="blue"
+  onChange={(event) => {
+    document.documentElement.dataset.brand = event.target.value;
+  }}
+>
+  <option value="blue">ブルー</option>
+  <option value="violet">バイオレット</option>
+</select>
+```
+
+```css
+:root[data-brand="violet"] {
+  --ui-color-primary: #6d28d9;
+  --ui-color-on-primary: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-brand="violet"] {
+    --ui-color-primary: #c4b5fd;
+    --ui-color-on-primary: #1e1535;
+  }
+}
+```
+
+ブルーは標準色をそのまま使います。この例は選択を保存しません。永続化する場合は、ストレージを使えない環境でも選択できるようにし、初期 HTML と保存した選択の反映もアプリ側で設計してください。
+
+明暗を手動切り替えする場合、`data-theme` の付与だけではライブラリの色は変わりません。`color-scheme` と上記7つの色変数を、light / dark それぞれのセレクターに定義してください。OS 追従を選んだら属性を外す構成にできます。
+
+## 配色変更後の確認
+
+通常文字は 4.5:1、大きな文字は 3:1、識別に必要な UI 境界や状態は 3:1 を基準に、実際の背景と合成された色で確認します。上の比率は選択した不透明な2色の計算結果であり、画面全体の検証結果ではありません。
+
+明暗それぞれで、通常・選択・エラー・フォーカス状態、キーボード操作、forced-colors、文字200%拡大とリフローを確認してください。エラーや選択を色だけで伝えず、文言や形を併用します。独自テーマの実ブラウザー・スクリーンリーダー検証は利用側の責任であり、このサンプルでの実機確認は未実施です。

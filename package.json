@@ -8,7 +8,8 @@
   },
   "scripts": {
     "prepare": "vp config --hooks --no-agent",
-    "check": "pnpm test:agents && pnpm test:ci && pnpm lint && pnpm lint:markup && pnpm typecheck && pnpm test && pnpm build && pnpm check:fallow",
+    "check": "pnpm test:agents && pnpm test:ci && pnpm lint && pnpm lint:markup && pnpm typecheck && pnpm test && pnpm test:cli && pnpm build && pnpm check:fallow",
+    "test:cli": "pnpm --filter @utakata-ui/cli test",
     "check:fallow": "fallow audit --changed-since origin/main",
     "dev": "pnpm --filter @utakata-ui/react build && pnpm --filter @utakata-ui/docs dev",
     "build": "pnpm -r build",

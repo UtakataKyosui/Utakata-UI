@@ -1,0 +1,29 @@
+{
+  "name": "@utakata-ui/cli",
+  "version": "0.1.0",
+  "description": "Install Utakata UI source components from its dedicated Base UI and Lism CSS registry.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "utakata-ui": "bin/utakata-ui.mjs"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UtakataKyosui/Utakata-UI.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  }
+}

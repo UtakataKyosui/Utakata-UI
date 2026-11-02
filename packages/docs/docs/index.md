@@ -34,6 +34,8 @@ Base UI の挙動と Lism CSS によるスタイルを Utakata UI のコンポ�
 ## ドキュメント
 
 - [導入方法](./getting-started)
+- [コマンドでコンポーネントを追加](./registry)
+- [テーマカラー](./theming)
 - [コンポーネント仕様](./components)
 - [UIプレビュー](./preview)
 - [MCP の利用方法](./mcp)

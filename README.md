@@ -104,6 +104,31 @@ CI は npm 11.5.1 以降を確認し、公開リポジトリでは provenance �
 公開前には実ブラウザーのキーボード・スクリーンリーダー・テーマ確認を別途記録してください。
 詳細は [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) を参照してください。
 
+### npm リリース（MCP）
+
+`@utakata-ui/mcp` は npm 公開後に `npx -y @utakata-ui/mcp@0.1.0` で起動できます。
+MCP クライアントへの設定例と公開手順は [MCP ガイド](packages/docs/docs/mcp.md) を参照してください。
+React の依存バージョンを先に公開し、MCP は必ず `pnpm pack` で配布用 tgz を作成します。
+`Release MCP`（`.github/workflows/release-mcp.yml`）の手動実行は検証のみ、
+`mcp-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
+`release-mcp.yml` 用に別途登録し、Environment の制限にも `mcp-v*` を含めてください。
+CI は packed MCP を一時プロジェクトで起動し、stdio 接続・3ツール・manifest の一致を検証します。
+
+### 専用 registry と CLI
+
+Utakata UI は Base UI + Lism CSS のソースを専用 registry から配布します。
+`packages/cli` の `@utakata-ui/cli` は追加の実行時依存を持たず、Tailwind CSS や
+shadcn CLI・`components.json` を使用しません。`list`・`add`・`--dry-run` を提供し、
+既存ファイルとの競合は明示的な `--overwrite` がなければ停止します。
+依存パッケージのインストールコマンドは表示のみで、利用側で実行します。
+
+`pnpm build:docs` は `packages/docs/dist/registry/v1/` にカタログと各コンポーネントの
+JSON を生成します。CLI の npm 公開と docs の静的ホスティングの両方が必要です。
+導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/registry.md) を参照してください。
+`Release CLI`（`.github/workflows/release-cli.yml`）の手動実行は検証のみ、
+`cli-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
+`release-cli.yml` 用に設定し、Environment のタグ制限にも `cli-v*` を含めてください。
+
 ### Claude Code / Codex
 
 このリポジトリには共通の開発指針 `AGENTS.md` と、それを読み込む
