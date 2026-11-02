@@ -26,6 +26,7 @@ import {
   Spinner,
   Switch,
   Table,
+  Tabs,
   Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
@@ -504,6 +505,68 @@ function AccordionStates() {
   );
 }
 
+function TabsStates() {
+  return (
+    <section aria-label="Tabs states">
+      <Button>Before tabs</Button>
+      <Tabs.Root defaultValue="profile">
+        <Tabs.List aria-label="Account sections">
+          <Tabs.Tab value="profile">Profile</Tabs.Tab>
+          <Tabs.Tab value="billing">Billing</Tabs.Tab>
+          <Tabs.Tab value="team" disabled>
+            Team
+          </Tabs.Tab>
+          <Tabs.Tab value="security">Security</Tabs.Tab>
+        </Tabs.List>
+        {['profile', 'billing', 'team', 'security'].map((value) => (
+          <Tabs.Panel key={value} value={value}>
+            <Button>{value} action</Button>
+          </Tabs.Panel>
+        ))}
+      </Tabs.Root>
+      <Button>After tabs</Button>
+      <div className="fixture-tabs-wrap" data-case="wrap">
+        <Tabs.Root defaultValue="overview">
+          <Tabs.List aria-label="Wrapping sections">
+            {['overview', 'activity', 'reports', 'settings', 'billing'].map(
+              (value) => (
+                <Tabs.Tab key={value} value={value}>
+                  {value}
+                </Tabs.Tab>
+              ),
+            )}
+            <Tabs.Indicator />
+          </Tabs.List>
+          {['overview', 'activity', 'reports', 'settings', 'billing'].map(
+            (value) => (
+              <Tabs.Panel key={value} value={value}>
+                {value} panel
+              </Tabs.Panel>
+            ),
+          )}
+        </Tabs.Root>
+      </div>
+      <div className="fixture-tabs-vertical" data-case="vertical">
+        <Tabs.Root defaultValue="one" orientation="vertical">
+          <Tabs.List aria-label="Vertical sections">
+            {['one', 'two', 'three'].map((value) => (
+              <Tabs.Tab key={value} value={value}>
+                {value}
+              </Tabs.Tab>
+            ))}
+            <Tabs.Indicator />
+          </Tabs.List>
+          {['one', 'two', 'three'].map((value) => (
+            <Tabs.Panel key={value} value={value}>
+              {value} panel
+            </Tabs.Panel>
+          ))}
+        </Tabs.Root>
+      </div>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -688,6 +751,7 @@ function Fixture() {
       <PaginationStates />
       <CollapsibleStates />
       <AccordionStates />
+      <TabsStates />
     </main>
   );
 }

@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
+import { Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Card, Collapsible, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, type AccordionHeaderProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type CollapsibleRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -269,6 +269,22 @@ function AccordionHeaderWrapper(props: AccordionHeaderProps) { return <Accordion
 export const wrappedAccordionHeader = <AccordionHeaderWrapper level={4} />;
 // @ts-expect-error Wrappers must preserve the heading level contract.
 export const wrappedAccordionHeaderInvalid = <AccordionHeaderWrapper level={1} />;
+export const tabsUncontrolled: TabsRootProps = { defaultValue: 'profile' };
+export const tabsControlled: TabsRootProps = { value: 'profile' };
+export const tabs = <Tabs.Root {...tabsUncontrolled}><Tabs.List aria-label="Settings"><Tabs.Tab value="profile">Profile</Tabs.Tab></Tabs.List><Tabs.Panel value="profile">Details</Tabs.Panel></Tabs.Root>;
+// @ts-expect-error The initial tab must be explicit in shipped declarations.
+export const tabsImplicitInitial: TabsRootProps = {};
+// @ts-expect-error value and defaultValue are mutually exclusive in shipped declarations.
+export const tabsBoth: TabsRootProps = { value: 'a', defaultValue: 'b' };
+// @ts-expect-error JSX usage must also provide the initial tab.
+export const tabsImplicitJsx = <Tabs.Root />;
+const tabsNoValueProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the explicit initial tab.
+export const tabsSpreadImplicit = <Tabs.Root {...tabsNoValueProps} />;
+function TabsWrapper(props: TabsRootProps) { return <Tabs.Root {...props} />; }
+export const wrappedTabs = <TabsWrapper defaultValue="a" />;
+// @ts-expect-error Wrappers must preserve the explicit initial tab.
+export const wrappedTabsInvalid = <TabsWrapper />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

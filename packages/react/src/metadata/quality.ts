@@ -19,6 +19,7 @@ import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
 import { switchQualityRules } from './components/Switch.js';
 import { tableQualityRules } from './components/Table.js';
+import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
 
 export interface QualityRule {
@@ -105,6 +106,7 @@ export const qualityRules = {
   Slider: sliderQualityRules,
   Collapsible: collapsibleQualityRules,
   Accordion: accordionQualityRules,
+  Tabs: tabsQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
