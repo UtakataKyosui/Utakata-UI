@@ -26,6 +26,7 @@ import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
 import { toastQualityRules } from './components/Toast.js';
 import { toggleQualityRules } from './components/Toggle.js';
+import { toggleGroupQualityRules } from './components/ToggleGroup.js';
 import { tooltipQualityRules } from './components/Tooltip.js';
 
 export interface QualityRule {
@@ -119,6 +120,7 @@ export const qualityRules = {
   DropdownMenu: dropdownMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
+  ToggleGroup: toggleGroupQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

@@ -33,6 +33,7 @@ import {
   Textarea,
   Toast,
   Toggle,
+  ToggleGroup,
   Tooltip,
   useToastManager,
 } from '../../packages/react/src/index.js';
@@ -825,6 +826,46 @@ function ToastStates() {
   );
 }
 
+function ToggleGroupStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="ToggleGroup states">
+      <Button>Before groups</Button>
+      <ToggleGroup.Root
+        aria-label="Text format"
+        multiple
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `format:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="bold">Bold</ToggleGroup.Item>
+        <ToggleGroup.Item value="italic" disabled>
+          Italic
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="underline">Underline</ToggleGroup.Item>
+        <ToggleGroup.Item value="strike">Strike</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <ToggleGroup.Root
+        aria-label="Alignment"
+        orientation="vertical"
+        defaultValue={['center']}
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, `align:${value.join(',')}`])
+        }
+      >
+        <ToggleGroup.Item value="left">Left</ToggleGroup.Item>
+        <ToggleGroup.Item value="center">Center</ToggleGroup.Item>
+        <ToggleGroup.Item value="right" disabled>
+          Right
+        </ToggleGroup.Item>
+        <ToggleGroup.Item value="justify">Justify</ToggleGroup.Item>
+      </ToggleGroup.Root>
+      <Button>After groups</Button>
+      <output aria-label="Group changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -1016,6 +1057,7 @@ function Fixture() {
       <MenuStates />
       <AlertDialogStates />
       <ToastStates />
+      <ToggleGroupStates />
     </main>
   );
 }

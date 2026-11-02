@@ -1322,6 +1322,17 @@
       var(--ui-focus-ring);
   }
 
+  .ui-toggle-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--ui-toggle-group-gap, 0.25rem);
+  }
+
+  .ui-toggle-group--vertical {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
   .ui-tooltip__positioner,
   .ui-popover__positioner,
   .ui-dropdown-menu__positioner {

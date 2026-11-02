@@ -180,3 +180,9 @@ section[aria-label="Toast states"] {
   flex-direction: column;
   min-width: 0;
 }
+
+section[aria-label="ToggleGroup states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
