@@ -1498,7 +1498,10 @@
     flex-direction: column;
     gap: 0.5rem;
     inset: auto 1rem 1rem auto;
+    /* Bounded to the screen so tall stacks scroll instead of leaving the top unreachable. */
+    max-block-size: calc(100dvh - 2rem);
     max-width: calc(100vw - 2rem);
+    overflow-y: auto;
     position: fixed;
     width: 24rem;
     z-index: 50;
@@ -1506,6 +1509,7 @@
 
   .ui-toast {
     background: var(--ui-color-surface);
+    flex-shrink: 0;
     border: 1px solid var(--ui-color-border);
     border-radius: 0.75rem;
     box-shadow: var(--ui-shadow-popup);
