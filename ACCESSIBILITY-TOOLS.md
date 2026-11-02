@@ -25,6 +25,18 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`native-select.browser-behavior` は Chromium light/dark の全 sm/md/lg でラベル・説明・エラー関連、実キーのネイティブ type-ahead 選択、disabled の Tab 除外、フォーム値とリセット、24×24 CSS px、文字4.5:1・境界/フォーカス/矢印3:1の算出色を検証します。矢印の aria-hidden と pointer-events も確認し、`native-select-evidence` / `native-select-axe` を既存CI成果物へ添付します。ラベル関連と disabled を意図的に除去した DOM で検出も確認します。OS のポップアップ内の操作・外観、スクリーンリーダー、実際のズーム・強制配色は `native-select.platform-picker` に未検証として残します。type-ahead の合格は OS ピッカー操作の合格ではありません。
+
+`textarea.keyboard-input` は Chromium light/dark の全 sm/md/lg で実キーボードによる Enter の改行と maxLength の上限、Tab による disabled の除外、readOnly の編集禁止、フォーム値・説明・エラー関連を検証します。maxLength を意図的に除去した DOM でも制限超過を検出します。`textarea-evidence` と `textarea-axe` に環境・状態・実測値と結果を添付し、既存 CI 成果物でコミットに結び付けます。jsdom の `textarea.value-form` は属性の転送と値・送信の単体検証で、ブラウザーによる文字数制限の証拠には使いません。手動リサイズ、実際の文字ズーム、支援技術の発話等は `textarea.visual-resize` の未検証事項として残ります。
+
+### Input の必須ブラウザー証拠
+
+`input.visual-theme` は `verification: 'browser'` の必須自動ルールです。jsdom の検査対象から明示的に分離し、Playwright で `evaluateQuality` に実測チェックを渡します。チェック未提供なら `unverified` となり `automatedPassed` は失敗します。reporter は manifest の全 browser rule ID を読み、Chromium light/dark の各プロジェクトに対応するテストがなければ失敗します。`pnpm test:ci` に、欠落・片テーマのみ・skip を検出する否定例があります。
+
+`tests/browser/input.spec.ts` は全 sm/md/lg と通常・readOnly・disabled・invalid を描画し、24×24 CSS px、通常テーマの有効な入力の文字・placeholder 4.5:1、境界・フォーカス 3:1、説明・エラー関連、実際の Tab による disabled の除外、readOnly の編集禁止、320 CSS px 幅の収まり、強制配色エミュレーションでの outline を検査します。コントラストはこの fixture の不透明な背景と算出色に適用し、非対応の色表現は未判定として失敗します。disabled はコントラスト閾値の適用外です。低コントラスト・小さすぎる実 DOM を使い検出能力も確認します。
+
+`input-evidence` にブラウザー・OS・テーマ・状態ごとの実測値とルール結果、`input-axe` に axe 結果を添付します。CI の既存成果物はコミット SHA と結び付いています。実際の200%文字ズーム、物理環境の強制配色、スクリーンリーダーの発話と利用者の理解は `input.zoom-assistive-output` に残し、未検証です。320px の viewport はズームの証拠ではありません。独自 CSS や利用側の背景は別途検証が必要です。
+
 Markuplint は任意の React 合成や Base UI の polymorphic `render` の描画結果を確定できない。今回 Pretenders による一律の HTML 要素マッピングは設定していない。型と描画後の検証を併用する。利用者向けの共有 lint preset の配布は未実装。
 
 SPA の `tests/browser/index.html` に限り `require-h1` を無効化する。h1 は React で描画し、ブラウザーテストで存在を明示検証する。他の規則・ファイルへ例外を広げない。
