@@ -22,11 +22,20 @@ export const cardQualityRules = [
   {
     id: 'card.layout-theme',
     requirement:
-      'Padding stays consistent with any part combination, long content wraps, and borders and text stay visible in every supported theme, 200% zoom, 320 CSS px width and forced colors.',
+      'In a real browser the card padding is identical for every part combination, long content wraps without clipping or overflow at 320 CSS px and 200% text size, text keeps at least 4.5:1 contrast against the card background in every supported theme and in forced colors, and the card keeps a visible border in forced colors.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep overflow-wrap and the shared padding on Card.Root; check --ui-card-background, --ui-card-border and text color overrides.',
+  },
+  {
+    id: 'card.zoom-assistive',
+    requirement:
+      'At real 200% browser zoom the card layout reflows without loss, and assistive technology reads the heading level and card content in order.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered layout, contrast and reflow in a real browser.',
+      'Check browser zoom and screen reader output in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

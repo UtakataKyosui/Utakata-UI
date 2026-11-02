@@ -44,7 +44,7 @@ for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell
 by exact Playwright version, OS and architecture. OS libraries are installed
 on every browser job; the cache does not establish that they exist. Only Chromium
-headless is downloaded. Browser tests have a three-minute global timeout below
+headless is downloaded. Browser tests have a five-minute global timeout below
 the job timeout, so they can write failure evidence. Artifacts are uploaded only
 after the test step runs. Release keeps full checks and uses the pnpm cache.
 

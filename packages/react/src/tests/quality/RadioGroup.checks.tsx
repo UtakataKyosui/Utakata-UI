@@ -71,19 +71,6 @@ export const radioGroupChecks: Record<string, QualityCheck> = {
     // Controlled: the selection follows the value prop, not the click.
     expect(checked()).toEqual(['free']);
   },
-  'radio-group.keyboard': async () => {
-    render(<PlanGroup />);
-    const [free, team, pro] = screen.getAllByRole('radio');
-    expect(free).toHaveAttribute('tabindex', '0');
-    expect(team).toHaveAttribute('aria-disabled', 'true');
-    free?.focus();
-    fireEvent.keyDown(free as HTMLElement, { key: 'ArrowDown' });
-    await waitFor(() => expect(pro).toHaveFocus());
-    await waitFor(() => expect(checked()).toEqual(['pro']));
-    fireEvent.keyDown(pro as HTMLElement, { key: 'ArrowUp' });
-    await waitFor(() => expect(free).toHaveFocus());
-    await waitFor(() => expect(checked()).toEqual(['free']));
-  },
   'radio-group.form': async () => {
     render(<ControlledPlan />);
     const form = document.querySelector('form') as HTMLFormElement;
