@@ -1,3 +1,4 @@
+import { alertQualityRules } from './components/Alert.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
@@ -81,6 +82,7 @@ export const qualityRules = {
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,
   Card: cardQualityRules,
+  Alert: alertQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

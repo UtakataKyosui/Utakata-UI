@@ -58,3 +58,13 @@ section[aria-label="Card states"] {
 section[aria-label="Card states"] .ui-card {
   inline-size: 240px;
 }
+
+section[aria-label="Alert states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Alert states"] .ui-alert {
+  inline-size: 240px;
+}

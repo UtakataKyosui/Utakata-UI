@@ -8,6 +8,13 @@ export {
   Text,
 } from 'lism-css/react';
 
+export type {
+  AlertDescriptionProps,
+  AlertRootProps,
+  AlertTitleProps,
+} from './components/Alert.js';
+export { Alert } from './components/Alert.js';
+
 export type { BadgeProps } from './components/Badge.js';
 export { Badge } from './components/Badge.js';
 
@@ -66,6 +73,8 @@ export { Switch } from './components/Switch.js';
 
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
+
+export type { AlertVariant } from './metadata/components/Alert.js';
 
 export type { BadgeVariant } from './metadata/components/Badge.js';
 

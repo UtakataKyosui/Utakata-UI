@@ -19,6 +19,7 @@ import {
   type QualityRule,
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
+import { alertChecks } from './quality/Alert.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
@@ -126,6 +127,7 @@ describe('accessibility regression checks', () => {
       ...skeletonChecks,
       ...spinnerChecks,
       ...cardChecks,
+      ...alertChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

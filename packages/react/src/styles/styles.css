@@ -354,6 +354,51 @@
     gap: 0.5rem;
   }
 
+  .ui-alert {
+    background: var(--ui-alert-background, var(--ui-color-surface));
+    border: 1px solid var(--ui-alert-border, var(--ui-color-border));
+    border-inline-start-width: 4px;
+    border-radius: 0.5rem;
+    color: var(--ui-color-text);
+    display: grid;
+    gap: 0.25rem 0.75rem;
+    grid-template-columns: minmax(0, 1fr);
+    overflow-wrap: anywhere;
+    padding: 0.875rem 1rem;
+  }
+
+  .ui-alert:has(> svg) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ui-alert > svg {
+    flex-shrink: 0;
+    grid-row: 1 / span 2;
+    margin-block-start: 0.125rem;
+  }
+
+  .ui-alert > :not(svg) {
+    grid-column: -2;
+  }
+
+  .ui-alert__title {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .ui-alert__description {
+    color: var(--ui-color-muted);
+  }
+
+  .ui-alert--destructive {
+    border-color: var(--ui-alert-border, var(--ui-color-danger));
+    color: var(--ui-color-danger);
+  }
+
+  .ui-alert--destructive .ui-alert__description {
+    color: var(--ui-color-text);
+  }
+
   .ui-input,
   .ui-textarea,
   .ui-native-select__control {
