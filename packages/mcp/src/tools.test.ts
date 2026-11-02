@@ -48,6 +48,7 @@ describe('manifest tools', () => {
       'Tooltip',
       'Popover',
       'DropdownMenu',
+      'AlertDialog',
     ]);
   });
 
@@ -80,6 +81,7 @@ describe('manifest tools', () => {
       'Dialog',
       'Popover',
       'DropdownMenu',
+      'AlertDialog',
     ]);
     expect(searchComponents('   ')).toEqual([]);
   });

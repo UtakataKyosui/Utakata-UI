@@ -1,5 +1,6 @@
 import { accordionManifest } from './components/Accordion.js';
 import { alertManifest } from './components/Alert.js';
+import { alertDialogManifest } from './components/AlertDialog.js';
 import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
@@ -151,6 +152,7 @@ export const componentManifest = {
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
     DropdownMenu: dropdownMenuManifest,
+    AlertDialog: alertDialogManifest,
   },
 } as const;
 
