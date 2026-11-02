@@ -22,6 +22,7 @@ import { tableManifest } from './components/Table.js';
 import { tabsManifest } from './components/Tabs.js';
 import { textareaManifest } from './components/Textarea.js';
 import { toggleManifest } from './components/Toggle.js';
+import { tooltipManifest } from './components/Tooltip.js';
 import { qualityRules } from './quality.js';
 
 export const componentManifest = {
@@ -145,6 +146,7 @@ export const componentManifest = {
     Accordion: accordionManifest,
     Tabs: tabsManifest,
     Toggle: toggleManifest,
+    Tooltip: tooltipManifest,
   },
 } as const;
 

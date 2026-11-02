@@ -45,6 +45,7 @@ describe('manifest tools', () => {
       'Accordion',
       'Tabs',
       'Toggle',
+      'Tooltip',
     ]);
   });
 

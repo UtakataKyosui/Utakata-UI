@@ -22,6 +22,7 @@ import { tableQualityRules } from './components/Table.js';
 import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
 import { toggleQualityRules } from './components/Toggle.js';
+import { tooltipQualityRules } from './components/Tooltip.js';
 
 export interface QualityRule {
   id: string;
@@ -109,6 +110,7 @@ export const qualityRules = {
   Accordion: accordionQualityRules,
   Tabs: tabsQualityRules,
   Toggle: toggleQualityRules,
+  Tooltip: tooltipQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

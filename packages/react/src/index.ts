@@ -130,6 +130,12 @@ export { Textarea } from './components/Textarea.js';
 export type { ToggleProps } from './components/Toggle.js';
 export { Toggle } from './components/Toggle.js';
 
+export type {
+  TooltipPopupProps,
+  TooltipRootProps,
+  TooltipText,
+} from './components/Tooltip.js';
+export { Tooltip } from './components/Tooltip.js';
 export type { AccordionHeadingLevel } from './metadata/components/Accordion.js';
 export type { AlertVariant } from './metadata/components/Alert.js';
 export type { AvatarSize } from './metadata/components/Avatar.js';
