@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Alert visuals and keeps announcements manual', () => {
+    expect(getComponent('Alert')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'alert.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'alert.announcement',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Card layout and keeps zoom manual', () => {
     expect(getComponent('Card')?.qualityRules).toEqual(
       expect.arrayContaining([

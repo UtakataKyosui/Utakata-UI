@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -136,6 +136,19 @@ export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile
 export const cardEmptyTitle: CardTitleProps = { level: '2' };
 // @ts-expect-error Card className must be a string in shipped declarations.
 export const cardFunctionClass = <Card.Root className={() => 'x'} />;
+type AlertRootProps = ComponentProps<typeof Alert.Root>;
+export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
+export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;
+export const staticAlert = <Alert.Root><Alert.Title>Notice</Alert.Title></Alert.Root>;
+// @ts-expect-error Only live-region roles are supported on Alert.Root in shipped declarations.
+export const alertRegionRole: AlertRootProps = { role: 'region' };
+// @ts-expect-error Alert variants are limited to the manifest in shipped declarations.
+export const alertUnsupportedVariant: AlertRootProps = { variant: 'warning' };
+const alertRoleProps = { role: 'region' };
+// @ts-expect-error Spreads cannot widen the Alert role contract.
+export const alertRoleSpread = <Alert.Root {...alertRoleProps} />;
+// @ts-expect-error Alert className must be a string in shipped declarations.
+export const alertFunctionClass = <Alert.Root className={() => 'x'} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

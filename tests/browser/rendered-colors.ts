@@ -131,3 +131,45 @@ export async function measureRenderedColors(
     });
   }, selector);
 }
+
+export type OverflowMeasurement = {
+  /** True when the element or a descendant is wider than its own box (clipped or scrolling). */
+  clipped: boolean[];
+  /** True when the element or a descendant extends past the viewport or the element's right edge. */
+  outside: boolean[];
+};
+
+/** Measures layout overflow for every element matching `selector`. */
+export async function measureOverflow(
+  page: Page,
+  selector: string,
+): Promise<OverflowMeasurement> {
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+  return page.evaluate((query) => {
+    const roots = [...document.querySelectorAll<HTMLElement>(query)];
+    const viewport = document.documentElement.clientWidth;
+    return {
+      clipped: roots.map((root) =>
+        [root, ...root.querySelectorAll<HTMLElement>('*')].some(
+          (node) =>
+            node.scrollWidth > node.clientWidth + 1 &&
+            getComputedStyle(node).display !== 'inline',
+        ),
+      ),
+      outside: roots.map((root) => {
+        const box = root.getBoundingClientRect();
+        return (
+          box.right > viewport + 1 ||
+          [...root.querySelectorAll<HTMLElement>('*')].some(
+            (node) => node.getBoundingClientRect().right > box.right + 1,
+          )
+        );
+      }),
+    };
+  }, selector);
+}

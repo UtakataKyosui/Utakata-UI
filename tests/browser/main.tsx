@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
+  Alert,
   Badge,
   Button,
   Card,
@@ -263,6 +264,29 @@ function CardStates() {
   );
 }
 
+const alertLongText =
+  'Unbroken_identifier_that_must_wrap_inside_the_alert and a long sentence describing what happened.';
+
+function AlertStates() {
+  return (
+    <section aria-label="Alert states">
+      {componentManifest.components.Alert.variants.flatMap((variant) => [
+        <Alert.Root key={`${variant}-icon`} variant={variant} data-case="icon">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
+            <circle cx="8" cy="8" r="7" fill="currentColor" />
+          </svg>
+          <Alert.Title>Status {variant}</Alert.Title>
+          <Alert.Description>Description for {variant}</Alert.Description>
+        </Alert.Root>,
+        <Alert.Root key={`${variant}-long`} variant={variant} data-case="long">
+          <Alert.Title>{alertLongText}</Alert.Title>
+          <Alert.Description>{alertLongText}</Alert.Description>
+        </Alert.Root>,
+      ])}
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -439,6 +463,7 @@ function Fixture() {
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
+      <AlertStates />
     </main>
   );
 }
