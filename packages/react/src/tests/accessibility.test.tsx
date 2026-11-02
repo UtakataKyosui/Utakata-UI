@@ -47,6 +47,7 @@ import { tabsChecks } from './quality/Tabs.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
 import { toastChecks } from './quality/Toast.checks.js';
 import { toggleChecks } from './quality/Toggle.checks.js';
+import { toggleGroupChecks } from './quality/ToggleGroup.checks.js';
 import { tooltipChecks } from './quality/Tooltip.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
@@ -164,6 +165,7 @@ describe('accessibility regression checks', () => {
       ...dropdownMenuChecks,
       ...alertDialogChecks,
       ...toastChecks,
+      ...toggleGroupChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

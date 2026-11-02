@@ -137,7 +137,11 @@ export type {
 export { Toast, useToastManager } from './components/Toast.js';
 export type { ToggleProps } from './components/Toggle.js';
 export { Toggle } from './components/Toggle.js';
-
+export type {
+  ToggleGroupItemProps,
+  ToggleGroupRootProps,
+} from './components/ToggleGroup.js';
+export { ToggleGroup } from './components/ToggleGroup.js';
 export type {
   TooltipPopupProps,
   TooltipRootProps,
@@ -161,7 +165,7 @@ export type {
   ToggleSize,
   ToggleVariant,
 } from './metadata/components/Toggle.js';
-
+export type { ToggleGroupOrientation } from './metadata/components/ToggleGroup.js';
 export type {
   ButtonSize,
   ButtonVariant,

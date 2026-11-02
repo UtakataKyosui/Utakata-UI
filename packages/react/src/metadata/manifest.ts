@@ -26,6 +26,7 @@ import { tabsManifest } from './components/Tabs.js';
 import { textareaManifest } from './components/Textarea.js';
 import { toastManifest } from './components/Toast.js';
 import { toggleManifest } from './components/Toggle.js';
+import { toggleGroupManifest } from './components/ToggleGroup.js';
 import { tooltipManifest } from './components/Tooltip.js';
 import { qualityRules } from './quality.js';
 
@@ -155,6 +156,7 @@ export const componentManifest = {
     DropdownMenu: dropdownMenuManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
+    ToggleGroup: toggleGroupManifest,
   },
 } as const;
 
