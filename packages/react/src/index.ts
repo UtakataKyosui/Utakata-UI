@@ -34,6 +34,9 @@ export { NativeSelect } from './components/NativeSelect.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 
+export type { SwitchRootProps, SwitchThumbProps } from './components/Switch.js';
+export { Switch } from './components/Switch.js';
+
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 

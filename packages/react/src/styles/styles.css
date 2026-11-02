@@ -220,7 +220,8 @@
   .ui-input:focus-visible,
   .ui-textarea:focus-visible,
   .ui-native-select__control:focus-visible,
-  .ui-checkbox:focus-visible {
+  .ui-checkbox:focus-visible,
+  .ui-switch:focus-visible {
     box-shadow: var(--ui-focus-ring);
     outline: 2px solid transparent;
     outline-offset: 2px;
@@ -245,7 +246,8 @@
   .ui-textarea[aria-invalid="true"],
   .ui-native-select__control[data-invalid],
   .ui-native-select__control[aria-invalid="true"],
-  .ui-checkbox[data-invalid] {
+  .ui-checkbox[data-invalid],
+  .ui-switch[data-invalid] {
     border-color: var(--ui-color-danger);
   }
 
@@ -364,12 +366,48 @@
     transform: none;
   }
 
-  .ui-checkbox[data-disabled] {
+  .ui-switch {
+    align-items: center;
+    background: var(--ui-color-muted);
+    block-size: 1.5rem;
+    border: 2px solid var(--ui-color-muted);
+    border-radius: 999px;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: 2.75rem;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .ui-switch[data-checked] {
+    background: var(--ui-color-primary);
+    border-color: var(--ui-color-primary);
+  }
+
+  .ui-switch__thumb {
+    background: var(--ui-color-surface);
+    block-size: calc(1.5rem - 8px);
+    border-radius: 50%;
+    inline-size: calc(1.5rem - 8px);
+    margin-inline-start: 2px;
+    transition: margin-inline-start 150ms ease;
+  }
+
+  .ui-switch__thumb[data-checked] {
+    margin-inline-start: calc(1.25rem + 2px);
+  }
+
+  .ui-checkbox[data-disabled],
+  .ui-switch[data-disabled] {
     cursor: not-allowed;
     opacity: 0.55;
   }
 
-  .ui-checkbox[data-readonly] {
+  .ui-checkbox[data-readonly],
+  .ui-switch[data-readonly] {
     cursor: default;
   }
 
@@ -378,7 +416,8 @@
       background: CanvasText;
     }
 
-    .ui-checkbox {
+    .ui-checkbox,
+    .ui-switch {
       background: Canvas;
       border-color: CanvasText;
       color: CanvasText;
@@ -386,23 +425,39 @@
     }
 
     .ui-checkbox[data-checked],
-    .ui-checkbox[data-indeterminate] {
+    .ui-checkbox[data-indeterminate],
+    .ui-switch[data-checked] {
       background: Highlight;
       border-color: Highlight;
       color: HighlightText;
     }
 
-    .ui-checkbox[data-disabled] {
+    .ui-switch__thumb {
+      background: CanvasText;
+    }
+
+    .ui-switch[data-checked] > .ui-switch__thumb {
+      background: HighlightText;
+    }
+
+    .ui-checkbox[data-disabled],
+    .ui-switch[data-disabled] {
       border-color: GrayText;
     }
 
-    .ui-checkbox:focus-visible {
+    .ui-checkbox:focus-visible,
+    .ui-switch:focus-visible {
       outline-color: Highlight;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .ui-button {
+      transition: none;
+    }
+
+    .ui-switch,
+    .ui-switch__thumb {
       transition: none;
     }
   }
