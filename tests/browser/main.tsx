@@ -6,6 +6,7 @@ import {
   Input,
   Kbd,
   KbdGroup,
+  NativeSelect,
   Separator,
   Textarea,
 } from '../../packages/react/src/index.js';
@@ -123,6 +124,41 @@ function Fixture() {
               <Textarea size={size} defaultValue="Invalid note" />
               <Field.Error match>Enter a valid note.</Field.Error>
             </Field.Root>
+          </form>
+        ))}
+      </section>
+      <section aria-label="NativeSelect states">
+        {componentManifest.components.NativeSelect.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="country">
+              <Field.Label>Country {size}</Field.Label>
+              <NativeSelect size={size} defaultValue="jp">
+                <option value="jp">Japan</option>
+                <option value="ca" disabled>
+                  Canada
+                </option>
+                <optgroup label="Other countries">
+                  <option value="us">United States</option>
+                </optgroup>
+              </NativeSelect>
+              <Field.Description>Used for shipping.</Field.Description>
+            </Field.Root>
+            <NativeSelect
+              size={size}
+              disabled
+              name="disabled"
+              aria-label={`Disabled country ${size}`}
+            >
+              <option value="jp">Japan</option>
+            </NativeSelect>
+            <Field.Root invalid>
+              <Field.Label>Invalid country {size}</Field.Label>
+              <NativeSelect size={size}>
+                <option value="">Choose a country</option>
+              </NativeSelect>
+              <Field.Error match>Choose a valid country.</Field.Error>
+            </Field.Root>
+            <Button type="reset">Reset country {size}</Button>
           </form>
         ))}
       </section>
