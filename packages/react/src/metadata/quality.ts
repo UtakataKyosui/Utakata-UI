@@ -1,4 +1,5 @@
 import { alertQualityRules } from './components/Alert.js';
+import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
@@ -83,6 +84,7 @@ export const qualityRules = {
   Spinner: spinnerQualityRules,
   Card: cardQualityRules,
   Alert: alertQualityRules,
+  Avatar: avatarQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

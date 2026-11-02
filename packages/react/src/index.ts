@@ -15,6 +15,12 @@ export type {
 } from './components/Alert.js';
 export { Alert } from './components/Alert.js';
 
+export type {
+  AvatarFallbackProps,
+  AvatarImageProps,
+  AvatarRootProps,
+} from './components/Avatar.js';
+export { Avatar } from './components/Avatar.js';
 export type { BadgeProps } from './components/Badge.js';
 export { Badge } from './components/Badge.js';
 
@@ -75,7 +81,7 @@ export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
 
 export type { AlertVariant } from './metadata/components/Alert.js';
-
+export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 
 export type { CardTitleLevel } from './metadata/components/Card.js';
