@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Table scrolling and focus and keeps zoom manual', () => {
+    expect(getComponent('Table')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'table.reflow-focus',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'table.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Progress visuals and keeps OS checks manual', () => {
     expect(getComponent('Progress')?.qualityRules).toEqual(
       expect.arrayContaining([

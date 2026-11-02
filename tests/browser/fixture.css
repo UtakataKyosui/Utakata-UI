@@ -78,3 +78,13 @@ section[aria-label="Progress states"] {
 section[aria-label="Progress states"] .ui-progress {
   inline-size: 240px;
 }
+
+section[aria-label="Table states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Table states"] .ui-table-container {
+  inline-size: 240px;
+}
