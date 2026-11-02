@@ -21,11 +21,20 @@ export const checkboxQualityRules = [
   {
     id: 'checkbox.form',
     requirement:
-      'A checked checkbox submits its name and value with the form, controlled updates are reflected, and form reset restores defaultChecked.',
+      'A checked checkbox submits its name and value with the form, controlled updates are reflected, and uncanceled form reset restores defaultChecked while canceled reset preserves the current state.',
     verification: 'automated',
     severity: 'error',
     remediation:
       'Use the Base UI hidden input via name/value; do not add another hidden input.',
+  },
+  {
+    id: 'checkbox.reset-browser',
+    requirement:
+      'Real browser reset buttons restore both defaultChecked states only when reset is not canceled; canceled resets preserve the selected state and submitted value.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Respect defaultPrevented after all reset listeners run and verify checkbox.reset-browser.',
   },
   {
     id: 'checkbox.visual-state',

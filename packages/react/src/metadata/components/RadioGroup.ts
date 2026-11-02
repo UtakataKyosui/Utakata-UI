@@ -22,8 +22,8 @@ export const radioGroupQualityRules = [
   {
     id: 'radio-group.keyboard',
     requirement:
-      'Arrow keys move focus and selection between enabled items and skip disabled items (Base UI composite behavior).',
-    verification: 'automated',
+      'Tab enters and leaves the group once, and arrow keys move focus and selection between enabled items and skip disabled items in a real browser (Base UI composite behavior).',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI RadioGroup keyboard handling; do not add custom key handlers or tabindex values.',
