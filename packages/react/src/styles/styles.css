@@ -1133,6 +1133,7 @@
     }
 
     .ui-table-container:focus-visible,
+    .ui-breadcrumb__link:focus-visible,
     .ui-radio-group__item:focus-visible,
     .ui-select__trigger:focus-visible,
     .ui-slider__thumb:has(:focus-visible) {

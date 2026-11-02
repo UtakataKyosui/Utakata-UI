@@ -20,13 +20,22 @@ export const breadcrumbQualityRules = [
       'Use Breadcrumb.Separator and Breadcrumb.Ellipsis instead of text separators inside links; do not add tabindex or expand handlers.',
   },
   {
-    id: 'breadcrumb.wrapping-theme',
+    id: 'breadcrumb.reflow-focus',
     requirement:
-      'Long hierarchies wrap without clipping at 320 CSS px and 200% zoom, and links, the current page and focus stay distinguishable without color in every theme and forced colors.',
+      'In a real browser a long hierarchy wraps without clipping or overflow at 320 CSS px and 200% text size, link and current-page text keep at least 4.5:1 contrast, links are underlined while the current page is not so they differ without color, real Tab visits each link once in order and skips separators, the focused link shows a visible indicator, and in forced colors that indicator is a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep link underlines, overflow-wrap on items and the forced-colors outline; do not add tabindex to separators or the ellipsis.',
+  },
+  {
+    id: 'breadcrumb.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the hierarchy stays readable and the current page stays distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check narrow viewports, zoom, dark theme and forced colors in a real browser.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
   {
     id: 'breadcrumb.screen-reader',

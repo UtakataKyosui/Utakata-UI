@@ -88,3 +88,13 @@ section[aria-label="Table states"] {
 section[aria-label="Table states"] .ui-table-container {
   inline-size: 240px;
 }
+
+section[aria-label="Breadcrumb states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Breadcrumb states"] .ui-breadcrumb {
+  inline-size: 240px;
+}
