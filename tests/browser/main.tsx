@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Select,
   Separator,
+  Slider,
   Switch,
   Textarea,
 } from '../../packages/react/src/index.js';
@@ -125,6 +126,51 @@ function SelectStates() {
       </form>
       <Button>After select</Button>
       <output aria-label="Select changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function SliderStates() {
+  const [events, setEvents] = useState<string[]>([]);
+  return (
+    <section aria-label="Slider input">
+      <Button>Before slider</Button>
+      <Slider.Root
+        min={0}
+        max={1}
+        step={0.1}
+        largeStep={0.5}
+        defaultValue={0.5}
+      >
+        <Slider.Label>Gain</Slider.Label>
+        <Slider.Value />
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Indicator />
+            <Slider.Thumb getAriaValueText={(value) => `${value} gain`} />
+          </Slider.Track>
+        </Slider.Control>
+      </Slider.Root>
+      <Slider.Root
+        defaultValue={50}
+        step={5}
+        onValueChange={(value) =>
+          setEvents((previous) => [...previous, `change:${value}`])
+        }
+        onValueCommitted={(value) =>
+          setEvents((previous) => [...previous, `commit:${value}`])
+        }
+      >
+        <Slider.Label>Volume</Slider.Label>
+        <Slider.Value />
+        <Slider.Control>
+          <Slider.Track>
+            <Slider.Indicator />
+            <Slider.Thumb getAriaValueText={(value) => `${value} percent`} />
+          </Slider.Track>
+        </Slider.Control>
+      </Slider.Root>
+      <output aria-label="Slider events">{JSON.stringify(events)}</output>
     </section>
   );
 }
@@ -300,6 +346,7 @@ function Fixture() {
       <SwitchStates />
       <RadioGroupStates />
       <SelectStates />
+      <SliderStates />
     </main>
   );
 }

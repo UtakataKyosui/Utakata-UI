@@ -42,6 +42,8 @@ export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 
+export { Slider } from './components/Slider.js';
+
 export type { SwitchRootProps, SwitchThumbProps } from './components/Switch.js';
 export { Switch } from './components/Switch.js';
 

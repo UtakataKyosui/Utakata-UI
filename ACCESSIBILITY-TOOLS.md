@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`slider.keyboard` と `slider.pointer` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で、実際の Tab による単一進入、矢印・Page Up/Down・Home/End と小数ステップの範囲内動作、トラック押下による位置移動、サムのドラッグによる連続変更と `onValueCommitted` の解放時1回の通知を検証します。キーとポインター押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話は `slider.screen-reader`、視覚状態・実際のズーム・強制配色は `slider.visual-state` の手動確認に残ります。
+
 `select.keyboard-selection`、`select.escape-focus-return`、`select.popup-position-dismiss` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で実際のキーとマウスを使い、ArrowDown での展開、矢印・先頭文字による移動、disabled 項目が選べないこと、Enter での選択とフォーカス復帰、Escape で値を変えず閉じてフォーカスがトリガーへ戻ること、ポップアップがビューポート内かつトリガー近傍に配置されること、外側押下で値を変えず閉じることを検証します。Escape と外側押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話と長いリストのスクロールは `select.screen-reader`、視覚状態・実際のズーム・強制配色は `select.visual-state` の手動確認に残ります。
 
 `radio-group.keyboard` は jsdom の合成キーから独立させた必須 browser ルールです。Chromium light/dark で実際の Tab・矢印キーを使い、Tab での単一進入、矢印キーによる移動と選択、disabled 項目の読み飛ばし、グループ離脱後の Shift+Tab による選択項目への復帰、disabled 項目のクリックで値が変わらないことを検証します。矢印キーを握りつぶす不正なハンドラーを挿入した対照例では検証が失敗することを確認します。`radio-group-keyboard-evidence` と `radio-group-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話、視覚状態、実際のズーム・強制配色は `radio-group.real-keyboard-screen-reader` と `radio-group.visual-state` の手動確認に残ります。

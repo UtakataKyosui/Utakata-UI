@@ -5,6 +5,7 @@ import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
+import { sliderQualityRules } from './components/Slider.js';
 import { switchQualityRules } from './components/Switch.js';
 import { textareaQualityRules } from './components/Textarea.js';
 
@@ -79,6 +80,7 @@ export const qualityRules = {
   Switch: switchQualityRules,
   RadioGroup: radioGroupQualityRules,
   Select: selectQualityRules,
+  Slider: sliderQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

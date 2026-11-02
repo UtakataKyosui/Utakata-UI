@@ -5,6 +5,7 @@ import { nativeSelectManifest } from './components/NativeSelect.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
+import { sliderManifest } from './components/Slider.js';
 import { switchManifest } from './components/Switch.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
@@ -115,6 +116,7 @@ export const componentManifest = {
     Switch: switchManifest,
     RadioGroup: radioGroupManifest,
     Select: selectManifest,
+    Slider: sliderManifest,
   },
 } as const;
 
