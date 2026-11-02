@@ -30,6 +30,7 @@ describe('manifest tools', () => {
       'Alert',
       'Avatar',
       'Progress',
+      'Table',
       'Input',
       'Textarea',
       'NativeSelect',

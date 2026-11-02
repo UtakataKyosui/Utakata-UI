@@ -85,6 +85,12 @@ export type {
 export { Spinner } from './components/Spinner.js';
 export type { SwitchRootProps, SwitchThumbProps } from './components/Switch.js';
 export { Switch } from './components/Switch.js';
+export type {
+  TableCellProps,
+  TableContainerProps,
+  TableHeadProps,
+} from './components/Table.js';
+export { Table } from './components/Table.js';
 
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';

@@ -14,6 +14,7 @@ import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
 import { switchManifest } from './components/Switch.js';
+import { tableManifest } from './components/Table.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
 
@@ -123,6 +124,7 @@ export const componentManifest = {
     Alert: alertManifest,
     Avatar: avatarManifest,
     Progress: progressManifest,
+    Table: tableManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
