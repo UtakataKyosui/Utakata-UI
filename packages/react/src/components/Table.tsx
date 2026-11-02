@@ -11,8 +11,11 @@ type TablePartProps<Tag extends keyof JSX.IntrinsicElements> = Omit<
 export type TableContainerProps = Omit<
   TablePartProps<'section'>,
   'role' | 'tabIndex' | 'aria-label' | 'aria-labelledby'
-> &
-  (
+> & {
+  // Optional `never` members also reject these names when props arrive through a spread.
+  role?: never;
+  tabIndex?: never;
+} & (
     | { 'aria-label': string; 'aria-labelledby'?: never }
     | { 'aria-label'?: never; 'aria-labelledby': string }
   );

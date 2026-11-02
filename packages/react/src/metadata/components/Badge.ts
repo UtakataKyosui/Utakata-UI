@@ -20,13 +20,22 @@ export const badgeQualityRules = [
       'Wrap the Badge in a Button or link when an action is needed instead of making the Badge itself focusable.',
   },
   {
-    id: 'badge.wrapping-theme',
+    id: 'badge.visual-theme',
     requirement:
-      'Long text and icon badges wrap without clipping, and every variant is legible in every supported theme, 200% text zoom and forced colors.',
+      'In a real browser, every variant keeps text contrast of at least 4.5:1 against its effective background for short, long and icon content in every supported theme and in forced colors, and long text wraps inside a 320 CSS px viewport and at 200% text size without clipping or horizontal overflow.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep wrapping enabled (overflow-wrap) and avoid fixed block sizes or overflow clipping; check --ui-badge-background and --ui-badge-color overrides for contrast.',
+  },
+  {
+    id: 'badge.zoom-assistive',
+    requirement:
+      'At real 200% browser zoom the badge text stays legible, and assistive technology reads the badge text in document order.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast, narrow viewports, text zoom, dark theme and forced colors in a real browser.',
+      'Check browser zoom and screen reader output in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

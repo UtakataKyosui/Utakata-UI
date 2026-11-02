@@ -14,7 +14,7 @@ export const switchQualityRules = [
     id: 'switch.keyboard-pointer',
     requirement:
       'Space and click each toggle the switch once; disabled and read-only switches do not change.',
-    verification: 'automated',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI Switch keyboard, disabled and readOnly behavior.',
