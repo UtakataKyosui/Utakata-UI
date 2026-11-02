@@ -27,6 +27,7 @@ describe('manifest tools', () => {
       'Skeleton',
       'Spinner',
       'Card',
+      'Alert',
       'Input',
       'Textarea',
       'NativeSelect',
