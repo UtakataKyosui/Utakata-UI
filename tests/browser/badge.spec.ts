@@ -19,8 +19,18 @@ type BadgeMeasurement = {
   clientWidth: number;
 };
 
+async function settleLayout(page: Page) {
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      ),
+  );
+}
+
 // Colors are resolved through a canvas so color-mix() and system colors become RGBA.
-function measureBadges(page: Page) {
+async function measureBadges(page: Page) {
+  await settleLayout(page);
   return page.evaluate(() => {
     const canvas = document.createElement('canvas');
     canvas.width = 1;
