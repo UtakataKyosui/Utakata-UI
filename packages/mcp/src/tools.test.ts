@@ -2,6 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Toggle keyboard and visuals and keeps zoom manual', () => {
+    const rules = getComponent('Toggle')?.qualityRules ?? [];
+    for (const id of ['toggle.keyboard', 'toggle.visual-theme'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'toggle.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Tabs keyboard and layout and keeps zoom and speech manual', () => {
     const rules = getComponent('Tabs')?.qualityRules ?? [];
     for (const id of ['tabs.keyboard', 'tabs.indicator-layout'])
