@@ -5,7 +5,7 @@ type ComponentName = keyof typeof componentManifest.components;
 interface QualityRuleEntry {
   readonly id: string;
   readonly requirement: string;
-  readonly verification: 'automated' | 'manual';
+  readonly verification: 'automated' | 'browser' | 'manual';
   readonly severity: 'error' | 'warning';
   readonly remediation: string;
 }
