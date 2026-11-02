@@ -24,6 +24,7 @@ import { switchQualityRules } from './components/Switch.js';
 import { tableQualityRules } from './components/Table.js';
 import { tabsQualityRules } from './components/Tabs.js';
 import { textareaQualityRules } from './components/Textarea.js';
+import { toastQualityRules } from './components/Toast.js';
 import { toggleQualityRules } from './components/Toggle.js';
 import { tooltipQualityRules } from './components/Tooltip.js';
 
@@ -117,6 +118,7 @@ export const qualityRules = {
   Popover: popoverQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
+  Toast: toastQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
