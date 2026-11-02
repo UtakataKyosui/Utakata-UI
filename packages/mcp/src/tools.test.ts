@@ -2,6 +2,26 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Collapsible keyboard and motion and keeps zoom manual', () => {
+    const rules = getComponent('Collapsible')?.qualityRules ?? [];
+    for (const id of [
+      'collapsible.keyboard-focus',
+      'collapsible.motion-forced',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'collapsible.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Pagination keyboard and reflow and keeps zoom manual', () => {
     const rules = getComponent('Pagination')?.qualityRules ?? [];
     for (const id of [
@@ -309,6 +329,7 @@ describe('manifest tools', () => {
       'RadioGroup',
       'Select',
       'Slider',
+      'Collapsible',
     ]);
   });
 

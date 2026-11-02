@@ -108,3 +108,9 @@ section[aria-label="Pagination states"] {
 section[aria-label="Pagination states"] .ui-pagination {
   inline-size: 240px;
 }
+
+section[aria-label="Collapsible states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
