@@ -1,4 +1,4 @@
-import { act, cleanup, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, screen } from '@testing-library/react';
 import { expect, vi } from 'vitest';
 import {
   evaluateQuality,
@@ -76,4 +76,10 @@ export function expectDisabledAndReadOnlyTextboxes() {
   readOnly.focus();
   expect(readOnly).toHaveFocus();
   expect(readOnly).toHaveValue('kept');
+}
+
+/** Presses Space as DOM events; real keyboard input is covered in browser tests. */
+export function pressSpace(element: HTMLElement) {
+  fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+  fireEvent.keyUp(element, { key: ' ', code: 'Space' });
 }

@@ -19,6 +19,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 - Use `Input` for single-line text inside `Field.Root` in place of `Field.Control` (never both); one input receives `Field.Label`, `Field.Description` and `Field.Error`. `size` is visual (`sm | md | lg`); set width with CSS. Provide `autoComplete` and visible error text; do not coerce values in the component.
 - Use `Textarea` for multi-line text in place of `Field.Control`. Default `rows` is 3 and resizing is vertical; state `maxLength` limits in visible text such as `Field.Description`.
 - Use `NativeSelect` for short single-value lists that should use the platform picker; pass `option`/`optgroup` children. `multiple` and the native listbox `size` are not supported; className/ref target the select.
+- Compose `Checkbox.Root` with `Checkbox.Indicator` and name it with `Field.Label` in `Field.Root` or a wrapping `<label>`. An empty Indicator draws a check or a dash (indeterminate); do not pass a single ✓ glyph when using indeterminate. Base UI submits `name`/`value`; do not add hidden inputs.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 

@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`checkbox.reset-browser` は Chromium light/dark で defaultChecked のオン・オフと reset のキャンセル有無の4通りを、実際のチェック・リセットボタン操作で検証します。reset 後の遅延処理を待ち、aria-checked と FormData を照合し、`checkbox-reset-evidence` を既存のコミット付き CI 成果物に添付します。キャンセルの回帰テストは修正前に両初期値で失敗することを確認済みです。これは Checkbox の全キーボード・視覚状態・支援技術出力の証拠ではありません。
+
 `native-select.browser-behavior` は Chromium light/dark の全 sm/md/lg でラベル・説明・エラー関連、実キーのネイティブ type-ahead 選択、disabled の Tab 除外、フォーム値とリセット、24×24 CSS px、文字4.5:1・境界/フォーカス/矢印3:1の算出色を検証します。矢印の aria-hidden と pointer-events も確認し、`native-select-evidence` / `native-select-axe` を既存CI成果物へ添付します。ラベル関連と disabled を意図的に除去した DOM で検出も確認します。OS のポップアップ内の操作・外観、スクリーンリーダー、実際のズーム・強制配色は `native-select.platform-picker` に未検証として残します。type-ahead の合格は OS ピッカー操作の合格ではありません。
 
 `textarea.keyboard-input` は Chromium light/dark の全 sm/md/lg で実キーボードによる Enter の改行と maxLength の上限、Tab による disabled の除外、readOnly の編集禁止、フォーム値・説明・エラー関連を検証します。maxLength を意図的に除去した DOM でも制限超過を検出します。`textarea-evidence` と `textarea-axe` に環境・状態・実測値と結果を添付し、既存 CI 成果物でコミットに結び付けます。jsdom の `textarea.value-form` は属性の転送と値・送信の単体検証で、ブラウザーによる文字数制限の証拠には使いません。手動リサイズ、実際の文字ズーム、支援技術の発話等は `textarea.visual-resize` の未検証事項として残ります。
