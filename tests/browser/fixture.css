@@ -35,7 +35,7 @@ section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  inline-size: min(12rem, 100%);
+  inline-size: 192px;
 }
 
 section[aria-label="Badge states"] {
