@@ -30,6 +30,7 @@ describe('manifest tools', () => {
       'Switch',
       'RadioGroup',
       'Select',
+      'Slider',
     ]);
   });
 

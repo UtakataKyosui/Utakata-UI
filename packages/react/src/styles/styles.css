@@ -573,6 +573,83 @@
     padding: 0.375rem 0.5rem 0.125rem;
   }
 
+  .ui-slider {
+    align-items: center;
+    color: var(--ui-color-text);
+    display: grid;
+    gap: 0.25rem 0.75rem;
+    grid-template-columns: 1fr auto;
+  }
+
+  .ui-slider__label {
+    font-weight: 600;
+  }
+
+  .ui-slider__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ui-slider__control {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    grid-column: 1 / -1;
+    padding-block: 0.75rem;
+    touch-action: none;
+  }
+
+  .ui-slider__control[data-orientation="vertical"] {
+    block-size: 10rem;
+    inline-size: max-content;
+    justify-content: center;
+    padding-block: 0;
+    padding-inline: 0.75rem;
+  }
+
+  .ui-slider__track {
+    background: color-mix(in srgb, var(--ui-color-border) 45%, transparent);
+    block-size: 0.25rem;
+    border-radius: 999px;
+    inline-size: 100%;
+    position: relative;
+  }
+
+  .ui-slider__track[data-orientation="vertical"] {
+    block-size: 100%;
+    inline-size: 0.25rem;
+  }
+
+  .ui-slider__indicator {
+    background: var(--ui-color-primary);
+    border-radius: inherit;
+  }
+
+  .ui-slider__thumb {
+    background: var(--ui-color-surface);
+    border: 2px solid var(--ui-color-primary);
+    border-radius: 50%;
+    block-size: 1.25rem;
+    inline-size: 1.25rem;
+  }
+
+  .ui-slider__thumb::before {
+    content: "";
+    inset: -0.25rem;
+    position: absolute;
+  }
+
+  .ui-slider__thumb:has(:focus-visible) {
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-slider[data-disabled] {
+    opacity: 0.55;
+  }
+
+  .ui-slider__control[data-disabled] {
+    cursor: not-allowed;
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;
@@ -622,7 +699,8 @@
       border-color: Highlight;
     }
 
-    .ui-radio-group__indicator[data-checked]::after {
+    .ui-radio-group__indicator[data-checked]::after,
+    .ui-slider__indicator {
       background: Highlight;
       forced-color-adjust: none;
     }
@@ -631,8 +709,19 @@
       outline-color: Highlight;
     }
 
+    .ui-slider__track {
+      border: 1px solid CanvasText;
+    }
+
+    .ui-slider__thumb {
+      background: ButtonFace;
+      border-color: ButtonText;
+      forced-color-adjust: none;
+    }
+
     .ui-radio-group__item:focus-visible,
-    .ui-select__trigger:focus-visible {
+    .ui-select__trigger:focus-visible,
+    .ui-slider__thumb:has(:focus-visible) {
       outline: 2px solid Highlight;
     }
   }
