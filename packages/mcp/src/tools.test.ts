@@ -2,6 +2,194 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Alert visuals and keeps announcements manual', () => {
+    expect(getComponent('Alert')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'alert.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'alert.announcement',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Card layout and keeps zoom manual', () => {
+    expect(getComponent('Card')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'card.layout-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'card.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Spinner motion and keeps OS checks manual', () => {
+    expect(getComponent('Spinner')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'spinner.motion-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'spinner.os-reduced-motion',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Skeleton motion and keeps OS checks manual', () => {
+    expect(getComponent('Skeleton')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'skeleton.motion-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'skeleton.os-reduced-motion',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Badge visuals and keeps zoom and speech manual', () => {
+    const rules = getComponent('Badge')?.qualityRules ?? [];
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'badge.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'badge.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Slider keyboard and pointer and keeps speech manual', () => {
+    const rules = getComponent('Slider')?.qualityRules ?? [];
+    for (const id of ['slider.keyboard', 'slider.pointer'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'slider.screen-reader',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Select interaction and keeps speech manual', () => {
+    const rules = getComponent('Select')?.qualityRules ?? [];
+    for (const id of [
+      'select.keyboard-selection',
+      'select.escape-focus-return',
+      'select.popup-position-dismiss',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'select.screen-reader',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for RadioGroup keyboard interaction', () => {
+    expect(getComponent('RadioGroup')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'radio-group.keyboard',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Switch keyboard interaction', () => {
+    expect(getComponent('Switch')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'switch.keyboard-pointer',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
+  it('exposes the required Checkbox reset browser rule', () => {
+    expect(getComponent('Checkbox')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'checkbox.reset-browser',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
+  it('exposes NativeSelect browser coverage separately from platform evidence', () => {
+    expect(getComponent('NativeSelect')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'native-select.browser-behavior',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'native-select.platform-picker',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('exposes the required Textarea keyboard browser rule', () => {
+    expect(getComponent('Textarea')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'textarea.keyboard-input',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
+  it('distinguishes required Input browser checks from residual manual evidence', () => {
+    expect(getComponent('Input')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'input.zoom-assistive-output',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('exposes component and shared review rules to agents', () => {
     expect(getComponent('Dialog')?.qualityRules.map(({ id }) => id)).toEqual(
       expect.arrayContaining([
