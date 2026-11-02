@@ -35,6 +35,7 @@ import { skeletonChecks } from './quality/Skeleton.checks.js';
 import { sliderChecks } from './quality/Slider.checks.js';
 import { spinnerChecks } from './quality/Spinner.checks.js';
 import { switchChecks } from './quality/Switch.checks.js';
+import { tableChecks } from './quality/Table.checks.js';
 import { textareaChecks } from './quality/Textarea.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
@@ -132,6 +133,7 @@ describe('accessibility regression checks', () => {
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,
+      ...tableChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

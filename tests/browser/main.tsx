@@ -21,6 +21,7 @@ import {
   Slider,
   Spinner,
   Switch,
+  Table,
   Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
@@ -333,6 +334,49 @@ function ProgressStates() {
   );
 }
 
+const tableColumns = [
+  'Name',
+  'Email address',
+  'Department',
+  'Location',
+  'Status',
+];
+
+function TableStates() {
+  return (
+    <section aria-label="Table states">
+      <Button>Before table</Button>
+      <Table.Container aria-label="Team members">
+        <Table.Root>
+          <Table.Caption>Team members</Table.Caption>
+          <Table.Header>
+            <Table.Row>
+              {tableColumns.map((column) => (
+                <Table.Head key={column} scope="col">
+                  {column}
+                </Table.Head>
+              ))}
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {['Aya', 'Ken'].map((name) => (
+              <Table.Row key={name}>
+                <Table.Head scope="row">{name}</Table.Head>
+                {tableColumns.slice(1).map((column) => (
+                  <Table.Cell key={column}>
+                    {column} of {name} in the regional office
+                  </Table.Cell>
+                ))}
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
+      </Table.Container>
+      <Button>After table</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -512,6 +556,7 @@ function Fixture() {
       <AlertStates />
       <AvatarStates />
       <ProgressStates />
+      <TableStates />
     </main>
   );
 }

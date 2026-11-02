@@ -14,6 +14,7 @@ import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
 import { switchQualityRules } from './components/Switch.js';
+import { tableQualityRules } from './components/Table.js';
 import { textareaQualityRules } from './components/Textarea.js';
 
 export interface QualityRule {
@@ -87,6 +88,7 @@ export const qualityRules = {
   Alert: alertQualityRules,
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
+  Table: tableQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

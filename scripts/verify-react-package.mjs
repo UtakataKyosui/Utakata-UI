@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -186,6 +186,21 @@ function ProgressWrapper(props: ProgressRootProps) { return <Progress.Root {...p
 export const wrappedProgress = <ProgressWrapper value={5} label="Upload" />;
 // @ts-expect-error Wrappers must preserve the required name.
 export const wrappedProgressInvalid = <ProgressWrapper value={5} />;
+export const labelledTable: TableContainerProps = { 'aria-label': 'Team members' };
+export const referencedTable: TableContainerProps = { 'aria-labelledby': 'team-caption' };
+export const table = <Table.Container {...labelledTable}><Table.Root><Table.Caption id="team-caption">Team</Table.Caption><Table.Header><Table.Row><Table.Head scope="col">Name</Table.Head></Table.Row></Table.Header></Table.Root></Table.Container>;
+// @ts-expect-error Table.Container requires a name in shipped declarations.
+export const unnamedTable: TableContainerProps = {};
+// @ts-expect-error Container focusability is fixed for keyboard scrolling.
+export const untabbableTable: TableContainerProps = { 'aria-label': 'x', tabIndex: -1 };
+// @ts-expect-error The region role is fixed.
+export const tableRoleOverride: TableContainerProps = { 'aria-label': 'x', role: 'none' };
+const tableRoleProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Spreads cannot override the region role.
+export const tableRoleSpread = <Table.Container {...tableRoleProps} />;
+const tableFocusProps = { 'aria-label': 'x', tabIndex: -1 };
+// @ts-expect-error Spreads cannot remove the container from the tab order.
+export const tableFocusSpread = <Table.Container {...tableFocusProps} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
