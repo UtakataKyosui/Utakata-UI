@@ -3,9 +3,11 @@ import {
   Button,
   Dialog,
   Field,
+  Input,
   Kbd,
   KbdGroup,
   Separator,
+  Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -61,6 +63,68 @@ function Fixture() {
           <Separator decorative={false} orientation="vertical" />
           <span>Settings</span>
         </div>
+      </section>
+      <section aria-label="Input states">
+        {componentManifest.components.Input.sizes.map((size) => (
+          <div key={size} className="fixture-inputs">
+            <Field.Root name={`input-${size}`}>
+              <Field.Label>Input {size}</Field.Label>
+              <Input size={size} placeholder="Enter a value" />
+              <Field.Description>
+                Required contact information.
+              </Field.Description>
+            </Field.Root>
+            <Input
+              size={size}
+              aria-label={`Read only ${size}`}
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Input
+              size={size}
+              aria-label={`Disabled ${size}`}
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid {size}</Field.Label>
+              <Input size={size} defaultValue="Invalid value" />
+              <Field.Error match>Enter a valid contact value.</Field.Error>
+            </Field.Root>
+          </div>
+        ))}
+      </section>
+      <section aria-label="Textarea states">
+        {componentManifest.components.Textarea.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="notes">
+              <Field.Label>Notes {size}</Field.Label>
+              <Textarea size={size} maxLength={8} />
+              <Field.Description>
+                Up to 8 characters, including line breaks.
+              </Field.Description>
+            </Field.Root>
+            <Textarea
+              size={size}
+              aria-label={`Read only notes ${size}`}
+              name="readonly"
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Textarea
+              size={size}
+              aria-label={`Disabled notes ${size}`}
+              name="disabled"
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid notes {size}</Field.Label>
+              <Textarea size={size} defaultValue="Invalid note" />
+              <Field.Error match>Enter a valid note.</Field.Error>
+            </Field.Root>
+          </form>
+        ))}
       </section>
     </main>
   );

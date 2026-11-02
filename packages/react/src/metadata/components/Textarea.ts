@@ -13,7 +13,7 @@ export const textareaQualityRules = [
   {
     id: 'textarea.value-form',
     requirement:
-      'Multi-line values including line breaks reach onChange, respect maxLength and are submitted with the form.',
+      'Multi-line values including line breaks reach onChange and are submitted with the form; maxLength is forwarded to the native element.',
     verification: 'automated',
     severity: 'error',
     remediation:
@@ -26,6 +26,15 @@ export const textareaQualityRules = [
     verification: 'automated',
     severity: 'error',
     remediation: 'Use the native disabled and readOnly attributes.',
+  },
+  {
+    id: 'textarea.keyboard-input',
+    requirement:
+      'In a real browser, Enter inserts a newline, maxLength prevents excess typing, disabled textareas are skipped by Tab and read-only values cannot be edited.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Run the required textarea.keyboard-input browser check using real keyboard input; preserve native textarea behavior.',
   },
   {
     id: 'textarea.visual-resize',

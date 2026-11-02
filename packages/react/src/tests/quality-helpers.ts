@@ -35,7 +35,11 @@ export async function expectAutomatedQuality(
 ) {
   const warn = vi.spyOn(console, 'warn');
   try {
-    const report = await evaluateQuality(rules, isolateChecks(checks));
+    // Browser rules are evaluated separately by the required Playwright gate.
+    const report = await evaluateQuality(
+      rules.filter((rule) => rule.verification !== 'browser'),
+      isolateChecks(checks),
+    );
     expect(report.automatedPassed, formatQualityReport(report.results)).toBe(
       true,
     );
