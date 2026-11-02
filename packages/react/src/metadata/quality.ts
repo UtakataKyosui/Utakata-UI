@@ -8,6 +8,7 @@ import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
+import { spinnerQualityRules } from './components/Spinner.js';
 import { switchQualityRules } from './components/Switch.js';
 import { textareaQualityRules } from './components/Textarea.js';
 
@@ -77,6 +78,7 @@ export const qualityRules = {
   Separator: separatorQualityRules,
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
+  Spinner: spinnerQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
