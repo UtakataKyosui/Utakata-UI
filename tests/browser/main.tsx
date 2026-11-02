@@ -7,6 +7,7 @@ import {
   Kbd,
   KbdGroup,
   Separator,
+  Textarea,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
@@ -91,6 +92,38 @@ function Fixture() {
               <Field.Error match>Enter a valid contact value.</Field.Error>
             </Field.Root>
           </div>
+        ))}
+      </section>
+      <section aria-label="Textarea states">
+        {componentManifest.components.Textarea.sizes.map((size) => (
+          <form key={size} className="fixture-inputs">
+            <Field.Root name="notes">
+              <Field.Label>Notes {size}</Field.Label>
+              <Textarea size={size} maxLength={8} />
+              <Field.Description>
+                Up to 8 characters, including line breaks.
+              </Field.Description>
+            </Field.Root>
+            <Textarea
+              size={size}
+              aria-label={`Read only notes ${size}`}
+              name="readonly"
+              readOnly
+              defaultValue="Kept value"
+            />
+            <Textarea
+              size={size}
+              aria-label={`Disabled notes ${size}`}
+              name="disabled"
+              disabled
+              defaultValue="Unavailable"
+            />
+            <Field.Root invalid>
+              <Field.Label>Invalid notes {size}</Field.Label>
+              <Textarea size={size} defaultValue="Invalid note" />
+              <Field.Error match>Enter a valid note.</Field.Error>
+            </Field.Root>
+          </form>
         ))}
       </section>
     </main>
