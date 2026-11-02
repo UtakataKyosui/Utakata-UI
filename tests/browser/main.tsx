@@ -10,6 +10,7 @@ import {
   KbdGroup,
   NativeSelect,
   RadioGroup,
+  Select,
   Separator,
   Switch,
   Textarea,
@@ -73,6 +74,57 @@ function RadioGroupStates() {
       </RadioGroup.Root>
       <Button>After radios</Button>
       <output aria-label="RadioGroup changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+const selectThemes = [
+  { value: 'system', label: 'System' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'light', label: 'Light' },
+];
+
+function SelectStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="Select input">
+      <Button>Before select</Button>
+      <form aria-label="Select form">
+        <Select.Root
+          name="theme"
+          defaultValue="system"
+          items={selectThemes}
+          onValueChange={(value) =>
+            setChanges((previous) => [...previous, String(value)])
+          }
+        >
+          <Select.Label>Theme</Select.Label>
+          <Select.Trigger>
+            <Select.Value placeholder="Choose a theme" />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner>
+              <Select.Popup>
+                <Select.List>
+                  {selectThemes.map((theme) => (
+                    <Select.Item
+                      key={theme.value}
+                      value={theme.value}
+                      disabled={theme.value === 'dark'}
+                    >
+                      <Select.ItemText>{theme.label}</Select.ItemText>
+                      <Select.ItemIndicator>✓</Select.ItemIndicator>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </form>
+      <Button>After select</Button>
+      <output aria-label="Select changes">{JSON.stringify(changes)}</output>
     </section>
   );
 }
@@ -247,6 +299,7 @@ function Fixture() {
       </section>
       <SwitchStates />
       <RadioGroupStates />
+      <SelectStates />
     </main>
   );
 }

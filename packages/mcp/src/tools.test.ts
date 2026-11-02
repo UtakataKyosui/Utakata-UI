@@ -2,6 +2,27 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Select interaction and keeps speech manual', () => {
+    const rules = getComponent('Select')?.qualityRules ?? [];
+    for (const id of [
+      'select.keyboard-selection',
+      'select.escape-focus-return',
+      'select.popup-position-dismiss',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'select.screen-reader',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
     expect(getComponent('RadioGroup')?.qualityRules).toEqual(
       expect.arrayContaining([
