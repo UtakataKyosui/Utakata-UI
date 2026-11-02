@@ -8,6 +8,11 @@ export type SkeletonProps = Omit<
 > & {
   className?: string;
   shape?: SkeletonShape;
+  // Optional `never` members also reject these names when props arrive through a spread.
+  children?: never;
+  role?: never;
+  'aria-hidden'?: never;
+  tabIndex?: never;
 };
 
 /**

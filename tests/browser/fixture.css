@@ -22,3 +22,69 @@ section {
   display: flex;
   gap: 0.75rem;
 }
+
+.fixture-inputs {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.fixture-badges {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  inline-size: 192px;
+}
+
+section[aria-label="Badge states"] {
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fixture-skeletons {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+section[aria-label="Card states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Card states"] .ui-card {
+  inline-size: 240px;
+}
+
+section[aria-label="Alert states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Alert states"] .ui-alert {
+  inline-size: 240px;
+}
+
+section[aria-label="Progress states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Progress states"] .ui-progress {
+  inline-size: 240px;
+}
+
+section[aria-label="Table states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Table states"] .ui-table-container {
+  inline-size: 240px;
+}
