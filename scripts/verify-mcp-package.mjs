@@ -76,7 +76,8 @@ const expected = JSON.parse(readFileSync('expected.json', 'utf8'));
 const client = new Client({ name: 'utakata-package-test', version: '1.0.0' });
 const transport = new StdioClientTransport({
   command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
-  args: ['exec', '--offline', '--yes', '--', ${JSON.stringify(`${metadata.name}@${metadata.version}`)}],
+  // npm's update notice is unrelated to the MCP server's stderr diagnostics.
+  args: ['exec', '--offline', '--yes', '--update-notifier=false', '--', ${JSON.stringify(`${metadata.name}@${metadata.version}`)}],
   stderr: 'pipe',
 });
 let stderr = '';
