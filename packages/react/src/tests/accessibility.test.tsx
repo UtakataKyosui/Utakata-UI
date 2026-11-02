@@ -25,6 +25,7 @@ import { alertDialogChecks } from './quality/AlertDialog.checks.js';
 import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
 import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
+import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
@@ -166,6 +167,7 @@ describe('accessibility regression checks', () => {
       ...alertDialogChecks,
       ...toastChecks,
       ...toggleGroupChecks,
+      ...buttonGroupChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

@@ -51,6 +51,7 @@ describe('manifest tools', () => {
       'AlertDialog',
       'Toast',
       'ToggleGroup',
+      'ButtonGroup',
     ]);
   });
 
