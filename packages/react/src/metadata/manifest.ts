@@ -1,6 +1,7 @@
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { separatorManifest } from './components/Separator.js';
+import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
 
 export const componentManifest = {
@@ -103,6 +104,7 @@ export const componentManifest = {
     Kbd: kbdManifest,
     Separator: separatorManifest,
     Input: inputManifest,
+    Textarea: textareaManifest,
   },
 } as const;
 

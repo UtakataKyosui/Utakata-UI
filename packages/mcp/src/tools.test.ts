@@ -24,6 +24,7 @@ describe('manifest tools', () => {
       'Kbd',
       'Separator',
       'Input',
+      'Textarea',
     ]);
   });
 

@@ -22,6 +22,7 @@ import { audit } from './audit.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
+import { textareaChecks } from './quality/Textarea.checks.js';
 import { isolateChecks } from './quality-helpers.js';
 
 describe('accessibility regression checks', () => {
@@ -112,6 +113,7 @@ describe('accessibility regression checks', () => {
       ...kbdChecks,
       ...separatorChecks,
       ...inputChecks,
+      ...textareaChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [
