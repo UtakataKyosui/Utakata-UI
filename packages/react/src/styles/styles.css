@@ -399,6 +399,48 @@
     color: var(--ui-color-text);
   }
 
+  .ui-avatar {
+    align-items: center;
+    background: var(
+      --ui-avatar-background,
+      color-mix(in srgb, var(--ui-color-primary) 15%, var(--ui-color-surface))
+    );
+    block-size: var(--ui-avatar-size, 2.5rem);
+    border-radius: var(--ui-avatar-radius, 50%);
+    color: var(--ui-color-text);
+    display: inline-flex;
+    flex-shrink: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    inline-size: var(--ui-avatar-size, 2.5rem);
+    justify-content: center;
+    overflow: hidden;
+    user-select: none;
+    vertical-align: middle;
+  }
+
+  .ui-avatar--sm {
+    block-size: var(--ui-avatar-size, 2rem);
+    font-size: 0.75rem;
+    inline-size: var(--ui-avatar-size, 2rem);
+  }
+
+  .ui-avatar--lg {
+    block-size: var(--ui-avatar-size, 3.5rem);
+    font-size: 1.125rem;
+    inline-size: var(--ui-avatar-size, 3.5rem);
+  }
+
+  .ui-avatar__image {
+    block-size: 100%;
+    inline-size: 100%;
+    object-fit: cover;
+  }
+
+  .ui-avatar__fallback {
+    line-height: 1;
+  }
+
   .ui-input,
   .ui-textarea,
   .ui-native-select__control {
@@ -856,7 +898,8 @@
       background: CanvasText;
     }
 
-    .ui-badge {
+    .ui-badge,
+    .ui-avatar {
       border: 1px solid CanvasText;
     }
 

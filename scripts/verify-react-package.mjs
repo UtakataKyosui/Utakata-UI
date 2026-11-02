@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -149,6 +149,24 @@ const alertRoleProps = { role: 'region' };
 export const alertRoleSpread = <Alert.Root {...alertRoleProps} />;
 // @ts-expect-error Alert className must be a string in shipped declarations.
 export const alertFunctionClass = <Alert.Root className={() => 'x'} />;
+type AvatarImageProps = ComponentProps<typeof Avatar.Image>;
+export const namedAvatarProps: AvatarImageProps = { src: '/aya.png', alt: 'Aya' };
+export const decorativeAvatarProps: AvatarImageProps = { src: '/aya.png', alt: '' };
+export const avatar = <Avatar.Root size="lg"><Avatar.Image {...namedAvatarProps} /><Avatar.Fallback>Aya</Avatar.Fallback></Avatar.Root>;
+export const adjacentNameAvatar = <Avatar.Root><Avatar.Image {...decorativeAvatarProps} /><Avatar.Fallback aria-hidden="true">A</Avatar.Fallback></Avatar.Root>;
+// @ts-expect-error Avatar images require an explicit alt decision in shipped declarations.
+export const avatarMissingAlt: AvatarImageProps = { src: '/aya.png' };
+// @ts-expect-error Avatar.Image requires alt in JSX in shipped declarations.
+export const avatarMissingAltJsx = <Avatar.Image src="/aya.png" />;
+const avatarSpreadProps = { src: '/aya.png' };
+// @ts-expect-error Spreads cannot bypass the required alt.
+export const avatarSpreadMissingAlt = <Avatar.Image {...avatarSpreadProps} />;
+function AvatarWrapper(props: AvatarImageProps) { return <Avatar.Image {...props} />; }
+export const wrappedAvatar = <AvatarWrapper src="/aya.png" alt="Aya" />;
+// @ts-expect-error Wrappers must preserve the required alt.
+export const wrappedAvatarInvalid = <AvatarWrapper src="/aya.png" />;
+// @ts-expect-error Avatar sizes are limited to the manifest in shipped declarations.
+export const avatarUnsupportedSize = <Avatar.Root size="xl" />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

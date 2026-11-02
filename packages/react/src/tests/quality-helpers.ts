@@ -83,3 +83,33 @@ export function pressSpace(element: HTMLElement) {
   fireEvent.keyDown(element, { key: ' ', code: 'Space' });
   fireEvent.keyUp(element, { key: ' ', code: 'Space' });
 }
+
+/** Image whose load succeeds unless the URL contains "broken". */
+class MockImage {
+  static created = 0;
+  complete = false;
+  naturalWidth = 0;
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  constructor() {
+    MockImage.created++;
+  }
+  set src(value: string) {
+    setTimeout(() =>
+      (value.includes('broken') ? this.onerror : this.onload)?.(),
+    );
+  }
+}
+
+/** Replaces window.Image, which Base UI Avatar reads to preload images. */
+export async function withMockImage(run: () => void | Promise<void>) {
+  const original = window.Image;
+  MockImage.created = 0;
+  window.Image = MockImage as unknown as typeof Image;
+  try {
+    await run();
+    expect(MockImage.created).toBeGreaterThan(0);
+  } finally {
+    window.Image = original;
+  }
+}

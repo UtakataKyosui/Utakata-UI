@@ -1,4 +1,5 @@
 import { alertManifest } from './components/Alert.js';
+import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
@@ -119,6 +120,7 @@ export const componentManifest = {
     Spinner: spinnerManifest,
     Card: cardManifest,
     Alert: alertManifest,
+    Avatar: avatarManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,

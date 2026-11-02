@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Avatar visuals and keeps zoom manual', () => {
+    expect(getComponent('Avatar')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'avatar.visual-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'avatar.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Alert visuals and keeps announcements manual', () => {
     expect(getComponent('Alert')?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -216,6 +231,7 @@ describe('manifest tools', () => {
       'Spinner',
       'Card',
       'Alert',
+      'Avatar',
       'Input',
       'Textarea',
       'NativeSelect',
