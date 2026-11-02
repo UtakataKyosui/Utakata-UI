@@ -39,5 +39,6 @@ section {
 }
 
 section[aria-label="Badge states"] {
+  flex-direction: column;
   min-width: 0;
 }
