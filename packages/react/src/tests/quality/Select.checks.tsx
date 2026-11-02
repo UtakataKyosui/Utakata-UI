@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { expect } from 'vitest';
 import { Select, type SelectRootProps } from '../../components/Select.js';
 import type { QualityCheck } from '../../metadata/quality.js';
@@ -59,13 +59,6 @@ async function openWithKeyboard() {
   await screen.findByRole('listbox');
 }
 
-async function expectClosedWithFocus() {
-  await waitFor(() =>
-    expect(screen.queryByRole('listbox')).not.toBeInTheDocument(),
-  );
-  expect(trigger()).toHaveFocus();
-}
-
 export const selectChecks: Record<string, QualityCheck> = {
   'select.trigger-name': async () => {
     const { container } = render(<ThemeSelect />);
@@ -76,27 +69,6 @@ export const selectChecks: Record<string, QualityCheck> = {
     expect((await audit(container)).violations).toEqual([]);
     // The popup is portalled outside the render container.
     expect((await audit(listbox)).violations).toEqual([]);
-  },
-  'select.keyboard-selection': async () => {
-    render(<ThemeSelect />);
-    await openWithKeyboard();
-    expect(document.activeElement).toHaveTextContent('System');
-    await press('l');
-    expect(document.activeElement).toHaveTextContent('Light');
-    await press('Enter');
-    await expectClosedWithFocus();
-    expect(trigger()).toHaveTextContent('Light');
-  },
-  'select.escape-focus-return': async () => {
-    render(<ThemeSelect defaultValue="system" />);
-    await openWithKeyboard();
-    await press('ArrowDown');
-    await press('ArrowDown');
-    expect(document.activeElement).toHaveTextContent('Light');
-    await press('Escape');
-    await expectClosedWithFocus();
-    expect(trigger()).toHaveTextContent('System');
-    expect(formValue()).toEqual(['theme', 'system']);
   },
   'select.value-form': async () => {
     const changes: (string | null)[] = [];

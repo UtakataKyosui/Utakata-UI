@@ -13,8 +13,8 @@ export const alertDialogQualityRules = [
   {
     id: 'alert-dialog.initial-focus-containment',
     requirement:
-      'Opening moves focus to the least destructive action (the cancel Close placed first or targeted by initialFocus), and focus stays inside the popup.',
-    verification: 'automated',
+      'In a real browser opening moves focus to the least destructive action (the cancel Close placed first or targeted by initialFocus), and Tab and Shift+Tab keep focus inside the popup while the page behind is inert.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Place AlertDialog.Close before the confirming action or pass initialFocus to AlertDialog.Popup; preserve Base UI focus management.',
@@ -22,8 +22,8 @@ export const alertDialogQualityRules = [
   {
     id: 'alert-dialog.dismissal-focus-return',
     requirement:
-      'Cancel and Escape close the dialog and restore focus to the trigger; pointer presses outside the popup do not close it.',
-    verification: 'automated',
+      'In a real browser Cancel and Escape close the dialog and restore focus to the trigger; pointer presses outside the popup do not close it.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Keep Base UI Alert Dialog dismissal; do not reuse the outside-press dismissal of a normal Dialog.',
@@ -38,13 +38,22 @@ export const alertDialogQualityRules = [
       'Run the action from a consumer Button and close with controlled open/onOpenChange; do not build a confirm Promise API.',
   },
   {
-    id: 'alert-dialog.keyboard-screen-reader',
+    id: 'alert-dialog.forced-focus',
     requirement:
-      'Verify initial focus, tab containment, Escape, focus return and the alert announcement in real browsers with screen readers, and check every supported theme, 200% zoom and forced colors.',
+      'In a real browser with forced colors active the popup keeps a visible border and every focused popup action keeps a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the forced-colors popup border and the outline fallback for focusable popup descendants.',
+  },
+  {
+    id: 'alert-dialog.platform-manual',
+    requirement:
+      'The alert announcement, real 200% browser zoom and real high-contrast modes are verified in real browsers with screen readers.',
     verification: 'manual',
     severity: 'error',
     remediation:
-      'Record browser, assistive technology, theme and findings before release.',
+      'Record browser, assistive technology, theme and findings before release; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

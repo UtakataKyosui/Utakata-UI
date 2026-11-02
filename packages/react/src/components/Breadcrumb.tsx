@@ -24,15 +24,16 @@ export type BreadcrumbLinkProps = BreadcrumbPartProps<'a'> &
     | { href?: string; render: useRender.RenderProp }
   );
 
+// Optional `never` members also reject these names when props arrive through a spread.
 export type BreadcrumbPageProps = Omit<
   BreadcrumbPartProps<'span'>,
   'aria-current'
->;
+> & { 'aria-current'?: never };
 
 export type BreadcrumbDecorationProps = Omit<
   BreadcrumbPartProps<'li'>,
   'aria-hidden' | 'role'
->;
+> & { 'aria-hidden'?: never; role?: never };
 
 const Root = forwardRef<HTMLElement, BreadcrumbRootProps>(
   function BreadcrumbRoot({ className, ...props }, ref) {

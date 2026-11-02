@@ -120,3 +120,60 @@ test('audit harness detects missing names and low contrast', async ({
     expect.arrayContaining(['button-name', 'color-contrast']),
   );
 });
+
+async function forcedOutline(locator: ReturnType<Page['locator']>) {
+  await expect(locator).toBeFocused();
+  return locator.evaluate((node) => {
+    const style = getComputedStyle(node);
+    return {
+      style: style.outlineStyle,
+      width: Number.parseFloat(style.outlineWidth),
+    };
+  });
+}
+
+async function verifyForcedFocusOutlines(page: Page) {
+  await page.emulateMedia({ forcedColors: 'active' });
+  // Forced colors suppress box shadows, so each focus target needs an outline.
+  const button = page.getByRole('button', { name: 'solid sm', exact: true });
+  await button.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  const buttonOutline = await forcedOutline(button);
+  expect(buttonOutline.style, 'Button outline').toBe('solid');
+  expect(buttonOutline.width).toBeGreaterThanOrEqual(2);
+  const field = page.getByRole('textbox', { name: 'Email', exact: true });
+  await field.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  const fieldOutline = await forcedOutline(field);
+  expect(fieldOutline.style, 'Field control outline').toBe('solid');
+  expect(fieldOutline.width).toBeGreaterThanOrEqual(2);
+  await page.getByRole('button', { name: 'Open settings' }).focus();
+  await page.keyboard.press('Enter');
+  const dialog = page.getByRole('dialog', { name: 'Settings' });
+  await expect(dialog).toBeVisible();
+  const inside = dialog.getByRole('button', { name: 'Close settings' });
+  await inside.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+  const dialogOutline = await forcedOutline(inside);
+  expect(dialogOutline.style, 'Dialog descendant outline').toBe('solid');
+  expect(dialogOutline.width).toBeGreaterThanOrEqual(2);
+}
+
+test('Button, Field control and Dialog descendants keep a focus outline in forced colors', async ({
+  page,
+}) => {
+  await verifyForcedFocusOutlines(page);
+});
+
+test('forced-colors focus detector rejects a removed Button outline', async ({
+  page,
+}) => {
+  await page.addStyleTag({
+    content:
+      '.ui-button:focus-visible { outline: none !important; box-shadow: none !important; }',
+  });
+  await expect(verifyForcedFocusOutlines(page)).rejects.toThrow();
+});

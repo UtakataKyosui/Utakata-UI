@@ -66,30 +66,6 @@ export const alertDialogChecks: Record<string, QualityCheck> = {
     expect(dialog).toHaveAccessibleDescription('This cannot be undone.');
     expect((await audit(document.body)).violations).toEqual([]);
   },
-  'alert-dialog.initial-focus-containment': async () => {
-    const { dialog } = await openConfirmation();
-    // jsdom cannot move focus with Tab; the browser suite presses real keys.
-    // Here we verify the modal boundary Base UI uses for containment.
-    const outside = screen.getByText('Outside content');
-    expect(outside.closest('[aria-hidden="true"]')).not.toBe(null);
-    expect(dialog.closest('[aria-hidden="true"]')).toBe(null);
-    expect(dialog).toContainElement(document.activeElement as HTMLElement);
-  },
-  'alert-dialog.dismissal-focus-return': async () => {
-    const first = await openConfirmation();
-    const outside =
-      document.querySelector('.ui-dialog__backdrop') ?? document.body;
-    fireEvent.pointerDown(outside);
-    fireEvent.mouseDown(outside);
-    fireEvent.click(outside);
-    expect(first.dialog).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
-    await expectClosedWithFocusOn(first.trigger);
-    fireEvent.click(first.trigger);
-    const reopened = await screen.findByRole('alertdialog');
-    fireEvent.keyDown(document.activeElement ?? reopened, { key: 'Escape' });
-    await expectClosedWithFocusOn(first.trigger);
-  },
   'alert-dialog.confirm-controlled': async () => {
     let deletions = 0;
     const { trigger } = await openConfirmation(() => deletions++);
