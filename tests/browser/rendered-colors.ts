@@ -156,12 +156,16 @@ export async function measureOverflow(
     const roots = [...document.querySelectorAll<HTMLElement>(query)];
     const viewport = document.documentElement.clientWidth;
     return {
+      // Visually hidden text (1px boxes) is clipped on purpose and is skipped.
       clipped: roots.map((root) =>
-        [root, ...root.querySelectorAll<HTMLElement>('*')].some(
-          (node) =>
+        [root, ...root.querySelectorAll<HTMLElement>('*')].some((node) => {
+          const box = node.getBoundingClientRect();
+          if (box.width <= 1 && box.height <= 1) return false;
+          return (
             node.scrollWidth > node.clientWidth + 1 &&
-            getComputedStyle(node).display !== 'inline',
-        ),
+            getComputedStyle(node).display !== 'inline'
+          );
+        }),
       ),
       outside: roots.map((root) => {
         const box = root.getBoundingClientRect();

@@ -2,6 +2,26 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Pagination keyboard and reflow and keeps zoom manual', () => {
+    const rules = getComponent('Pagination')?.qualityRules ?? [];
+    for (const id of [
+      'pagination.disabled-direction',
+      'pagination.target-reflow',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'pagination.zoom-theme',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Breadcrumb reflow and focus and keeps zoom manual', () => {
     expect(getComponent('Breadcrumb')?.qualityRules).toEqual(
       expect.arrayContaining([

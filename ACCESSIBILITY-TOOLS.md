@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`pagination.disabled-direction` と `pagination.target-reflow` は Chromium light/dark の必須 browser ルールです。前者は実際の Tab で無効な「前へ」が飛ばされること、リンクが順番に1回ずつ訪れられること、Enter でリンク先へ遷移すること、無効なリンクのクリックでハンドラーもハッシュも変わらないことを検証します。後者はリンクと省略記号が 24×24 CSS px 以上であること、幅320px とルート文字サイズ200% でクリップやはみ出しなく折り返すこと、現在ページが太い境界線と太字で、無効状態が破線の境界線で色なしに区別できること、リンク文字が 4.5:1 以上であること、強制配色でフォーカス時に 2px 以上の実線の outline が残ることを検証します。無効リンクのフォーカス可能化・色だけの区別・フォーカス表示の除去の対照例では検証が失敗することを確認します。`pagination-keyboard-evidence` / `pagination-reflow-evidence` と axe の結果を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `pagination.zoom-theme`、読み上げは `pagination.screen-reader` に未検証として残ります。
+
 `breadcrumb.reflow-focus` は長い階層のパンくずを Chromium light/dark で検証する必須 browser ルールです。幅320px とルート文字サイズ200% でクリップや枠外へのはみ出しなく折り返すこと、リンクと現在ページの文字が 4.5:1 以上であること、リンクには下線があり現在ページには無いため色なしで区別できること、実際の Tab でリンクを順番に1回ずつ訪れ区切りと省略記号を飛ばすこと、フォーカス時に表示が出ること、強制配色では box-shadow が抑制されるため 2px 以上の実線の outline が残ることを検証します。折り返し無効・フォーカス表示の除去・下線の除去の対照例では検証が失敗することを確認します。`breadcrumb-evidence` と `breadcrumb-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `breadcrumb.zoom-theme`、読み上げは `breadcrumb.screen-reader` に未検証として残ります。
 
 `table.reflow-focus` は幅の広い Table を Chromium light/dark で検証する必須 browser ルールです。コンテナが横スクロールになり表が内容幅を保つこと（通常と幅320px）、実際の Tab でスクロール領域にフォーカスが入り、矢印キーで `scrollLeft` が増え、次の Tab で表を抜けること、フォーカス時に表示（box-shadow または outline）が出ること、強制配色では box-shadow が抑制されるため 2px 以上の実線の outline が残ることを検証します。スクロール無効化とフォーカス表示の除去の対照例では検証が失敗することを確認します。`table-evidence` と `table-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `table.zoom-theme`、表ナビゲーションの読み上げは `table.screen-reader` に未検証として残ります。

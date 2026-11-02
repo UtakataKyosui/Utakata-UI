@@ -14,6 +14,7 @@ import {
   Kbd,
   KbdGroup,
   NativeSelect,
+  Pagination,
   Progress,
   RadioGroup,
   Select,
@@ -410,6 +411,46 @@ function BreadcrumbStates() {
   );
 }
 
+function PaginationStates() {
+  const [clicks, setClicks] = useState(0);
+  return (
+    <section aria-label="Pagination states">
+      <Button>Before pagination</Button>
+      <Pagination.Root aria-label="Result pages">
+        <Pagination.List>
+          <Pagination.Item>
+            <Pagination.Previous
+              disabled
+              onClick={() => setClicks((n) => n + 1)}
+            >
+              Previous
+            </Pagination.Previous>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-1" active>
+              1
+            </Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-2">2</Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Ellipsis label="More pages" />
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Link href="#page-9">9</Pagination.Link>
+          </Pagination.Item>
+          <Pagination.Item>
+            <Pagination.Next href="#page-next">Next</Pagination.Next>
+          </Pagination.Item>
+        </Pagination.List>
+      </Pagination.Root>
+      <Button>After pagination</Button>
+      <output aria-label="Pagination clicks">{clicks}</output>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -591,6 +632,7 @@ function Fixture() {
       <ProgressStates />
       <TableStates />
       <BreadcrumbStates />
+      <PaginationStates />
     </main>
   );
 }
