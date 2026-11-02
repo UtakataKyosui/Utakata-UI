@@ -22,8 +22,8 @@ export const toastQualityRules = [
   {
     id: 'toast.pause-on-hover-focus',
     requirement:
-      'Auto-dismiss timers pause while the pointer is over the viewport or keyboard focus is inside it, and resume afterwards (WCAG 2.2.1).',
-    verification: 'automated',
+      'In a real browser auto-dismiss timers pause while the pointer is over the viewport or keyboard focus is inside it, and resume afterwards (WCAG 2.2.1).',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI viewport hover/focus handling; do not implement separate timers.',
@@ -40,20 +40,29 @@ export const toastQualityRules = [
   {
     id: 'toast.close-action-keyboard',
     requirement:
-      'Toast.Close and Toast.Action are named native buttons; activating Close or pressing Escape inside the toast closes it, and Action runs its handler.',
-    verification: 'automated',
+      'In a real browser F6 moves focus into the viewport, Toast.Close and Toast.Action are reached by Tab as named native buttons, Enter or Space on Close and Escape inside the toast close it, and Action runs its handler once.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Give Close visible text or aria-label and Action a descriptive label; keep Base UI keyboard handling.',
   },
   {
-    id: 'toast.screen-reader-theme',
+    id: 'toast.viewport-layout',
     requirement:
-      'Verify announcements, F6 navigation into the viewport, focus return, notification frequency and legibility in every supported theme, 200% zoom, forced colors and reduced motion with real browsers and screen readers.',
+      'In a real browser a stack of tall toasts in a short viewport stays inside the screen, the viewport scrolls instead of leaving the top unreachable, toast items keep their full content height, and in forced colors the focused Action and Close keep a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the viewport max height and overflow scrolling, flex-shrink: 0 on toasts and the forced-colors outline for focusable toast parts.',
+  },
+  {
+    id: 'toast.platform-manual',
+    requirement:
+      'Announcements, notification frequency, real 200% browser zoom, real high-contrast modes and reduced motion are verified in real browsers with screen readers.',
     verification: 'manual',
     severity: 'error',
     remediation:
-      'Record browser, assistive technology, theme and findings before release.',
+      'Record browser, assistive technology, theme and findings before release; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

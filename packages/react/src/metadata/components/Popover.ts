@@ -13,8 +13,8 @@ export const popoverQualityRules = [
   {
     id: 'popover.open-dismiss-focus',
     requirement:
-      'The trigger opens the popup with expanded state, focus moves into the popup, and Close, Escape and outside press close it and restore focus to the trigger; pressing inside does not close it.',
-    verification: 'automated',
+      'In a real browser the trigger opens the popup with expanded state, focus moves into the popup, and Close, Escape and outside press close it and restore focus to the trigger; pressing inside does not close it.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI focus management and dismissal; do not reimplement outside-press handling.',
@@ -29,13 +29,22 @@ export const popoverQualityRules = [
       'Pass disabled to Popover.Trigger and drive open with open/onOpenChange on Popover.Root.',
   },
   {
-    id: 'popover.real-browser',
+    id: 'popover.forced-focus',
     requirement:
-      'Verify real keyboard tab order, edge collision positioning, themes, forced colors, 200% zoom/reflow and screen-reader announcements.',
+      'In a real browser with forced colors active the focused trigger, the focused popup and focusable popup descendants each keep a system-color outline of at least 2px, and the popup keeps a visible border.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the forced-colors outline fallback for the trigger, the popup and its focusable descendants; box shadows are suppressed in forced colors.',
+  },
+  {
+    id: 'popover.platform-manual',
+    requirement:
+      'Edge collision positioning, real 200% browser zoom and reflow, real high-contrast modes and screen-reader announcements are verified on real devices and assistive technology.',
     verification: 'manual',
     severity: 'error',
     remediation:
-      'Record browser, assistive technology, commit and findings before release.',
+      'Record browser, assistive technology, commit and findings before release; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 
@@ -67,7 +76,7 @@ export const popoverManifest = {
   },
   defaults: { open: false, modal: false, side: 'bottom', sideOffset: 0 },
   composition:
-    'Popover.Root contains a Trigger and a Portal with Positioner and Popup. Popup should include a Title, an optional Description and a Close button.',
+    'Popover.Root contains a Trigger and a Portal with Positioner and Popup. Popup should include a Title, an optional Description and a Close button. Trigger and Close render bare unstyled buttons, so compose them onto Button with render (for example render={<Button variant="outline" />}) to keep their text readable in every theme.',
   avoid: [
     'Do not create a popover without a Popover.Title or other accessible name.',
     'Do not use Popover for hover-only content or as a modal; use Tooltip or Dialog.',
