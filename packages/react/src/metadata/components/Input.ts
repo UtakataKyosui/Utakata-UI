@@ -39,7 +39,16 @@ export const inputQualityRules = [
   {
     id: 'input.visual-theme',
     requirement:
-      'Borders, placeholder, focus ring, disabled and invalid states are distinguishable in every supported theme, at 200% zoom and in forced colors; every size keeps a target of at least 24×24 CSS px.',
+      'In Chromium light/dark, every size and default, read-only, disabled and invalid state has a 24×24 CSS px target; enabled text/placeholder and borders meet contrast thresholds, keyboard focus stays visible in forced colors and controls fit a narrow viewport.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Run the required input.visual-theme browser check; preserve contrast, target dimensions, focus outlines and layout.',
+  },
+  {
+    id: 'input.zoom-assistive-output',
+    requirement:
+      'Verify actual 200% text zoom, physical forced-colors settings, screen-reader feedback and user comprehension in context.',
     verification: 'manual',
     severity: 'warning',
     remediation:
