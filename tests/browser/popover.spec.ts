@@ -48,7 +48,7 @@ async function openWithKeyboard(page: Page) {
 }
 
 async function verifyOpenDismissFocus(page: Page) {
-  const { trigger, dialog, input, close, after } = popover(page);
+  const { trigger, dialog, input, close } = popover(page);
   await openWithKeyboard(page);
   // Pressing and typing inside does not close it.
   await input.click();
@@ -68,7 +68,8 @@ async function verifyOpenDismissFocus(page: Page) {
   // An outside press closes it and restores focus.
   await page.keyboard.press('Enter');
   await expect(dialog).toBeVisible({ timeout });
-  await after.click();
+  // The popup can overlap nearby controls, so press a fixed point outside it.
+  await page.mouse.click(2, 2);
   await expect(dialog).toHaveCount(0, { timeout });
   await expect(trigger).toHaveAttribute('aria-expanded', 'false', { timeout });
 }

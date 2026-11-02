@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import {
   Accordion,
   Alert,
+  AlertDialog,
   Avatar,
   Badge,
   Breadcrumb,
@@ -709,6 +710,43 @@ function MenuStates() {
   );
 }
 
+function AlertDialogStates() {
+  const [deletions, setDeletions] = useState(0);
+  const [open, setOpen] = useState(false);
+  return (
+    <section aria-label="AlertDialog states">
+      <Button>Before alert dialog</Button>
+      <AlertDialog.Root open={open} onOpenChange={setOpen}>
+        <AlertDialog.Trigger render={<Button variant="outline" />}>
+          Delete file
+        </AlertDialog.Trigger>
+        <AlertDialog.Portal>
+          <AlertDialog.Backdrop />
+          <AlertDialog.Popup>
+            <AlertDialog.Title>Delete file?</AlertDialog.Title>
+            <AlertDialog.Description>
+              This cannot be undone.
+            </AlertDialog.Description>
+            <AlertDialog.Close render={<Button variant="outline" />}>
+              Cancel
+            </AlertDialog.Close>
+            <Button
+              onClick={() => {
+                setDeletions((count) => count + 1);
+                setOpen(false);
+              }}
+            >
+              Delete permanently
+            </Button>
+          </AlertDialog.Popup>
+        </AlertDialog.Portal>
+      </AlertDialog.Root>
+      <Button>After alert dialog</Button>
+      <output aria-label="Deletions">{deletions}</output>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -898,6 +936,7 @@ function Fixture() {
       <TooltipStates />
       <PopoverStates />
       <MenuStates />
+      <AlertDialogStates />
     </main>
   );
 }

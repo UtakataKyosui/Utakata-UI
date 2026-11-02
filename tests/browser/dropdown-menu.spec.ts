@@ -62,7 +62,7 @@ async function verifyKeyboard(page: Page) {
 }
 
 async function verifyActivateDismiss(page: Page) {
-  const { item, actions, menu: popup, trigger, after } = menu(page);
+  const { item, actions, menu: popup, trigger } = menu(page);
   await openWithKeyboard(page);
   await page.keyboard.press('Home');
   await expect(item('Edit')).toBeFocused({ timeout });
@@ -90,7 +90,8 @@ async function verifyActivateDismiss(page: Page) {
   // An outside press closes it without an action.
   await page.keyboard.press('Enter');
   await expect(popup).toBeVisible({ timeout });
-  await after.click();
+  // The popup can overlap nearby controls, so press a fixed point outside it.
+  await page.mouse.click(2, 2);
   await expect(popup).toHaveCount(0, { timeout });
   await expect(actions).toHaveText('["Edit","Duplicate"]');
 }
