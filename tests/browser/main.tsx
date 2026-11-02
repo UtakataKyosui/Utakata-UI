@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import {
   Badge,
   Button,
+  Card,
   Checkbox,
   Dialog,
   Field,
@@ -226,6 +227,42 @@ function SpinnerStates() {
   );
 }
 
+const cardLongText =
+  'Supercalifragilisticexpialidocious_unbroken_identifier_that_must_wrap and a long sentence describing the account in detail.';
+
+function CardStates() {
+  return (
+    <section aria-label="Card states">
+      <Card.Root data-case="full">
+        <Card.Header>
+          <Card.Title level="2">Profile</Card.Title>
+          <Card.Description>Edit your public information</Card.Description>
+        </Card.Header>
+        <Card.Content>Body content</Card.Content>
+        <Card.Footer>
+          <Button>Save</Button>
+        </Card.Footer>
+      </Card.Root>
+      <Card.Root data-case="content">
+        <Card.Content>Content only</Card.Content>
+      </Card.Root>
+      <Card.Root data-case="header-footer">
+        <Card.Header>
+          <Card.Title level="3">Header only</Card.Title>
+        </Card.Header>
+        <Card.Footer>Footer text</Card.Footer>
+      </Card.Root>
+      <Card.Root data-case="long">
+        <Card.Header>
+          <Card.Title level="3">{cardLongText}</Card.Title>
+          <Card.Description>{cardLongText}</Card.Description>
+        </Card.Header>
+        <Card.Content>{cardLongText}</Card.Content>
+      </Card.Root>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -401,6 +438,7 @@ function Fixture() {
       <BadgeStates />
       <SkeletonStates />
       <SpinnerStates />
+      <CardStates />
     </main>
   );
 }

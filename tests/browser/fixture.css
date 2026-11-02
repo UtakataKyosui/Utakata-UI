@@ -48,3 +48,13 @@ section[aria-label="Badge states"] {
   display: flex;
   gap: 0.75rem;
 }
+
+section[aria-label="Card states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Card states"] .ui-card {
+  inline-size: 240px;
+}
