@@ -37,7 +37,8 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
+    `import type { ComponentProps } from 'react';
+import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Slider, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -78,6 +79,13 @@ export const selectMultiple: SelectRootProps<string> = { multiple: true };
 export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
 // @ts-expect-error Select.Trigger className must be a string in shipped declarations.
 export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
+type SliderRootProps = ComponentProps<typeof Slider.Root>;
+export const sliderProps: SliderRootProps = { defaultValue: 50, min: 0, max: 100, step: 5, name: 'volume' };
+export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider.Label><Slider.Control><Slider.Track><Slider.Indicator /><Slider.Thumb getAriaValueText={(value) => value + ' percent'} /></Slider.Track></Slider.Control></Slider.Root>;
+// @ts-expect-error Slider values are numbers in shipped declarations.
+export const sliderStringValue: SliderRootProps = { defaultValue: '50' };
+// @ts-expect-error Slider className must be a string in shipped declarations.
+export const sliderFunctionClass: SliderRootProps = { className: () => 'x' };
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };
