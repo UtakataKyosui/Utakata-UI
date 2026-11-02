@@ -2,6 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Popover dismissal and forced-colors focus and keeps platform checks manual', () => {
+    const rules = getComponent('Popover')?.qualityRules ?? [];
+    for (const id of ['popover.open-dismiss-focus', 'popover.forced-focus'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'popover.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Tooltip interaction and visuals and keeps platform checks manual', () => {
     const rules = getComponent('Tooltip')?.qualityRules ?? [];
     for (const id of [

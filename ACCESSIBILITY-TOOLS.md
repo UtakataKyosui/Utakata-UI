@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`popover.open-dismiss-focus` と `popover.forced-focus` は Chromium light/dark の必須 browser ルールです。前者は実際の Enter で開いて `aria-expanded` が立ちフォーカスがポップアップ内へ移ること、ポップアップ内の入力操作では閉じず、Close・Escape・外側クリックで閉じてフォーカスがトリガーへ戻ることを検証します。後者は強制配色でフォーカス中のトリガー・ポップアップ・ポップアップ内の入力に 2px 以上の実線の outline が残り、ポップアップに境界線が残ることを検証します（強制配色では box-shadow が抑制されるため）。Escape の握りつぶしとフォーカス表示の除去の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。端での衝突配置、実際の200%ズーム、ハイコントラスト、読み上げは `popover.platform-manual` に未検証として残ります。
+
 `tooltip.focus-hover-escape`、`tooltip.hoverable`、`tooltip.visual-position` は Chromium light/dark の必須 browser ルールです。実際のマウスホバーと Tab によるフォーカスで遅延後にツールチップが開き、Escape でフォーカスを動かさず閉じること、トリガーからポップアップへポインターを移動しても開いたままであること（WCAG 1.4.13。`disableHoverablePopup` を渡した既知の不正フィクスチャでは閉じることを確認）、ポップアップ文字が 4.5:1 以上で幅320px のビューポート内に収まること、強制配色でポップアップに境界線が残りフォーカス中のトリガーに 2px 以上の outline が残ることを検証します。Escape の握りつぶしとフォーカス表示の除去の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。タッチ操作、実際の200%ズーム、ハイコントラスト、スクリーンリーダーの説明の読み上げは `tooltip.platform-manual` に未検証として残ります。
 
 `toggle.keyboard` と `toggle.visual-theme` は Chromium light/dark の必須 browser ルールです。前者は実際の Tab で有効なトグルに到達し無効なものを飛ばすこと、Enter と Space がそれぞれ1回だけ切り替えて通知は1回ずつであること、フォーカスがトグルに残ることを検証します。後者は全サイズ・全バリアントの押下／非押下で文字が 4.5:1 以上、目標サイズが 24×24 CSS px 以上であること、押下状態が色だけでなく内側の枠線（box-shadow）で区別されること、強制配色で押下状態が Highlight 系の色になりフォーカス時に 2px 以上の outline が残ることを検証します。Space の二重発火・押下の内側枠の除去・強制配色のフォーカス消失の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `toggle.zoom-theme` に未検証として残ります。
