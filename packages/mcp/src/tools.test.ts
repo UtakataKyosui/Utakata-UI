@@ -22,6 +22,7 @@ describe('manifest tools', () => {
       'Field',
       'Dialog',
       'Kbd',
+      'Separator',
     ]);
   });
 

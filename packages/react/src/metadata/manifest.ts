@@ -1,4 +1,5 @@
 import { kbdManifest } from './components/Kbd.js';
+import { separatorManifest } from './components/Separator.js';
 import { qualityRules } from './quality.js';
 
 export const componentManifest = {
@@ -99,6 +100,7 @@ export const componentManifest = {
         'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and an optional useful Description. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
     Kbd: kbdManifest,
+    Separator: separatorManifest,
   },
 } as const;
 
@@ -107,3 +109,5 @@ export type ButtonVariant =
 export type ButtonSize =
   (typeof componentManifest.components.Button.sizes)[number];
 export type KbdSize = (typeof componentManifest.components.Kbd.sizes)[number];
+export type SeparatorOrientation =
+  (typeof componentManifest.components.Separator.orientations)[number];

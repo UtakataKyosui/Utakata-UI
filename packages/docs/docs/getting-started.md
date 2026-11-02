@@ -17,7 +17,7 @@ export function Example() {
 }
 ```
 
-Button・Field・Dialog・Kbd と、Box・Stack・Flex・Grid・Container・Text・Heading を公開しています。
+Button・Field・Dialog・Kbd・Separator と、Box・Stack・Flex・Grid・Container・Text・Heading を公開しています。
 
 対応する Props・構成例・品質要件は[コンポーネント仕様](./components)を参照してください。
 

@@ -56,6 +56,12 @@ test('static display components expose names and orientation', async ({
   await expect(
     section.getByRole('group', { name: 'Control and K' }),
   ).toBeVisible();
+  const separator = section.getByRole('separator');
+  await expect(separator).toHaveCount(1);
+  await expect(separator).toHaveAttribute('aria-orientation', 'vertical');
+  const box = await separator.boundingBox();
+  expect(box?.height).toBeGreaterThan(0);
+  expect(box?.width).toBeGreaterThan(0);
   await audit(
     page,
     'static-display-axe',

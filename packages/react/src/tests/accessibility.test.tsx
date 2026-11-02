@@ -26,6 +26,7 @@ import {
 } from '../metadata/quality.js';
 import { audit } from './audit.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
+import { separatorChecks } from './quality/Separator.checks.js';
 
 describe('accessibility regression checks', () => {
   let warnings: MockInstance<typeof console.warn>;
@@ -113,6 +114,7 @@ describe('accessibility regression checks', () => {
         await waitFor(() => expect(trigger).toHaveFocus());
       },
       ...kbdChecks,
+      ...separatorChecks,
     };
     const isolatedChecks = Object.fromEntries(
       Object.entries(checks).map(([id, check]) => [
