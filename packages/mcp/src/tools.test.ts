@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('exposes NativeSelect browser coverage separately from platform evidence', () => {
+    expect(getComponent('NativeSelect')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'native-select.browser-behavior',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'native-select.platform-picker',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('exposes the required Textarea keyboard browser rule', () => {
     expect(getComponent('Textarea')?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -51,6 +66,7 @@ describe('manifest tools', () => {
       'Separator',
       'Input',
       'Textarea',
+      'NativeSelect',
     ]);
   });
 

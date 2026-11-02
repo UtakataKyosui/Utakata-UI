@@ -37,10 +37,19 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, Separator, Textarea, type ButtonProps, type InputProps, type TextareaProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
+export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;
+// @ts-expect-error Numeric listbox size is excluded from the shipped API.
+export const nativeSelectNumericSize: NativeSelectProps = { size: 4 };
+// @ts-expect-error Multiple selection is not supported.
+export const nativeSelectMultiple = <NativeSelect multiple aria-label="Country" />;
+const multipleSelectProps = { multiple: true, className: 'country' };
+// @ts-expect-error Spreads must preserve the single-selection contract.
+export const nativeSelectMultipleSpread = <NativeSelect {...multipleSelectProps} aria-label="Country" />;
 export const textareaProps: TextareaProps = { size: 'sm', rows: 4, maxLength: 500, className: 'notes' };
 export const notes = <Field.Root><Field.Label>Notes</Field.Label><Textarea {...textareaProps} /></Field.Root>;
 // @ts-expect-error Unsupported Textarea sizes fail against shipped declarations.

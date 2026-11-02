@@ -1,5 +1,6 @@
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
+import { nativeSelectManifest } from './components/NativeSelect.js';
 import { separatorManifest } from './components/Separator.js';
 import { textareaManifest } from './components/Textarea.js';
 import { qualityRules } from './quality.js';
@@ -105,6 +106,7 @@ export const componentManifest = {
     Separator: separatorManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
+    NativeSelect: nativeSelectManifest,
   },
 } as const;
 
