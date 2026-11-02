@@ -8,6 +8,9 @@ export {
   Text,
 } from 'lism-css/react';
 
+export type { BadgeProps } from './components/Badge.js';
+export { Badge } from './components/Badge.js';
+
 export type {
   ButtonAccessibilityProps,
   ButtonProps,
@@ -49,6 +52,8 @@ export { Switch } from './components/Switch.js';
 
 export type { TextareaProps } from './components/Textarea.js';
 export { Textarea } from './components/Textarea.js';
+
+export type { BadgeVariant } from './metadata/components/Badge.js';
 
 export type { InputSize } from './metadata/components/Input.js';
 

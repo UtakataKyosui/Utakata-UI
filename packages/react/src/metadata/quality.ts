@@ -1,3 +1,4 @@
+import { badgeQualityRules } from './components/Badge.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
@@ -73,6 +74,7 @@ export const qualityRules = {
   ],
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
+  Badge: badgeQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
