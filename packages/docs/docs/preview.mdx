@@ -36,6 +36,8 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 
 単一キーと組み合わせの表示例です。組み合わせは`KbdGroup`の`aria-label`で読み上げ用の名前を付けます。
 
+`Kbd`と`KbdGroup`は表示専用です。`tabIndex`・`contentEditable`・キーボードイベントハンドラーは指定できません。ショートカットの処理はアプリケーション側に実装してください。TypeScriptを経由しない値や動的なJSX・独自CSSについては、利用側でもこの制約を確認してください。
+
 <Component path="kbd" />
 
 ## Separator
@@ -43,6 +45,8 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 詳しい使い方とAPIは[Separator](./components/separator)を参照してください。
 
 横・縦の区切りです。既定は装飾として支援技術から隠し、`decorative={false}`で意味のある区切りにします。
+
+`Separator`は操作しない区切りです。フォーカス可能になる`tabIndex`・`contentEditable`は型で禁止しています。サイズ変更操作には専用のコンポーネントを使用してください。
 
 <Component path="separator" />
 
@@ -59,6 +63,8 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 詳しい使い方とAPIは[Input](./components/input)を参照してください。
 
 1行のテキスト入力です。`Field.Root`の中では`Field.Control`の代わりに置き、ラベル・補足・エラーを1つの入力欄に関連付けます。サイズ、読み取り専用、無効状態の表示例です。
+
+組み込みテーマの各サイズ・状態は実ブラウザーで検証します。独自の背景色・CSS、実際の文字ズーム、支援技術での読み上げや文言の理解は利用側でも確認してください。`input.visual-theme`は必須ブラウザールールで、手動確認の結果とは区別されます。
 
 <Component path="input" />
 

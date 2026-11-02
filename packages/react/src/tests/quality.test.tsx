@@ -14,6 +14,12 @@ const required: QualityRule = {
 };
 
 describe('quality evaluation', () => {
+  it('blocks missing browser evidence and evaluates supplied browser checks', async () => {
+    const browser: QualityRule = { ...required, verification: 'browser' };
+    expect((await evaluateQuality([browser], {})).automatedPassed).toBe(false);
+    const report = await evaluateQuality([browser], { [browser.id]: () => {} });
+    expect(report.automatedPassed).toBe(true);
+  });
   it('blocks missing and failing required checks with actionable output', async () => {
     const missing = await evaluateQuality([required], {});
     expect(missing.automatedPassed).toBe(false);

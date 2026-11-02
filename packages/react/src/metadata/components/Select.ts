@@ -13,8 +13,8 @@ export const selectQualityRules = [
   {
     id: 'select.keyboard-selection',
     requirement:
-      'Arrow keys open the popup and move between options, typing moves to a matching option, Enter selects, and focus returns to the trigger.',
-    verification: 'automated',
+      'In a real browser, ArrowDown opens the popup, arrow keys move between options, typing moves to a matching option, Enter selects, focus returns to the trigger, and disabled options cannot be selected.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Preserve Base UI Select keyboard, typeahead and focus management; do not add custom key handlers.',
@@ -22,8 +22,8 @@ export const selectQualityRules = [
   {
     id: 'select.escape-focus-return',
     requirement:
-      'Escape closes the popup without changing the value and restores focus to the trigger.',
-    verification: 'automated',
+      'In a real browser, Escape closes the popup without changing the value and restores focus to the trigger.',
+    verification: 'browser',
     severity: 'error',
     remediation: 'Preserve Base UI dismissal and focus restoration.',
   },
@@ -37,9 +37,18 @@ export const selectQualityRules = [
       'Pass items so Select.Value can show labels, use Select.Value placeholder, set name on Root and mark unavailable options disabled.',
   },
   {
-    id: 'select.real-keyboard-screen-reader',
+    id: 'select.popup-position-dismiss',
     requirement:
-      'In a real browser the popup opens, positions, scrolls and closes on outside press, and screen readers announce the name, expanded state, active option and selection.',
+      'In a real browser the popup opens beside the trigger within the viewport, and an outside press closes it without changing the value.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Preserve Base UI Select positioning and outside-press dismissal; do not constrain the popup with custom overflow or z-index rules.',
+  },
+  {
+    id: 'select.screen-reader',
+    requirement:
+      'Screen readers announce the trigger name, expanded state, active option and selection, and the popup scrolls long lists.',
     verification: 'manual',
     severity: 'error',
     remediation:
