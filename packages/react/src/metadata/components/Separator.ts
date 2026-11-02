@@ -16,7 +16,7 @@ export const separatorQualityRules = [
     verification: 'automated',
     severity: 'error',
     remediation:
-      'Do not add tabindex or drag behavior; use a dedicated resizable component instead.',
+      'The public props reject tabIndex and contentEditable. Do not add drag behavior; use a dedicated resizable component instead.',
   },
   {
     id: 'separator.visual-contrast',
