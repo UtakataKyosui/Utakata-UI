@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Avatar, Badge, Breadcrumb, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Avatar, Badge, Breadcrumb, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -219,6 +219,28 @@ export const breadcrumbSeparatorSpread = <Breadcrumb.Separator {...breadcrumbVis
 const breadcrumbLinkProps = { children: 'Home' };
 // @ts-expect-error Spreads cannot create a link without a destination.
 export const breadcrumbLinkSpread = <Breadcrumb.Link {...breadcrumbLinkProps} />;
+export const paginationPage: PaginationLinkProps = { href: '?page=2', active: true };
+export const paginationEnabled: PaginationDirectionProps = { href: '?page=2' };
+export const paginationDisabled: PaginationDirectionProps = { disabled: true };
+export const pagination = <Pagination.Root aria-label="Result pages"><Pagination.List><Pagination.Item><Pagination.Previous {...paginationDisabled} /></Pagination.Item><Pagination.Item><Pagination.Link {...paginationPage}>1</Pagination.Link></Pagination.Item><Pagination.Item><Pagination.Ellipsis label="More pages" /></Pagination.Item><Pagination.Item><Pagination.Next {...paginationEnabled} /></Pagination.Item></Pagination.List></Pagination.Root>;
+// @ts-expect-error Page links need a URL in shipped declarations.
+export const paginationNoHref: PaginationLinkProps = { children: '2' };
+// @ts-expect-error An enabled Previous/Next needs a URL in shipped declarations.
+export const paginationEnabledNoHref: PaginationDirectionProps = {};
+// @ts-expect-error A disabled Previous/Next must not keep its URL in shipped declarations.
+export const paginationDisabledHref: PaginationDirectionProps = { disabled: true, href: '?' };
+// @ts-expect-error The current page is set with active, not aria-current.
+export const paginationRawCurrent: PaginationLinkProps = { href: '?', 'aria-current': 'page' };
+const paginationCurrentProps = { href: '?', 'aria-current': 'page' as const };
+// @ts-expect-error Spreads cannot set aria-current directly.
+export const paginationCurrentSpread = <Pagination.Link {...paginationCurrentProps} />;
+const paginationDisabledProps = { href: '?', 'aria-disabled': false as const };
+// @ts-expect-error Spreads cannot override the managed disabled state.
+export const paginationDisabledSpread = <Pagination.Next {...paginationDisabledProps} />;
+function PaginationWrapper(props: PaginationDirectionProps) { return <Pagination.Next {...props} />; }
+export const wrappedPagination = <PaginationWrapper href="?page=3" />;
+// @ts-expect-error Wrappers must preserve the href/disabled exclusion.
+export const wrappedPaginationInvalid = <PaginationWrapper disabled href="?page=3" />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

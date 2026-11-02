@@ -28,6 +28,7 @@ import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
+import { paginationChecks } from './quality/Pagination.checks.js';
 import { progressChecks } from './quality/Progress.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
@@ -136,6 +137,7 @@ describe('accessibility regression checks', () => {
       ...progressChecks,
       ...tableChecks,
       ...breadcrumbChecks,
+      ...paginationChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

@@ -496,7 +496,8 @@
   }
 
   .ui-table-container:focus-visible,
-  .ui-breadcrumb__link:focus-visible {
+  .ui-breadcrumb__link:focus-visible,
+  .ui-pagination__link:focus-visible {
     box-shadow: var(--ui-focus-ring);
     outline: none;
   }
@@ -540,7 +541,8 @@
     text-align: end;
   }
 
-  .ui-breadcrumb__list {
+  .ui-breadcrumb__list,
+  .ui-pagination__list {
     align-items: center;
     display: flex;
     flex-wrap: wrap;
@@ -578,6 +580,57 @@
   .ui-breadcrumb__page {
     color: var(--ui-color-text);
     font-weight: 600;
+  }
+
+  .ui-pagination__list {
+    gap: 0.25rem;
+  }
+
+  .ui-pagination__link,
+  .ui-pagination__ellipsis {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: 2.5rem;
+    min-inline-size: 2.5rem;
+  }
+
+  .ui-pagination__link {
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    padding: 0.25rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .ui-pagination__link[href]:hover {
+    border-color: var(--ui-color-border);
+    text-decoration: underline;
+  }
+
+  .ui-pagination__link[aria-current="page"] {
+    border: 2px solid currentColor;
+    font-weight: 700;
+  }
+
+  .ui-pagination__link[aria-disabled="true"] {
+    border-color: var(--ui-color-border);
+    border-style: dashed;
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-pagination__ellipsis {
+    color: var(--ui-color-muted);
+  }
+
+  .ui-pagination__hidden-text {
+    block-size: 1px;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
   }
 
   .ui-input,
@@ -1068,6 +1121,15 @@
       forced-color-adjust: none;
     }
 
+    .ui-pagination__link[aria-current="page"] {
+      border-color: Highlight;
+    }
+
+    .ui-pagination__link[aria-disabled="true"] {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
     .ui-checkbox,
     .ui-switch {
       background: Canvas;
@@ -1134,6 +1196,7 @@
 
     .ui-table-container:focus-visible,
     .ui-breadcrumb__link:focus-visible,
+    .ui-pagination__link:focus-visible,
     .ui-radio-group__item:focus-visible,
     .ui-select__trigger:focus-visible,
     .ui-slider__thumb:has(:focus-visible) {

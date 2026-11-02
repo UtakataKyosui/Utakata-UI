@@ -61,6 +61,13 @@ export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
 export { NativeSelect } from './components/NativeSelect.js';
+export type {
+  PaginationDirectionProps,
+  PaginationEllipsisProps,
+  PaginationLinkProps,
+  PaginationRootProps,
+} from './components/Pagination.js';
+export { Pagination } from './components/Pagination.js';
 
 export type {
   ProgressAccessibilityProps,

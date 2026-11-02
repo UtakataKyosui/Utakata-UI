@@ -7,6 +7,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
+import { paginationManifest } from './components/Pagination.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
@@ -127,6 +128,7 @@ export const componentManifest = {
     Progress: progressManifest,
     Table: tableManifest,
     Breadcrumb: breadcrumbManifest,
+    Pagination: paginationManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
