@@ -13,8 +13,8 @@ export const paginationQualityRules = [
   {
     id: 'pagination.disabled-direction',
     requirement:
-      'A disabled Previous/Next has no href, is not focusable, exposes aria-disabled and does not navigate or run click handlers on click or Enter; enabled ones are named links with href.',
-    verification: 'automated',
+      'In a real browser a disabled Previous/Next has no href, is skipped by Tab, exposes aria-disabled and does not navigate or run click handlers on click; enabled links are visited by Tab in order and navigate on Enter.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Use disabled on the first/last page instead of removing the control or keeping href; keep the default or a specific visible name.',
@@ -29,13 +29,22 @@ export const paginationQualityRules = [
       'Use Pagination.Ellipsis inside an Item; adjust label to match the context.',
   },
   {
-    id: 'pagination.target-reflow-theme',
+    id: 'pagination.target-reflow',
     requirement:
-      'Links are at least 24x24 CSS px, the list wraps at 320 CSS px and 200% zoom, and the current page, disabled state and focus are distinguishable without color in every theme and forced colors.',
+      'In a real browser links and the ellipsis are at least 24x24 CSS px, the list wraps without clipping or overflow at 320 CSS px and 200% text size, the current page differs from other links by a thicker border and heavier weight and the disabled direction by a dashed border so neither relies on color, link text keeps at least 4.5:1 contrast, and in forced colors the focused link shows a system-color outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep min-size, wrapping, the current-page border and the disabled dashed border; keep the forced-colors outline for focused links.',
+  },
+  {
+    id: 'pagination.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the current page, disabled state and focus stay distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Measure targets and check narrow viewports, zoom, dark theme and forced colors in a real browser; for many pages show a window with Ellipsis.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
   {
     id: 'pagination.screen-reader',

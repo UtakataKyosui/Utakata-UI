@@ -20,13 +20,22 @@ export const skeletonQualityRules = [
       'Set aria-busy="true" on the parent while loading, provide one role="status" text, and set aria-busy="false" after the content renders.',
   },
   {
-    id: 'skeleton.reduced-motion',
+    id: 'skeleton.motion-theme',
     requirement:
-      'The pulse animation stops under prefers-reduced-motion and the placeholder stays visible in every supported theme and forced colors.',
+      'In a real browser the pulse animation runs by default and stops under prefers-reduced-motion, and the placeholder stays distinguishable from its surface in every supported theme and keeps a visible border in forced colors.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the prefers-reduced-motion override and the forced-colors border; check --ui-skeleton-color overrides against the surface.',
+  },
+  {
+    id: 'skeleton.os-reduced-motion',
+    requirement:
+      'With the operating system reduced-motion setting and real high-contrast modes the placeholder shows no motion and remains visible.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check the rendered animation with the OS reduced-motion setting, dark theme and forced colors in a real browser.',
+      'Check the OS reduced-motion and high-contrast settings in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

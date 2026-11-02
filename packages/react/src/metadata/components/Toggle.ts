@@ -31,20 +31,29 @@ export const toggleQualityRules = [
   {
     id: 'toggle.keyboard',
     requirement:
-      'Enter and Space toggle a focused toggle once in a real browser, and focus remains on the toggle.',
-    verification: 'manual',
+      'In a real browser Tab reaches an enabled toggle and skips a disabled one, Enter and Space each toggle a focused toggle exactly once and notify once, and focus remains on the toggle.',
+    verification: 'browser',
     severity: 'error',
     remediation:
       'Verify with real keyboard input in each supported browser; record results in the evidence log.',
   },
   {
-    id: 'toggle.visual-states',
+    id: 'toggle.visual-theme',
     requirement:
-      'Pressed, unpressed, focus and disabled states are distinguishable without color alone for every size and variant, in every theme and forced colors.',
+      'In a real browser every size and variant keeps text contrast of at least 4.5:1 and a target of at least 24x24 CSS px in both pressed and unpressed states in every supported theme, the pressed state adds an inset outline so it differs without color alone, and in forced colors the pressed toggle uses Highlight colors and the focused toggle keeps an outline of at least 2px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the pressed inset outline and the forced-colors pressed colors; check color overrides against the surface.',
+  },
+  {
+    id: 'toggle.zoom-theme',
+    requirement:
+      'At real 200% browser zoom and in real high-contrast modes the pressed, unpressed, focus and disabled states stay distinguishable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast, the pressed border/fill and the focus ring in a real browser, including forced colors.',
+      'Check browser zoom, dark theme and high-contrast modes in a real browser; leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

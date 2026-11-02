@@ -1,4 +1,11 @@
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { createRef } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
@@ -29,6 +36,33 @@ const functionClass: CheckboxRootProps = { className: () => 'x' };
 void [validRoot, validIndicator, numericValue, functionClass];
 
 describe('Checkbox', () => {
+  it.each([false, true])(
+    'preserves changed selection when reset is canceled (default %s)',
+    async (defaultChecked) => {
+      const formRef = createRef<HTMLFormElement>();
+      render(
+        <form ref={formRef} onReset={(event) => event.preventDefault()}>
+          <Checkbox.Root
+            aria-label="Accept"
+            name="terms"
+            value="yes"
+            defaultChecked={defaultChecked}
+          />
+        </form>,
+      );
+      const checkbox = screen.getByRole('checkbox', { name: 'Accept' });
+      fireEvent.click(checkbox);
+      expect(checkbox).toHaveAttribute('aria-checked', String(!defaultChecked));
+      act(() => formRef.current?.reset());
+      await settle();
+      expect(screen.getByRole('checkbox', { name: 'Accept' })).toBe(checkbox);
+      expect(checkbox).toHaveAttribute('aria-checked', String(!defaultChecked));
+      expect(
+        new FormData(formRef.current as HTMLFormElement).get('terms'),
+      ).toBe(defaultChecked ? null : 'yes');
+    },
+  );
+
   it('forwards className and refs to Root and Indicator', () => {
     const rootRef = createRef<HTMLElement>();
     const indicatorRef = createRef<HTMLSpanElement>();

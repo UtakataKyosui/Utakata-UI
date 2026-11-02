@@ -22,11 +22,20 @@ export const spinnerQualityRules = [
   {
     id: 'spinner.motion-theme',
     requirement:
-      'Under prefers-reduced-motion the rotation stops and a static partial ring remains recognizable; the ring is visible in every supported theme and forced colors.',
+      'In a real browser every size rotates by default and stops under prefers-reduced-motion while a static partial ring stays recognizable, and the ring arc keeps at least 3:1 contrast and stays distinct from its track in every supported theme and in forced colors.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the prefers-reduced-motion override and the forced-colors ring colors; check color overrides against the surface.',
+  },
+  {
+    id: 'spinner.os-reduced-motion',
+    requirement:
+      'With the operating system reduced-motion setting and real high-contrast modes the ring shows no motion and remains recognizable.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check the OS reduced-motion setting, rendered contrast in dark theme and forced colors in a real browser.',
+      'Check the OS reduced-motion and high-contrast settings in a real browser; leave unverified until performed.',
   },
   {
     id: 'spinner.announcement',

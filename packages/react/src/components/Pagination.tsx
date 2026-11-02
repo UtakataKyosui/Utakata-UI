@@ -13,10 +13,15 @@ type PaginationPartProps<Tag extends keyof JSX.IntrinsicElements> = Omit<
   className?: string;
 };
 
+// Optional `never` members also reject these names when props arrive through a spread.
 type AnchorProps = Omit<
   PaginationPartProps<'a'>,
   'href' | 'aria-current' | 'aria-disabled' | 'role'
->;
+> & {
+  'aria-current'?: never;
+  'aria-disabled'?: never;
+  role?: never;
+};
 
 /** Defaults to aria-label="ページ送り"; aria-labelledby replaces it. */
 export type PaginationRootProps = PaginationPartProps<'nav'>;
@@ -38,6 +43,8 @@ export type PaginationEllipsisProps = Omit<
   PaginationPartProps<'span'>,
   'children' | 'role'
 > & {
+  children?: never;
+  role?: never;
   /** Text read by assistive technology instead of the visual "…". */
   label?: string;
 };
