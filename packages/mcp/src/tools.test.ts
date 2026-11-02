@@ -32,6 +32,7 @@ describe('manifest tools', () => {
       'Progress',
       'Table',
       'Breadcrumb',
+      'Pagination',
       'Input',
       'Textarea',
       'NativeSelect',

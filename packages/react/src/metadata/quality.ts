@@ -7,6 +7,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
+import { paginationQualityRules } from './components/Pagination.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
@@ -91,6 +92,7 @@ export const qualityRules = {
   Progress: progressQualityRules,
   Table: tableQualityRules,
   Breadcrumb: breadcrumbQualityRules,
+  Pagination: paginationQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
