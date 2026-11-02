@@ -411,6 +411,64 @@
     cursor: default;
   }
 
+  .ui-radio-group {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+  }
+
+  .ui-radio-group--horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .ui-radio-group__item {
+    align-items: center;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.5rem;
+    min-block-size: 1.5rem;
+    min-inline-size: 1.5rem;
+    padding: 0.125rem 0.25rem;
+  }
+
+  .ui-radio-group__item:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-radio-group__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-radio-group__indicator {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 2px solid var(--ui-color-border);
+    border-radius: 50%;
+    block-size: 1.125rem;
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: 1.125rem;
+    justify-content: center;
+  }
+
+  .ui-radio-group__indicator[data-checked] {
+    border-color: var(--ui-color-primary);
+  }
+
+  .ui-radio-group__indicator[data-checked]::after {
+    background: var(--ui-color-primary);
+    border-radius: 50%;
+    block-size: 0.5rem;
+    content: "";
+    inline-size: 0.5rem;
+  }
+
   @media (forced-colors: active) {
     .ui-separator {
       background: CanvasText;
@@ -448,6 +506,25 @@
     .ui-checkbox:focus-visible,
     .ui-switch:focus-visible {
       outline-color: Highlight;
+    }
+
+    .ui-radio-group__indicator {
+      border-color: CanvasText;
+      forced-color-adjust: none;
+      background: Canvas;
+    }
+
+    .ui-radio-group__indicator[data-checked] {
+      border-color: Highlight;
+    }
+
+    .ui-radio-group__indicator[data-checked]::after {
+      background: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .ui-radio-group__item:focus-visible {
+      outline: 2px solid Highlight;
     }
   }
 

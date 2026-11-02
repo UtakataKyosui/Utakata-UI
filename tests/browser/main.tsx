@@ -9,6 +9,7 @@ import {
   Kbd,
   KbdGroup,
   NativeSelect,
+  RadioGroup,
   Separator,
   Switch,
   Textarea,
@@ -44,6 +45,34 @@ function SwitchStates() {
         </label>
       ))}
       <output aria-label="Switch changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+function RadioGroupStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  return (
+    <section aria-label="RadioGroup input">
+      <Button>Before radios</Button>
+      <RadioGroup.Root
+        aria-label="Plan"
+        onValueChange={(value) =>
+          setChanges((previous) => [...previous, String(value)])
+        }
+      >
+        {['free', 'team', 'pro'].map((value) => (
+          <RadioGroup.Item
+            key={value}
+            value={value}
+            disabled={value === 'team'}
+          >
+            <RadioGroup.Indicator />
+            {value}
+          </RadioGroup.Item>
+        ))}
+      </RadioGroup.Root>
+      <Button>After radios</Button>
+      <output aria-label="RadioGroup changes">{JSON.stringify(changes)}</output>
     </section>
   );
 }
@@ -217,6 +246,7 @@ function Fixture() {
         )}
       </section>
       <SwitchStates />
+      <RadioGroupStates />
     </main>
   );
 }

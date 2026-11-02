@@ -21,6 +21,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 - Use `NativeSelect` for short single-value lists that should use the platform picker; pass `option`/`optgroup` children. `multiple` and the native listbox `size` are not supported; className/ref target the select.
 - Compose `Checkbox.Root` with `Checkbox.Indicator` and name it with `Field.Label` in `Field.Root` or a wrapping `<label>`. An empty Indicator draws a check or a dash (indeterminate); do not pass a single ✓ glyph when using indeterminate. Base UI submits `name`/`value`; do not add hidden inputs.
 - Compose `Switch.Root` with `Switch.Thumb` for settings that apply immediately; keep the label text unchanged across states. Use Checkbox for choices confirmed by a submit button.
+- Use `RadioGroup.Root` with `RadioGroup.Item` (each containing `RadioGroup.Indicator` and its visible text) for a single choice. Name the group with `aria-labelledby` pointing at visible text, or `aria-label`; do not put it inside `Field.Root` with `Field.Label`, which would rename every item. `orientation` only changes layout. Keep the value on Root; `form.reset()` restores an uncontrolled `defaultValue`, and a controlled value must be reset in `onReset`.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 
