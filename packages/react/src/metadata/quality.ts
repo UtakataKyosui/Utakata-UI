@@ -6,6 +6,7 @@ import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
+import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
@@ -113,6 +114,7 @@ export const qualityRules = {
   Toggle: toggleQualityRules,
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
+  DropdownMenu: dropdownMenuQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',
