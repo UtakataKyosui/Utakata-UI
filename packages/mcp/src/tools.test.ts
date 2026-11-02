@@ -2,6 +2,21 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('requires browser evidence for Skeleton motion and keeps OS checks manual', () => {
+    expect(getComponent('Skeleton')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'skeleton.motion-theme',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'skeleton.os-reduced-motion',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Badge visuals and keeps zoom and speech manual', () => {
     const rules = getComponent('Badge')?.qualityRules ?? [];
     expect(rules).toEqual(

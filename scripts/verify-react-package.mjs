@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Slider, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
+import { Badge, Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Skeleton, Slider, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -94,6 +94,18 @@ export const badgeUnsupportedVariant = <Badge variant="loud">Draft</Badge>;
 export const badgeMissingText = <Badge />;
 // @ts-expect-error Badge className must be a string in shipped declarations.
 export const badgeFunctionClass = <Badge className={() => 'x'}>Draft</Badge>;
+export const skeletonProps: SkeletonProps = { shape: 'circle', style: { width: 40 } };
+export const skeleton = <Skeleton {...skeletonProps} />;
+// @ts-expect-error Skeleton shapes are limited to the manifest in shipped declarations.
+export const skeletonUnsupportedShape: SkeletonProps = { shape: 'pill' };
+// @ts-expect-error Skeleton never exposes status semantics in shipped declarations.
+export const skeletonRole: SkeletonProps = { role: 'status' };
+const skeletonFocusProps = { tabIndex: 0, role: 'button' };
+// @ts-expect-error Spreads cannot make a Skeleton focusable in shipped declarations.
+export const skeletonFocusSpread = <Skeleton {...skeletonFocusProps} />;
+const skeletonContentProps = { children: 'Loading' };
+// @ts-expect-error Spreads cannot give a Skeleton content in shipped declarations.
+export const skeletonContentSpread = <Skeleton {...skeletonContentProps} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

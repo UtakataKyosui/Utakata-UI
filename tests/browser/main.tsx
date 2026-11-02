@@ -13,6 +13,7 @@ import {
   RadioGroup,
   Select,
   Separator,
+  Skeleton,
   Slider,
   Switch,
   Textarea,
@@ -202,6 +203,18 @@ function BadgeStates() {
   );
 }
 
+function SkeletonStates() {
+  return (
+    <section aria-label="Skeleton states">
+      <p role="status">Loading profile</p>
+      <div aria-busy="true" className="fixture-skeletons">
+        <Skeleton shape="circle" style={{ width: 40, height: 40 }} />
+        <Skeleton style={{ width: 160, height: 16 }} />
+      </div>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -375,6 +388,7 @@ function Fixture() {
       <SelectStates />
       <SliderStates />
       <BadgeStates />
+      <SkeletonStates />
     </main>
   );
 }
