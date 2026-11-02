@@ -37,7 +37,7 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type TextareaProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, RadioGroup, Select, Separator, Textarea, type ButtonProps, type InputProps, type NativeSelectProps, type RadioGroupRootProps, type SelectRootProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -70,6 +70,14 @@ export const plan = <RadioGroup.Root {...radioGroupProps} aria-label="Plan"><Rad
 export const radioGroupDiagonal: RadioGroupRootProps = { orientation: 'diagonal' };
 // @ts-expect-error RadioGroup className must be a string in shipped declarations.
 export const radioGroupFunctionClass: RadioGroupRootProps = { className: () => 'x' };
+export const selectProps: SelectRootProps<string> = { defaultValue: 'system', name: 'theme' };
+export const theme = <Select.Root {...selectProps}><Select.Label>Theme</Select.Label><Select.Trigger><Select.Value placeholder="Choose a theme" /><Select.Icon /></Select.Trigger></Select.Root>;
+// @ts-expect-error Select is single-selection only in shipped declarations.
+export const selectMultiple: SelectRootProps<string> = { multiple: true };
+// @ts-expect-error A single Select does not accept an array value in shipped declarations.
+export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
+// @ts-expect-error Select.Trigger className must be a string in shipped declarations.
+export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

@@ -37,7 +37,8 @@ export type {
   RadioGroupRootProps,
 } from './components/RadioGroup.js';
 export { RadioGroup } from './components/RadioGroup.js';
-
+export type { SelectRootProps } from './components/Select.js';
+export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 
