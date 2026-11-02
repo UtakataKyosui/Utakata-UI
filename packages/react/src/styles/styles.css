@@ -198,7 +198,8 @@
     min-block-size: 1em;
   }
 
-  .ui-input {
+  .ui-input,
+  .ui-textarea {
     background: var(--ui-color-surface);
     border: 1px solid var(--ui-color-border);
     border-radius: var(--ui-radius-control);
@@ -209,42 +210,51 @@
     min-inline-size: 0;
   }
 
-  .ui-input::placeholder {
+  .ui-input::placeholder,
+  .ui-textarea::placeholder {
     color: var(--ui-color-muted);
     opacity: 1;
   }
 
-  .ui-input:focus-visible {
+  .ui-input:focus-visible,
+  .ui-textarea:focus-visible {
     box-shadow: var(--ui-focus-ring);
     outline: 2px solid var(--ui-color-primary);
     outline-offset: 2px;
   }
 
-  .ui-input:read-only {
+  .ui-input:read-only,
+  .ui-textarea:read-only {
     border-style: dashed;
   }
 
-  .ui-input:disabled {
+  .ui-input:disabled,
+  .ui-textarea:disabled {
     border-style: solid;
     cursor: not-allowed;
     opacity: 0.55;
   }
 
   .ui-input[data-invalid],
-  .ui-input[aria-invalid="true"] {
+  .ui-input[aria-invalid="true"],
+  .ui-textarea[data-invalid],
+  .ui-textarea[aria-invalid="true"] {
     border-color: var(--ui-color-danger);
   }
 
-  .ui-input--sm {
+  .ui-input--sm,
+  .ui-textarea--sm {
     font-size: 0.875rem;
     padding: 0.25rem 0.5rem;
   }
 
-  .ui-input--md {
+  .ui-input--md,
+  .ui-textarea--md {
     padding: 0.5rem 0.75rem;
   }
 
-  .ui-input--lg {
+  .ui-input--lg,
+  .ui-textarea--lg {
     font-size: 1.125rem;
     padding: 0.625rem 0.875rem;
   }
@@ -259,6 +269,12 @@
 
   .ui-input--lg {
     min-block-size: 3rem;
+  }
+
+  .ui-textarea {
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    resize: vertical;
   }
 
   @media (forced-colors: active) {

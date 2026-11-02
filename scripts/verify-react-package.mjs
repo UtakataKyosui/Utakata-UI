@@ -37,10 +37,16 @@ try {
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
-    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, Separator, type ButtonProps, type InputProps } from '@utakata-ui/react';
+    `import { Button, Dialog, Field, Input, Kbd, KbdGroup, Separator, Textarea, type ButtonProps, type InputProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const textareaProps: TextareaProps = { size: 'sm', rows: 4, maxLength: 500, className: 'notes' };
+export const notes = <Field.Root><Field.Label>Notes</Field.Label><Textarea {...textareaProps} /></Field.Root>;
+// @ts-expect-error Unsupported Textarea sizes fail against shipped declarations.
+export const textareaUnsupportedSize: TextareaProps = { size: 'xl' };
+// @ts-expect-error Textarea className must be a string.
+export const textareaFunctionClass = <Textarea aria-label="Notes" className={() => 'x'} />;
 export const inputProps: InputProps = { size: 'lg', type: 'email', readOnly: true, className: 'email' };
 export const input = <Field.Root><Field.Label>Email</Field.Label><Input {...inputProps} /></Field.Root>;
 // @ts-expect-error Input visual sizes replace the numeric native size.

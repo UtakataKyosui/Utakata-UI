@@ -2,6 +2,17 @@ import { describe, expect, it } from 'vitest';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
 describe('manifest tools', () => {
+  it('exposes the required Textarea keyboard browser rule', () => {
+    expect(getComponent('Textarea')?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'textarea.keyboard-input',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+  });
   it('distinguishes required Input browser checks from residual manual evidence', () => {
     expect(getComponent('Input')?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -39,6 +50,7 @@ describe('manifest tools', () => {
       'Kbd',
       'Separator',
       'Input',
+      'Textarea',
     ]);
   });
 

@@ -1,6 +1,7 @@
 import { inputQualityRules } from './components/Input.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { separatorQualityRules } from './components/Separator.js';
+import { textareaQualityRules } from './components/Textarea.js';
 
 export interface QualityRule {
   id: string;
@@ -67,6 +68,7 @@ export const qualityRules = {
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
   Input: inputQualityRules,
+  Textarea: textareaQualityRules,
   shared: [
     {
       id: 'theme.contrast-focus',

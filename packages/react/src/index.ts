@@ -26,7 +26,12 @@ export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 
+export type { TextareaProps } from './components/Textarea.js';
+export { Textarea } from './components/Textarea.js';
+
 export type { InputSize } from './metadata/components/Input.js';
+
+export type { TextareaSize } from './metadata/components/Textarea.js';
 
 export type {
   ButtonSize,
