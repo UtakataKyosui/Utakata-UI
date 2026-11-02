@@ -1,6 +1,7 @@
 import { alertManifest } from './components/Alert.js';
 import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
+import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { inputManifest } from './components/Input.js';
@@ -125,6 +126,7 @@ export const componentManifest = {
     Avatar: avatarManifest,
     Progress: progressManifest,
     Table: tableManifest,
+    Breadcrumb: breadcrumbManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,

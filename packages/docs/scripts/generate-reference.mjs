@@ -4,6 +4,11 @@ import { componentManifest } from '@utakata-ui/react/manifest';
 const componentsDirectory = new URL('../docs/components/', import.meta.url);
 await mkdir(componentsDirectory, { recursive: true });
 
+// Manifest prose may mention JSX such as render={<RouterLink />}; escape it
+// so MDX renders the text instead of evaluating it.
+const prose = (text) =>
+  text.replace(/[{}<>]/g, (character) => `\\${character}`);
+
 const pages = Object.entries(componentManifest.components).map(
   async ([name, component]) => {
     const slug = name.toLowerCase();
@@ -14,7 +19,7 @@ title: ${name}
 description: ${component.description}
 ---
 
-${component.description}
+${prose(component.description)}
 
 ## プレビュー
 
@@ -22,9 +27,9 @@ ${component.description}
 
 ## 使い方
 
-${component.composition}
+${prose(component.composition)}
 
-${component.accessibility}
+${prose(component.accessibility)}
 
 \`\`\`tsx
 ${component.example}

@@ -4,6 +4,7 @@ import {
   Alert,
   Avatar,
   Badge,
+  Breadcrumb,
   Button,
   Card,
   Checkbox,
@@ -377,6 +378,38 @@ function TableStates() {
   );
 }
 
+function BreadcrumbStates() {
+  return (
+    <section aria-label="Breadcrumb states">
+      <Button>Before breadcrumb</Button>
+      <Breadcrumb.Root>
+        <Breadcrumb.List>
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href="#home">Home</Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Ellipsis />
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Link href="#catalog">
+              Catalog_of_regional_products_and_services
+            </Breadcrumb.Link>
+          </Breadcrumb.Item>
+          <Breadcrumb.Separator />
+          <Breadcrumb.Item>
+            <Breadcrumb.Page>
+              Current_page_with_a_very_long_unbroken_title_for_wrapping
+            </Breadcrumb.Page>
+          </Breadcrumb.Item>
+        </Breadcrumb.List>
+      </Breadcrumb.Root>
+      <Button>After breadcrumb</Button>
+    </section>
+  );
+}
+
 function Fixture() {
   return (
     <main>
@@ -557,6 +590,7 @@ function Fixture() {
       <AvatarStates />
       <ProgressStates />
       <TableStates />
+      <BreadcrumbStates />
     </main>
   );
 }

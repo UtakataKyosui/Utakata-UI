@@ -38,7 +38,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Alert, Avatar, Badge, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
+import { Alert, Avatar, Badge, Breadcrumb, Button, Card, Dialog, Field, Input, Kbd, KbdGroup, NativeSelect, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Textarea, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonProps, type InputProps, type NativeSelectProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TextareaProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -201,6 +201,24 @@ export const tableRoleSpread = <Table.Container {...tableRoleProps} />;
 const tableFocusProps = { 'aria-label': 'x', tabIndex: -1 };
 // @ts-expect-error Spreads cannot remove the container from the tab order.
 export const tableFocusSpread = <Table.Container {...tableFocusProps} />;
+export const hrefLink: BreadcrumbLinkProps = { href: '/' };
+export const routerLink: BreadcrumbLinkProps = { render: <a href="/docs">Docs</a> };
+export const breadcrumb = <Breadcrumb.Root><Breadcrumb.List><Breadcrumb.Item><Breadcrumb.Link {...hrefLink}>Home</Breadcrumb.Link></Breadcrumb.Item><Breadcrumb.Separator /><Breadcrumb.Item><Breadcrumb.Page>Docs</Breadcrumb.Page></Breadcrumb.Item></Breadcrumb.List></Breadcrumb.Root>;
+// @ts-expect-error A breadcrumb link needs href or a render element in shipped declarations.
+export const breadcrumbNoDestination: BreadcrumbLinkProps = { children: 'Home' };
+// @ts-expect-error JSX usage must also provide a destination.
+export const breadcrumbNoDestinationJsx = <Breadcrumb.Link>Home</Breadcrumb.Link>;
+// @ts-expect-error The current page always uses aria-current="page" in shipped declarations.
+export const breadcrumbWrongCurrent: BreadcrumbPageProps = { 'aria-current': 'step' };
+const breadcrumbCurrentProps = { 'aria-current': 'step' as const };
+// @ts-expect-error Spreads cannot change the current-page marker.
+export const breadcrumbCurrentSpread = <Breadcrumb.Page {...breadcrumbCurrentProps} />;
+const breadcrumbVisibleProps = { 'aria-hidden': false as const, role: 'presentation' };
+// @ts-expect-error Spreads cannot expose decorative separators.
+export const breadcrumbSeparatorSpread = <Breadcrumb.Separator {...breadcrumbVisibleProps} />;
+const breadcrumbLinkProps = { children: 'Home' };
+// @ts-expect-error Spreads cannot create a link without a destination.
+export const breadcrumbLinkSpread = <Breadcrumb.Link {...breadcrumbLinkProps} />;
 export const namedIcon = <Button iconOnly aria-label="Save" />;
 export const referencedIcon = <Button iconOnly aria-labelledby="save-label" />;
 export const normalButton: ButtonProps = { children: 'Save' };

@@ -25,6 +25,8 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 ## 検査範囲と残る確認
 
+`breadcrumb.reflow-focus` は長い階層のパンくずを Chromium light/dark で検証する必須 browser ルールです。幅320px とルート文字サイズ200% でクリップや枠外へのはみ出しなく折り返すこと、リンクと現在ページの文字が 4.5:1 以上であること、リンクには下線があり現在ページには無いため色なしで区別できること、実際の Tab でリンクを順番に1回ずつ訪れ区切りと省略記号を飛ばすこと、フォーカス時に表示が出ること、強制配色では box-shadow が抑制されるため 2px 以上の実線の outline が残ることを検証します。折り返し無効・フォーカス表示の除去・下線の除去の対照例では検証が失敗することを確認します。`breadcrumb-evidence` と `breadcrumb-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `breadcrumb.zoom-theme`、読み上げは `breadcrumb.screen-reader` に未検証として残ります。
+
 `table.reflow-focus` は幅の広い Table を Chromium light/dark で検証する必須 browser ルールです。コンテナが横スクロールになり表が内容幅を保つこと（通常と幅320px）、実際の Tab でスクロール領域にフォーカスが入り、矢印キーで `scrollLeft` が増え、次の Tab で表を抜けること、フォーカス時に表示（box-shadow または outline）が出ること、強制配色では box-shadow が抑制されるため 2px 以上の実線の outline が残ることを検証します。スクロール無効化とフォーカス表示の除去の対照例では検証が失敗することを確認します。`table-evidence` と `table-axe` を既存のコミット付き CI 成果物へ添付します。実際の200%ズームとハイコントラストは `table.zoom-theme`、表ナビゲーションの読み上げは `table.screen-reader` に未検証として残ります。
 
 `progress.visual-motion` は 0・50・100 の確定値と不確定値の Progress を Chromium light/dark で実測する必須 browser ルールです。インジケーター幅が値に比例すること（トラック内寸に対し ±1px）、塗りがトラックと背景に対し 3:1 以上、トラックの境界が背景に対し 3:1 以上、値と見出しの文字が 4.5:1 以上であること、不確定バーが既定でアニメーション実行中で `prefers-reduced-motion: reduce` のエミュレーションでは `none` かつ静止した縞模様になること、強制配色でも塗りとトラック境界が見えることを算出色とレイアウトで検証します。幅の誤り・塗りとトラックの同色化・縮小モーション時のアニメーション維持の対照例では検証が失敗することを確認します。`progress-evidence` と `progress-axe` を既存のコミット付き CI 成果物へ添付します。実際の OS 設定とハイコントラストは `progress.os-reduced-motion`、スクリーンリーダーの発話は `progress.screen-reader` に未検証として残ります。
