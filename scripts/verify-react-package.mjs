@@ -60,6 +60,17 @@ export const unsupportedVariant = <Button variant="unsupported">Save</Button>;
 export const shortcut = <KbdGroup aria-label="Control and K"><Kbd>Ctrl</Kbd><Kbd size="sm">K</Kbd></KbdGroup>;
 // @ts-expect-error Kbd sizes are limited to the manifest.
 export const unsupportedKbd = <Kbd size="lg">K</Kbd>;
+// @ts-expect-error Display-only keys cannot receive keyboard focus.
+export const focusableKbd = <Kbd tabIndex={0}>K</Kbd>;
+// @ts-expect-error Display-only groups cannot intercept keyboard events.
+export const keyboardGroup = <KbdGroup onKeyDown={() => {}}>K</KbdGroup>;
+const interactiveKeyProps = { tabIndex: 0, onKeyUp: () => {} };
+// @ts-expect-error Spreads cannot bypass the display-only key contract.
+export const interactiveKbdSpread = <Kbd {...interactiveKeyProps}>K</Kbd>;
+// @ts-expect-error Spreads cannot bypass the display-only group contract.
+export const interactiveGroupSpread = <KbdGroup {...interactiveKeyProps}>K</KbdGroup>;
+// @ts-expect-error Editable keys would introduce keyboard interaction.
+export const editableKbd = <Kbd contentEditable>K</Kbd>;
 `,
   );
   run(process.execPath, [
