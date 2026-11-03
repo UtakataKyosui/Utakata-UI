@@ -39,6 +39,11 @@ test('CSS keeps browser/build checks; MCP changes do not start browsers or docs'
   assert.equal(mcp.tests, true);
   assert.equal(mcp.browser, false);
   assert.equal(mcp.docs, false);
+  const packedMcp = selectScope(['scripts/verify-mcp-package.mjs']);
+  assert.equal(packedMcp.mcp, true);
+  assert.equal(packedMcp.build, true);
+  assert.equal(packedMcp.browser, false);
+  assert.equal(packedMcp.docs, false);
 });
 
 test('docs and unit fixtures only run their relevant gates', () => {

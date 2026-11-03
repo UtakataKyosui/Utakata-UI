@@ -90,6 +90,8 @@ jobs:
           else
             pnpm test
           fi
+      - name: Dedicated registry CLI tests
+        run: pnpm test:cli
 
   build:
     needs: scope
@@ -120,8 +122,8 @@ jobs:
       - name: Verify Docs native compiler after install
         if: needs.scope.outputs.docs == 'true'
         run: node scripts/check-docs-compiler.mjs
-      - name: Build React (also required by Docs)
-        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true'
+      - name: Build React (also required by Docs and MCP)
+        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true' || needs.scope.outputs.mcp == 'true'
         run: pnpm --filter @utakata-ui/react build
       - name: Build MCP
         if: needs.scope.outputs.mcp == 'true'
@@ -141,6 +143,18 @@ jobs:
           mkdir -p "$RUNNER_TEMP/react-consumer"
           npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
           node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
+      - name: Verify packed MCP stdio and tools
+        if: needs.scope.outputs.mcp == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/mcp-consumer" "$RUNNER_TEMP/react-for-mcp"
+          pnpm --filter @utakata-ui/react pack --pack-destination "$RUNNER_TEMP/react-for-mcp"
+          pnpm --filter @utakata-ui/mcp pack --pack-destination "$RUNNER_TEMP/mcp-consumer"
+          node scripts/verify-mcp-package.mjs "$RUNNER_TEMP"/mcp-consumer/*.tgz "$RUNNER_TEMP"/react-for-mcp/*.tgz
+      - name: Verify packed dedicated CLI
+        run: |
+          mkdir -p "$RUNNER_TEMP/cli-consumer"
+          pnpm --filter @utakata-ui/cli pack --pack-destination "$RUNNER_TEMP/cli-consumer"
+          node scripts/verify-cli-package.mjs "$RUNNER_TEMP"/cli-consumer/*.tgz
 
   browser-accessibility:
     needs: scope

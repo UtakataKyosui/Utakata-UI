@@ -48,6 +48,22 @@ headless is downloaded. Browser tests have a seven-minute global timeout (two wo
 the job timeout, so they can write failure evidence. Artifacts are uploaded only
 after the test step runs. Release keeps full checks and uses the pnpm cache.
 
+MCP builds require the React package first. The build job packs both packages
+with pnpm, installs the archives into an isolated consumer, then verifies the
+installed MCP executable, stdio initialization, all tools, invalid inputs and
+manifest parity. `Release MCP` uses `mcp-vX.Y.Z` tags and a separate npm Trusted
+Publisher for `release-mcp.yml`; manual main runs only verify. Tagged releases
+also require the exact React dependency version to exist on npm before publish.
+
+The dedicated registry CLI has dependency-free Node tests (`pnpm test:cli`) in
+the checks job. The build job also packs and installs it into an isolated
+consumer, then tests package-name execution, catalog listing, dry-run, source
+installation and repeated installs. Docs builds verify the registry's import
+graph and typecheck valid/invalid consumer code installed through the CLI.
+`Release CLI` uses `cli-vX.Y.Z` tags and its own `release-cli.yml` Trusted
+Publisher. It does not require a published React package; sources are fetched
+from the separately hosted Utakata UI registry.
+
 Run `pnpm test:ci`, `actionlint`, and `gh actions-lock --verify` after workflow
 changes. Run `gh actions-lock` whenever adding/changing an Action reference;
 commit `.github/workflows/actions.lock` together with the workflow. The lockfile

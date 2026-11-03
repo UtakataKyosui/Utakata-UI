@@ -44,6 +44,7 @@ const rules = [
   ],
   [/^tests\/browser\/(main\.tsx|index\.html)$/, ['markup']],
   [/^scripts\/verify-react-package\.mjs$/, ['react', 'fallow']],
+  [/^scripts\/verify-mcp-package\.mjs$/, ['mcp', 'fallow']],
   [/^scripts\/accessibility-lint\.test\.mjs$/, ['markup', 'fallow']],
   [
     /\.(md|txt)$|^\.github\/workflows\/(actions\.lock|verify-lockfile\.yml|release\.yml)$|^\.gitignore$/,

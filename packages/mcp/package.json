@@ -1,17 +1,38 @@
 {
   "name": "@utakata-ui/mcp",
   "version": "0.1.0",
+  "description": "MCP server for Utakata UI component specifications and accessibility guidance.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UtakataKyosui/Utakata-UI.git",
+    "directory": "packages/mcp"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "type": "module",
+  "bin": {
+    "utakata-ui-mcp": "dist/server.js"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm --filter @utakata-ui/react build && pnpm build",
     "start": "node dist/server.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",
     "@utakata-ui/react": "workspace:*",
     "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5"
   }
 }

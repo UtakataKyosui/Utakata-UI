@@ -1,11 +1,17 @@
+#!/usr/bin/env node
+import { readFileSync } from 'node:fs';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { getComponent, listComponents, searchComponents } from './tools.js';
 
+const { version } = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+);
+
 const server = new McpServer({
   name: 'utakata-ui',
-  version: '0.1.0',
+  version,
 });
 
 server.registerTool(

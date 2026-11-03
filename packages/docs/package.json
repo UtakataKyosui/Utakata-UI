@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm generate:reference && blume dev",
-    "build": "pnpm generate:reference && blume build",
+    "build": "pnpm test:registry && pnpm generate:reference && blume build && pnpm generate:registry",
+    "generate:registry": "node scripts/generate-registry.mjs",
+    "test:registry": "node --test scripts/generate-registry.test.mjs",
     "generate:reference": "node scripts/generate-reference.mjs",
     "doctor": "blume doctor",
     "preview": "blume preview"
