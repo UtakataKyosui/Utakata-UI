@@ -44,6 +44,66 @@ async function verifyReflow(page: Page) {
   return measurement;
 }
 
+async function verifyOpenDialog(page: Page, timeout = 5000) {
+  const popup = page.getByRole('dialog', {
+    name: 'Review settings / 設定確認',
+  });
+  await expect(popup).toBeVisible({ timeout });
+  const overflow = await measureOverflow(page, '.ui-dialog__popup');
+  expect(overflow.clipped, 'Dialog horizontal clipping').toEqual([false]);
+  expect(overflow.outside, 'Dialog content outside bounds').toEqual([false]);
+  const verticalClipping = await popup.evaluate((root) =>
+    [root, ...root.querySelectorAll<HTMLElement>('*')].some((node) => {
+      const style = getComputedStyle(node);
+      return (
+        style.display !== 'inline' &&
+        ['hidden', 'clip'].includes(style.overflowY) &&
+        node.scrollHeight > node.clientHeight + 1
+      );
+    }),
+  );
+  expect(verticalClipping, 'Dialog vertical clipping').toBe(false);
+  const content = [];
+  for (const locator of [
+    popup.getByRole('heading'),
+    popup.locator('.ui-dialog__description'),
+    popup.getByRole('button', { name: 'Close / 閉じる' }),
+  ]) {
+    await expect(locator, 'Dialog content is visible').toBeVisible({ timeout });
+    await locator.scrollIntoViewIfNeeded();
+    await expect(locator, 'Dialog content reaches viewport').toBeInViewport({
+      ratio: 1,
+      timeout,
+    });
+    const bounds = await locator.evaluate((node) => {
+      const box = node.getBoundingClientRect();
+      const root = node.closest('[role="dialog"]');
+      if (!root) throw new Error('Missing Dialog');
+      const parent = root.getBoundingClientRect();
+      const hit = document.elementFromPoint(
+        box.x + box.width / 2,
+        box.y + box.height / 2,
+      );
+      return {
+        top: box.top,
+        bottom: box.bottom,
+        parentTop: parent.top,
+        parentBottom: parent.bottom,
+        reachable: !!hit && (hit === node || node.contains(hit)),
+      };
+    });
+    expect(bounds.top, 'Dialog content top').toBeGreaterThanOrEqual(
+      bounds.parentTop,
+    );
+    expect(bounds.bottom, 'Dialog content bottom').toBeLessThanOrEqual(
+      bounds.parentBottom,
+    );
+    expect(bounds.reachable, 'Dialog content is unobscured').toBe(true);
+    content.push(bounds);
+  }
+  return { overflow, verticalClipping, content };
+}
+
 test.beforeEach(async ({ page }) => {
   await page.goto('/?layout');
 });
@@ -63,7 +123,7 @@ for (const [id, css] of [
   ['theme.text-size', 'html { font-size: 200%; }'],
   [
     'theme.text-spacing',
-    '.layout-contract, .layout-contract * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } .layout-contract p { margin-block-end: 2em !important; }',
+    '.layout-contract, .layout-contract *, .ui-dialog__popup, .ui-dialog__popup * { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } .layout-contract p, .ui-dialog__popup p { margin-block-end: 2em !important; }',
   ],
 ] as const) {
   test(`[${id}] content and operation remain available at 320 CSS px`, async ({
@@ -84,6 +144,20 @@ for (const [id, css] of [
     expect(box).not.toBeNull();
     expect(box?.x).toBeGreaterThanOrEqual(0);
     expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(320);
+    const dialogContent = await verifyOpenDialog(page);
+    // The fixture has one action. Real Tab must reach it, and Enter must close
+    // the popup; Escape alone would not prove the Close action is available.
+    await page.keyboard.press('Tab');
+    await expect(
+      popup.getByRole('button', { name: 'Close / 閉じる' }),
+    ).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(popup).toBeHidden();
+    await expect(
+      page.getByRole('button', { name: 'Review / 確認', exact: true }),
+    ).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(popup).toBeVisible();
     await page.keyboard.press('Escape');
     await expect(popup).toBeHidden();
     await expect(
@@ -93,10 +167,40 @@ for (const [id, css] of [
       body: JSON.stringify({
         measurements,
         dialog: box,
+        dialogContent,
         limit: 'text scaling, not browser zoom',
       }),
       contentType: 'application/json',
     });
+  });
+}
+
+for (const [name, css, error] of [
+  [
+    'fixed-height popup',
+    '.ui-dialog__popup { height: 40px !important; overflow: hidden !important; }',
+    /Dialog vertical clipping/,
+  ],
+  [
+    'clipped description',
+    '.ui-dialog__description { height: 10px !important; overflow: hidden !important; }',
+    /Dialog vertical clipping/,
+  ],
+  [
+    'hidden Close action',
+    '.ui-dialog__popup button { visibility: hidden !important; }',
+    /Dialog content is visible/,
+  ],
+] as const) {
+  test(`Dialog content detector rejects ${name}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    await page
+      .getByRole('button', { name: 'Review / 確認', exact: true })
+      .focus();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await page.addStyleTag({ content: css });
+    await expect(verifyOpenDialog(page, 500)).rejects.toThrow(error);
   });
 }
 
