@@ -40,7 +40,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Test scope, aggregate and evidence gates (no dependency install)
-        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs
+        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs
       - name: Select required gates
         id: scope
         env:

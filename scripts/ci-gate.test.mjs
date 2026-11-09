@@ -3,6 +3,22 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gatesPassed } from './ci-gate.mjs';
 
+test('Quality runs the complete dependency-free CI regression suite before scope selection', () => {
+  const { scripts } = JSON.parse(
+    readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+  );
+  const workflow = readFileSync(
+    new URL('../.github/workflows/quality.yml', import.meta.url),
+    'utf8',
+  );
+  const scopeJob = workflow.split('\n  checks:\n')[0];
+  assert.ok(scopeJob.includes(`run: ${scripts['test:ci']}\n`));
+  assert.ok(
+    scopeJob.indexOf(`run: ${scripts['test:ci']}\n`) <
+      scopeJob.indexOf('run: node scripts/ci-scope.mjs'),
+  );
+});
+
 function fixture(required) {
   return {
     scope: {

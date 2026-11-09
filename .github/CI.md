@@ -8,17 +8,17 @@ Main pushes and manual runs execute all applicable gates.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
-| Change                                                       | Required work                                                                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                                     |
-| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                             |
-| React component/API/metadata                                 | Types, related unit tests, React build/packed consumer, Docs, browser, fallow; Markuplint for TSX components |
-| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                            |
-| React unit fixture                                           | Types, related unit tests, fallow                                                                            |
-| MCP implementation                                           | Types, related unit tests, MCP build, fallow                                                                 |
-| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                                   |
-| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                                |
-| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                                   |
+| Change                                                       | Required work                                                                                              |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                                   |
+| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                           |
+| React component/API/metadata                                 | Types, related unit tests, React and MCP build/packed consumers, Docs, browser, fallow; Markuplint for TSX |
+| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                          |
+| React unit fixture                                           | Types, related unit tests, fallow                                                                          |
+| MCP implementation                                           | Types, related unit tests, MCP build, fallow                                                               |
+| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                                 |
+| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                              |
+| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                                 |
 
 Root config/dependency changes clear the diff base: lint and tests run fully.
 Other PRs use Biome's changed mode, Vitest's affected import graph (including
@@ -50,8 +50,10 @@ jobs, with `fail-fast: false` to retain both sets of evidence. Each uses two
 workers and zero retries. Its five-minute suite timeout leaves time for setup
 and evidence upload within the ten-minute job limit. The job records elapsed
 wall time (checkout through artifact upload) in the Actions summary and fails
-above 420 seconds, 70% of the limit. Cold/warm GitHub timings still need to be
-measured; local suite duration does not establish this budget on GitHub.
+above 420 seconds, 70% of the limit. Six GitHub-hosted browser jobs on PR #85
+(runs 42650709777–42660430846, job start to completion) took 119–149 seconds;
+these runs were not separated by browser-cache hit or miss, so a cold-cache
+budget remains unmeasured.
 Artifacts are uploaded only after the test step runs. Release React calls the
 same browser workflow and cannot publish if either theme fails. Manual main
 release runs default to `release_mode: verify`; explicit `token` or `oidc` modes publish after verification. Release keeps full checks and

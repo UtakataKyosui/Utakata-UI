@@ -26,7 +26,25 @@ test('component changes retain consumer, browser, docs and unit coverage', () =>
     'fallow',
   ])
     assert.equal(scope[flag], true, flag);
-  assert.equal(scope.mcp, false);
+  assert.equal(scope.mcp, true);
+});
+
+test('React exports and manifest changes verify the downstream packed MCP consumer', () => {
+  for (const file of [
+    'packages/react/src/index.ts',
+    'packages/react/src/metadata/manifest.ts',
+    'packages/react/tsconfig.build.json',
+  ]) {
+    const scope = selectScope([file]);
+    assert.equal(scope.react, true, file);
+    assert.equal(scope.mcp, true, file);
+    assert.equal(scope.build, true, file);
+  }
+  assert.equal(selectScope(['packages/react/README.md']).mcp, false);
+  assert.equal(
+    selectScope(['packages/react/src/tests/diagnostics.test.tsx']).mcp,
+    false,
+  );
 });
 
 test('CSS keeps browser/build checks; MCP changes do not start browsers or docs', () => {

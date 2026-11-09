@@ -29,7 +29,7 @@ const rules = [
   ],
   [
     /^packages\/react\/(?!src\/tests\/)(?!.*\.(md|txt)$)(?!.*\/LICENSE$)/,
-    ['react', 'browser', 'docs', 'fallow'],
+    ['react', 'mcp', 'browser', 'docs', 'fallow'],
   ],
   [/^packages\/react\/.*\.[cm]?[jt]sx?$/, ['types', 'tests', 'fallow']],
   [/^packages\/react\/src\/tests\//, ['tests', 'fallow']],
