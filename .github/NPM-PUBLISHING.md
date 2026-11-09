@@ -1,8 +1,15 @@
 # npm 公開の初期設定と運用
 
-現在の Release ワークフローは **npm Trusted Publishing（OIDC）** を使用します。
-通常の CI 公開では `NPM_TOKEN` Secret は不要です。初回は管理者がローカルで公開し、
-その後に npm 側で各パッケージの Trusted Publisher を登録します。
+初回も以後も **GitHub Actions** から公開できます。各 Release の手動実行で
+`release_mode` を選択します。既定は `verify`（検証のみ）です。
+
+| release_mode | 動作                                   | 必要な設定                         |
+| ------------ | -------------------------------------- | ---------------------------------- |
+| `verify`     | 検証・pack・配布テストのみ             | npm の公開認証は不要               |
+| `token`      | 検証後に npm へ公開。初回にも使用可能  | `npm` Environment の `NPM_TOKEN`   |
+| `oidc`       | 検証後に npm Trusted Publishing で公開 | 対象パッケージの Trusted Publisher |
+
+タグ push での公開は引き続き OIDC を使用します。Token への自動切り替えは行いません。
 この手順書の追加は、Token の発行・設定変更・公開を実行したことを意味しません。
 
 ## 1. アカウントとスコープを準備する
@@ -26,49 +33,33 @@
    `react-v*`、`mcp-v*`、`cli-v*` をそれぞれ追加します。
 3. 通常の OIDC 運用では、Environment secrets に npm の公開 Token を登録する必要はありません。
 
-各 Release ジョブは `environment: npm` を使用します。手動実行は `main` での検証のみで、
-公開しません。タグ push は実際の公開を開始するため、公開準備が整ってから行います。
+各 Release ジョブは `environment: npm` を使用します。手動実行では `main` を選択し、
+`release_mode: verify` が公開しない検証モードです。
+`token` / `oidc` の選択、またはタグ push は実際の公開を開始します。
 
-## 3. 初回をローカルで公開する
+## 3. 初回を GitHub Actions で公開する
 
-公開対象の変更が main に含まれ、CI と必要な手動確認が完了してから行います。
-React の例です。コマンドはリポジトリルートで実行します。
+1. 次の「Token の設定」に従い、公開権限を持つ Granular Access Token を発行し、
+   `npm` Environment の Secret `NPM_TOKEN` に保存します。
+2. 公開するバージョンを package.json で確認し、変更とこのワークフローを main にマージします。
+   Quality と必要な手動確認が完了していることも確認します。
+3. GitHub の **Actions → Release React → Run workflow** を開きます。
+   **Use workflow from: main**、**release_mode: verify** を選んで検証します。
+4. 検証成功後、同じ main のバージョンを確認し、**release_mode: token** で実行します。
+   main が更新されていれば、その新しいコミットに対して検証も再実行されます。
+5. `npm` Environment の承認要求でコミットと公開対象を確認し、承認します。
+   全検証と配布テストの成功後、テストしたものと同じ tgz を公開します。
+6. 実行ログと npm のパッケージページで、バージョンと provenance を確認します。
+   公開済みのバージョンは再利用できません。成功した同一バージョンの公開ジョブを再実行しないでください。
 
-```sh
-npm login --registry=https://registry.npmjs.org/
-npm whoami --registry=https://registry.npmjs.org/
-pnpm install --frozen-lockfile
-pnpm check
-pnpm test:a11y:browser
-```
+MCP は **Release MCP**、CLI は **Release CLI** で同じ操作を行います。
+MCP の公開前には依存する React のバージョンを先に公開してください。
+MCP は pnpm pack による workspace 依存の変換と外部利用テストを行い、
+公開時には React の依存バージョンが npm に存在することも確認します。
+CLI は React の npm 公開を必要としません。
 
-新しい空の作業ディレクトリを `mktemp -d` で作成し、次の `<pack-dir>` にそのパスを指定します。
-バージョンとファイル名は package.json に合わせます。
-
-```sh
-npm pack ./packages/react --pack-destination <pack-dir>
-tar -tzf <pack-dir>/utakata-ui-react-0.1.0.tgz
-node scripts/verify-react-package.mjs <pack-dir>/utakata-ui-react-0.1.0.tgz
-npm publish <pack-dir>/utakata-ui-react-0.1.0.tgz --dry-run --access public
-```
-
-dry-run は収録内容の確認であり、公開権限の成功証明ではありません。
-管理者が内容・バージョン・公開先を確認した後、同じ tgz を公開します。
-
-```sh
-npm publish <pack-dir>/utakata-ui-react-0.1.0.tgz --access public --registry=https://registry.npmjs.org/
-npm view @utakata-ui/react@0.1.0 version dist.integrity --registry=https://registry.npmjs.org/
-```
-
-認証・2FA は npm の対話フローで完了します。初回のローカル公開に CI の provenance が
-付くとは扱いません。公開済みのバージョンは再利用できません。
-
-MCP は React の依存バージョンを先に公開します。MCP の `workspace:*` を配布用の依存に
-変換するため、必ず `pnpm --filter @utakata-ui/mcp pack --pack-destination <pack-dir>` を使い、
-`scripts/verify-mcp-package.mjs` で React と MCP の tgz を検証します。
-CLI は `pnpm --filter @utakata-ui/cli pack --pack-destination <pack-dir>` と
-`scripts/verify-cli-package.mjs` を使用します。正確な引数は各 Release ワークフローを参照してください。
-各パッケージの初回公開と npm 側設定は個別に必要です。
+ローカルで `npm login` や `npm publish` を実行する必要はありません。
+公開権限の実確認は公開時に行われます。検証モードの成功だけでは認証・公開権限を確認済みにしません。
 
 ## 4. Trusted Publisher を登録する
 
@@ -88,17 +79,19 @@ CI は GitHub-hosted runner と `id-token: write` を設定済みです。
 期限切れの場合は npm 側で削除・再作成します。
 詳細は [npm Trusted Publishing 公式手順](https://docs.npmjs.com/trusted-publishers/) を参照してください。
 
-次のバージョンに更新した変更を main にマージし、対応する Release を main で手動実行して検証します。
-続いて、確認した main のコミットにパッケージ固有のタグを付けて push し、Environment の承認を行います。
+次のバージョンに更新した変更を main にマージし、対応する Release を main で
+`release_mode: verify` により検証します。続いて `release_mode: oidc` で実行し、承認して公開します。
+タグで公開する場合は、確認した main のコミットにパッケージ固有のタグを付けて push します。
 たとえば React の次版が `0.1.1` なら `react-v0.1.1` です。
+手動で公開した同じバージョンのタグを push すると再公開になるため、いずれか一方の方法を使用します。
 タグと package.json のバージョンが違う場合や、コミットが main に含まれない場合は失敗します。
 
 OIDC 公開の成功後、npm の Publishing access で Token による公開を禁止する設定を検討し、
 不要な公開 Token を失効させます。パッケージページのバージョン・provenance と CI の結果を確認します。
 
-## 5. Token が必要な場合の設定
+## 5. 初回公開用の Token の設定
 
-対話的な `npm login` を使えない場合などに限定して、npm のプロフィールメニューから
+初回を Actions から公開するため、npm のプロフィールメニューから
 **Access Tokens → Generate New Token** で Granular Access Token を発行します。
 
 - Packages and scopes は公開対象だけを選び、直接公開には Read and write (publish and stage) を指定します。
@@ -112,21 +105,23 @@ OIDC 公開の成功後、npm の Publishing access で Token による公開を
 発行画面の詳細は [npm の Token 作成手順](https://docs.npmjs.com/creating-and-viewing-access-tokens/) を参照してください。
 ローカル利用時は、認証情報をユーザー側の保護された設定で管理します。
 
-CI に Token を渡す運用を選ぶ場合の保存先は
-**GitHub Settings → Environments → npm → Environment secrets → Add secret**、名前は `NPM_TOKEN` です。
-ただし、**現在のワークフローはこの Secret を読みません**。登録だけでは動作せず、
-別途レビューしたワークフロー変更で Secret を公開ステップにだけ渡し、npm の認証設定に接続する必要があります。
-接続例は `NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}` と、
-`//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}` を記載した一時 userconfig です。
-一時ファイルを `NPM_CONFIG_USERCONFIG` で公開ステップだけに指定し、終了時に削除します。
-Token の実値を書いた設定をキャッシュ・artifact に含めず、OIDC と Token のどちらで認証するか明示します。
-既存 OIDC 構成での公開には、この変更も Secret 登録も不要です。
+保存先は **GitHub Settings → Environments → npm → Environment secrets → Add secret**、
+名前は `NPM_TOKEN`、値は発行した Token です。Actions の入力欄には Token を貼り付けません。
+`release_mode: token` の公開ステップだけがこの Secret を読み取ります。
+依存インストール・テスト・ビルドには渡しません。
+一時 userconfig には環境変数の参照だけを書き、終了時に削除します。
+公開時の lifecycle scripts は無効化し、検証済み tgz を npm registry へ公開します。
+Secret 未設定・認証失敗時は失敗し、OIDC への自動切り替えはしません。
+
+OIDC への移行が完了するまでは、Token を更新して `release_mode: token` で公開を継続できます。
+移行後は Secret と npm 側の不要な Token を削除・失効させます。
 
 ## 6. 未設定・認証失敗の切り分け
 
 - `pnpm verify:release-readiness` は読み取り専用です。ローカル認証、main の必須チェック、
   npm Environment と承認者を確認し、不明な項目は unverified として非ゼロ終了します。
-  ローカルの `npm whoami` 成功は OIDC の成功証明ではありません。
+  ローカル認証は任意の補助確認です。Actions の Token/OIDC 公開にはローカルログインは不要で、
+  ローカル未認証でも手動リリースできます。この preflight は公開ジョブの必須ゲートではありません。
 - スコープ権限・Publisher の確認証拠を渡す方法は [CI ガイド](CI.md) を参照してください。
   現在の preflight の対象は React です。MCP・CLI はそれぞれ別に設定を確認します。
 - ENEEDAUTH/E404 は、スコープ権限、Publisher の owner/repository/workflow/environment、

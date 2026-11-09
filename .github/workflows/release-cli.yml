@@ -1,6 +1,13 @@
 name: Release CLI
 on:
   workflow_dispatch:
+    inputs:
+      release_mode:
+        description: "verify only, publish with OIDC, or publish with npm Environment NPM_TOKEN"
+        type: choice
+        required: true
+        default: verify
+        options: [verify, oidc, token]
   push:
     tags:
       - "cli-v*"
@@ -74,5 +81,10 @@ jobs:
           pnpm --filter @utakata-ui/cli pack --pack-destination "$RUNNER_TEMP/cli-release"
           node scripts/verify-cli-package.mjs "$RUNNER_TEMP"/cli-release/*.tgz
       - name: Publish with npm trusted publishing
-        if: github.event_name == 'push'
-        run: npm publish "$RUNNER_TEMP"/cli-release/*.tgz --access public --provenance --tag latest
+        if: github.event_name == 'push' || inputs.release_mode == 'oidc'
+        run: npm publish "$RUNNER_TEMP"/cli-release/*.tgz --access public --provenance --tag latest --ignore-scripts
+      - name: Publish with npm Environment token
+        if: github.event_name == 'workflow_dispatch' && inputs.release_mode == 'token'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: node scripts/publish-npm-token.mjs "$RUNNER_TEMP"/cli-release/*.tgz

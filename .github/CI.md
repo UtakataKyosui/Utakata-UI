@@ -54,7 +54,7 @@ above 420 seconds, 70% of the limit. Cold/warm GitHub timings still need to be
 measured; local suite duration does not establish this budget on GitHub.
 Artifacts are uploaded only after the test step runs. Release React calls the
 same browser workflow and cannot publish if either theme fails. Manual main
-release runs still verify without publishing. Release keeps full checks and
+release runs default to `release_mode: verify`; explicit `token` or `oidc` modes publish after verification. Release keeps full checks and
 uses the pnpm cache.
 
 The browser fixture is built once per job and served with Vite preview. It has
@@ -119,21 +119,22 @@ the original Skeleton failure's cause. That failure has no surviving log and
 has not been reproduced; #83's cause-identification criterion remains open.
 
 `pnpm verify:release-readiness` performs read-only checks of main's required
-quality context, the protected npm environment and npm authentication. Unknown
+quality context, the protected npm environment and optional local npm authentication (the preflight is not a release gate). Unknown
 or unauthorized responses are unverified and exit nonzero. npm scope rights
 and Trusted Publisher settings need maintainer evidence; optionally provide
 its JSON path as an argument. Each entry keyed by `npm.scope-publish-rights` or
 `npm.trusted-publisher` must have `package: @utakata-ui/react`, `status: passed`,
 `reviewer`, `evidence` reference and `checkedAt` within the last 30 days. Never
 put tokens or private screenshots in this file. Trusted Publisher is a later
-phase after the separately authorized initial local publication, not an initial
+phase after the separately authorized initial token publication through Actions, not an initial
 publication prerequisite. An unconfigured later phase is not overall CI-release
 readiness.
 
-For account/scope setup, GitHub Environment protection, initial local publication,
+For account/scope setup, GitHub Environment protection, initial Actions publication,
 per-package Trusted Publisher values, and optional token/Secrets handling, see
-[npm publishing setup](NPM-PUBLISHING.md). Current release workflows use OIDC;
-adding an `NPM_TOKEN` secret alone does not configure token authentication.
+[npm publishing setup](NPM-PUBLISHING.md). Release workflows default to verification. Manual `token` mode uses only the npm
+Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and tag pushes
+use Trusted Publishing. Initial publication needs no local login.
 
 The reviewable `.github/required-checks.ruleset.json` requires the always
 reporting `accessibility` aggregate on main, with strict checks and no bypass
@@ -149,7 +150,7 @@ MCP builds require the React package first. The build job packs both packages
 with pnpm, installs the archives into an isolated consumer, then verifies the
 installed MCP executable, stdio initialization, all tools, invalid inputs and
 manifest parity. `Release MCP` uses `mcp-vX.Y.Z` tags and a separate npm Trusted
-Publisher for `release-mcp.yml`; manual main runs only verify. Tagged releases
+Publisher for `release-mcp.yml`; manual main runs default to verify and can explicitly publish with token or OIDC. Tagged releases
 also require the exact React dependency version to exist on npm before publish.
 
 The dedicated registry CLI has dependency-free Node tests (`pnpm test:cli`) in

@@ -72,3 +72,37 @@ test('Quality and React release share the complete two-theme browser gate', () =
     /continue-on-error|--grep|--pass-with-no-tests/,
   );
 });
+
+test('releases default to verification and expose the token only to explicit manual publication', () => {
+  for (const name of ['release', 'release-mcp', 'release-cli']) {
+    const workflow = readFileSync(
+      new URL(`../.github/workflows/${name}.yml`, import.meta.url),
+      'utf8',
+    );
+    assert.match(workflow, /default: verify/);
+    assert.match(workflow, /options: \[verify, oidc, token\]/);
+    assert.match(
+      workflow,
+      /if: github.event_name == 'push' \|\| inputs.release_mode == 'oidc'/,
+    );
+    assert.match(
+      workflow,
+      /if: github.event_name == 'workflow_dispatch' && inputs.release_mode == 'token'/,
+    );
+    assert.equal((workflow.match(/secrets\.NPM_TOKEN/g) ?? []).length, 1);
+    const [verification, tokenStep] = workflow.split(
+      '      - name: Publish with npm Environment token',
+    );
+    assert.doesNotMatch(verification, /secrets\.NPM_TOKEN/);
+    assert.match(tokenStep, /node scripts\/publish-npm-token\.mjs/);
+    assert.match(workflow, /environment: npm/);
+    assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
+    assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
+    if (name === 'release-mcp') {
+      assert.match(
+        workflow,
+        /Require published React dependency\n        if: github.event_name == 'push' \|\| inputs.release_mode != 'verify'/,
+      );
+    }
+  }
+});
