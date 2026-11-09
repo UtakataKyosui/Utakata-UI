@@ -128,8 +128,11 @@ test('CLI work has its own gate; shared browser and release policy invalidate al
   for (const file of [
     '.github/workflows/browser.yml',
     '.github/workflows/release.yml',
+    '.github/workflows/release-mcp.yml',
+    '.github/workflows/release-cli.yml',
+    'scripts/prior-verification.mjs',
   ]) {
-    assert.equal(selectScope([file]).full, true);
+    assert.equal(selectScope([file]).full, true, file);
   }
 });
 

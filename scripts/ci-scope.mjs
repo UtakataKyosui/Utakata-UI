@@ -20,7 +20,7 @@ const flags = [
 // Unrecognized paths run everything instead of silently losing coverage.
 const rules = [
   [
-    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup)/,
+    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup|prior-verification)/,
     ['full'],
   ],
   [

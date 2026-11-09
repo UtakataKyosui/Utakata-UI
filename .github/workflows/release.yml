@@ -8,6 +8,10 @@ on:
         required: true
         default: verify
         options: [verify, oidc, token]
+      full_verification:
+        description: "Rerun every verification gate instead of reusing unchanged main evidence"
+        type: boolean
+        default: false
   push:
     tags:
       - "react-v*"
@@ -17,12 +21,67 @@ concurrency:
   group: release-react
   cancel-in-progress: false
 jobs:
+  prior:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      checks: ${{ steps.prior.outputs.checks }}
+      browser: ${{ steps.prior.outputs.browser }}
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Reuse unchanged verification from main
+        id: prior
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FULL_VERIFICATION: ${{ inputs.full_verification }}
+        run: node scripts/prior-verification.mjs release.yml checks,browser
   browser-accessibility:
-    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    needs: prior
+    if: needs.prior.outputs.browser == 'run'
     uses: ./.github/workflows/browser.yml
+  verify:
+    needs: prior
+    if: needs.prior.outputs.checks == 'run'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+            .github/workflows/release.yml
+      - name: Install release dependencies with native diagnostics
+        run: |
+          pnpm install --frozen-lockfile --reporter=ndjson > "$RUNNER_TEMP/pnpm-install.ndjson" || {
+            tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
+            exit 1
+          }
+      - name: Verify Docs native compiler after install
+        run: node scripts/check-docs-compiler.mjs
+      - name: Quality checks
+        run: pnpm check
   release:
-    needs: browser-accessibility
-    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    needs: [prior, browser-accessibility, verify]
+    # A reused gate is skipped here only because prior found unchanged passing evidence.
+    if: >-
+      !cancelled() && needs.prior.result == 'success' &&
+      (needs.browser-accessibility.result == 'success' || (needs.browser-accessibility.result == 'skipped' && needs.prior.outputs.browser == 'reuse')) &&
+      (needs.verify.result == 'success' || (needs.verify.result == 'skipped' && needs.prior.outputs.checks == 'reuse'))
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     # Only publishing runs use the protected npm Environment and its secrets.
@@ -74,10 +133,8 @@ jobs:
             tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
             exit 1
           }
-      - name: Verify Docs native compiler after install
-        run: node scripts/check-docs-compiler.mjs
-      - name: Quality checks
-        run: pnpm check
+      - name: Build public package
+        run: pnpm --filter @utakata-ui/react build
       - name: Pack and test public package
         run: |
           mkdir -p "$RUNNER_TEMP/react-release"
