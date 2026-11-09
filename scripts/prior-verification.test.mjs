@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { selectReuse } from './prior-verification.mjs';
 import {
   maxReuseAgeMs,
   qualityCandidate,
   releaseCandidate,
-  selectReuse,
-} from './prior-verification.mjs';
+  verifiedBase,
+} from './verified-runs.mjs';
 
 const now = Date.parse('2026-11-10T00:00:00Z');
 const run = (overrides) => ({
@@ -119,6 +120,24 @@ test('release runs count verification jobs even when publication failed', () => 
     ),
     null,
   );
+});
+
+test('main pushes use the newest verified ancestor or fall back to full gates', () => {
+  const candidates = [
+    qualityCandidate(run({ head_sha: 'not-ancestor' })),
+    qualityCandidate(run({ head_sha: 'parent' })),
+  ];
+  const base = (overrides) =>
+    verifiedBase({
+      head: 'head',
+      candidates,
+      isAncestor: (sha) => sha === 'parent',
+      now,
+      ...overrides,
+    });
+  assert.equal(base(), 'parent');
+  assert.equal(base({ candidates: [] }), '');
+  assert.equal(base({ now: now + maxReuseAgeMs }), '');
 });
 
 test('a newer candidate that requires a gate does not hide an exact older match', () => {

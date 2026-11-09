@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { lookupVerifiedBase } from './verified-runs.mjs';
 
 const flags = [
   'lint',
@@ -20,7 +21,7 @@ const flags = [
 // Unrecognized paths run everything instead of silently losing coverage.
 const rules = [
   [
-    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup|prior-verification)/,
+    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup|prior-verification|verified-runs)/,
     ['full'],
   ],
   [
@@ -84,16 +85,28 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
-  // Main pushes/manual runs are full gates. PRs use the entire merge-base diff,
-  // not just the last commit. Missing/invalid bases fail instead of skipping work.
-  const isPR = process.env.EVENT_NAME === 'pull_request';
-  const base = isPR
-    ? execFileSync('git', ['merge-base', process.env.BASE_SHA, 'HEAD'], {
-        encoding: 'utf8',
-      }).trim()
-    : '';
+  // PRs use the entire merge-base diff, not just the last commit; invalid bases
+  // fail. Main pushes diff against the newest main commit whose Quality run
+  // passed; lookup failure or no such commit runs full gates. Manual runs are full.
+  const event = process.env.EVENT_NAME;
+  const head = execFileSync('git', ['rev-parse', 'HEAD'], {
+    encoding: 'utf8',
+  }).trim();
+  let base = '';
+  if (event === 'pull_request') {
+    base = execFileSync('git', ['merge-base', process.env.BASE_SHA, 'HEAD'], {
+      encoding: 'utf8',
+    }).trim();
+  } else if (event === 'push') {
+    try {
+      base = lookupVerifiedBase(process.env.GITHUB_REPOSITORY, head);
+    } catch (error) {
+      console.log(`Verified main lookup failed: ${error.message}`);
+    }
+    console.log(`Verified main base: ${base || 'none (full gates)'}`);
+  }
   const files = base ? changedFiles(base) : [];
-  const scope = selectScope(files, !isPR);
+  const scope = selectScope(files, !base);
   const output = Object.entries({ ...scope, base: scope.full ? '' : base })
     .map(([key, value]) => `${key}=${value}`)
     .join('\n');

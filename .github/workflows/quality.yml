@@ -21,6 +21,9 @@ jobs:
   scope:
     runs-on: ubuntu-24.04
     timeout-minutes: 3
+    permissions:
+      contents: read
+      actions: read
     outputs:
       base: ${{ steps.scope.outputs.base }}
       checks: ${{ steps.scope.outputs.checks }}
@@ -46,6 +49,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GH_TOKEN: ${{ github.token }}
         run: node scripts/ci-scope.mjs
       - name: Agent infrastructure (no dependency install)
         if: steps.scope.outputs.agents == 'true'

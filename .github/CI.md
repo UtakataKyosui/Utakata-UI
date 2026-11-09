@@ -4,7 +4,11 @@ Quality always starts on PR updates so the `accessibility` aggregate check can
 report a result even for documentation-only changes. It does not use workflow
 path filters that could leave a required check pending. Superseded runs cancel.
 PRs compare the complete merge-base diff, including removed/renamed paths.
-Main pushes and manual runs execute all applicable gates.
+Main pushes compare against the newest main commit whose Quality `push` or
+`workflow_dispatch` run succeeded, provided it is an ancestor created within
+14 days. Each successful main run therefore extends verification inductively;
+an unchanged commit runs no gates. A missing, failed, expired or unreadable
+prior run gives full gates. Manual runs always execute all gates.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
