@@ -7,7 +7,11 @@ import {
 } from '../../packages/react/src/metadata/quality.js';
 
 const section = 'section[aria-label="Tabs states"]';
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function tabs(page: Page) {
   const root = page.locator(section);
@@ -198,6 +202,7 @@ test('[tabs.indicator-layout] indicator follows the selected tab across wrapped 
 });
 
 test('Tabs detector rejects swallowed arrow navigation', async ({ page }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.evaluate(() => {
     document.addEventListener(
@@ -214,6 +219,7 @@ test('Tabs detector rejects swallowed arrow navigation', async ({ page }) => {
 test('Tabs detector rejects an indicator pinned to the bottom of the list', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} [data-case="wrap"] .ui-tabs__indicator { inset-block-start: auto !important; inset-block-end: -1px !important; translate: var(--active-tab-left) 0 !important; }`,

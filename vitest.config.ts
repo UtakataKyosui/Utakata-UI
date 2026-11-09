@@ -10,6 +10,9 @@ export default defineConfig({
     },
   },
   test: {
+    // Bound CPU/memory pressure on GitHub's two-core runners. Keep test
+    // timeouts unchanged so slow or hung checks still fail.
+    ...(process.env.CI ? { maxWorkers: 2 } : {}),
     environment: 'jsdom',
     setupFiles: ['./packages/react/src/tests/test-setup.ts'],
     include: [

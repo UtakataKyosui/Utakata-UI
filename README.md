@@ -80,7 +80,8 @@ GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動
 タグのバージョンは `packages/react/package.json` と一致する安定版に限り、コミットは
 `main` に含まれている必要があります。手動実行は main を選択してください（他の ref はスキップします）。
 公開するものと同じ tgz を一時的な外部プロジェクトに
-インストールし、型・SSR・CSS の解決・manifest を確認します。
+インストールし、型・SSR・CSS・manifest を確認し、Vite の production build も実行します。
+公開前には Quality と共通のブラウザー検証を light/dark 両テーマで実行します。
 
 初回公開前に、次の設定を行ってください。
 
@@ -201,6 +202,8 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 `pnpm test:a11y` で Button の各 variant、Field のラベル・説明、開いた Dialog の portal を axe-core で検査します。違反があればテストが失敗し、違反ルールと対象要素が表示されます。検査自体が動作していることも、名前のないボタンを検出するテストで確認します。
 
 GitHub Actions の `Quality / accessibility` は main 向け PR・main への push・手動実行時に lint、型検査、a11y テスト、全テスト、ビルドを実行します。作業ブランチへの push とタグでは起動しません。マージを必ずブロックするには、リポジトリの branch protection でこのチェックを必須に設定してください。必須チェックを欠落させないため、Quality にはパスフィルターを設定しません。
+
+PR は merge-base からの全差分に必要なゲートを選択し、main・手動実行は全ゲートを実行します。単体テスト、配布検証、Docs、light/dark のブラウザー検証を分割し、依存とブラウザーのダウンロードをキャッシュします。必要なジョブの skip・失敗・キャンセルは集約ゲートを失敗させます。ブラウザーの証拠台帳と手動の未検証一覧も成果物へ保存します。実行方針と保証範囲は [.github/CI.md](.github/CI.md) を参照してください。
 
 コンポーネント追加・変更時は `packages/react/src/tests/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
 

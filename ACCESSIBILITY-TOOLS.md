@@ -13,6 +13,8 @@
 
 ## 実装したゲート
 
+Quality と Release React は共通の `browser.yml` で Chromium light/dark を別ジョブとして実行する。固定ビルドを配信し、開発用依存の再最適化によるページ再読込を避ける。`test-results/browser-evidence.json` はコミット・実行条件・ルールとテストの対応・全試行・成果物参照・手動ルールの未検証一覧を保存する。既存のルール単位の台帳であり、全 variant/size/state の登録漏れ検出や混在ルールの分解が完了したとは扱わない。詳細と残作業は [.github/CI.md](.github/CI.md) を参照する。
+
 - `pnpm lint`: 既存 Biome の推奨ルール（a11y を含む）。
 - `pnpm lint:markup`: 部品ソース、docs の TSX 例、ブラウザー fixture の静的検査。正常 JSX、代替テキスト欠落、ボタンの不正な入れ子で検出器を検証する。意図的に不正な既存 Vitest fixture は対象にしない。
 - `pnpm test:a11y`: 既存 jsdom / axe と品質ルールの回帰検査。

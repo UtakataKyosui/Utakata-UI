@@ -7,7 +7,11 @@ import {
 } from '../../packages/react/src/metadata/quality.js';
 
 const section = 'section[aria-label="Table states"]';
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function table(page: Page) {
   const root = page.locator(section);
@@ -128,6 +132,7 @@ test('[table.reflow-focus] scrolling container, keyboard scroll and focus indica
 test('Table detector rejects a container that does not scroll', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-table-container { overflow-x: visible !important; }`,
@@ -138,6 +143,7 @@ test('Table detector rejects a container that does not scroll', async ({
 test('Table detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-table-container:focus-visible { outline: none !important; box-shadow: none !important; }`,

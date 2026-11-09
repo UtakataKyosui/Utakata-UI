@@ -8,7 +8,11 @@ import {
 import { measureOverflow, measureRenderedColors } from './rendered-colors.js';
 
 const section = 'section[aria-label="Pagination states"]';
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function pagination(page: Page) {
   const root = page.locator(section);
@@ -212,6 +216,7 @@ test('[pagination.target-reflow] targets, wrapping, non-color marks and forced-c
 test('Pagination detector rejects a disabled control that stays focusable', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await pagination(page).previous.evaluate((node) => {
     node.setAttribute('tabindex', '0');
@@ -222,6 +227,7 @@ test('Pagination detector rejects a disabled control that stays focusable', asyn
 test('Pagination detector rejects marks that rely on color alone', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-pagination__link[aria-current="page"] { border-width: 1px !important; font-weight: 400 !important; }`,
@@ -232,6 +238,7 @@ test('Pagination detector rejects marks that rely on color alone', async ({
 test('Pagination detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-pagination__link:focus-visible { outline: none !important; }`,

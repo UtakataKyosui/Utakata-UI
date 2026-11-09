@@ -95,3 +95,22 @@ test('multi-commit/deletion/rename path lists preserve all affected areas', () =
   assert.equal(scope.react, true);
   assert.equal(scope.docs, true);
 });
+
+test('CLI work has its own gate; shared browser and release policy invalidate all gates', () => {
+  for (const file of [
+    'packages/cli/src/index.mjs',
+    'scripts/verify-cli-package.mjs',
+  ]) {
+    const scope = selectScope([file]);
+    assert.equal(scope.cli, true);
+    assert.equal(scope.build, true);
+    assert.equal(scope.browser, false);
+    assert.equal(scope.tests, false);
+  }
+  for (const file of [
+    '.github/workflows/browser.yml',
+    '.github/workflows/release.yml',
+  ]) {
+    assert.equal(selectScope([file]).full, true);
+  }
+});

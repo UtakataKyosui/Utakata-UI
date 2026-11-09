@@ -11,6 +11,7 @@ const flags = [
   'docs',
   'react',
   'mcp',
+  'cli',
   'agents',
   'fallow',
 ];
@@ -19,7 +20,7 @@ const flags = [
 // Unrecognized paths run everything instead of silently losing coverage.
 const rules = [
   [
-    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/quality\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup)/,
+    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup)/,
     ['full'],
   ],
   [
@@ -35,6 +36,7 @@ const rules = [
   [/^packages\/react\/src\/components\/.*\.tsx$/, ['markup']],
   [/^packages\/react\/.*(?:\.(md|txt)|\/LICENSE)$/, ['react']],
   [/^packages\/mcp\/(?!.*\.(md|txt)$)/, ['types', 'tests', 'mcp', 'fallow']],
+  [/^packages\/cli\/|^scripts\/verify-cli-package\.mjs$/, ['cli', 'fallow']],
   [/^packages\/docs\//, ['docs']],
   [/^packages\/docs\/.*\.[jt]sx?$/, ['types', 'fallow']],
   [/^packages\/docs\/.*\.tsx$/, ['markup']],
@@ -63,7 +65,7 @@ export function selectScope(files, full = false) {
     for (const flag of selected) scope[flag] = true;
   }
   scope.checks = scope.lint || scope.types || scope.tests || scope.markup;
-  scope.build = scope.react || scope.mcp || scope.docs;
+  scope.build = scope.react || scope.mcp || scope.cli;
   scope.full = full;
   return scope;
 }
