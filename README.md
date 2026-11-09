@@ -85,8 +85,11 @@ GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動
 
 初回公開前に、次の設定を行ってください。
 
+画面ごとの設定値、初回公開、Token が必要な場合の権限と GitHub Secrets の扱いは
+[npm 公開の設定手順](.github/NPM-PUBLISHING.md) を参照してください。
+
 1. npm で `@utakata-ui` スコープの所有・公開権限と名前の利用可否を確認します。
-2. GitHub に `npm` Environment を作成し、必要に応じて承認者と `react-v*` タグの制限を設定します。
+2. GitHub に `npm` Environment を作成し、承認者と検証用の `main`、公開用の `react-v*` タグの制限を設定します。
 3. 初回はローカルで `pnpm check`、`pnpm --filter @utakata-ui/react build` を実行し、
    `npm pack ./packages/react --pack-destination /tmp` の内容を確認します。
    `node scripts/verify-react-package.mjs /tmp/utakata-ui-react-0.1.0.tgz` で利用側を検証できます。

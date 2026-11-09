@@ -130,6 +130,11 @@ phase after the separately authorized initial local publication, not an initial
 publication prerequisite. An unconfigured later phase is not overall CI-release
 readiness.
 
+For account/scope setup, GitHub Environment protection, initial local publication,
+per-package Trusted Publisher values, and optional token/Secrets handling, see
+[npm publishing setup](NPM-PUBLISHING.md). Current release workflows use OIDC;
+adding an `NPM_TOKEN` secret alone does not configure token authentication.
+
 The reviewable `.github/required-checks.ruleset.json` requires the always
 reporting `accessibility` aggregate on main, with strict checks and no bypass
 actors. Applying it changes remote merge policy and requires confirmation under
