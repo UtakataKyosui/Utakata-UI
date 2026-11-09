@@ -78,9 +78,14 @@ node scripts/verify-mcp-package.mjs /tmp/utakata-ui-mcp-0.1.0.tgz /tmp/utakata-u
 
 `pnpm pack` は MCP のビルドも実行し、`workspace:*` の依存指定を公開用のバージョンへ置き換えます。MCP には `npm pack` を使わず、生成した tgz を公開してください。検証では tgz を一時プロジェクトへインストールし、実行コマンド・stdio の接続・3ツール・入力エラー・manifest の一致を確認します。
 
-初回は npm で認証し、確認済みの tgz を `npm publish /tmp/utakata-ui-mcp-0.1.0.tgz --access public` で公開します。この操作は別途実施する公開作業です。
-
-以後は GitHub Actions の `Release MCP`（`.github/workflows/release-mcp.yml`）を使用できます。手動実行は main 上で検証・パッケージ作成まで行い、`mcp-vX.Y.Z` タグへの push は検証後に公開します。タグと MCP の安定版バージョンが一致し、コミットが main に含まれる必要があります。公開済みバージョンは再使用できません。
+初回も GitHub Actions の `Release MCP` で公開できます。`npm` Environment の Secret
+`NPM_TOKEN` に公開用 Granular Access Token を設定し、main を選択して
+`release_mode: verify` で確認後、`release_mode: token` で実行して承認します。
+Token は対象スコープへの公開権限と Bypass 2FA を必要とします。
+以後は Trusted Publisher を登録して `release_mode: oidc`、または `mcp-vX.Y.Z` タグ push で公開します。
+タグと MCP の安定版バージョンは一致し、コミットが main に含まれる必要があります。
+同じバージョンを手動とタグの両方で公開しないでください。
+設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
 
 GitHub の `npm` Environment で必要な公開制限を設定し、`@utakata-ui/mcp` の npm Trusted Publisher に owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-mcp.yml`、environment `npm` を登録してください。Environment のタグ制限を使う場合は `mcp-v*` も許可します。React の Trusted Publisher とは別に設定します。CI は公開前に React の依存バージョンが npm に存在することを確認します。
 

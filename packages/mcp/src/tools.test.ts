@@ -494,7 +494,9 @@ describe('manifest tools', () => {
       expect.arrayContaining([
         'dialog.accessible-name',
         'dialog.escape-focus-return',
-        'theme.contrast-focus',
+        'theme.rendered-contrast',
+        'theme.focus-visibility',
+        'dialog.assistive-output',
         'content.labels-headings',
       ]),
     );

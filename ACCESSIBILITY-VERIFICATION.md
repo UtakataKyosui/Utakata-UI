@@ -63,7 +63,13 @@ TypeScript の型定義から任意のアクセシビリティ条件に対して
 
 ## 品質ルールと証拠の設計
 
-現在の `dialog.keyboard-screen-reader` と `theme.contrast-focus` は複数の性質が混在している。実装時は browser-keyboard、focus-visibility、contrast、assistive-output など独立した rule ID に分解する。分解は実際のテスト追加と同時に行い、手動ルールの名前や分類を変更しただけで合格扱いにしない。
+Dialogの混在ルールは `dialog.browser-keyboard` と `dialog.assistive-output` に分離した。
+テーマは `theme.rendered-contrast`、`theme.interaction-contrast`、`theme.focus-visibility`、
+`theme.target-size`、`theme.reflow`、`theme.text-size`、`theme.text-spacing`、
+`theme.reduced-motion` を別々に実行し、実機確認は `theme.platform-rendering` に残す。
+各自動ルールの適用範囲・基準・残存確認はquality metadataに記載する。
+既存の他部品の複合ルールをすべて分解したわけではない。分解は実際のテスト追加と同時に行い、
+手動ルールの名前や分類を変更しただけで合格扱いにしない。
 
 各 rule に適用条件、検証対象の性質、期待値、検査方法、残存確認、参照基準を持たせる。実行証拠には以下を記録する。
 

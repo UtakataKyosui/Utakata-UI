@@ -8,17 +8,17 @@ Main pushes and manual runs execute all applicable gates.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
-| Change                                                       | Required work                                                                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                                     |
-| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                             |
-| React component/API/metadata                                 | Types, related unit tests, React build/packed consumer, Docs, browser, fallow; Markuplint for TSX components |
-| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                            |
-| React unit fixture                                           | Types, related unit tests, fallow                                                                            |
-| MCP implementation                                           | Types, related unit tests, MCP build, fallow                                                                 |
-| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                                   |
-| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                                |
-| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                                   |
+| Change                                                       | Required work                                                                                              |
+| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                                   |
+| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                           |
+| React component/API/metadata                                 | Types, related unit tests, React and MCP build/packed consumers, Docs, browser, fallow; Markuplint for TSX |
+| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                          |
+| React unit fixture                                           | Types, related unit tests, fallow                                                                          |
+| MCP implementation                                           | Types, related unit tests, MCP build, fallow                                                               |
+| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                                 |
+| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                              |
+| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                                 |
 
 Root config/dependency changes clear the diff base: lint and tests run fully.
 Other PRs use Biome's changed mode, Vitest's affected import graph (including
@@ -50,11 +50,13 @@ jobs, with `fail-fast: false` to retain both sets of evidence. Each uses two
 workers and zero retries. Its five-minute suite timeout leaves time for setup
 and evidence upload within the ten-minute job limit. The job records elapsed
 wall time (checkout through artifact upload) in the Actions summary and fails
-above 420 seconds, 70% of the limit. Cold/warm GitHub timings still need to be
-measured; local suite duration does not establish this budget on GitHub.
+above 420 seconds, 70% of the limit. Six GitHub-hosted browser jobs on PR #85
+(runs 42650709777–42660430846, job start to completion) took 119–149 seconds;
+these runs were not separated by browser-cache hit or miss, so a cold-cache
+budget remains unmeasured.
 Artifacts are uploaded only after the test step runs. Release React calls the
 same browser workflow and cannot publish if either theme fails. Manual main
-release runs still verify without publishing. Release keeps full checks and
+release runs default to `release_mode: verify`; explicit `token` or `oidc` modes publish after verification. Release keeps full checks and
 uses the pnpm cache.
 
 The browser fixture is built once per job and served with Vite preview. It has
@@ -84,18 +86,73 @@ nonpassing records; results are always regenerated, never restored from cache.
 The three baseline IDs additionally require rendered Button/Field axe,
 Dialog keyboard/focus, and forced-colors tests in every selected theme.
 
-This ledger maps existing browser rules to tests; it does not yet enforce a
-complete component × variant × size × state registry. Some quality rules still
-combine properties. Those parts of #49, actual assistive output, physical OS
-modes and browser zoom remain residual work. Repository branch protection and
-npm scope/Trusted Publisher configuration require separate verification; this
-change does not mutate those services.
+`tests/browser/coverage.ts` explicitly registers every public component, its
+public axes and relevant state checks. Manifest axes are compared against fixed
+reviewed values: adding a component/value without reviewing fixtures fails.
+The configuration test verifies actual rendered axis combinations (including
+variant × size), and state entries reference required browser rule IDs. Each
+ledger record links those component/state entries to the executed rule test.
+This is axis coverage plus registered state transitions, not an assertion that
+every axis × state × input × content permutation has run. Some older component
+rules still combine properties; their assertions and failure artifacts remain
+available. Actual assistive output, physical OS modes and browser zoom are
+tracked separately in ACCESSIBILITY-MANUAL.md.
+
+Evidence now hashes the actual nonignored source contents (including unstaged
+and new files), environment/configuration and attachments. A changed source,
+environment or deleted/replaced attachment invalidates evidence. Source changes
+during a run fail it. Do not edit tracked source while gathering final evidence.
+
+Browser workflow dispatch accepts `cache_mode: cold` or `warm`. Cold uses a
+temporary empty pnpm store and browser directory and bypasses both cache
+restores. Both modes enforce the same 420-second wall budget and retain both
+theme artifacts. Quality's manual `browser_cache_mode` input also forwards the
+mode to the reusable browser workflow, allowing verification on the PR branch.
+Record run URLs and actual job durations before claiming cold/warm performance.
+
+`pnpm test:stability` repeats the entire unit suite ten times, retaining every
+JSON report and diagnostic log under `unit-stability-results/` (separate from
+Playwright's cleaned output directory). Set
+`STABILITY_RUNS=2..30` and `STABILITY_WORKERS=2|4|default` to reproduce load
+conditions. Any failed/missing/skipped attempt fails the aggregate; later passes
+cannot erase it. The manual Unit stability diagnostics workflow runs the same
+command on Ubuntu. Repeated passing runs are stability evidence, not proof of
+the original Skeleton failure's cause. That failure has no surviving log and
+has not been reproduced; #83's cause-identification criterion remains open.
+
+`pnpm verify:release-readiness` performs read-only checks of main's required
+quality context, the protected npm environment and optional local npm authentication (the preflight is not a release gate). Unknown
+or unauthorized responses are unverified and exit nonzero. npm scope rights
+and Trusted Publisher settings need maintainer evidence; optionally provide
+its JSON path as an argument. Each entry keyed by `npm.scope-publish-rights` or
+`npm.trusted-publisher` must have `package: @utakata-ui/react`, `status: passed`,
+`reviewer`, `evidence` reference and `checkedAt` within the last 30 days. Never
+put tokens or private screenshots in this file. Trusted Publisher is a later
+phase after the separately authorized initial token publication through Actions, not an initial
+publication prerequisite. An unconfigured later phase is not overall CI-release
+readiness.
+
+For account/scope setup, GitHub Environment protection, initial Actions publication,
+per-package Trusted Publisher values, and optional token/Secrets handling, see
+[npm publishing setup](NPM-PUBLISHING.md). Release workflows default to verification. Manual `token` mode uses only the npm
+Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and tag pushes
+use Trusted Publishing. Initial publication needs no local login.
+
+The reviewable `.github/required-checks.ruleset.json` requires the always
+reporting `accessibility` aggregate on main, with strict checks and no bypass
+actors. Applying it changes remote merge policy and requires confirmation under
+AGENTS.md. After explicit user approval on 2026-11-10 JST, ruleset `26865507`
+was applied and read back: active on `refs/heads/main`, strict `accessibility`
+check from GitHub Actions (integration 15368), no bypass actors. This remote
+setting is not applied automatically by a source PR. The `npm` environment should require
+the repository owner's review; scope ownership and the npm publisher binding
+remain external prerequisites. No npm/environment/publisher settings were changed.
 
 MCP builds require the React package first. The build job packs both packages
 with pnpm, installs the archives into an isolated consumer, then verifies the
 installed MCP executable, stdio initialization, all tools, invalid inputs and
 manifest parity. `Release MCP` uses `mcp-vX.Y.Z` tags and a separate npm Trusted
-Publisher for `release-mcp.yml`; manual main runs only verify. Tagged releases
+Publisher for `release-mcp.yml`; manual main runs default to verify and can explicitly publish with token or OIDC. Tagged releases
 also require the exact React dependency version to exist on npm before publish.
 
 The dedicated registry CLI has dependency-free Node tests (`pnpm test:cli`) in
@@ -122,8 +179,10 @@ shorter elapsed time.
 
 The React consumer verification also installs Vite 8.3.5 into its temporary
 external project, imports the installed CSS and manifest with a rendered Button,
-and runs a production build. This supplements the existing declaration negative
-fixtures and SSR test; it exercises the package exports without source aliases.
+and runs a production build. The same declaration fixtures, SSR and production
+build run for React/React DOM 18.3.1 with @types/react 18.3.31 / @types/react-dom
+18.3.7 and React/React DOM 19.3.1 with types 19.3.0, using TypeScript 5.9.3.
+These are tested versions, not a promise that every peer-range version has run.
 
 ## Verification record (2026-11-10 JST)
 

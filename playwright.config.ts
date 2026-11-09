@@ -4,6 +4,11 @@ import {
   type QualityRule,
   qualityRules,
 } from './packages/react/src/metadata/quality.js';
+import {
+  coverage,
+  requiredStateRuleIds,
+  validateCoverage,
+} from './tests/browser/coverage.js';
 
 const browserRuleIds: string[] = Object.values(
   componentManifest.components,
@@ -11,6 +16,16 @@ const browserRuleIds: string[] = Object.values(
   component.qualityRules
     .filter((rule) => String(rule.verification) === 'browser')
     .map((rule) => rule.id),
+);
+browserRuleIds.push(
+  ...qualityRules.shared
+    .filter((rule) => rule.verification === 'browser')
+    .map((rule) => rule.id),
+);
+validateCoverage(componentManifest.components);
+browserRuleIds.push('coverage.public-configurations');
+browserRuleIds.push(
+  ...requiredStateRuleIds.filter((id) => !browserRuleIds.includes(id)),
 );
 browserRuleIds.push(
   'baseline.rendered-axe',
@@ -22,7 +37,9 @@ const manualRules: QualityRule[] = Object.values(
 ).flatMap((component) =>
   component.qualityRules.filter((rule) => rule.verification === 'manual'),
 );
-manualRules.push(...qualityRules.shared);
+manualRules.push(
+  ...qualityRules.shared.filter((rule) => rule.verification === 'manual'),
+);
 
 export default defineConfig({
   testDir: './tests/browser',
@@ -42,6 +59,7 @@ export default defineConfig({
           ? [process.env.CI_BROWSER_PROJECT]
           : undefined,
         manualRules,
+        coverage,
       },
     ],
   ],

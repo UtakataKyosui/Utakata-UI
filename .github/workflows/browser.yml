@@ -1,6 +1,17 @@
 name: Browser accessibility
 on:
   workflow_call:
+    inputs:
+      cache_mode:
+        type: string
+        default: warm
+  workflow_dispatch:
+    inputs:
+      cache_mode:
+        description: Cold bypasses both pnpm store and browser download caches
+        type: choice
+        options: [warm, cold]
+        default: cold
 permissions:
   contents: read
 jobs:
@@ -24,15 +35,25 @@ jobs:
       - uses: actions/setup-node@v4.4.0
         with:
           node-version: "24.16.0"
-          cache: pnpm
+          cache: ${{ inputs.cache_mode != 'cold' && 'pnpm' || '' }}
           cache-dependency-path: |
             pnpm-lock.yaml
             package.json
-      - run: pnpm install --frozen-lockfile
+      - name: Install dependencies with selected cache mode
+        env:
+          CACHE_MODE: ${{ inputs.cache_mode }}
+        run: |
+          if [[ "$CACHE_MODE" == cold ]]; then
+            pnpm install --frozen-lockfile --store-dir "$RUNNER_TEMP/cold-pnpm-store"
+            echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/cold-browsers" >> "$GITHUB_ENV"
+          else
+            pnpm install --frozen-lockfile
+          fi
       - name: Select exact browser cache version
         id: playwright
         run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
       - name: Cache Chromium headless shell
+        if: inputs.cache_mode != 'cold'
         id: browsers
         uses: actions/cache@v6.1.0
         with:
@@ -63,7 +84,8 @@ jobs:
         env:
           STARTED: ${{ steps.budget.outputs.started }}
           PROJECT: ${{ matrix.project }}
+          CACHE_MODE: ${{ inputs.cache_mode }}
         run: |
           elapsed=$(( $(date +%s) - STARTED ))
-          echo "### $PROJECT browser job: ${elapsed}s / 420s budget (10 minute job limit)" >> "$GITHUB_STEP_SUMMARY"
+          echo "### $PROJECT browser job ($CACHE_MODE cache): ${elapsed}s / 420s budget (10 minute job limit)" >> "$GITHUB_STEP_SUMMARY"
           test "$elapsed" -le 420

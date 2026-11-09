@@ -4,6 +4,7 @@ packages/*/dist/
 coverage/
 playwright-report/
 test-results/
+unit-stability-results/
 .vite-hooks/_/
 .fallow/
 packages/docs/.blume/

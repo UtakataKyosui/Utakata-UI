@@ -29,7 +29,7 @@ const rules = [
   ],
   [
     /^packages\/react\/(?!src\/tests\/)(?!.*\.(md|txt)$)(?!.*\/LICENSE$)/,
-    ['react', 'browser', 'docs', 'fallow'],
+    ['react', 'mcp', 'browser', 'docs', 'fallow'],
   ],
   [/^packages\/react\/.*\.[cm]?[jt]sx?$/, ['types', 'tests', 'fallow']],
   [/^packages\/react\/src\/tests\//, ['tests', 'fallow']],
@@ -44,7 +44,7 @@ const rules = [
     /^tests\/browser\/|^playwright\.config\.ts$|^scripts\/required-browser-checks\.mjs$/,
     ['browser', 'types', 'fallow'],
   ],
-  [/^tests\/browser\/(main\.tsx|index\.html)$/, ['markup']],
+  [/^tests\/browser\/.*\.(tsx|html)$/, ['markup']],
   [/^scripts\/verify-react-package\.mjs$/, ['react', 'fallow']],
   [/^scripts\/verify-mcp-package\.mjs$/, ['mcp', 'fallow']],
   [/^scripts\/accessibility-lint\.test\.mjs$/, ['markup', 'fallow']],

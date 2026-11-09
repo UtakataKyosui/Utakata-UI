@@ -1,0 +1,42 @@
+name: Unit stability diagnostics
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: Full suite repetitions (2–30), without retrying failures away
+        default: "10"
+        required: true
+      workers:
+        description: Worker limit; default reproduces Vitest automatic parallelism
+        type: choice
+        options: ["2", "4", default]
+        default: "2"
+permissions:
+  contents: read
+jobs:
+  stability:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Repeat full suite and retain every result
+        env:
+          STABILITY_RUNS: ${{ inputs.runs }}
+          STABILITY_WORKERS: ${{ inputs.workers }}
+        run: node scripts/stress-unit.mjs
+      - name: Upload all attempts, including failures
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: unit-stability-${{ github.sha }}-${{ inputs.workers }}-workers
+          path: unit-stability-results/
+          if-no-files-found: error
+          retention-days: 14

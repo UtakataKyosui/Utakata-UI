@@ -3,6 +3,22 @@ import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gatesPassed } from './ci-gate.mjs';
 
+test('Quality runs the complete dependency-free CI regression suite before scope selection', () => {
+  const { scripts } = JSON.parse(
+    readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+  );
+  const workflow = readFileSync(
+    new URL('../.github/workflows/quality.yml', import.meta.url),
+    'utf8',
+  );
+  const scopeJob = workflow.split('\n  checks:\n')[0];
+  assert.ok(scopeJob.includes(`run: ${scripts['test:ci']}\n`));
+  assert.ok(
+    scopeJob.indexOf(`run: ${scripts['test:ci']}\n`) <
+      scopeJob.indexOf('run: node scripts/ci-scope.mjs'),
+  );
+});
+
 function fixture(required) {
   return {
     scope: {
@@ -71,4 +87,38 @@ test('Quality and React release share the complete two-theme browser gate', () =
     read('browser'),
     /continue-on-error|--grep|--pass-with-no-tests/,
   );
+});
+
+test('releases default to verification and expose the token only to explicit manual publication', () => {
+  for (const name of ['release', 'release-mcp', 'release-cli']) {
+    const workflow = readFileSync(
+      new URL(`../.github/workflows/${name}.yml`, import.meta.url),
+      'utf8',
+    );
+    assert.match(workflow, /default: verify/);
+    assert.match(workflow, /options: \[verify, oidc, token\]/);
+    assert.match(
+      workflow,
+      /if: github.event_name == 'push' \|\| inputs.release_mode == 'oidc'/,
+    );
+    assert.match(
+      workflow,
+      /if: github.event_name == 'workflow_dispatch' && inputs.release_mode == 'token'/,
+    );
+    assert.equal((workflow.match(/secrets\.NPM_TOKEN/g) ?? []).length, 1);
+    const [verification, tokenStep] = workflow.split(
+      '      - name: Publish with npm Environment token',
+    );
+    assert.doesNotMatch(verification, /secrets\.NPM_TOKEN/);
+    assert.match(tokenStep, /node scripts\/publish-npm-token\.mjs/);
+    assert.match(workflow, /environment: npm/);
+    assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
+    assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
+    if (name === 'release-mcp') {
+      assert.match(
+        workflow,
+        /Require published React dependency\n        if: github.event_name == 'push' \|\| inputs.release_mode != 'verify'/,
+      );
+    }
+  }
 });
