@@ -29,8 +29,20 @@ const decide = ({ files = [], candidates, ancestor = true }) =>
     now,
   });
 
+const browserPassed = [
+  {
+    name: 'browser-accessibility / browser (chromium-light)',
+    conclusion: 'success',
+  },
+  {
+    name: 'browser-accessibility / browser (chromium-dark)',
+    conclusion: 'success',
+  },
+];
+const quality = (overrides) => qualityCandidate(run(overrides), browserPassed);
+
 test('unchanged commits reuse a passing main Quality run for every gate', () => {
-  const decisions = decide({ candidates: [qualityCandidate(run())] });
+  const decisions = decide({ candidates: [quality()] });
   assert.equal(decisions.checks.decision, 'reuse');
   assert.equal(decisions.browser.decision, 'reuse');
   assert.equal(decisions.browser.id, 1);
@@ -39,7 +51,7 @@ test('unchanged commits reuse a passing main Quality run for every gate', () => 
 test('documentation changes rerun checks but reuse browser evidence', () => {
   const decisions = decide({
     files: ['README.md'],
-    candidates: [qualityCandidate(run())],
+    candidates: [quality()],
   });
   assert.equal(decisions.checks.decision, 'run');
   assert.equal(decisions.browser.decision, 'reuse');
@@ -53,7 +65,7 @@ test('component, CSS and release workflow changes rerun browser checks', () => {
   ]) {
     const decisions = decide({
       files: [file],
-      candidates: [qualityCandidate(run())],
+      candidates: [quality()],
     });
     assert.equal(decisions.browser.decision, 'run', file);
   }
@@ -67,13 +79,12 @@ test('missing, failed, PR, branch, expired and non-ancestor runs never skip', ()
     { head_branch: 'feature' },
   ])
     assert.equal(qualityCandidate(run(overrides)), null);
-  const expired = qualityCandidate(
-    run({ created_at: new Date(now - maxReuseAgeMs - 1).toISOString() }),
-  );
+  const expired = quality({
+    created_at: new Date(now - maxReuseAgeMs - 1).toISOString(),
+  });
   assert.equal(decide({ candidates: [expired] }).checks.decision, 'run');
   assert.equal(
-    decide({ candidates: [qualityCandidate(run())], ancestor: false }).checks
-      .decision,
+    decide({ candidates: [quality()], ancestor: false }).checks.decision,
     'run',
   );
 });
@@ -145,8 +156,8 @@ test('a newer candidate that requires a gate does not hide an exact older match'
     head: 'head',
     gates: ['browser'],
     candidates: [
-      qualityCandidate(run({ id: 2, head_sha: 'older-css' })),
-      qualityCandidate(run({ id: 1, head_sha: 'head' })),
+      quality({ id: 2, head_sha: 'older-css' }),
+      quality({ id: 1, head_sha: 'head' }),
     ],
     isAncestor: () => true,
     filesSince: (sha) =>
@@ -154,4 +165,36 @@ test('a newer candidate that requires a gate does not hide an exact older match'
     now,
   });
   assert.equal(decisions.browser.id, 1);
+});
+
+test('incremental main runs without browser jobs never stand in for browser evidence', () => {
+  const docsOnly = qualityCandidate(
+    run({ id: 3, head_sha: 'docs-only' }),
+    browserPassed.map((job) => ({ ...job, conclusion: 'skipped' })),
+  );
+  assert.deepEqual(docsOnly.satisfies, ['checks']);
+  const decisions = selectReuse({
+    head: 'head',
+    gates: ['browser'],
+    candidates: [docsOnly, quality({ id: 1, head_sha: 'browsers-ran' })],
+    isAncestor: () => true,
+    filesSince: () => ['README.md'],
+    now,
+  });
+  assert.equal(decisions.browser.id, 1);
+  const expiredBrowsers = quality({
+    id: 1,
+    created_at: new Date(now - maxReuseAgeMs - 1).toISOString(),
+  });
+  assert.equal(
+    selectReuse({
+      head: 'head',
+      gates: ['browser'],
+      candidates: [docsOnly, expiredBrowsers],
+      isAncestor: () => true,
+      filesSince: () => [],
+      now,
+    }).browser.decision,
+    'run',
+  );
 });

@@ -7,8 +7,9 @@ PRs compare the complete merge-base diff, including removed/renamed paths.
 Main pushes compare against the newest main commit whose Quality `push` or
 `workflow_dispatch` run succeeded, provided it is an ancestor created within
 14 days. Each successful main run therefore extends verification inductively;
-an unchanged commit runs no gates. A missing, failed, expired or unreadable
-prior run gives full gates. Manual runs always execute all gates.
+an unchanged commit runs no gates. The 14-day bound applies to each link, not
+to the original evidence of a skipped gate. A missing, failed, expired or
+unreadable prior run gives full gates. Manual runs always execute all gates.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
@@ -68,8 +69,11 @@ skips a gate only when a completed main `push`/`workflow_dispatch` run passed it
 on an ancestor commit created within 14 days (the browser artifact retention), and
 the diff from that commit to HEAD does not select it: any change reruns
 `pnpm check`; browser checks rerun when `ci-scope.mjs` selects browser. Accepted
-evidence is a successful main Quality run, or a release run's successful `verify`
-job / both browser jobs, even when its publication failed. PR runs are scoped and
+`checks` evidence is a successful main Quality run or a release run's successful
+`verify` job. Accepted browser evidence is a run whose two browser jobs both
+succeeded in that run, so an incremental main run that skipped them never counts
+and the 14-day bound applies to the browser artifacts themselves. Release
+evidence counts even when its publication failed. PR runs are scoped and
 never count. Lookup errors, missing runs and `full_verification: true` run every
 gate. The step summary names the reused run, attempt and commit. `release`
 requires each gate to have passed in this run or to be reused, and always

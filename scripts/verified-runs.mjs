@@ -32,19 +32,28 @@ function trustedMainRun(run) {
   );
 }
 
-export function qualityCandidate(run) {
+// Incremental main runs succeed with irrelevant gates skipped. A run verifies
+// the whole tree inductively, but browser evidence exists only where both
+// browser jobs ran, so its age bound applies to that run itself.
+export function qualityCandidate(run, jobs = []) {
   if (!trustedMainRun(run) || run.conclusion !== 'success') return null;
-  return candidate(run, 'Quality', ['checks', 'browser']);
+  const satisfies = ['checks'];
+  if (browserJobs.every((name) => passed(jobs, name)))
+    satisfies.push('browser');
+  return candidate(run, 'Quality', satisfies);
+}
+
+function passed(jobs, name) {
+  return jobs.some((job) => job.name === name && job.conclusion === 'success');
 }
 
 export function releaseCandidate(run, jobs, workflow) {
   const tagPush = run.event === 'push' && run.head_branch !== 'main';
   if (!trustedMainRun(run) && !tagPush) return null;
-  const passed = (name) =>
-    jobs.some((job) => job.name === name && job.conclusion === 'success');
   const satisfies = [];
-  if (passed('verify')) satisfies.push('checks');
-  if (browserJobs.every(passed)) satisfies.push('browser');
+  if (passed(jobs, 'verify')) satisfies.push('checks');
+  if (browserJobs.every((name) => passed(jobs, name)))
+    satisfies.push('browser');
   return satisfies.length ? candidate(run, workflow, satisfies) : null;
 }
 
@@ -64,19 +73,18 @@ function api(path) {
 }
 
 export function collectCandidates(repository, workflow) {
-  const runs = (file) =>
+  const runs = (file, filter = '') =>
     api(
-      `repos/${repository}/actions/workflows/${file}/runs?status=completed&per_page=20`,
+      `repos/${repository}/actions/workflows/${file}/runs?status=completed&per_page=20${filter}`,
     ).workflow_runs;
-  const release = runs(workflow).flatMap((run) => {
-    const jobs = api(
-      `repos/${repository}/actions/runs/${run.id}/jobs?per_page=50`,
-    ).jobs;
-    return releaseCandidate(run, jobs, workflow) ?? [];
-  });
-  const quality = runs('quality.yml').flatMap(
-    (run) => qualityCandidate(run) ?? [],
+  const jobs = (run) =>
+    api(`repos/${repository}/actions/runs/${run.id}/jobs?per_page=50`).jobs;
+  const release = runs(workflow).flatMap(
+    (run) => releaseCandidate(run, jobs(run), workflow) ?? [],
   );
+  const quality = runs('quality.yml', '&branch=main')
+    .filter((run) => run.conclusion === 'success')
+    .flatMap((run) => qualityCandidate(run, jobs(run)) ?? []);
   return [...release, ...quality].sort(
     (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
   );
