@@ -5,14 +5,14 @@ import { changedFiles } from './ci-scope.mjs';
 const all = [
   'packages/react/src/components/**/*.tsx',
   'packages/docs/**/*.tsx',
-  'tests/browser/main.tsx',
-  'tests/browser/index.html',
+  'tests/browser/**/*.tsx',
+  'tests/browser/**/*.html',
 ];
 const base = process.env.CI_DIFF_BASE;
 const files = base
   ? changedFiles(base).filter(
       (file) =>
-        /^(packages\/react\/src\/components\/.*\.tsx|packages\/docs\/.*\.tsx|tests\/browser\/(main\.tsx|index\.html))$/.test(
+        /^(packages\/react\/src\/components\/.*\.tsx|packages\/docs\/.*\.tsx|tests\/browser\/.*\.(tsx|html))$/.test(
           file,
         ) && existsSync(file),
     )

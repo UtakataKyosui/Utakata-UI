@@ -10,6 +10,7 @@
       "!**/.blume",
       "!playwright-report",
       "!test-results",
+      "!unit-stability-results",
       "!packages/docs/docs/components.md"
     ]
   },

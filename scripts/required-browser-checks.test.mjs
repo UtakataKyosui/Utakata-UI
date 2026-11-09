@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { test } from 'node:test';
@@ -10,6 +10,7 @@ import RequiredBrowserChecks, {
 function run(tests) {
   const directory = mkdtempSync(join(tmpdir(), 'utakata-evidence-'));
   const reporter = new RequiredBrowserChecks({
+    requireAttachments: false,
     requiredIds: ['input.visual-theme'],
     outputFile: join(directory, 'evidence.json'),
   });
@@ -33,6 +34,7 @@ test('evidence persists rule mapping, failures and residual checks; stale result
   try {
     const outputFile = join(directory, 'evidence.json');
     const reporter = new RequiredBrowserChecks({
+      requireAttachments: false,
       requiredIds: ['input.visual-theme'],
       projects: ['chromium-light'],
       manualRules: [
@@ -43,8 +45,36 @@ test('evidence persists rule mapping, failures and residual checks; stale result
     reporter.onBegin({}, { allTests: () => [fixture('chromium-light')] });
     assert.equal(reporter.onEnd({ status: 'passed' }), undefined);
     const evidence = JSON.parse(readFileSync(outputFile, 'utf8'));
-    const expected = { commit: evidence.commit, contract: evidence.contract };
+    const expected = {
+      commit: evidence.commit,
+      contract: evidence.contract,
+      source: evidence.source,
+      environment: evidence.environmentHash,
+    };
     assert.equal(validateEvidence(evidence, expected), true);
+    assert.equal(
+      validateEvidence(evidence, {
+        ...expected,
+        source: 'changed-css-or-source',
+      }),
+      false,
+    );
+    assert.equal(
+      validateEvidence(evidence, {
+        ...expected,
+        environment: 'changed-browser-or-config',
+      }),
+      false,
+    );
+    assert.equal(
+      validateEvidence(
+        { ...evidence, environment: { platform: 'different' } },
+        expected,
+      ),
+      false,
+    );
+    assert.equal(validateEvidence({}, expected), false);
+    assert.equal(validateEvidence(null, expected), false);
     assert.deepEqual(evidence.records[0].rules, ['input.visual-theme']);
     assert.equal(evidence.residual[0].status, 'unverified');
     assert.equal(
@@ -94,6 +124,11 @@ test('evidence persists rule mapping, failures and residual checks; stale result
       status: 'failed',
     });
     assert.equal(JSON.parse(readFileSync(outputFile, 'utf8')).status, 'failed');
+    reporter.onBegin({}, { allTests: () => [fixture('chromium-light')] });
+    reporter.source = 'source-changed-during-run';
+    assert.deepEqual(reporter.onEnd({ status: 'passed' }), {
+      status: 'failed',
+    });
     const testCase = fixture('chromium-light');
     testCase.expectedStatus = 'failed';
     reporter.onBegin({}, { allTests: () => [testCase] });
@@ -168,7 +203,37 @@ test('reporter rejects incomplete, invalid and unreadable axe attachments even w
       const evidence = JSON.parse(readFileSync(outputFile, 'utf8'));
       const attachment = evidence.records[0].attempts[0].attachments[0];
       assert.equal(readFileSync(attachment.path, 'utf8'), JSON.stringify(axe));
+      if (pass) {
+        const expected = {
+          commit: evidence.commit,
+          contract: evidence.contract,
+          source: evidence.source,
+          environment: evidence.environmentHash,
+        };
+        assert.equal(validateEvidence(evidence, expected), true);
+        writeFileSync(attachment.path, 'replaced');
+        assert.equal(validateEvidence(evidence, expected), false);
+        rmSync(attachment.path);
+        assert.equal(validateEvidence(evidence, expected), false);
+      }
     }
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('a required passing test without retained attachments is unverified', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'utakata-missing-evidence-'));
+  try {
+    const reporter = new RequiredBrowserChecks({
+      requiredIds: ['input.visual-theme'],
+      projects: ['chromium-light'],
+      outputFile: join(directory, 'evidence.json'),
+    });
+    reporter.onBegin({}, { allTests: () => [fixture('chromium-light')] });
+    assert.deepEqual(reporter.onEnd({ status: 'passed' }), {
+      status: 'failed',
+    });
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

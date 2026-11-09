@@ -21,10 +21,10 @@ try {
     '--no-fund',
     '--prefer-offline',
     archive,
-    'react@19',
-    'react-dom@19',
-    '@types/react@19',
-    '@types/react-dom@19',
+    'react@19.3.1',
+    'react-dom@19.3.1',
+    '@types/react@19.3.0',
+    '@types/react-dom@19.3.0',
     'typescript@5.9.3',
     'vite@8.3.5',
   ]);
@@ -43,6 +43,7 @@ import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Butto
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const verificationStates: readonly string[] = componentManifest.components.Button.verificationStates;
 export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
 export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;
 // @ts-expect-error Numeric listbox size is excluded from the shipped API.
@@ -490,6 +491,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Button } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 assert.ok(componentManifest);
+assert.ok(componentManifest.components.Button.verificationStates.includes('disabled'));
 assert.match(renderToStaticMarkup(createElement(Button, null, 'Save')), /Save/);
 assert.ok(import.meta.resolve('@utakata-ui/react/styles.css').endsWith('.css'));
 `,
@@ -513,6 +515,40 @@ createRoot(document.getElementById('root')!).render(createElement(Button, null, 
 `,
   );
   run(process.execPath, ['node_modules/vite/bin/vite.js', 'build']);
+  // The published peer range includes React 18. Check the same full positive /
+  // negative declaration fixture, SSR and production build against both major
+  // versions, using exact versions rather than a floating latest type package.
+  run('npm', [
+    'install',
+    '--ignore-scripts',
+    '--no-audit',
+    '--no-fund',
+    '--prefer-offline',
+    'react@18.3.1',
+    'react-dom@18.3.1',
+    '@types/react@18.3.31',
+    '@types/react-dom@18.3.7',
+  ]);
+  run(process.execPath, [
+    'node_modules/typescript/bin/tsc',
+    '--outDir',
+    'build',
+    '--strict',
+    '--jsx',
+    'react-jsx',
+    '--module',
+    'ESNext',
+    '--moduleResolution',
+    'Bundler',
+    '--target',
+    'ES2022',
+    'consumer.tsx',
+  ]);
+  run(process.execPath, ['consumer.mjs']);
+  run(process.execPath, ['node_modules/vite/bin/vite.js', 'build']);
+  console.log(
+    'Packed declarations / SSR / CSS / manifest / Vite verified: TypeScript 5.9.3; React 18.3.1 + types 18.3.31; React 19.3.1 + types 19.3.0.',
+  );
 } finally {
   rmSync(directory, { recursive: true, force: true });
 }

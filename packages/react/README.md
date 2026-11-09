@@ -25,3 +25,12 @@ TypeScript は `moduleResolution: "Bundler"` を使用してください。
 ## License
 
 MIT — 同梱の LICENSE を参照してください。
+
+## 配布型の検証環境
+
+公開アーカイブの正例・負例（必須情報、禁止組み合わせ、spread、ラッパー）、
+SSR、CSS/manifest import、ViteビルドをTypeScript 5.9.3で検証する。
+対象はReact/React DOM 18.3.1 + @types/react 18.3.31 / @types/react-dom 18.3.7と、
+React/React DOM 19.3.1 + 型定義19.3.0。peer範囲のすべてのバージョンを検証した意味ではない。
+利用側でもstrictを有効にして`tsc --noEmit`を実行する。
+動的文字列、JSX合成、独自CSS、anyなどによる型検査の迂回は別途検証する。

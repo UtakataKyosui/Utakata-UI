@@ -114,3 +114,9 @@ test('CLI work has its own gate; shared browser and release policy invalidate al
     assert.equal(selectScope([file]).full, true);
   }
 });
+
+test('new browser JSX fixtures retain static markup validation', () => {
+  const scope = selectScope(['tests/browser/layout-fixture.tsx']);
+  assert.equal(scope.markup, true);
+  assert.equal(scope.browser, true);
+});

@@ -2,22 +2,49 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { digest, sourceFingerprint } from './evidence-contract.mjs';
 
 // Evidence is valid only for this commit and this rule/environment contract.
-export function validateEvidence(evidence, { commit, contract }) {
+export function validateEvidence(
+  evidence,
+  { commit, contract, source, environment },
+) {
   return (
+    !!evidence &&
     evidence.commit === commit &&
     evidence.contract === contract &&
+    evidence.source === source &&
+    evidence.environmentHash === environment &&
+    typeof source === 'string' &&
+    typeof environment === 'string' &&
+    digest(JSON.stringify(evidence.environment)) === environment &&
     evidence.schemaVersion === 1 &&
     evidence.status === 'passed' &&
     evidence.missing?.length === 0 &&
     evidence.axeFailures?.length === 0 &&
+    Array.isArray(evidence.records) &&
     evidence.records.length > 0 &&
     evidence.records.every(
       (record) =>
         record.status === 'passed' &&
+        Array.isArray(record.attempts) &&
         record.attempts.length > 0 &&
-        record.attempts.every((attempt) => attempt.status === 'passed'),
+        record.attempts.every(
+          (attempt) =>
+            attempt.status === 'passed' &&
+            (!evidence.requireAttachments ||
+              !record.rules?.length ||
+              attempt.attachments?.length > 0) &&
+            (attempt.attachments ?? []).every((attachment) => {
+              try {
+                return (
+                  digest(readFileSync(attachment.path)) === attachment.sha256
+                );
+              } catch {
+                return false;
+              }
+            }),
+        ),
     )
   );
 }
@@ -28,6 +55,8 @@ export default class RequiredBrowserChecks {
     this.requiredIds = options.requiredIds ?? [];
     this.projects = options.projects ?? ['chromium-light', 'chromium-dark'];
     this.manualRules = options.manualRules ?? [];
+    this.coverage = options.coverage ?? {};
+    this.requireAttachments = options.requireAttachments ?? true;
     this.axeFailures = [];
     this.attachments = new Map();
     this.outputFile =
@@ -38,6 +67,7 @@ export default class RequiredBrowserChecks {
     this.axeFailures = [];
     this.attachments.clear();
     this.config = config;
+    this.source = sourceFingerprint();
     this.tests = suite.allTests();
     this.missing = this.projects.flatMap((project) =>
       this.requiredIds
@@ -77,10 +107,19 @@ export default class RequiredBrowserChecks {
           this.axeFailures.push(`${test.title}: unreadable ${attachment.name}`);
         }
       }
+      let sha256;
+      try {
+        sha256 = digest(readFileSync(path));
+      } catch {
+        this.axeFailures.push(
+          `${test.title}: missing attachment ${attachment.name}`,
+        );
+      }
       return {
         name: attachment.name,
         contentType: attachment.contentType,
         path,
+        sha256,
       };
     });
     this.attachments.set(result, attachments);
@@ -91,13 +130,20 @@ export default class RequiredBrowserChecks {
       (test) =>
         test.expectedStatus !== 'passed' ||
         test.results.length === 0 ||
-        test.results.some((result) => result.status !== 'passed'),
+        test.results.some(
+          (result) =>
+            result.status !== 'passed' ||
+            (this.requireAttachments &&
+              this.requiredIds.some((id) => test.title.includes(`[${id}]`)) &&
+              !this.attachments.get(result)?.length),
+        ),
     );
     const failed =
       !this.tests?.length ||
       unverified?.length ||
       this.missing?.length ||
       this.axeFailures.length ||
+      this.source !== sourceFingerprint() ||
       (result && result.status !== 'passed');
     if (this.tests) {
       const commit =
@@ -109,6 +155,8 @@ export default class RequiredBrowserChecks {
             requiredIds: this.requiredIds,
             projects: this.projects,
             manualRules: this.manualRules,
+            coverage: this.coverage,
+            requireAttachments: this.requireAttachments,
           }),
         )
         .digest('hex');
@@ -120,6 +168,8 @@ export default class RequiredBrowserChecks {
             encoding: 'utf8',
           }).trim().length > 0,
         contract,
+        source: this.source,
+        requireAttachments: this.requireAttachments,
         createdAt: new Date().toISOString(),
         durationMs: result?.duration,
         environment: {
@@ -141,6 +191,11 @@ export default class RequiredBrowserChecks {
           rules: this.requiredIds.filter((id) =>
             test.title.includes(`[${id}]`),
           ),
+          cases: Object.entries(this.coverage).flatMap(([component, entry]) =>
+            Object.entries(entry.states)
+              .filter(([, id]) => test.title.includes(`[${id}]`))
+              .map(([state]) => ({ component, state })),
+          ),
           status: unverified.includes(test) ? 'unverified' : 'passed',
           attempts: test.results.map((attempt) => ({
             status: attempt.status,
@@ -158,11 +213,26 @@ export default class RequiredBrowserChecks {
         residual: this.manualRules.map((rule) => ({
           ...rule,
           status: 'unverified',
+          tracking: {
+            issue: '#49',
+            owner: 'release maintainer',
+            procedure: 'ACCESSIBILITY-MANUAL.md',
+            due: 'before a release claims this scope is verified',
+          },
         })),
       };
+      evidence.environmentHash = digest(JSON.stringify(evidence.environment));
       mkdirSync(dirname(this.outputFile), { recursive: true });
       writeFileSync(this.outputFile, `${JSON.stringify(evidence, null, 2)}\n`);
-      if (!failed && !validateEvidence(evidence, { commit, contract }))
+      if (
+        !failed &&
+        !validateEvidence(evidence, {
+          commit,
+          contract,
+          source: evidence.source,
+          environment: evidence.environmentHash,
+        })
+      )
         return { status: 'failed' };
     }
     if (failed) {

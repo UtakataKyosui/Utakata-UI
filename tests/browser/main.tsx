@@ -42,6 +42,7 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+import { LayoutFixture } from './layout-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
   if (!form) return;
@@ -1174,10 +1175,55 @@ function Fixture() {
       <ToggleGroupStates />
       <ButtonGroupStates />
       <InputGroupStates />
+      <section aria-label="Additional public configurations">
+        {componentManifest.components.Card.headingLevels.map((level) => (
+          <Card.Root key={level}>
+            <Card.Title level={level}>Card heading {level}</Card.Title>
+          </Card.Root>
+        ))}
+        <Accordion.Root>
+          {componentManifest.components.Accordion.headingLevels.map((level) => (
+            <Accordion.Item key={level} value={String(level)}>
+              <Accordion.Header level={level}>
+                <Accordion.Trigger>Accordion heading {level}</Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Panel>Details</Accordion.Panel>
+            </Accordion.Item>
+          ))}
+        </Accordion.Root>
+        <RadioGroup.Root
+          orientation="horizontal"
+          aria-label="Horizontal options"
+        >
+          <RadioGroup.Item value="basic">
+            <RadioGroup.Indicator />
+            Basic
+          </RadioGroup.Item>
+          <RadioGroup.Item value="pro">
+            <RadioGroup.Indicator />
+            Pro
+          </RadioGroup.Item>
+        </RadioGroup.Root>
+        <Field.Root>
+          <Field.Label>Message with footer</Field.Label>
+          <InputGroup.Root>
+            <Textarea />
+            <InputGroup.Addon align="block-end">
+              <InputGroup.Text>Plain text</InputGroup.Text>
+            </InputGroup.Addon>
+          </InputGroup.Root>
+        </Field.Root>
+      </section>
     </main>
   );
 }
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
-createRoot(root).render(<Fixture />);
+createRoot(root).render(
+  new URLSearchParams(location.search).has('layout') ? (
+    <LayoutFixture />
+  ) : (
+    <Fixture />
+  ),
+);

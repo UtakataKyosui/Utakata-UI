@@ -31,8 +31,9 @@ import { toggleManifest } from './components/Toggle.js';
 import { toggleGroupManifest } from './components/ToggleGroup.js';
 import { tooltipManifest } from './components/Tooltip.js';
 import { qualityRules } from './quality.js';
+import { withVerificationStates } from './verification.js';
 
-export const componentManifest = {
+const manifest = {
   version: 1,
   framework: 'Utakata-UI',
   sharedQualityRules: qualityRules.shared,
@@ -162,6 +163,11 @@ export const componentManifest = {
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
   },
+} as const;
+
+export const componentManifest = {
+  ...manifest,
+  components: withVerificationStates(manifest.components),
 } as const;
 
 export type ButtonVariant =

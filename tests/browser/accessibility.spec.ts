@@ -33,7 +33,7 @@ test.beforeEach(async ({ page, browser }) => {
   ).toBeVisible();
 });
 
-test('[baseline.rendered-axe] all button variants/sizes and field pass rendered axe checks', async ({
+test('[baseline.rendered-axe] [theme.rendered-contrast] all button variants/sizes and field pass rendered axe checks', async ({
   page,
 }) => {
   for (const variant of componentManifest.components.Button.variants) {
@@ -69,7 +69,7 @@ test('static display components expose names and orientation', async ({
   );
 });
 
-test('[baseline.keyboard-focus] keyboard activates buttons and dialog traps and restores focus', async ({
+test('[baseline.keyboard-focus] [dialog.browser-keyboard] keyboard activates buttons and dialog traps and restores focus', async ({
   page,
 }) => {
   await page.keyboard.press('Tab');
@@ -128,27 +128,24 @@ async function forcedOutline(locator: ReturnType<Page['locator']>) {
     return {
       style: style.outlineStyle,
       width: Number.parseFloat(style.outlineWidth),
+      shadow: style.boxShadow,
     };
   });
 }
 
-async function verifyForcedFocusOutlines(page: Page) {
-  await page.emulateMedia({ forcedColors: 'active' });
+async function verifyForcedFocusOutlines(page: Page, forced = true) {
+  await page.emulateMedia({ forcedColors: forced ? 'active' : 'none' });
   // Forced colors suppress box shadows, so each focus target needs an outline.
   const button = page.getByRole('button', { name: 'solid sm', exact: true });
   await button.focus();
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
   const buttonOutline = await forcedOutline(button);
-  expect(buttonOutline.style, 'Button outline').toBe('solid');
-  expect(buttonOutline.width).toBeGreaterThanOrEqual(2);
   const field = page.getByRole('textbox', { name: 'Email', exact: true });
   await field.focus();
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
   const fieldOutline = await forcedOutline(field);
-  expect(fieldOutline.style, 'Field control outline').toBe('solid');
-  expect(fieldOutline.width).toBeGreaterThanOrEqual(2);
   await page.getByRole('button', { name: 'Open settings' }).focus();
   await page.keyboard.press('Enter');
   const dialog = page.getByRole('dialog', { name: 'Settings' });
@@ -158,13 +155,29 @@ async function verifyForcedFocusOutlines(page: Page) {
   await page.keyboard.press('Shift+Tab');
   await page.keyboard.press('Tab');
   const dialogOutline = await forcedOutline(inside);
-  expect(dialogOutline.style, 'Dialog descendant outline').toBe('solid');
-  expect(dialogOutline.width).toBeGreaterThanOrEqual(2);
+  for (const outline of [buttonOutline, fieldOutline, dialogOutline]) {
+    if (forced) {
+      expect(outline.style, 'forced focus outline').toBe('solid');
+      expect(
+        outline.width,
+        'forced focus outline width',
+      ).toBeGreaterThanOrEqual(2);
+    } else {
+      expect(outline.shadow, 'standard focus ring').not.toBe('none');
+    }
+  }
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await test.info().attach(`${forced ? 'forced' : 'standard'}-focus-evidence`, {
+    body: JSON.stringify({ buttonOutline, fieldOutline, dialogOutline }),
+    contentType: 'application/json',
+  });
 }
 
-test('[baseline.forced-colors] Button, Field control and Dialog descendants keep a focus outline in forced colors', async ({
+test('[baseline.forced-colors] [theme.focus-visibility] Button, Field control and Dialog descendants keep a focus outline in forced colors', async ({
   page,
 }) => {
+  await verifyForcedFocusOutlines(page, false);
   await verifyForcedFocusOutlines(page);
 });
 

@@ -84,12 +84,61 @@ nonpassing records; results are always regenerated, never restored from cache.
 The three baseline IDs additionally require rendered Button/Field axe,
 Dialog keyboard/focus, and forced-colors tests in every selected theme.
 
-This ledger maps existing browser rules to tests; it does not yet enforce a
-complete component × variant × size × state registry. Some quality rules still
-combine properties. Those parts of #49, actual assistive output, physical OS
-modes and browser zoom remain residual work. Repository branch protection and
-npm scope/Trusted Publisher configuration require separate verification; this
-change does not mutate those services.
+`tests/browser/coverage.ts` explicitly registers every public component, its
+public axes and relevant state checks. Manifest axes are compared against fixed
+reviewed values: adding a component/value without reviewing fixtures fails.
+The configuration test verifies actual rendered axis combinations (including
+variant × size), and state entries reference required browser rule IDs. Each
+ledger record links those component/state entries to the executed rule test.
+This is axis coverage plus registered state transitions, not an assertion that
+every axis × state × input × content permutation has run. Some older component
+rules still combine properties; their assertions and failure artifacts remain
+available. Actual assistive output, physical OS modes and browser zoom are
+tracked separately in ACCESSIBILITY-MANUAL.md.
+
+Evidence now hashes the actual nonignored source contents (including unstaged
+and new files), environment/configuration and attachments. A changed source,
+environment or deleted/replaced attachment invalidates evidence. Source changes
+during a run fail it. Do not edit tracked source while gathering final evidence.
+
+Browser workflow dispatch accepts `cache_mode: cold` or `warm`. Cold uses a
+temporary empty pnpm store and browser directory and bypasses both cache
+restores. Both modes enforce the same 420-second wall budget and retain both
+theme artifacts. Quality's manual `browser_cache_mode` input also forwards the
+mode to the reusable browser workflow, allowing verification on the PR branch.
+Record run URLs and actual job durations before claiming cold/warm performance.
+
+`pnpm test:stability` repeats the entire unit suite ten times, retaining every
+JSON report and diagnostic log under `unit-stability-results/` (separate from
+Playwright's cleaned output directory). Set
+`STABILITY_RUNS=2..30` and `STABILITY_WORKERS=2|4|default` to reproduce load
+conditions. Any failed/missing/skipped attempt fails the aggregate; later passes
+cannot erase it. The manual Unit stability diagnostics workflow runs the same
+command on Ubuntu. Repeated passing runs are stability evidence, not proof of
+the original Skeleton failure's cause. That failure has no surviving log and
+has not been reproduced; #83's cause-identification criterion remains open.
+
+`pnpm verify:release-readiness` performs read-only checks of main's required
+quality context, the protected npm environment and npm authentication. Unknown
+or unauthorized responses are unverified and exit nonzero. npm scope rights
+and Trusted Publisher settings need maintainer evidence; optionally provide
+its JSON path as an argument. Each entry keyed by `npm.scope-publish-rights` or
+`npm.trusted-publisher` must have `package: @utakata-ui/react`, `status: passed`,
+`reviewer`, `evidence` reference and `checkedAt` within the last 30 days. Never
+put tokens or private screenshots in this file. Trusted Publisher is a later
+phase after the separately authorized initial local publication, not an initial
+publication prerequisite. An unconfigured later phase is not overall CI-release
+readiness.
+
+The reviewable `.github/required-checks.ruleset.json` requires the always
+reporting `accessibility` aggregate on main, with strict checks and no bypass
+actors. Applying it changes remote merge policy and requires confirmation under
+AGENTS.md. After explicit user approval on 2026-11-10 JST, ruleset `26865507`
+was applied and read back: active on `refs/heads/main`, strict `accessibility`
+check from GitHub Actions (integration 15368), no bypass actors. This remote
+setting is not applied automatically by a source PR. The `npm` environment should require
+the repository owner's review; scope ownership and the npm publisher binding
+remain external prerequisites. No npm/environment/publisher settings were changed.
 
 MCP builds require the React package first. The build job packs both packages
 with pnpm, installs the archives into an isolated consumer, then verifies the
@@ -122,8 +171,10 @@ shorter elapsed time.
 
 The React consumer verification also installs Vite 8.3.5 into its temporary
 external project, imports the installed CSS and manifest with a rendered Button,
-and runs a production build. This supplements the existing declaration negative
-fixtures and SSR test; it exercises the package exports without source aliases.
+and runs a production build. The same declaration fixtures, SSR and production
+build run for React/React DOM 18.3.1 with @types/react 18.3.31 / @types/react-dom
+18.3.7 and React/React DOM 19.3.1 with types 19.3.0, using TypeScript 5.9.3.
+These are tested versions, not a promise that every peer-range version has run.
 
 ## Verification record (2026-11-10 JST)
 

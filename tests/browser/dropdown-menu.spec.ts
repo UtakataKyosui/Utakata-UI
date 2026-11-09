@@ -36,6 +36,7 @@ async function openWithKeyboard(page: Page) {
   await page.keyboard.press('Enter');
   await expect(popup).toBeVisible({ timeout });
   await expect(trigger).toHaveAttribute('aria-expanded', 'true', { timeout });
+  await expect(menu(page).item('Edit')).toBeFocused({ timeout });
 }
 
 async function verifyKeyboard(page: Page) {
@@ -74,6 +75,10 @@ async function verifyActivateDismiss(page: Page) {
   await page.keyboard.press('Enter');
   await expect(popup).toBeVisible({ timeout });
   await page.keyboard.press('Home');
+  // Popup visibility can precede Base UI's deferred initial focus. Wait for
+  // Home's focus result before advancing, otherwise that effect can overwrite
+  // the immediately following ArrowDown (observed in the full dark suite).
+  await expect(item('Edit')).toBeFocused({ timeout });
   await page.keyboard.press('ArrowDown');
   await expect(item('Duplicate')).toBeFocused({ timeout });
   await page.keyboard.press('Space');
@@ -124,6 +129,7 @@ async function verifyForced(page: Page) {
   await expect(item('Edit')).toBeFocused({ timeout });
   await expect.poll(() => read('Edit'), { timeout }).toEqual(expected);
   await page.keyboard.press('ArrowDown');
+  await expect(item('Duplicate')).toBeFocused({ timeout });
   await page.keyboard.press('ArrowDown');
   await expect(item('Delete')).toBeFocused({ timeout });
   await expect.poll(() => read('Delete'), { timeout }).toEqual(expected);

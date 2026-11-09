@@ -5,6 +5,17 @@ body {
   margin: 0;
 }
 
+.layout-contract {
+  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.layout-contract .ui-field__control {
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+}
+
 main {
   display: grid;
   gap: 1.5rem;
