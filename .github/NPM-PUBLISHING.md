@@ -33,9 +33,10 @@
    `react-v*`、`mcp-v*`、`cli-v*` をそれぞれ追加します。
 3. 通常の OIDC 運用では、Environment secrets に npm の公開 Token を登録する必要はありません。
 
-各 Release ジョブは `environment: npm` を使用します。手動実行では `main` を選択し、
-`release_mode: verify` が公開しない検証モードです。
-`token` / `oidc` の選択、またはタグ push は実際の公開を開始します。
+各 Release ジョブは、公開する実行（`token` / `oidc` の選択、またはタグ push）だけ
+`environment: npm` を使用し、承認を待ちます。手動実行では `main` を選択し、
+`release_mode: verify` が公開しない検証モードです。`verify` は `npm` Environment を
+使わないため、承認待ちにならず、Environment の `NPM_TOKEN` も渡されません。
 
 ## 3. 初回を GitHub Actions で公開する
 
@@ -46,7 +47,9 @@
 3. GitHub の **Actions → Release React → Run workflow** を開きます。
    **Use workflow from: main**、**release_mode: verify** を選んで検証します。
 4. 検証成功後、同じ main のバージョンを確認し、**release_mode: token** で実行します。
-   main が更新されていれば、その新しいコミットに対して検証も再実行されます。
+   同じコミット、または検証に影響しない変更だけなら、main の Quality や前回の
+   Release で成功した検証を再利用し、配布物の build・pack・配布テストだけを行います。
+   すべて再実行するには **full_verification** を選びます。
 5. `npm` Environment の承認要求でコミットと公開対象を確認し、承認します。
    全検証と配布テストの成功後、テストしたものと同じ tgz を公開します。
 6. 実行ログと npm のパッケージページで、バージョンと provenance を確認します。

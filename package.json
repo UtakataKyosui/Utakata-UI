@@ -16,7 +16,7 @@
     "build:docs": "pnpm --filter @utakata-ui/docs... build",
     "lint": "biome check .",
     "lint:markup": "node scripts/lint-markup.mjs && node --test scripts/accessibility-lint.test.mjs",
-    "test:ci": "node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs",
+    "test:ci": "node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs scripts/prior-verification.test.mjs",
     "test:stability": "node scripts/stress-unit.mjs",
     "verify:release-readiness": "node scripts/release-readiness.mjs",
     "test:a11y:browser": "playwright test",

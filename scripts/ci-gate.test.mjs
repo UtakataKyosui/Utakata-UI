@@ -74,7 +74,10 @@ test('Quality and React release share the complete two-theme browser gate', () =
   for (const name of ['quality', 'release']) {
     assert.match(read(name), /uses: \.\/\.github\/workflows\/browser\.yml/);
   }
-  assert.match(read('release'), /needs: browser-accessibility/);
+  assert.match(
+    read('release'),
+    /needs: \[prior, browser-accessibility, verify\]/,
+  );
   assert.match(read('quality'), /run: node scripts\/ci-gate\.mjs/);
   assert.match(read('browser'), /project: \[chromium-light, chromium-dark\]/);
   assert.match(read('browser'), /fail-fast: false/);
@@ -87,6 +90,65 @@ test('Quality and React release share the complete two-theme browser gate', () =
     read('browser'),
     /continue-on-error|--grep|--pass-with-no-tests/,
   );
+});
+
+test('releases skip a verification job only when prior evidence was reused', () => {
+  for (const [name, gates] of [
+    ['release', ['checks', 'browser']],
+    ['release-mcp', ['checks']],
+    ['release-cli', ['checks']],
+  ]) {
+    const workflow = readFileSync(
+      new URL(`../.github/workflows/${name}.yml`, import.meta.url),
+      'utf8',
+    );
+    assert.ok(
+      workflow.includes(
+        `run: node scripts/prior-verification.mjs ${name}.yml ${gates.join(',')}\n`,
+      ),
+    );
+    assert.match(workflow, /actions: read/);
+    assert.match(
+      workflow,
+      /FULL_VERIFICATION: \$\{\{ inputs\.full_verification \}\}/,
+    );
+    const publish = workflow.split('\n  release:\n')[1];
+    const condition = publish.split('    runs-on:')[0];
+    assert.match(
+      condition,
+      /!cancelled\(\) && needs\.prior\.result == 'success'/,
+    );
+    const jobs = { checks: 'verify', browser: 'browser-accessibility' };
+    for (const gate of gates) {
+      const job = jobs[gate];
+      assert.ok(
+        condition.includes(
+          `(needs.${job}.result == 'success' || (needs.${job}.result == 'skipped' && needs.prior.outputs.${gate} == 'reuse'))`,
+        ),
+        `${name} ${gate}`,
+      );
+      assert.ok(
+        workflow.includes(
+          `  ${job}:\n    needs: prior\n    if: needs.prior.outputs.${gate} == 'run'\n`,
+        ),
+        `${name} ${job}`,
+      );
+    }
+    // Publication always rebuilds, packs and tests the exact archive it uploads.
+    assert.match(publish, /verify-(react|mcp|cli)-package\.mjs/);
+    assert.doesNotMatch(publish, /run: pnpm check/);
+    // The React archive has no prepack, so it must be built before any pack.
+    const reactPack = publish.search(
+      /npm pack \.\/packages\/react|pnpm --filter @utakata-ui\/react pack/,
+    );
+    if (reactPack !== -1)
+      assert.ok(
+        publish.indexOf('run: pnpm --filter @utakata-ui/react build') !== -1 &&
+          publish.indexOf('run: pnpm --filter @utakata-ui/react build') <
+            reactPack,
+        name,
+      );
+  }
 });
 
 test('releases default to verification and expose the token only to explicit manual publication', () => {
@@ -111,13 +173,18 @@ test('releases default to verification and expose the token only to explicit man
     );
     assert.doesNotMatch(verification, /secrets\.NPM_TOKEN/);
     assert.match(tokenStep, /node scripts\/publish-npm-token\.mjs/);
-    assert.match(workflow, /environment: npm/);
+    assert.equal((workflow.match(/^\s+environment:/gm) ?? []).length, 1);
+    assert.ok(
+      workflow.includes(
+        "    environment: ${{ (github.event_name == 'push' || inputs.release_mode != 'verify') && 'npm' || '' }}\n",
+      ),
+    );
     assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
     assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
     if (name === 'release-mcp') {
       assert.match(
         workflow,
-        /Require published React dependency\n        if: github.event_name == 'push' \|\| inputs.release_mode != 'verify'/,
+        /Require published React dependency\n {8}if: github.event_name == 'push' \|\| inputs.release_mode != 'verify'/,
       );
     }
   }

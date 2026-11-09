@@ -21,6 +21,9 @@ jobs:
   scope:
     runs-on: ubuntu-24.04
     timeout-minutes: 3
+    permissions:
+      contents: read
+      actions: read
     outputs:
       base: ${{ steps.scope.outputs.base }}
       checks: ${{ steps.scope.outputs.checks }}
@@ -40,12 +43,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Test scope, aggregate and evidence gates (no dependency install)
-        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs
+        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs scripts/prior-verification.test.mjs
       - name: Select required gates
         id: scope
         env:
           EVENT_NAME: ${{ github.event_name }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GH_TOKEN: ${{ github.token }}
         run: node scripts/ci-scope.mjs
       - name: Agent infrastructure (no dependency install)
         if: steps.scope.outputs.agents == 'true'

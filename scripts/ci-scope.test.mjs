@@ -85,7 +85,7 @@ test('docs and unit fixtures only run their relevant gates', () => {
   }
 });
 
-test('dependencies, shared configuration, unknown code and main/manual runs use full gates', () => {
+test('dependencies, shared configuration, unknown code and unverified bases use full gates', () => {
   for (const file of [
     'pnpm-lock.yaml',
     'package.json',
@@ -128,8 +128,12 @@ test('CLI work has its own gate; shared browser and release policy invalidate al
   for (const file of [
     '.github/workflows/browser.yml',
     '.github/workflows/release.yml',
+    '.github/workflows/release-mcp.yml',
+    '.github/workflows/release-cli.yml',
+    'scripts/prior-verification.mjs',
+    'scripts/verified-runs.mjs',
   ]) {
-    assert.equal(selectScope([file]).full, true);
+    assert.equal(selectScope([file]).full, true, file);
   }
 });
 
