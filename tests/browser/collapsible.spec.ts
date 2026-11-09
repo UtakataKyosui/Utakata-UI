@@ -7,7 +7,11 @@ import {
 } from '../../packages/react/src/metadata/quality.js';
 
 const section = 'section[aria-label="Collapsible states"]';
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function collapsible(page: Page) {
   const root = page.locator(section);
@@ -194,6 +198,7 @@ test('[collapsible.motion-forced] transitions, reduced motion, indicator and for
 test('Collapsible detector rejects a closed panel that stays reachable', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   // Force the closed keepMounted panel visible so its action joins the Tab order.
   await page.addStyleTag({
@@ -205,6 +210,7 @@ test('Collapsible detector rejects a closed panel that stays reachable', async (
 test('Collapsible detector rejects motion under reduced motion', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `.ui-collapsible__panel, .ui-collapsible__trigger::after { transition: all 150ms ease !important; }`,
@@ -216,6 +222,7 @@ test('Collapsible detector rejects motion under reduced motion', async ({
 test('Collapsible detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-collapsible__trigger:focus-visible { outline: none !important; box-shadow: none !important; }`,

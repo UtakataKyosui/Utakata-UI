@@ -33,7 +33,7 @@ test.beforeEach(async ({ page, browser }) => {
   ).toBeVisible();
 });
 
-test('all button variants/sizes and field pass rendered axe checks', async ({
+test('[baseline.rendered-axe] all button variants/sizes and field pass rendered axe checks', async ({
   page,
 }) => {
   for (const variant of componentManifest.components.Button.variants) {
@@ -69,7 +69,7 @@ test('static display components expose names and orientation', async ({
   );
 });
 
-test('keyboard activates buttons and dialog traps and restores focus', async ({
+test('[baseline.keyboard-focus] keyboard activates buttons and dialog traps and restores focus', async ({
   page,
 }) => {
   await page.keyboard.press('Tab');
@@ -162,7 +162,7 @@ async function verifyForcedFocusOutlines(page: Page) {
   expect(dialogOutline.width).toBeGreaterThanOrEqual(2);
 }
 
-test('Button, Field control and Dialog descendants keep a focus outline in forced colors', async ({
+test('[baseline.forced-colors] Button, Field control and Dialog descendants keep a focus outline in forced colors', async ({
   page,
 }) => {
   await verifyForcedFocusOutlines(page);

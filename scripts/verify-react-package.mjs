@@ -26,6 +26,7 @@ try {
     '@types/react@19',
     '@types/react-dom@19',
     'typescript@5.9.3',
+    'vite@8.3.5',
   ]);
   const packageDirectory = join(directory, 'node_modules/@utakata-ui/react');
   const metadata = JSON.parse(
@@ -494,6 +495,24 @@ assert.ok(import.meta.resolve('@utakata-ui/react/styles.css').endsWith('.css'));
 `,
   );
   run(process.execPath, ['consumer.mjs']);
+  // Resolve JS, declarations, manifest and the CSS export through the installed
+  // package in a real consumer build, without workspace aliases.
+  writeFileSync(
+    join(directory, 'index.html'),
+    '<html lang="en"><head><title>Consumer</title></head><body><div id="root"></div><script type="module" src="/app.tsx"></script></body></html>',
+  );
+  writeFileSync(
+    join(directory, 'app.tsx'),
+    `
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Button } from '@utakata-ui/react';
+import { componentManifest } from '@utakata-ui/react/manifest';
+import '@utakata-ui/react/styles.css';
+createRoot(document.getElementById('root')!).render(createElement(Button, null, componentManifest.components.Button.description));
+`,
+  );
+  run(process.execPath, ['node_modules/vite/bin/vite.js', 'build']);
 } finally {
   rmSync(directory, { recursive: true, force: true });
 }

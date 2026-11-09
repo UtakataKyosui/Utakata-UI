@@ -6,7 +6,11 @@ import {
   formatQualityReport,
 } from '../../packages/react/src/metadata/quality.js';
 
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function select(page: Page) {
   const section = page.getByRole('region', { name: 'Select input' });
@@ -58,9 +62,14 @@ async function verifyEscape(page: Page) {
   const { section, trigger, option, changes, formValue } = select(page);
   await section.getByRole('button', { name: 'Before select' }).focus();
   await page.keyboard.press('Tab');
+  await expect(trigger).toBeFocused({ timeout });
   await page.keyboard.press('ArrowDown');
   await expect(page.getByRole('listbox')).toBeVisible({ timeout });
+  // The popup can be visible before Base UI finishes its initial focus effect.
+  // Wait for each actual transition before sending the next key.
+  await expect(option('System')).toBeFocused({ timeout });
   await page.keyboard.press('ArrowDown');
+  await expect(option('Dark')).toBeFocused({ timeout });
   await page.keyboard.press('ArrowDown');
   await expect(option('Light')).toBeFocused({ timeout });
   await page.keyboard.press('Escape');
@@ -126,6 +135,7 @@ for (const [id, verify] of Object.entries(verifiers)) {
           contentType: 'application/json',
         });
         expect(axe.violations).toEqual([]);
+        expect(axe.incomplete).toEqual([]);
       },
     });
     await test.info().attach(`${id}-evidence`, {
@@ -146,6 +156,7 @@ for (const [id, verify] of Object.entries(verifiers)) {
 test('Select detector catches a popup that ignores Escape and outside press', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.evaluate(() => {
     const block = (event: Event) => {
@@ -155,5 +166,5 @@ test('Select detector catches a popup that ignores Escape and outside press', as
     document.addEventListener('keydown', block, true);
     document.addEventListener('pointerdown', block, true);
   });
-  await expect(verifyEscape(page)).rejects.toThrow();
+  await expect(verifyEscape(page)).rejects.toThrow(/toBeHidden/);
 });

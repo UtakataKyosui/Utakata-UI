@@ -1,0 +1,69 @@
+name: Browser accessibility
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  browser:
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium-light, chromium-dark]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      CI: "true"
+    steps:
+      - name: Start wall-clock budget
+        id: budget
+        run: echo "started=$(date +%s)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+      - run: pnpm install --frozen-lockfile
+      - name: Select exact browser cache version
+        id: playwright
+        run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
+      - name: Cache Chromium headless shell
+        id: browsers
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-ubuntu24-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-headless
+      - name: Install OS dependencies (not cached)
+        run: pnpm exec playwright install-deps chromium
+      - name: Download Chromium headless shell
+        if: steps.browsers.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --only-shell chromium
+      - name: Rendered accessibility and keyboard behavior
+        id: browser-tests
+        env:
+          CI_BROWSER_PROJECT: ${{ matrix.project }}
+        run: pnpm test:a11y:browser --project=${{ matrix.project }}
+      - name: Upload browser evidence
+        if: always() && (steps.browser-tests.outcome == 'success' || steps.browser-tests.outcome == 'failure')
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: browser-accessibility-${{ github.sha }}-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Record and enforce browser job budget
+        if: always()
+        env:
+          STARTED: ${{ steps.budget.outputs.started }}
+          PROJECT: ${{ matrix.project }}
+        run: |
+          elapsed=$(( $(date +%s) - STARTED ))
+          echo "### $PROJECT browser job: ${elapsed}s / 420s budget (10 minute job limit)" >> "$GITHUB_STEP_SUMMARY"
+          test "$elapsed" -le 420

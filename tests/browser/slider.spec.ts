@@ -6,7 +6,11 @@ import {
   formatQualityReport,
 } from '../../packages/react/src/metadata/quality.js';
 
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function slider(page: Page) {
   const section = page.getByRole('region', { name: 'Slider input' });
@@ -99,6 +103,7 @@ for (const [id, verify] of Object.entries(verifiers)) {
           contentType: 'application/json',
         });
         expect(axe.violations).toEqual([]);
+        expect(axe.incomplete).toEqual([]);
       },
     });
     await test.info().attach(`${id}-evidence`, {
@@ -119,6 +124,7 @@ for (const [id, verify] of Object.entries(verifiers)) {
 test('Slider detector catches swallowed keys and pointer presses', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.evaluate(() => {
     const block = (event: Event) => event.stopImmediatePropagation();

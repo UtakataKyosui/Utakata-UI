@@ -10,7 +10,11 @@ concurrency:
   group: release-react
   cancel-in-progress: false
 jobs:
+  browser-accessibility:
+    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/browser.yml
   release:
+    needs: browser-accessibility
     if: github.event_name == 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 20

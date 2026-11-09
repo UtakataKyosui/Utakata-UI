@@ -7,7 +7,11 @@ import {
 } from '../../packages/react/src/metadata/quality.js';
 
 const section = 'section[aria-label="Accordion states"]';
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 function accordion(page: Page) {
   const root = page.locator(section);
@@ -176,6 +180,7 @@ test('[accordion.motion-forced] transitions, reduced motion, indicator and force
 test('Accordion detector rejects a disabled trigger that stays in the Tab order', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await accordion(page).archive.evaluate((node) => {
     node.removeAttribute('disabled');
@@ -187,6 +192,7 @@ test('Accordion detector rejects a disabled trigger that stays in the Tab order'
 test('Accordion detector rejects motion under reduced motion', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `.ui-accordion__panel, .ui-accordion__trigger::after { transition: all 150ms ease !important; }`,
@@ -198,6 +204,7 @@ test('Accordion detector rejects motion under reduced motion', async ({
 test('Accordion detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-accordion__trigger:focus-visible { outline: none !important; box-shadow: none !important; }`,

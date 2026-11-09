@@ -9,7 +9,11 @@ import { measureRenderedColors } from './rendered-colors.js';
 
 const section = 'section[aria-label="Toggle states"]';
 const visual = `${section} [data-case="visual"]`;
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 const { sizes, variants } = componentManifest.components.Toggle;
 
 function toggles(page: Page) {
@@ -196,6 +200,7 @@ test('[toggle.visual-theme] contrast, targets, pressed marks and forced colors',
 test('Toggle detector rejects a swallowed Enter activation', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.evaluate(() => {
     document.addEventListener(
@@ -212,6 +217,7 @@ test('Toggle detector rejects a swallowed Enter activation', async ({
 test('Toggle detector rejects a pressed state without its inset outline', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-toggle[data-pressed] { box-shadow: none !important; }`,
@@ -222,6 +228,7 @@ test('Toggle detector rejects a pressed state without its inset outline', async 
 test('Toggle detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-toggle:focus-visible { outline: none !important; box-shadow: none !important; }`,

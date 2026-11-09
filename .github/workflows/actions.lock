@@ -3,11 +3,16 @@
 # Docs: https://gh.io/actions-lockfile
 version: 'v0.0.3'
 workflows:
-    '.github/workflows/quality.yml':
+    '.github/workflows/browser.yml':
         - 'actions/cache@v6.1.0'
         - 'actions/checkout@v4.4.0'
         - 'actions/setup-node@v4.4.0'
         - 'actions/upload-artifact@v4.6.2'
+        - 'pnpm/action-setup@v4.3.0'
+    '.github/workflows/quality.yml':
+        - 'actions/cache@v6.1.0'
+        - 'actions/checkout@v4.4.0'
+        - 'actions/setup-node@v4.4.0'
         - 'fallow-rs/fallow@v3.38.1'
         - 'pnpm/action-setup@v4.3.0'
     '.github/workflows/release-cli.yml':

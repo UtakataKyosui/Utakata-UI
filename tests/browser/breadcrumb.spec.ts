@@ -9,7 +9,11 @@ import { measureOverflow, measureRenderedColors } from './rendered-colors.js';
 
 const section = 'section[aria-label="Breadcrumb states"]';
 const root = `${section} nav`;
-const timeout = 5000;
+let timeout = 5000;
+
+test.beforeEach(() => {
+  timeout = 5000;
+});
 
 async function verifyLayout(page: Page) {
   const layout = await measureOverflow(page, root);
@@ -147,6 +151,7 @@ test('[breadcrumb.reflow-focus] wrapping, contrast, tab order and focus indicato
 test('Breadcrumb detector rejects clipped non-wrapping content', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-breadcrumb__item { overflow-wrap: normal; white-space: nowrap; }
@@ -158,6 +163,7 @@ ${section} .ui-breadcrumb__list { flex-wrap: nowrap; overflow: hidden; }`,
 test('Breadcrumb detector rejects a forced-colors focus ring that disappears', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-breadcrumb__link:focus-visible { outline: none !important; box-shadow: none !important; }`,
@@ -169,6 +175,7 @@ test('Breadcrumb detector rejects a forced-colors focus ring that disappears', a
 test('Breadcrumb detector rejects links that lose their underline', async ({
   page,
 }) => {
+  timeout = 1000;
   await page.goto('/');
   await page.addStyleTag({
     content: `${section} .ui-breadcrumb__link { text-decoration: none !important; }`,

@@ -26,14 +26,15 @@ jobs:
       docs: ${{ steps.scope.outputs.docs }}
       react: ${{ steps.scope.outputs.react }}
       mcp: ${{ steps.scope.outputs.mcp }}
+      cli: ${{ steps.scope.outputs.cli }}
       fallow: ${{ steps.scope.outputs.fallow }}
     steps:
       - uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Test scope selection (no dependency install)
-        run: node --test scripts/ci-scope.test.mjs
+      - name: Test scope, aggregate and evidence gates (no dependency install)
+        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs
       - name: Select required gates
         id: scope
         env:
@@ -80,6 +81,26 @@ jobs:
         env:
           CI_DIFF_BASE: ${{ needs.scope.outputs.base }}
         run: pnpm lint:markup
+
+  unit:
+    needs: scope
+    if: needs.scope.outputs.tests == 'true' || needs.scope.outputs.cli == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+      - run: pnpm install --frozen-lockfile
       - name: Unit and jsdom accessibility tests (single run)
         if: needs.scope.outputs.tests == 'true'
         env:
@@ -91,11 +112,68 @@ jobs:
             pnpm test
           fi
       - name: Dedicated registry CLI tests
+        if: needs.scope.outputs.cli == 'true'
         run: pnpm test:cli
 
   build:
     needs: scope
     if: needs.scope.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+          # Invalidate downloads when installation policy changes.
+          cache-dependency-path: |
+            pnpm-lock.yaml
+            package.json
+            .github/workflows/quality.yml
+      - name: Install build dependencies with native diagnostics
+        run: |
+          pnpm install --frozen-lockfile --reporter=ndjson > "$RUNNER_TEMP/pnpm-install.ndjson" || {
+            tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
+            exit 1
+          }
+      - name: Build React (also required by MCP)
+        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.mcp == 'true'
+        run: pnpm --filter @utakata-ui/react build
+      - name: Build MCP
+        if: needs.scope.outputs.mcp == 'true'
+        run: pnpm --filter @utakata-ui/mcp build
+      - name: Cache consumer npm downloads
+        uses: actions/cache@v6.1.0
+        with:
+          path: ~/.npm
+          key: consumer-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'scripts/verify-react-package.mjs') }}
+      - name: Verify packed public types and SSR
+        if: needs.scope.outputs.react == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/react-consumer"
+          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
+          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
+      - name: Verify packed MCP stdio and tools
+        if: needs.scope.outputs.mcp == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/mcp-consumer" "$RUNNER_TEMP/react-for-mcp"
+          pnpm --filter @utakata-ui/react pack --pack-destination "$RUNNER_TEMP/react-for-mcp"
+          pnpm --filter @utakata-ui/mcp pack --pack-destination "$RUNNER_TEMP/mcp-consumer"
+          node scripts/verify-mcp-package.mjs "$RUNNER_TEMP"/mcp-consumer/*.tgz "$RUNNER_TEMP"/react-for-mcp/*.tgz
+      - name: Verify packed dedicated CLI
+        if: needs.scope.outputs.cli == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/cli-consumer"
+          pnpm --filter @utakata-ui/cli pack --pack-destination "$RUNNER_TEMP/cli-consumer"
+          node scripts/verify-cli-package.mjs "$RUNNER_TEMP"/cli-consumer/*.tgz
+
+  docs:
+    needs: scope
+    if: needs.scope.outputs.docs == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -122,85 +200,13 @@ jobs:
       - name: Verify Docs native compiler after install
         if: needs.scope.outputs.docs == 'true'
         run: node scripts/check-docs-compiler.mjs
-      - name: Build React (also required by Docs and MCP)
-        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.docs == 'true' || needs.scope.outputs.mcp == 'true'
-        run: pnpm --filter @utakata-ui/react build
-      - name: Build MCP
-        if: needs.scope.outputs.mcp == 'true'
-        run: pnpm --filter @utakata-ui/mcp build
-      - name: Build Docs
-        if: needs.scope.outputs.docs == 'true'
-        run: pnpm --filter @utakata-ui/docs build
-      - name: Cache consumer npm downloads
-        if: needs.scope.outputs.react == 'true'
-        uses: actions/cache@v6.1.0
-        with:
-          path: ~/.npm
-          key: consumer-npm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml', 'scripts/verify-react-package.mjs') }}
-      - name: Verify packed public types and SSR
-        if: needs.scope.outputs.react == 'true'
-        run: |
-          mkdir -p "$RUNNER_TEMP/react-consumer"
-          npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
-          node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
-      - name: Verify packed MCP stdio and tools
-        if: needs.scope.outputs.mcp == 'true'
-        run: |
-          mkdir -p "$RUNNER_TEMP/mcp-consumer" "$RUNNER_TEMP/react-for-mcp"
-          pnpm --filter @utakata-ui/react pack --pack-destination "$RUNNER_TEMP/react-for-mcp"
-          pnpm --filter @utakata-ui/mcp pack --pack-destination "$RUNNER_TEMP/mcp-consumer"
-          node scripts/verify-mcp-package.mjs "$RUNNER_TEMP"/mcp-consumer/*.tgz "$RUNNER_TEMP"/react-for-mcp/*.tgz
-      - name: Verify packed dedicated CLI
-        run: |
-          mkdir -p "$RUNNER_TEMP/cli-consumer"
-          pnpm --filter @utakata-ui/cli pack --pack-destination "$RUNNER_TEMP/cli-consumer"
-          node scripts/verify-cli-package.mjs "$RUNNER_TEMP"/cli-consumer/*.tgz
+      - name: Build React and Docs
+        run: pnpm build:docs
 
   browser-accessibility:
     needs: scope
     if: needs.scope.outputs.browser == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4.4.0
-        with:
-          persist-credentials: false
-      - uses: pnpm/action-setup@v4.3.0
-      - uses: actions/setup-node@v4.4.0
-        with:
-          node-version: "24.16.0"
-          cache: pnpm
-          cache-dependency-path: |
-            pnpm-lock.yaml
-            package.json
-      - run: pnpm install --frozen-lockfile
-      - name: Select exact browser cache version
-        id: playwright
-        run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
-      - name: Cache Chromium headless shell
-        id: browsers
-        uses: actions/cache@v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-ubuntu24-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-headless
-      - name: Install OS dependencies (not cached)
-        run: pnpm exec playwright install-deps chromium
-      - name: Download Chromium headless shell
-        if: steps.browsers.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --only-shell chromium
-      - name: Rendered accessibility and keyboard behavior
-        id: browser-tests
-        run: pnpm test:a11y:browser
-      - name: Upload browser evidence
-        if: always() && (steps.browser-tests.outcome == 'success' || steps.browser-tests.outcome == 'failure')
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: browser-accessibility-${{ github.sha }}
-          path: |
-            playwright-report/
-            test-results/
-          if-no-files-found: error
-          retention-days: 14
+    uses: ./.github/workflows/browser.yml
 
   fallow:
     needs: scope
@@ -224,16 +230,16 @@ jobs:
   # Preserve the existing required-check name, including docs-only PRs.
   # Skipped irrelevant jobs are allowed; a failed scope or gate cannot pass.
   accessibility:
-    needs: [scope, checks, build, browser-accessibility, fallow]
+    needs: [scope, checks, unit, build, docs, browser-accessibility, fallow]
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 1
     steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
       - name: Require all applicable gates
         env:
           RESULTS: ${{ toJSON(needs) }}
-        run: |
-          node --input-type=module -e '
-            const jobs = JSON.parse(process.env.RESULTS);
-            if (jobs.scope.result !== "success" || Object.values(jobs).some(({result}) => !["success", "skipped"].includes(result))) process.exit(1);
-          '
+          EVENT_NAME: ${{ github.event_name }}
+        run: node scripts/ci-gate.mjs
