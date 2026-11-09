@@ -21,7 +21,8 @@ jobs:
     if: github.event_name == 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
-    environment: npm
+    # Only publishing runs use the protected npm Environment and its secrets.
+    environment: ${{ (github.event_name == 'push' || inputs.release_mode != 'verify') && 'npm' || '' }}
     permissions:
       contents: read
       id-token: write

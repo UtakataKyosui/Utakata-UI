@@ -33,9 +33,10 @@
    `react-v*`、`mcp-v*`、`cli-v*` をそれぞれ追加します。
 3. 通常の OIDC 運用では、Environment secrets に npm の公開 Token を登録する必要はありません。
 
-各 Release ジョブは `environment: npm` を使用します。手動実行では `main` を選択し、
-`release_mode: verify` が公開しない検証モードです。
-`token` / `oidc` の選択、またはタグ push は実際の公開を開始します。
+各 Release ジョブは、公開する実行（`token` / `oidc` の選択、またはタグ push）だけ
+`environment: npm` を使用し、承認を待ちます。手動実行では `main` を選択し、
+`release_mode: verify` が公開しない検証モードです。`verify` は `npm` Environment を
+使わないため、承認待ちにならず、Environment の `NPM_TOKEN` も渡されません。
 
 ## 3. 初回を GitHub Actions で公開する
 

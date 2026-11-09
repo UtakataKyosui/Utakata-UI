@@ -111,7 +111,12 @@ test('releases default to verification and expose the token only to explicit man
     );
     assert.doesNotMatch(verification, /secrets\.NPM_TOKEN/);
     assert.match(tokenStep, /node scripts\/publish-npm-token\.mjs/);
-    assert.match(workflow, /environment: npm/);
+    assert.equal((workflow.match(/^\s+environment:/gm) ?? []).length, 1);
+    assert.ok(
+      workflow.includes(
+        "    environment: ${{ (github.event_name == 'push' || inputs.release_mode != 'verify') && 'npm' || '' }}\n",
+      ),
+    );
     assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
     assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
     if (name === 'release-mcp') {
