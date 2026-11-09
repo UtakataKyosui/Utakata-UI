@@ -137,6 +137,17 @@ test('releases skip a verification job only when prior evidence was reused', () 
     // Publication always rebuilds, packs and tests the exact archive it uploads.
     assert.match(publish, /verify-(react|mcp|cli)-package\.mjs/);
     assert.doesNotMatch(publish, /run: pnpm check/);
+    // The React archive has no prepack, so it must be built before any pack.
+    const reactPack = publish.search(
+      /npm pack \.\/packages\/react|pnpm --filter @utakata-ui\/react pack/,
+    );
+    if (reactPack !== -1)
+      assert.ok(
+        publish.indexOf('run: pnpm --filter @utakata-ui/react build') !== -1 &&
+          publish.indexOf('run: pnpm --filter @utakata-ui/react build') <
+            reactPack,
+        name,
+      );
   }
 });
 

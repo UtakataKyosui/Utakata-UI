@@ -129,6 +129,8 @@ jobs:
             tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
             exit 1
           }
+      - name: Build React dependency before packing it
+        run: pnpm --filter @utakata-ui/react build
       - name: Pack and test MCP in an isolated consumer
         run: |
           mkdir -p "$RUNNER_TEMP/mcp-release" "$RUNNER_TEMP/react-for-mcp"
