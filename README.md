@@ -19,17 +19,25 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 ## パッケージ
 
-`packages` 配下を次の3つのワークスペースに分けています。
+`packages` 配下を次のワークスペースに分けています。
 
-| ディレクトリ     | パッケージ                    | 役割                             |
-| ---------------- | ----------------------------- | -------------------------------- |
-| `packages/docs`  | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト   |
-| `packages/react` | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest |
-| `packages/mcp`   | `@utakata-ui/mcp`             | manifest を参照する MCP サーバー |
+| ディレクトリ        | パッケージ                    | 役割                                               |
+| ------------------- | ----------------------------- | -------------------------------------------------- |
+| `packages/docs`     | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト                     |
+| `packages/react`    | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest（標準の導入方法） |
+| `packages/mcp`      | `@utakata-ui/mcp`             | manifest を参照する MCP サーバー                   |
+| `packages/cli`      | `@utakata-ui/cli`             | ソースを取り込んで改変する場合の補助 CLI           |
+| `packages/a11y-cli` | `@utakata-ui/a11y-cli`        | 配色の利用契約（コントラスト等）を検査する CLI     |
 
 docs と MCP は UI 本体をワークスペース依存として参照します。UI 本体は docs・MCP に依存しません。
 
 `@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
+
+導入は npm パッケージで行います。
+
+```sh
+pnpm add @utakata-ui/react
+```
 
 ```tsx
 import { Button, Dialog, Field } from '@utakata-ui/react';
@@ -120,7 +128,9 @@ CI は packed MCP を一時プロジェクトで起動し、stdio 接続・3ツ�
 
 ### 専用 registry と CLI
 
-Utakata UI は Base UI + Lism CSS のソースを専用 registry から配布します。
+標準の導入方法は npm パッケージ `@utakata-ui/react` です。コンポーネントの実装自体を
+書き換える必要がある利用者向けに、補助手段として Base UI + Lism CSS のソースを専用 registry から配布します。
+取り込んだソースは npm パッケージの更新を受け取りません。
 `packages/cli` の `@utakata-ui/cli` は追加の実行時依存を持たず、Tailwind CSS や
 shadcn CLI・`components.json` を使用しません。`list`・`add`・`--dry-run` を提供し、
 既存ファイルとの競合は明示的な `--overwrite` がなければ停止します。

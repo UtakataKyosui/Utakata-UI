@@ -4,9 +4,15 @@ title: 導入方法
 description: Utakata-UI を React アプリケーションで使う
 ---
 
-React 18.3.1 以降を使用します。[コマンドでコンポーネントを追加](./registry)すると、Utakata UI 専用 CLI でソースを自分のプロジェクトへ取得できます。[テーマカラー](./theming)では色の変更方法と操作できるサンプルを紹介しています。
+React・React DOM 18.3.1 以降と、CSS の `@import` を解決できる Vite 等のバンドラーを使用します。TypeScript は `moduleResolution: "Bundler"` を使用してください。
 
-以下はこのリポジトリのワークスペース内で npm パッケージ形式の API を使う例です。registry から導入する場合の import パスは[専用の手順](./registry)を参照してください。
+Utakata UI は npm パッケージ `@utakata-ui/react` として導入します。
+
+```sh
+pnpm add @utakata-ui/react
+```
+
+コンポーネントは `@utakata-ui/react` から、スタイルは `@utakata-ui/react/styles.css` から読み込みます。CSS はグローバルエントリーで1度だけ読み込みます。[テーマカラー](./theming)では色の変更方法と操作できるサンプルを紹介しています。
 
 Utakata UI は、Base UI を基盤とし、内部で Lism CSS を使用するコンポーネントを、Agent Coding で組み合わせて UI を構築することを前提としています。エージェントには[コンポーネント仕様](./components)と [MCP](./mcp)を参照させ、公開 API とアクセシビリティ要件に沿って実装を進めてください。
 
@@ -39,3 +45,7 @@ Field は `Field.Label`、Dialog は `Dialog.Title` を組み合わせます。�
 診断は一般的な名前の取得元を確認する補助機能であり、完全な Accessible Name 計算ではありません。複雑な参照関係、CSS 生成コンテンツや支援技術の実際の読み上げは axe と実機で確認してください。文字列型は空白の名前や文言の適切さを保証しません。`iconOnly` を省略したアイコンだけの内容も型では判別できないため、DOM 検査が必要です。
 
 本番ビルドでは `process.env.NODE_ENV` を `production` に置換してください（React と同じビルド前提）。本番では監視・警告を実行しません。SSR では DOM を参照しません。標準テーマを独自 CSS で変更した場合もコントラスト・フォーカス・拡大表示を再検証してください。
+
+## ソースを取り込んで改変する場合
+
+コンポーネントの実装自体を書き換える必要がある場合に限り、[CLI でソースを取り込む](./registry)こともできます。取り込んだソースは npm パッケージの更新を受け取らず、型制約・開発時の診断・アクセシビリティの修正も自動では反映されません。通常は npm パッケージを使用してください。

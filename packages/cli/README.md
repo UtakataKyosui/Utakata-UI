@@ -2,7 +2,9 @@
 
 Utakata UI 専用の **Base UI + Lism CSS** registry から、コンポーネントのソースを取得する CLI です。Node.js 22 以降が必要です。実行時依存はありません。
 
-npm 公開後は、配信済み registry の URL を指定して使用します。
+Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です。この CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。取り込んだソースは `@utakata-ui/react` の更新を受け取りません。
+
+配信済み registry の URL を指定して使用します。
 
 ```sh
 npx -y @utakata-ui/cli@0.1.0 list --registry https://example.com/registry/v1

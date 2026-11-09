@@ -10,6 +10,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or query th
 
 ## Component usage
 
+- Install the npm package with `pnpm add @utakata-ui/react` and import components from `@utakata-ui/react`. Do not run `@utakata-ui/cli` unless the user explicitly asks to copy component source for modification; in a project that already contains copied source (for example `src/components/utakata/`), import from that location instead and do not add the npm package alongside it.
 - Import styles from `@utakata-ui/react/styles.css`.
 - Use `Button` for actions and provide a visible text label. For icon-only content set `iconOnly` and provide `aria-label` or `aria-labelledby`; this is enforced by TypeScript. Resolve development name/reference warnings and validate computed names with axe. A warning-free render is not proof of accessibility.
 - Compose `Field.Root` with a visible `Field.Label` and `Field.Control`. Add `Field.Description` or `Field.Error` when useful.
