@@ -1,18 +1,29 @@
 ---
 
-title: コマンドでコンポーネントを追加
-description: Utakata UI専用のregistryとCLIでソースを取得する
+title: ソースを取り込んで改変する
+description: 専用のregistryとCLIでコンポーネントのソースを取得する
 ---
 
-Utakata UI は **Base UI + Lism CSS** の構成に合わせた専用 registry と専用 CLI を提供します。Tailwind CSS、shadcn CLI、`components.json` のセットアップは不要です。
+Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です（[導入方法](./getting-started)）。このページの CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。
 
-必要なコンポーネントのソース・型・アクセシビリティ診断・共通 CSS を、自分のプロジェクトへ追加できます。コピー後は利用側で編集し、更新差分も管理します。
+CLI は **Base UI + Lism CSS** の構成に合わせた専用 registry から、コンポーネントのソース・型・アクセシビリティ診断・共通 CSS を自分のプロジェクトへコピーします。Tailwind CSS、shadcn CLI、`components.json` のセットアップは不要です。
+
+## npm パッケージとの違い
+
+| 項目                                                | npm パッケージ               | CLI で取り込んだソース                                       |
+| --------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| 更新・修正の反映                                    | パッケージの更新で反映される | 反映されない。利用側で差分を管理する                         |
+| 型制約・開発時の診断                                | 配布物で CI 検証済み         | 取り込んだ時点の内容。編集後は利用側で検証する               |
+| import パス                                         | `@utakata-ui/react`          | 配置先のパス（例: `@/components/utakata/components/Button`） |
+| コンポーネント仕様・MCP・エージェント向けガイドの例 | そのまま使える               | import パスを配置先に読み替える                              |
+
+1つのアプリでは、どちらか一方の方式に揃えてください。
 
 ## 前提
 
 CLI には Node.js 22 以降が必要です。利用先は React 18.3.1 以降・React DOM・TypeScript と、CSS import を解決するバンドラーを使用します。
 
-以下の `npx` コマンドは `@utakata-ui/cli` の npm 公開後に使用できます。コンポーネントの取得先となる docs サイトも、この変更を含めてビルド・公開してください。**docs の公開と CLI の npm 公開は別の作業です。** 公開前の試し方は後述します。
+コンポーネントの取得先は、docs サイトが配信する registry です。docs の公開と CLI の npm 公開は別の作業です。リポジトリ内での試し方は後述します。
 
 ## 一覧と追加コマンド
 
@@ -38,7 +49,7 @@ CLI はソースを配置し、必要な依存パッケージのインストー�
 pnpm add @base-ui/react@^1.9.0 lism-css@^1.1.0
 ```
 
-React・React DOM とその型定義はアプリ側で用意します。Utakata UI 本体の npm パッケージは、ソース取得方式では不要です。
+React・React DOM とその型定義はアプリ側で用意します。ソースを取り込む場合、`@utakata-ui/react` はインストールしません。
 
 ## 配置先と読み込み
 
