@@ -75,12 +75,13 @@ export function installDependencies(cwd, plan) {
         '/d',
         '/s',
         '/c',
-        `"${plan.manager}.cmd" ${plan.args.map((arg) => `"${arg}"`).join(' ')}`,
+        `""${plan.manager}.cmd" ${plan.args.map((arg) => `"${arg}"`).join(' ')}"`,
       ]
     : plan.args;
   const result = spawnSync(command, args, {
     cwd,
     stdio: 'inherit',
+    windowsVerbatimArguments: windowsShim,
     // Yarn Modern rejects Classic's --ignore-scripts. Both configuration
     // variables are supported by their respective Yarn generation; Modern
     // explicitly ignores the Classic setting. Keep workspace settings intact.
