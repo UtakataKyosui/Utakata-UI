@@ -49,8 +49,7 @@ The separate build job caches npm's download cache
 for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell
 by exact Playwright version, OS and architecture. OS libraries are installed
-on every browser job; the cache does not establish that they exist. Only Chromium
-headless is downloaded. `browser.yml` runs light/dark as two independent matrix
+on every browser job; the cache does not establish that they exist. Each browser job downloads only its selected engine (Chromium uses the headless shell). `browser.yml` runs Chromium, Firefox and WebKit light/dark as six independent matrix
 jobs, with `fail-fast: false` to retain both sets of evidence. Each uses two
 workers and zero retries. Its five-minute suite timeout leaves time for setup
 and evidence upload within the ten-minute job limit. The job records elapsed
@@ -70,7 +69,7 @@ on an ancestor commit created within 14 days (the browser artifact retention), a
 the diff from that commit to HEAD does not select it: any change reruns
 `pnpm check`; browser checks rerun when `ci-scope.mjs` selects browser. Accepted
 `checks` evidence is a successful main Quality run or a release run's successful
-`verify` job. Accepted browser evidence is a run whose two browser jobs both
+`verify` job. Accepted browser evidence is a run whose six browser and two screen reader jobs all
 succeeded in that run, so an incremental main run that skipped them never counts
 and the 14-day bound applies to the browser artifacts themselves. Release
 evidence counts even when its publication failed. PR runs are scoped and
@@ -244,3 +243,43 @@ These results describe this working tree, not a GitHub run or released version.
   assistive-technology output, OS modes and browser zoom remain unverified.
 
 No repository settings, registry settings, tags or releases were changed.
+
+
+## Browser and assistive-output extension
+
+Chromium retains the complete browser suite. `playwright.cross-browser.config.ts`
+runs the bounded Button/Field/Dialog foundation contract and detector controls on
+Firefox/WebKit, light/dark. This does not extend all Chromium component/IME/
+forced-color coverage to those engines. Each job preserves its own ledger and
+14-day artifacts; missing/skipped/failed required cases fail the reusable gate.
+
+The same reusable workflow runs Guidepup in serial on each disposable macos-15
+(VoiceOver + headed WebKit) and windows-2025 (NVDA + headed Firefox) runner.
+Setup and asset installation use the exact dev dependencies in pnpm-lock.yaml.
+These jobs are required by Quality and React release through the existing
+browser-accessibility aggregate. Prior evidence must include all eight jobs;
+older Chromium-only evidence cannot skip this gate. There is no continue-on-error.
+Output tests retain the actual reader transcript, reader/browser/OS versions,
+commit and source fingerprint. WebKit is not Safari; no iOS or comprehension
+claim follows. The broad residual manual rules remain unverified.
+
+Local extension verification: WebKit light/dark foundation and negative controls
+passed (34 cases). Firefox could not launch its temporary profile on this Mac;
+Firefox behavior and the OS screen reader jobs remain unverified until executed
+in their respective runners. Workflow definitions are not execution evidence.
+
+
+## Non-component PRs and the required aggregate
+
+Docs configuration/assets, prose, agent instructions and CLI-only changes do not
+require browser or screen reader jobs unless another changed path selects them.
+The `accessibility` aggregate is the required **overall quality check**, so a
+formatting/type/build failure still fails it on a non-component PR. Irrelevant
+skipped jobs are accepted; required missing/skipped/failed jobs remain failures.
+Regression tests combine the real scope selector and aggregate for these cases,
+including Docs icon/config changes, and ensure real failures still block merging.
+
+PR #138's run 42849682829 failed Biome formatting in
+`packages/docs/blume.config.ts`; its browser gate was correctly skipped. Format
+that config without changing its values rather than weakening merge protection.
+No remote ruleset or required-check settings are changed by this work.

@@ -29,16 +29,18 @@ const decide = ({ files = [], candidates, ancestor = true }) =>
     now,
   });
 
-const browserPassed = [
-  {
-    name: 'browser-accessibility / browser (chromium-light)',
+const browserPassed = ['chromium', 'firefox', 'webkit'].flatMap((browser) =>
+  ['light', 'dark'].map((theme) => ({
+    name: `browser-accessibility / browser (${browser}-${theme})`,
     conclusion: 'success',
-  },
-  {
-    name: 'browser-accessibility / browser (chromium-dark)',
+  })),
+);
+browserPassed.push(
+  ...['voiceover-webkit', 'nvda-firefox'].map((reader) => ({
+    name: `browser-accessibility / screen-reader (${reader})`,
     conclusion: 'success',
-  },
-];
+  })),
+);
 const quality = (overrides) => qualityCandidate(run(overrides), browserPassed);
 
 test('unchanged commits reuse a passing main Quality run for every gate', () => {
@@ -92,14 +94,7 @@ test('missing, failed, PR, branch, expired and non-ancestor runs never skip', ()
 test('release runs count verification jobs even when publication failed', () => {
   const passedJobs = [
     { name: 'verify', conclusion: 'success' },
-    {
-      name: 'browser-accessibility / browser (chromium-light)',
-      conclusion: 'success',
-    },
-    {
-      name: 'browser-accessibility / browser (chromium-dark)',
-      conclusion: 'success',
-    },
+    ...browserPassed,
     { name: 'release', conclusion: 'failure' },
   ];
   const release = releaseCandidate(
@@ -197,4 +192,18 @@ test('incremental main runs without browser jobs never stand in for browser evid
     }).browser.decision,
     'run',
   );
+});
+
+test('partial browser or screen reader matrices cannot be reused', () => {
+  for (const missing of browserPassed) {
+    const jobs = browserPassed.filter((job) => job !== missing);
+    assert.deepEqual(qualityCandidate(run(), jobs).satisfies, ['checks']);
+    for (const conclusion of ['failure', 'cancelled', 'skipped']) {
+      assert.deepEqual(
+        qualityCandidate(run(), [...jobs, { ...missing, conclusion }])
+          .satisfies,
+        ['checks'],
+      );
+    }
+  }
 });

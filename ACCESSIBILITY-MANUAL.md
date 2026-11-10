@@ -17,8 +17,9 @@
 
 環境のバージョンは実施時に確定して記録する。Playwrightのエミュレーション、
 ARIAスナップショット、文字サイズ変更を上記の証拠として転用しない。
-対応ブラウザーの自動検証は現在Chromiumのみ。Firefox/WebKitの未実行条件にも
-Chromiumの結果を拡張しない。
+Chromium全件に加えFirefox/WebKitの基礎自動検査、GuidepupによるVoiceOver/WebKit・
+NVDA/Firefoxの限定した発話検査をCIに定義している。実行済みの環境・性質だけを証拠とし、
+WebKitをSafariそのものの証拠や包括的manualルールの合格に拡張しない。
 
 ## 手順と独立した期待値
 

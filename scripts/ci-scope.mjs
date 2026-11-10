@@ -40,7 +40,7 @@ const rules = [
   [/^packages\/docs\/.*\.[jt]sx?$/, ['types', 'fallow']],
   [/^packages\/docs\/.*\.tsx$/, ['markup']],
   [
-    /^tests\/browser\/|^playwright\.config\.ts$|^scripts\/required-browser-checks\.mjs$/,
+    /^tests\/(browser|screen-reader)\/|^playwright(?:\.(?:cross-browser|screen-reader))?\.config\.ts$|^scripts\/required-browser-checks\.mjs$/,
     ['browser', 'types', 'fallow'],
   ],
   [/^tests\/browser\/.*\.(tsx|html)$/, ['markup']],

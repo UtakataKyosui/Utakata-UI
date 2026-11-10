@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gatesPassed } from './ci-gate.mjs';
+import { selectScope } from './ci-scope.mjs';
 
 test('Quality runs the complete dependency-free CI regression suite before scope selection', () => {
   const { scripts } = JSON.parse(
@@ -42,6 +43,37 @@ function fixture(required) {
   };
 }
 
+test('non-component PRs pass with irrelevant browser, screen reader and package gates skipped', () => {
+  for (const files of [
+    ['packages/docs/blume.config.ts', 'packages/docs/public/icon.png'],
+    ['packages/docs/docs/getting-started.md'],
+    ['README.md'],
+    ['skills/utakata-ui/SKILL.md'],
+    ['packages/cli/src/index.mjs'],
+  ]) {
+    const scope = selectScope(files);
+    const jobs = fixture(false);
+    jobs.scope.outputs = Object.fromEntries(
+      Object.entries(scope).map(([key, value]) => [key, String(value)]),
+    );
+    const applicable = {
+      checks: scope.checks,
+      unit: scope.tests || scope.cli,
+      build: scope.build,
+      docs: scope.docs,
+      'browser-accessibility': scope.browser,
+      fallow: scope.fallow,
+    };
+    for (const [job, needed] of Object.entries(applicable))
+      jobs[job].result = needed ? 'success' : 'skipped';
+    assert.equal(scope.browser, false, files.join(', '));
+    assert.equal(gatesPassed(jobs, 'pull_request'), true, files.join(', '));
+    // A real lint/build failure must still block the same non-component PR.
+    jobs.checks.result = 'failure';
+    assert.equal(gatesPassed(jobs, 'pull_request'), false);
+  }
+});
+
 test('aggregate permits only irrelevant skips; every missing or nonpassing required gate fails', () => {
   assert.equal(gatesPassed(fixture(true), 'pull_request'), true);
   assert.equal(gatesPassed(fixture(false), 'pull_request'), true);
@@ -65,7 +97,7 @@ test('aggregate permits only irrelevant skips; every missing or nonpassing requi
   assert.equal(gatesPassed(main, 'pull_request'), false);
 });
 
-test('Quality and React release share the complete two-theme browser gate', () => {
+test('Quality and React release share the complete browser and screen reader gate', () => {
   const read = (name) =>
     readFileSync(
       new URL(`../.github/workflows/${name}.yml`, import.meta.url),
@@ -79,7 +111,16 @@ test('Quality and React release share the complete two-theme browser gate', () =
     /needs: \[prior, browser-accessibility, verify\]/,
   );
   assert.match(read('quality'), /run: node scripts\/ci-gate\.mjs/);
-  assert.match(read('browser'), /project: \[chromium-light, chromium-dark\]/);
+  for (const browser of ['chromium', 'firefox', 'webkit']) {
+    for (const theme of ['light', 'dark'])
+      assert.ok(
+        read('browser')
+          .replace(/\s+/g, ' ')
+          .includes(
+            `project: ${browser}-${theme}, browser: ${browser}, config:`,
+          ),
+      );
+  }
   assert.match(read('browser'), /fail-fast: false/);
   assert.match(
     read('browser'),
@@ -181,4 +222,17 @@ test('releases default to verification and expose the token only to explicit man
     assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
     assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
   }
+});
+
+test('screen reader jobs execute on real OS runners and retain output', () => {
+  const workflow = readFileSync(
+    new URL('../.github/workflows/browser.yml', import.meta.url),
+    'utf8',
+  );
+  for (const reader of ['voiceover-webkit', 'nvda-firefox'])
+    assert.ok(workflow.includes(`reader: ${reader}`));
+  assert.match(workflow, /pnpm exec guidepup setup --ci/);
+  assert.match(workflow, /pnpm exec guidepup install/);
+  assert.match(workflow, /run: pnpm test:a11y:screen-reader/);
+  assert.match(workflow, /name: screen-reader \(\$\{\{ matrix.reader \}\}\)/);
 });
