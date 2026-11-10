@@ -7,7 +7,13 @@ test('[coverage.public-configurations] every registered public axis is rendered,
   await page.goto('/');
   const measurements: unknown[] = [];
   for (const [component, entry] of Object.entries(coverage)) {
-    const axes = Object.entries(entry.axes);
+    // Edge placements exist only while a sheet is open, so this closed-state
+    // visibility check cannot render them. sheet.placement-scroll opens every
+    // side registered in the manifest and verifies it instead.
+    const openOnlyAxes = new Set(['sides']);
+    const axes = Object.entries(entry.axes).filter(
+      ([axis]) => !openOnlyAxes.has(axis),
+    );
     // Full Cartesian product for visual axes. State transitions are separate
     // rule tests; this does not claim every state × axis combination was run.
     let selectors: string[] = [entry.selector];

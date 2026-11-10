@@ -40,6 +40,7 @@ import { progressChecks } from './quality/Progress.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
+import { sheetChecks } from './quality/Sheet.checks.js';
 import { skeletonChecks } from './quality/Skeleton.checks.js';
 import { sliderChecks } from './quality/Slider.checks.js';
 import { spinnerChecks } from './quality/Spinner.checks.js';
@@ -140,6 +141,7 @@ describe('accessibility regression checks', () => {
       },
       ...kbdChecks,
       ...separatorChecks,
+      ...sheetChecks,
       ...badgeChecks,
       ...skeletonChecks,
       ...spinnerChecks,
