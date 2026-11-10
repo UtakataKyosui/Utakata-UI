@@ -29,14 +29,18 @@ test.afterEach(async ({ browser, screenReader }) => {
   });
 });
 
-test('[assistive.control-name] focusing the email control announces its visible name', async ({
+test('[assistive.control-name] reader navigation announces the email control name and role', async ({
   page,
   screenReader,
 }) => {
   const input = page.getByLabel('Contact email / 連絡先', { exact: true });
-  const output = await screenReader.capture(() => input.focus());
-  expect(output.spokenPhrase).toContain('Contact email');
-  await expect(input).toBeFocused();
+  await expect(input).toBeVisible();
+  await screenReader.navigateNextUntil(
+    (phrase) =>
+      phrase.includes('Contact email') && /edit|text field/i.test(phrase),
+    { maxNavigationAttempts: 80 },
+  );
+  expect(await screenReader.lastSpokenPhrase()).toContain('Contact email');
 });
 
 test('[assistive.dialog-output] opening and closing the dialog announces context and returns focus', async ({
@@ -47,6 +51,9 @@ test('[assistive.dialog-output] opening and closing the dialog announces context
     name: 'Review / 確認',
     exact: true,
   });
+  // DOM focus alone does not move NVDA's browse cursor. A real user reaches
+  // the trigger with the reader before opening the modal, so establish both.
+  await screenReader.navigateNextUntil(/Review/, { maxNavigationAttempts: 80 });
   await trigger.focus();
   const opened = await screenReader.capture(() => page.keyboard.press('Enter'));
   await expect(page.getByRole('dialog')).toBeVisible();
@@ -63,14 +70,20 @@ test('output detector rejects a control whose accessible name was replaced', asy
   page,
   screenReader,
 }) => {
-  const input = page.getByLabel('Contact email / 連絡先', { exact: true });
+  // Keep a structural locator: replacing the name must not invalidate the
+  // locator before the capture action can focus the same control.
+  const input = page.locator('.layout-contract input');
+  await expect(input).toHaveCount(1);
   await input.evaluate((node) => {
     node.removeAttribute('aria-labelledby');
     node.setAttribute('aria-label', 'Negative control');
   });
-  const output = await screenReader.capture(() => input.focus());
-  expect(output.spokenPhrase).toContain('Negative control');
-  expect(() =>
-    expect(output.spokenPhrase).toContain('Contact email'),
-  ).toThrow();
+  await screenReader.navigateNextUntil(
+    (phrase) =>
+      phrase.includes('Negative control') && /edit|text field/i.test(phrase),
+    { maxNavigationAttempts: 80 },
+  );
+  const phrase = await screenReader.lastSpokenPhrase();
+  expect(phrase).toContain('Negative control');
+  expect(() => expect(phrase).toContain('Contact email')).toThrow();
 });
