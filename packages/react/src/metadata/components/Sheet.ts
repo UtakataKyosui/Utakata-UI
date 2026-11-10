@@ -27,7 +27,7 @@ export const sheetQualityRules = [
     remediation:
       'Keep Sheet.Popup inside Sheet.Portal and preserve Base UI modal focus management; do not render the panel outside the dialog.',
     applicability:
-      'Default modal Sheet on each side with a connected trigger and a Close button; modal={false} is not covered.',
+      'Modal Sheet on each side with a connected trigger and a Close button; Sheet.Root does not accept the modal option.',
     residual: 'Nested modals and trigger removal need separate evidence.',
     criteria: ['2.1.1', '2.1.2', '2.4.3'],
   },
@@ -40,7 +40,7 @@ export const sheetQualityRules = [
     remediation:
       'Keep Base UI Dialog dismissal; leave a visible backdrop area and a Sheet.Close inside the popup.',
     applicability:
-      'Default modal Sheet on each side at a viewport wide enough to leave backdrop visible.',
+      'Modal Sheet on each side at a viewport wide enough to leave backdrop visible.',
     residual:
       'Touch gestures and physical device behavior stay outside this check.',
     criteria: ['2.1.1', '2.4.3'],
@@ -108,7 +108,7 @@ export const sheetManifest = {
     'Close',
   ],
   partProps: {
-    Root: 'Base UI DialogRootProps (open, defaultOpen, onOpenChange)',
+    Root: 'Base UI DialogRootProps without modal (open, defaultOpen, onOpenChange)',
     Trigger: 'Base UI DialogTriggerProps',
     Portal: 'Base UI DialogPortalProps',
     Backdrop: 'Base UI DialogBackdropProps',
@@ -131,13 +131,13 @@ export const sheetManifest = {
   avoid: [
     'Do not create a sheet without a Sheet.Title.',
     'Do not omit a visible Sheet.Close; Escape and backdrop presses are not the only dismissal a user can find.',
-    'Do not use a sheet for a non-modal side panel or set modal to false; that behavior is not provided or verified.',
+    'Do not use a sheet for a non-modal side panel; Sheet.Root rejects the modal option at typecheck time and a non-modal panel is not provided or verified.',
     'Do not duplicate Base UI open state, focus management, scroll lock or Escape dismissal.',
   ],
   example:
     '<Sheet.Root><Sheet.Trigger render={<Button />}>Open filters</Sheet.Trigger><Sheet.Portal><Sheet.Backdrop /><Sheet.Popup side="right"><Sheet.Title>Filters</Sheet.Title><Sheet.Description>Narrow the list.</Sheet.Description><Sheet.Close render={<Button variant="outline" />}>Close</Sheet.Close></Sheet.Popup></Sheet.Portal></Sheet.Root>',
   accessibility:
-    'Base UI manages the modal dialog role, focus trapping, scroll lock, Escape and backdrop dismissal and focus restoration; Sheet adds only edge placement, scrolling and a slide transition that prefers-reduced-motion removes. Consumers supply the Title, a useful Description, a Close control and the content. side must be one of the four edges at typecheck time; the accessible name needs development diagnostics and axe checks.',
+    'Base UI manages the modal dialog role, focus trapping, scroll lock, Escape and backdrop dismissal and focus restoration; Sheet adds only edge placement, scrolling and a slide transition that prefers-reduced-motion removes. Consumers supply the Title, a useful Description, a Close control and the content. side must be one of the four edges and modal cannot be set at typecheck time; the accessible name needs development diagnostics and axe checks.',
 } as const;
 
 export type SheetSide = (typeof sheetManifest.sides)[number];

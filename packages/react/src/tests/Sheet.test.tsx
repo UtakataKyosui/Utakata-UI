@@ -30,7 +30,29 @@ const popupClass: PopupProps = {
 const unsafeProps = { side: 'center' };
 // @ts-expect-error Spreads cannot pass an unsupported side.
 const spreadSide = <Sheet.Popup {...unsafeProps} />;
-void [validSide, centered, logical, popupClass, spreadSide];
+type RootProps = ComponentProps<typeof Sheet.Root>;
+const validRoot: RootProps = { defaultOpen: true };
+// @ts-expect-error A Sheet is always modal; modal={false} is not available.
+const nonModal: RootProps = { modal: false };
+// @ts-expect-error The trap-focus variant is not available either.
+const trapFocus: RootProps = { modal: 'trap-focus' };
+// @ts-expect-error JSX usage must also keep the sheet modal.
+const nonModalJsx = <Sheet.Root modal={false} />;
+const unsafeRoot = { modal: false };
+// @ts-expect-error Spreads cannot make the sheet non-modal.
+const spreadNonModal = <Sheet.Root {...unsafeRoot} />;
+void [
+  validSide,
+  centered,
+  logical,
+  popupClass,
+  spreadSide,
+  validRoot,
+  nonModal,
+  trapFocus,
+  nonModalJsx,
+  spreadNonModal,
+];
 
 describe('Sheet', () => {
   it('forwards refs and merges classes with the shared dialog styles', async () => {

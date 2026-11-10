@@ -108,7 +108,7 @@ export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
-export type { SheetPopupProps } from './components/Sheet.js';
+export type { SheetPopupProps, SheetRootProps } from './components/Sheet.js';
 export { Sheet } from './components/Sheet.js';
 export type { SkeletonProps } from './components/Skeleton.js';
 export { Skeleton } from './components/Skeleton.js';

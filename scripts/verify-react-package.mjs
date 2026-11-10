@@ -354,6 +354,21 @@ const sheetUnsafeProps = { side: 'center' };
 export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
 // @ts-expect-error className must be a string, not a state function, in shipped declarations.
 export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+type SheetRootProps = ComponentProps<typeof Sheet.Root>;
+export const sheetRoot: SheetRootProps = { defaultOpen: true };
+// @ts-expect-error A Sheet is always modal in shipped declarations.
+export const sheetNonModal: SheetRootProps = { modal: false };
+// @ts-expect-error The trap-focus variant is not available in shipped declarations.
+export const sheetTrapFocus: SheetRootProps = { modal: 'trap-focus' };
+// @ts-expect-error JSX usage must also keep the sheet modal.
+export const sheetNonModalJsx = <Sheet.Root modal={false} />;
+const sheetUnsafeRoot = { modal: false };
+// @ts-expect-error Spreads cannot make the sheet non-modal.
+export const sheetSpreadNonModal = <Sheet.Root {...sheetUnsafeRoot} />;
+function SheetRootWrapper(props: SheetRootProps) { return <Sheet.Root {...props} />; }
+export const wrappedSheetRoot = <SheetRootWrapper defaultOpen />;
+// @ts-expect-error Wrappers must preserve the modal contract.
+export const wrappedSheetRootInvalid = <SheetRootWrapper modal={false} />;
 function SheetWrapper(props: SheetPopupProps) { return <Sheet.Popup {...props} />; }
 export const wrappedSheet = <SheetWrapper side="top" />;
 // @ts-expect-error Wrappers must preserve the side contract.

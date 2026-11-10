@@ -16,10 +16,23 @@ export type SheetPopupProps = Omit<
   side?: SheetSide;
 };
 
+export type SheetRootProps<Payload = unknown> = Omit<
+  BaseDialog.Root.Props<Payload>,
+  'modal'
+> & {
+  /** A Sheet is always modal; the Dialog `modal` option is not available. */
+  modal?: never;
+};
+
 const popupDiagnostics = {
   name: 'Sheet.Popup',
   fix: 'Provide a Sheet.Title or another accessible label.',
 };
+
+/** The Dialog root with `modal` fixed to its default (modal) behavior by type. */
+function Root<Payload = unknown>(props: SheetRootProps<Payload>) {
+  return <BaseDialog.Root {...props} />;
+}
 
 /**
  * The sheet surface, attached to one viewport edge. It is a Dialog popup, so
@@ -43,11 +56,12 @@ const Popup = forwardRef<HTMLDivElement, SheetPopupProps>(function SheetPopup(
   );
 });
 
-// A Sheet is a Dialog attached to an edge: Root, Trigger, Portal and Close are
-// the Base UI Dialog parts, and Backdrop, Title and Description are the styled
-// Dialog parts, so the ui-dialog__* classes and the Dialog behavior are shared.
+// A Sheet is a Dialog attached to an edge. Trigger, Portal and Close are the
+// Base UI Dialog parts, Root is the Dialog root without the `modal` option, and
+// Backdrop, Title and Description are the styled Dialog parts, so the
+// ui-dialog__* classes and the Dialog behavior are shared.
 export const Sheet = {
-  Root: BaseDialog.Root,
+  Root,
   Trigger: BaseDialog.Trigger,
   Portal: BaseDialog.Portal,
   Backdrop: Dialog.Backdrop,
