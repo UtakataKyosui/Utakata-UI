@@ -132,6 +132,8 @@ shadcn CLI・`components.json` を使用しません。`init` で `utakata.json`
 既存ファイルとの競合は明示的な `--overwrite` がなければ停止します。
 依存パッケージのインストールコマンドは表示のみで、利用側で実行します。
 
+`init --palette '<JSON>'` ではライト・ダークの配色も保存できます。ドキュメントのテーマ画面から配色を含むコマンドをコピーし、生成された `theme.css` をグローバルエントリーで読み込みます。
+
 `pnpm build:docs` は `packages/docs/.vercel/output/static/registry/v1/` にカタログと各コンポーネントの
 JSON を生成します。CLI の npm 公開と docs のデプロイの両方が必要です。
 導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/04-(advanced)/registry.md) を参照してください。

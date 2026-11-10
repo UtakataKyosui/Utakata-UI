@@ -43,6 +43,7 @@ import { componentManifest } from '../../packages/react/src/metadata/manifest.js
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
 import { LayoutFixture } from './layout-fixture.js';
+import { PaletteFixture } from './palette-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
   if (!form) return;
@@ -1220,8 +1221,11 @@ function Fixture() {
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
+const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  new URLSearchParams(location.search).has('layout') ? (
+  paletteLocale ? (
+    <PaletteFixture locale={paletteLocale} />
+  ) : new URLSearchParams(location.search).has('layout') ? (
     <LayoutFixture />
   ) : (
     <Fixture />

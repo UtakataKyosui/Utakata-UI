@@ -28,10 +28,19 @@ example.com は例示用です。実際の配信 URL に置き換えてくださ
 - `--cwd`: 利用先プロジェクトのルート。コピー先はその下に限定します。
 - `--dry-run`: 書き込みを行わず、予定を表示。
 - `--overwrite`: 内容が異なる既存ファイルの上書きを明示的に許可。
+- `init --palette '<JSON>'`: 任意の配色を保存し、配置先に `theme.css` を生成。
+
+```sh
+npx -y @utakata-ui/cli@0.1.0 init --registry https://example.com/registry/v1 --palette '{"light":{"primary":"#6d28d9","on-primary":"#ffffff"},"dark":{"primary":"#c4b5fd","on-primary":"#1e1535"}}'
+```
+
+`palette` は任意の `light` / `dark` オブジェクトです。各配色には `primary`、`on-primary`、`surface`、`text`、`muted`、`border`、`danger` を部分指定でき、値は不透明な `#RGB` / `#RRGGBB` に限ります。省略した色はregistryの標準色を使います。未知のキー・空の配色・透過色・CSS式は書き込み前に拒否します。比率による自動調整は行わず、指定色の実画面での検証は利用側で行います。
+
+パレット指定時は、`styles/styles.css` を読み込む代わりに配置先の `theme.css` をグローバルエントリーから1度だけ読み込みます。このファイルは内部で標準CSSを読み込み、OSの明暗設定ごとに色を上書きします。パレットは `utakata.json` に保存され、再初期化やコンポーネント追加でも維持します。変更するときは `init --palette '<JSON>' --overwrite` を使います。ドキュメントのテーマ画面から、選んだ配色を含むコマンドをコピーできます。
 
 CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一ファイルは変更せず、競合や不正な registry は書き込み前に拒否します。依存パッケージのインストール用コマンドを表示するので、利用先で実行してください。CLI 自体は package manager やスクリプトを実行しません。
 
-グローバルエントリーから配置先の `styles/styles.css` を読み込みます。React・React DOM・TypeScript と CSS import を解決するバンドラーは利用先で用意してください。Tailwind CSS や `components.json` は不要です。
+パレットなしの場合はグローバルエントリーから配置先の `styles/styles.css` を読み込みます。React・React DOM・TypeScript と CSS import を解決するバンドラーは利用先で用意してください。Tailwind CSS や `components.json` は不要です。
 
 独自の `schemaVersion: 1`、`kind: "utakata-ui/catalog" | "utakata-ui/component"` 形式を使用します。registry のディレクトリも `--registry` に渡せるため、npm 公開前はリポジトリの `bin/utakata-ui.mjs` からローカルで試せます。
 
