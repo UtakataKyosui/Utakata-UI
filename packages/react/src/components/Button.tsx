@@ -6,11 +6,16 @@ import type { ButtonSize, ButtonVariant } from '../metadata/manifest.js';
 import { useAccessibilityRef } from './accessibility.js';
 
 export type ButtonAccessibilityProps =
-  | { iconOnly?: false }
-  | ({ iconOnly: true } & (
-      | { 'aria-label': string }
-      | { 'aria-labelledby': string }
-    ));
+  | {
+      iconOnly?: false;
+      /** Square targets are available only with `iconOnly` (which requires a name). */
+      square?: never;
+    }
+  | ({
+      iconOnly: true;
+      /** Render an equal-width square target sized by `size` (sm 32px, md 40px, lg 48px). */
+      square?: boolean;
+    } & ({ 'aria-label': string } | { 'aria-labelledby': string }));
 
 export type ButtonProps = Omit<
   ComponentPropsWithoutRef<typeof BaseButton>,
@@ -22,7 +27,14 @@ export type ButtonProps = Omit<
 } & ButtonAccessibilityProps;
 
 export const Button = forwardRef<HTMLElement, ButtonProps>(function Button(
-  { className, size = 'md', variant = 'solid', iconOnly: _iconOnly, ...props },
+  {
+    className,
+    size = 'md',
+    variant = 'solid',
+    iconOnly: _iconOnly,
+    square,
+    ...props
+  },
   ref,
 ) {
   const accessibilityRef = useAccessibilityRef('Button', ref);
@@ -34,6 +46,7 @@ export const Button = forwardRef<HTMLElement, ButtonProps>(function Button(
         'ui-button',
         `ui-button--${variant}`,
         `ui-button--${size}`,
+        square && 'ui-button--square',
         className,
       ]
         .filter(Boolean)
