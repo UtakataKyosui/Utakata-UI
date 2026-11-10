@@ -260,6 +260,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="alertdialog" />
 
+## Command [#command]
+
+詳しい使い方とAPIは[Command](/components/command)を参照してください。
+
+検索して実行する、常に表示されるコマンド一覧です。ポップアップも選択値もなく、`Command.Item`の`onClick`で実行します（クリックと、ハイライト中のEnter）。`Dialog`の中に置くとコマンドパレットになり、`onClick`で`Dialog`を閉じるとフォーカスは開いたボタンに戻ります。フォーカスは常に入力欄に残り、矢印キーでハイライトを移します。入力欄には`aria-label`などで名前を付け、`Command.Empty`に該当なしの文言を入れます。Ctrl/Cmd+Kなどでパレットを開くショートカットは利用側の責任で実装し、ショートカットがなくても開ける操作を残してください。値を選んで送信する場合は`Combobox`、検索のない固定の候補には`Select`を使います。
+
+<Component path="command" />
+
 ## Toast [#toast]
 
 詳しい使い方とAPIは[Toast](/components/toast)を参照してください。

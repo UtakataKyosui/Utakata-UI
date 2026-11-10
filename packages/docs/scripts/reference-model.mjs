@@ -33,7 +33,14 @@ export const categories = [
   {
     slug: 'overlays',
     title: { ja: 'オーバーレイ', en: 'Overlays' },
-    components: ['Dialog', 'AlertDialog', 'Popover', 'Tooltip', 'Toast'],
+    components: [
+      'Dialog',
+      'AlertDialog',
+      'Command',
+      'Popover',
+      'Tooltip',
+      'Toast',
+    ],
   },
   {
     slug: 'disclosure',

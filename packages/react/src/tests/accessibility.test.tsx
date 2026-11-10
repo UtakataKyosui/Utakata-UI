@@ -29,6 +29,7 @@ import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
+import { commandChecks } from './quality/Command.checks.js';
 import { dropdownMenuChecks } from './quality/DropdownMenu.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { inputGroupChecks } from './quality/InputGroup.checks.js';
@@ -157,6 +158,7 @@ describe('accessibility regression checks', () => {
       ...switchChecks,
       ...radioGroupChecks,
       ...selectChecks,
+      ...commandChecks,
       ...sliderChecks,
       ...collapsibleChecks,
       ...accordionChecks,

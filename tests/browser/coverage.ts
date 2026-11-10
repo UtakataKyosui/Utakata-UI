@@ -175,6 +175,15 @@ export const coverage = {
       dismissed: 'select.popup-position-dismiss',
     },
   },
+  Command: {
+    axes: {},
+    selector: '.ui-command',
+    states: {
+      open: 'command.keyboard-execute',
+      dismissed: 'command.dialog-focus',
+      focused: 'command.visual-forced',
+    },
+  },
   Slider: {
     axes: {},
     selector: '.ui-slider',
