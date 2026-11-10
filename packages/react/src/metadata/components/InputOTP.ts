@@ -56,13 +56,67 @@ export const inputOTPQualityRules = [
       'Record browser, assistive technology, commit and results; leave unverified until performed.',
   },
   {
-    id: 'input-otp.visual-state',
+    id: 'input-otp.target-size',
     requirement:
-      'Each slot has an operable area of at least 24x24 CSS px, a visible focus indicator, and invalid, disabled and read-only states distinguishable in every supported theme, forced colors and 200% zoom without relying on color alone.',
+      'In Chromium light/dark, every slot (empty, filled, invalid and disabled) has a rendered target of at least 24x24 CSS px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep slot inline and block sizes at or above 24 CSS px, including custom CSS and size overrides.',
+  },
+  {
+    id: 'input-otp.contrast',
+    requirement:
+      'In Chromium light/dark, enabled slot text meets 4.5:1 and the slot border meets 3:1 against its rendered background; disabled slots are exempt.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Use theme tokens with sufficient contrast; recheck rendered colors after customizing slot CSS.',
+  },
+  {
+    id: 'input-otp.focus-visible',
+    requirement:
+      'In Chromium light/dark, a keyboard-focused slot shows a solid outline of at least 2 CSS px with 3:1 contrast against its background and a focus shadow.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Do not remove the slot focus outline or ring; keep outline width, style and color when restyling.',
+  },
+  {
+    id: 'input-otp.invalid-state',
+    requirement:
+      'In Chromium light/dark, an invalid code is shown by aria-invalid, a thicker slot border (not color alone) with 3:1 border contrast, and an associated error message.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep the invalid border-width change and render Field.Error text with how to recover.',
+  },
+  {
+    id: 'input-otp.forced-colors',
+    requirement:
+      'Under Chromium forced-colors emulation, slot borders stay drawn and a keyboard-focused slot keeps a visible solid outline of at least 2 CSS px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Do not set borders or outlines to none or transparent; rely on system colors in forced colors.',
+  },
+  {
+    id: 'input-otp.reflow',
+    requirement:
+      'At a 320 CSS px viewport, slots wrap inside the viewport without clipping, horizontal page scroll or targets under 24 CSS px.',
+    verification: 'browser',
+    severity: 'error',
+    remediation:
+      'Keep flex-wrap on the Root and avoid fixed widths that exceed the viewport.',
+  },
+  {
+    id: 'input-otp.zoom-physical',
+    requirement:
+      'Actual 200% browser zoom and text spacing, physical forced-colors and high-contrast settings, and rendering on real platforms keep the code readable and operable. Chromium emulation does not establish these.',
     verification: 'manual',
     severity: 'warning',
     remediation:
-      'Check rendered contrast, target size, focus indicator, reflow of long codes and forced colors in a real browser.',
+      'Inspect zoom, reflow and forced colors in real browsers and platforms; record environment and results, and leave unverified until performed.',
   },
 ] as const satisfies readonly QualityRule[];
 

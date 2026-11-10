@@ -188,8 +188,8 @@ export const coverage = {
     states: {
       empty: 'input-otp.keyboard-paste',
       complete: 'input-otp.keyboard-paste',
-      invalid: 'input-otp.keyboard-paste',
-      disabled: 'input-otp.keyboard-paste',
+      invalid: 'input-otp.invalid-state',
+      disabled: 'input-otp.target-size',
     },
   },
   Slider: {
