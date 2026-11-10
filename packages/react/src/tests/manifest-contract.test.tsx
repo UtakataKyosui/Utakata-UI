@@ -484,6 +484,45 @@ describe('public manifest contract', () => {
         ]),
       );
   });
+  it('requires browser evidence for InputOTP keyboard, paste and visual properties and keeps autofill, speech and physical zoom manual', () => {
+    const rules = componentManifest.components.InputOTP?.qualityRules ?? [];
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input-otp.keyboard-paste',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+    for (const id of [
+      'input-otp.target-size',
+      'input-otp.contrast',
+      'input-otp.focus-visible',
+      'input-otp.invalid-state',
+      'input-otp.forced-colors',
+      'input-otp.reflow',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of [
+      'input-otp.autofill-ime',
+      'input-otp.screen-reader',
+      'input-otp.zoom-physical',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
     expect(componentManifest.components.RadioGroup?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -601,6 +640,7 @@ describe('public manifest contract', () => {
       'Switch',
       'RadioGroup',
       'Select',
+      'InputOTP',
       'Combobox',
       'Command',
       'Slider',

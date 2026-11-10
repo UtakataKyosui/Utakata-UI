@@ -190,6 +190,16 @@ export const coverage = {
       dismissed: 'select.popup-position-dismiss',
     },
   },
+  InputOTP: {
+    axes: {},
+    selector: '.ui-input-otp',
+    states: {
+      empty: 'input-otp.keyboard-paste',
+      complete: 'input-otp.keyboard-paste',
+      invalid: 'input-otp.invalid-state',
+      disabled: 'input-otp.target-size',
+    },
+  },
   Combobox: {
     axes: {},
     selector: '.ui-combobox__input',

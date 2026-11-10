@@ -13,6 +13,7 @@ import { commandQualityRules } from './components/Command.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
+import { inputOTPQualityRules } from './components/InputOTP.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
@@ -143,6 +144,7 @@ export const qualityRules = {
   Switch: switchQualityRules,
   RadioGroup: radioGroupQualityRules,
   Select: selectQualityRules,
+  InputOTP: inputOTPQualityRules,
   Combobox: comboboxQualityRules,
   Command: commandQualityRules,
   Slider: sliderQualityRules,
