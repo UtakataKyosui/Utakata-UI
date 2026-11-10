@@ -24,6 +24,7 @@ export const categories = [
       'Textarea',
       'NativeSelect',
       'Select',
+      'Combobox',
       'Checkbox',
       'RadioGroup',
       'Switch',

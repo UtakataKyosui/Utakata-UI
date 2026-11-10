@@ -39,7 +39,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -81,6 +81,27 @@ export const selectMultiple: SelectRootProps<string> = { multiple: true };
 export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
 // @ts-expect-error Select.Trigger className must be a string in shipped declarations.
 export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
+export const comboboxProps: ComboboxRootProps<string> = { defaultValue: 'apple', name: 'fruit', items: ['apple', 'banana'] };
+export const fruit = <Field.Root><Field.Label>Fruit</Field.Label><Combobox.Root {...comboboxProps}><Combobox.InputGroup><Combobox.Input placeholder="Search fruit" /><Combobox.Clear aria-label="Clear" /><Combobox.Trigger aria-label="Show options" /></Combobox.InputGroup><Combobox.Portal><Combobox.Positioner><Combobox.Popup><Combobox.Empty>No fruit found</Combobox.Empty><Combobox.List>{(item: string) => <Combobox.Item key={item} value={item}>{item}<Combobox.ItemIndicator /></Combobox.Item>}</Combobox.List></Combobox.Popup></Combobox.Positioner></Combobox.Portal></Combobox.Root></Field.Root>;
+export const comboboxNamedByContent = <Combobox.Trigger>Show options</Combobox.Trigger>;
+export const comboboxNamedByReference = <Combobox.Clear aria-labelledby="clear-name" />;
+// @ts-expect-error Combobox is single-selection only in shipped declarations.
+export const comboboxMultiple: ComboboxRootProps<string> = { multiple: true };
+// @ts-expect-error A single Combobox does not accept an array value in shipped declarations.
+export const comboboxArrayValue: ComboboxRootProps<string> = { value: ['a'] };
+// @ts-expect-error Inline lists are not provided in shipped declarations.
+export const comboboxInline: ComboboxRootProps<string> = { inline: true };
+// @ts-expect-error An unnamed Combobox.Clear is a type error in shipped declarations.
+export const comboboxUnnamedClear = <Combobox.Clear />;
+// @ts-expect-error An unnamed Combobox.Trigger is a type error in shipped declarations.
+export const comboboxUnnamedTrigger = <Combobox.Trigger />;
+const comboboxEmptyProps = { className: 'clear' };
+// @ts-expect-error Spreads cannot remove the required Clear name in shipped declarations.
+export const comboboxUnnamedSpread = <Combobox.Clear {...comboboxEmptyProps} />;
+// @ts-expect-error Combobox.Input className must be a string in shipped declarations.
+export const comboboxFunctionClass = <Combobox.Input className={() => 'x'} />;
+// @ts-expect-error Combobox.Label is not exported: it would label only the trigger in shipped declarations.
+export const comboboxLabel = <Combobox.Label>Fruit</Combobox.Label>;
 type SliderRootProps = ComponentProps<typeof Slider.Root>;
 export const sliderProps: SliderRootProps = { defaultValue: 50, min: 0, max: 100, step: 5, name: 'volume' };
 export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider.Label><Slider.Control><Slider.Track><Slider.Indicator /><Slider.Thumb getAriaValueText={(value) => value + ' percent'} /></Slider.Track></Slider.Control></Slider.Root>;

@@ -175,6 +175,16 @@ export const coverage = {
       dismissed: 'select.popup-position-dismiss',
     },
   },
+  Combobox: {
+    axes: {},
+    selector: '.ui-combobox__input',
+    states: {
+      open: 'combobox.keyboard-selection',
+      dismissed: 'combobox.dismiss-focus',
+      composing: 'combobox.ime-browser',
+      focused: 'combobox.visual-forced',
+    },
+  },
   Slider: {
     axes: {},
     selector: '.ui-slider',
