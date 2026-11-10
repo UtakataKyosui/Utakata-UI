@@ -2267,6 +2267,79 @@
     max-width: min(90vw, 28rem);
   }
 
+  /*
+   * Sheet reuses the Dialog popup and attaches it to one viewport edge.
+   * --ui-sheet-size is the width of left/right sheets and the maximum height
+   * of top/bottom sheets. Edges are physical: left stays left in RTL.
+   */
+  .ui-sheet__popup {
+    border-radius: 0;
+    bottom: auto;
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    left: auto;
+    max-height: none;
+    max-width: none;
+    overflow: auto;
+    overscroll-behavior: contain;
+    right: auto;
+    top: auto;
+    transform: none;
+    transition: transform 200ms ease;
+    width: auto;
+  }
+
+  .ui-sheet__popup--left,
+  .ui-sheet__popup--right {
+    bottom: 0;
+    max-width: calc(100% - 2rem);
+    top: 0;
+    width: var(--ui-sheet-size, 24rem);
+  }
+
+  .ui-sheet__popup--left {
+    left: 0;
+  }
+
+  .ui-sheet__popup--right {
+    right: 0;
+  }
+
+  .ui-sheet__popup--top,
+  .ui-sheet__popup--bottom {
+    left: 0;
+    max-height: min(var(--ui-sheet-size, 24rem), calc(100dvh - 2rem));
+    right: 0;
+  }
+
+  .ui-sheet__popup--top {
+    top: 0;
+  }
+
+  .ui-sheet__popup--bottom {
+    bottom: 0;
+  }
+
+  .ui-sheet__popup--left[data-starting-style],
+  .ui-sheet__popup--left[data-ending-style] {
+    transform: translateX(-100%);
+  }
+
+  .ui-sheet__popup--right[data-starting-style],
+  .ui-sheet__popup--right[data-ending-style] {
+    transform: translateX(100%);
+  }
+
+  .ui-sheet__popup--top[data-starting-style],
+  .ui-sheet__popup--top[data-ending-style] {
+    transform: translateY(-100%);
+  }
+
+  .ui-sheet__popup--bottom[data-starting-style],
+  .ui-sheet__popup--bottom[data-ending-style] {
+    transform: translateY(100%);
+  }
+
   .ui-toast__viewport {
     display: flex;
     flex-direction: column;
@@ -2719,6 +2792,10 @@
     }
 
     .ui-toast {
+      transition: none;
+    }
+
+    .ui-sheet__popup {
       transition: none;
     }
   }

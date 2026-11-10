@@ -27,6 +27,7 @@ import {
   RadioGroup,
   Select,
   Separator,
+  Sheet,
   Skeleton,
   Slider,
   Spinner,
@@ -835,6 +836,40 @@ function AlertDialogStates() {
   );
 }
 
+const sheetOptions = Array.from({ length: 60 }, (_, index) => index + 1);
+
+function SheetStates() {
+  return (
+    <section aria-label="Sheet states">
+      <Button>Before sheet</Button>
+      {componentManifest.components.Sheet.sides.map((side) => (
+        <Sheet.Root key={side}>
+          <Sheet.Trigger render={<Button variant="outline" />}>
+            Open {side} sheet
+          </Sheet.Trigger>
+          <Sheet.Portal>
+            <Sheet.Backdrop />
+            <Sheet.Popup side={side}>
+              <Sheet.Title>Filters on the {side}</Sheet.Title>
+              <Sheet.Description>Narrow the list of results.</Sheet.Description>
+              <Sheet.Close render={<Button variant="outline" />}>
+                Close {side} sheet
+              </Sheet.Close>
+              {sheetOptions.map((option) => (
+                <p key={option}>
+                  Filter option {option} / 絞り込み条件 {option}
+                </p>
+              ))}
+              <Button>Apply {side} filters</Button>
+            </Sheet.Popup>
+          </Sheet.Portal>
+        </Sheet.Root>
+      ))}
+      <Button>After sheet</Button>
+    </section>
+  );
+}
+
 function ToastList() {
   const manager = useToastManager();
   return manager.toasts.map((toast) => (
@@ -1254,6 +1289,7 @@ function Fixture() {
       <PopoverStates />
       <MenuStates />
       <AlertDialogStates />
+      <SheetStates />
       <ToastStates />
       <ToggleGroupStates />
       <ButtonGroupStates />

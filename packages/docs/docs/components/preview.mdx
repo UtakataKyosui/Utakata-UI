@@ -268,6 +268,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="alertdialog" />
 
+## Sheet [#sheet]
+
+詳しい使い方とAPIは[Sheet](/components/sheet)を参照してください。
+
+Dialogを基にした、上・右・下・左の端に付くモーダルのパネルです。`side`で端を選びます（既定は`right`）。Tabキーの移動はパネル内にとどまり、Escape・`Sheet.Close`・背景の押下で閉じてフォーカスはTriggerに戻ります。内容が長いときはパネル内でスクロールし、動きを減らす設定ではスライドの遷移を行いません。`Sheet.Title`と見える`Sheet.Close`を必ず用意してください。
+
+<Component path="sheet" />
+
 ## Toast [#toast]
 
 詳しい使い方とAPIは[Toast](/components/toast)を参照してください。

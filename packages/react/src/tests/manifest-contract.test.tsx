@@ -95,6 +95,29 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Sheet focus, dismissal, placement, motion and forced colors and keeps platform checks manual', () => {
+    const rules = componentManifest.components.Sheet?.qualityRules ?? [];
+    for (const id of [
+      'sheet.focus-containment',
+      'sheet.dismissal-focus-return',
+      'sheet.placement-scroll',
+      'sheet.reduced-motion',
+      'sheet.forced-focus',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'sheet.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
     const rules = componentManifest.components.DropdownMenu?.qualityRules ?? [];
     for (const id of [
@@ -537,6 +560,7 @@ describe('public manifest contract', () => {
       'Dialog',
       'Kbd',
       'Separator',
+      'Sheet',
       'Badge',
       'Skeleton',
       'Spinner',

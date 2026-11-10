@@ -6,6 +6,7 @@ const verificationStates = {
   Dialog: ['open', 'closed'],
   Kbd: ['static'],
   Separator: ['decorative', 'semantic'],
+  Sheet: ['open', 'closed'],
   Badge: ['short', 'long', 'icon'],
   Skeleton: ['loading', 'reducedMotion', 'forcedColors'],
   Spinner: ['running', 'reducedMotion'],
