@@ -23,5 +23,17 @@
         ]
       }
     ]
+  },
+  "extraKnownMarketplaces": {
+    "utakata-cc-mod": {
+      "source": {
+        "source": "github",
+        "repo": "UtakataKyosui/utakata-cc-mod"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "goal-orchestrator@utakata-cc-mod": true,
+    "task-checkpoint@utakata-cc-mod": true
   }
 }
