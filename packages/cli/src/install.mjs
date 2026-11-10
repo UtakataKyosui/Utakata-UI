@@ -6,6 +6,7 @@ import {
   projectDirectory,
   projectOptions,
 } from './config.mjs';
+import { dependencyPlan, installDependencies } from './dependencies.mjs';
 import { planFile, writePlan } from './files.mjs';
 import { paletteFile } from './palette.mjs';
 import { validateCatalog, validateItem, validName } from './registry.mjs';
@@ -135,6 +136,8 @@ export async function initializeProject({
   palette,
   dryRun = false,
   overwrite = false,
+  install = true,
+  packageManager,
 }) {
   const options = await projectOptions(
     { registry, directory, cwd, palette },
@@ -147,6 +150,13 @@ export async function initializeProject({
   const { files, dependencies } = await collectComponents(options.registry, [
     items[0].name,
   ]);
+  const dependencyInstallation = install
+    ? await dependencyPlan(
+        options.cwd,
+        Object.fromEntries(dependencies),
+        packageManager,
+      )
+    : undefined;
   const shared = [...files.values()].filter(
     (file) => file.path === 'LICENSE' || file.path.startsWith('styles/'),
   );
@@ -167,9 +177,14 @@ export async function initializeProject({
   if (theme)
     plan.push(await planFile(options.cwd, destination, theme, overwrite));
   if (!dryRun) await writePlan(options.cwd, plan);
+  if (!dryRun && dependencyInstallation)
+    installDependencies(options.cwd, dependencyInstallation);
   return {
     files: plan.map(({ target, action }) => ({ target, action })),
     dependencies: Object.fromEntries(dependencies),
     stylesheet: resolve(destination, theme?.path ?? 'styles/styles.css'),
+    dependencyInstallation: dependencyInstallation
+      ? { ...dependencyInstallation, executed: !dryRun }
+      : undefined,
   };
 }

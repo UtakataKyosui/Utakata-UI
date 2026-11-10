@@ -48,6 +48,7 @@ import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
+import { LismFixture } from './lism-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
@@ -1495,7 +1496,9 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  paletteLocale ? (
+  new URLSearchParams(location.search).has('lism') ? (
+    <LismFixture />
+  ) : paletteLocale ? (
     <PaletteFixture locale={paletteLocale} />
   ) : new URLSearchParams(location.search).has('layout') ? (
     <LayoutFixture />

@@ -4,8 +4,8 @@ import { useState } from 'react';
 export default function ButtonExample() {
   const [count, setCount] = useState(0);
   return (
-    <Stack style={{ gap: '1.5rem' }}>
-      <Flex style={{ gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+    <Stack g="1.5rem">
+      <Flex g="0.75rem" fxw="wrap" ai="center">
         {componentManifest.components.Button.variants.map((variant) => (
           <Button
             key={variant}
@@ -17,7 +17,7 @@ export default function ButtonExample() {
         ))}
       </Flex>
       <p role="status">クリック回数: {count}</p>
-      <Flex style={{ gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Flex g="0.75rem" fxw="wrap" ai="center">
         {componentManifest.components.Button.sizes.map((size) => (
           <Button key={size} size={size} variant="outline">
             サイズ {size}
@@ -25,7 +25,7 @@ export default function ButtonExample() {
         ))}
         <Button disabled>無効なボタン</Button>
       </Flex>
-      <Flex style={{ gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Flex g="0.75rem" fxw="wrap" ai="center">
         <Button variant="secondary">補助操作</Button>
         <Button variant="destructive">アカウントを削除</Button>
         <Button variant="link">詳細を表示</Button>

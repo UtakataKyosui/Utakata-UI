@@ -7,29 +7,27 @@ import type { RadioGroupOrientation } from '../metadata/components/RadioGroup.js
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
 import { useFormResetKey } from './formReset.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type RadioGroupRootProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseRadioGroup>,
-  'className'
-> & {
-  className?: string;
-  /** Layout only; Base UI arrow keys work in both directions. */
-  orientation?: RadioGroupOrientation;
-};
+export type RadioGroupRootProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseRadioGroup>, 'className'> & {
+    className?: string;
+    /** Layout only; Base UI arrow keys work in both directions. */
+    orientation?: RadioGroupOrientation;
+  }
+>;
 
-export type RadioGroupItemProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseRadio.Root>,
-  'className'
-> & {
-  className?: string;
-};
+export type RadioGroupItemProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseRadio.Root>, 'className'> & {
+    className?: string;
+  }
+>;
 
-export type RadioGroupIndicatorProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseRadio.Indicator>,
-  'className'
-> & {
-  className?: string;
-};
+export type RadioGroupIndicatorProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseRadio.Indicator>, 'className'> & {
+    className?: string;
+  }
+>;
 
 const groupTarget = {
   name: 'RadioGroup.Root',
@@ -42,8 +40,8 @@ const itemTarget = {
   nameFromContent: true,
 };
 
-const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(
-  function RadioGroupRoot(
+const Root = withLism(
+  forwardRef<HTMLDivElement, RadioGroupRootProps>(function RadioGroupRoot(
     { className, orientation = 'vertical', inputRef, ...props },
     ref,
   ) {
@@ -63,11 +61,14 @@ const Root = forwardRef<HTMLDivElement, RadioGroupRootProps>(
         )}
       />
     );
-  },
+  }),
 );
 
-const Item = forwardRef<HTMLElement, RadioGroupItemProps>(
-  function RadioGroupItem({ className, ...props }, ref) {
+const Item = withLism(
+  forwardRef<HTMLElement, RadioGroupItemProps>(function RadioGroupItem(
+    { className, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(itemTarget, ref);
     return (
       <BaseRadio.Root
@@ -76,23 +77,25 @@ const Item = forwardRef<HTMLElement, RadioGroupItemProps>(
         className={withClassName('ui-radio-group__item', className)}
       />
     );
-  },
+  }),
 );
 
-const Indicator = forwardRef<HTMLSpanElement, RadioGroupIndicatorProps>(
-  function RadioGroupIndicator(
-    { className, keepMounted = true, ...props },
-    ref,
-  ) {
-    return (
-      <BaseRadio.Indicator
-        {...props}
-        keepMounted={keepMounted}
-        ref={ref}
-        className={withClassName('ui-radio-group__indicator', className)}
-      />
-    );
-  },
+const Indicator = withLism(
+  forwardRef<HTMLSpanElement, RadioGroupIndicatorProps>(
+    function RadioGroupIndicator(
+      { className, keepMounted = true, ...props },
+      ref,
+    ) {
+      return (
+        <BaseRadio.Indicator
+          {...props}
+          keepMounted={keepMounted}
+          ref={ref}
+          className={withClassName('ui-radio-group__indicator', className)}
+        />
+      );
+    },
+  ),
 );
 
 export const RadioGroup = { Root, Item, Indicator };

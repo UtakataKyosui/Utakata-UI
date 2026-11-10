@@ -1,25 +1,28 @@
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { SeparatorOrientation } from '../metadata/manifest.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type SeparatorProps = Omit<
-  ComponentPropsWithoutRef<'div'>,
-  'className' | 'role' | 'aria-orientation' | 'children'
-> & {
-  tabIndex?: never;
-  contentEditable?: never;
-  className?: string;
-  orientation?: SeparatorOrientation;
-  /** Decorative separators are hidden from assistive technology. */
-  decorative?: boolean;
-};
+export type SeparatorProps = WithLismProps<
+  Omit<
+    ComponentPropsWithoutRef<'div'>,
+    'className' | 'role' | 'aria-orientation' | 'children'
+  > & {
+    tabIndex?: never;
+    contentEditable?: never;
+    className?: string;
+    orientation?: SeparatorOrientation;
+    /** Decorative separators are hidden from assistive technology. */
+    decorative?: boolean;
+  }
+>;
 
 /**
  * A static separator. Base UI Separator always exposes role="separator", so
  * this renders HTML directly to support decorative separators.
  */
-export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
-  function Separator(
+export const Separator = withLism(
+  forwardRef<HTMLDivElement, SeparatorProps>(function Separator(
     { className, orientation = 'horizontal', decorative = true, ...props },
     ref,
   ) {
@@ -43,5 +46,5 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
         )}
       />
     );
-  },
+  }),
 );

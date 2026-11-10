@@ -122,7 +122,7 @@ try {
         '--cwd',
         cwd,
       ],
-      { cwd, encoding: 'utf8', timeout: 30_000 },
+      { cwd, encoding: 'utf8', timeout: 120_000 },
     );
   assert.match(invoke('list', '--registry', registry), /button\tButton/);
   assert.match(
@@ -154,6 +154,15 @@ try {
   assert.deepEqual(
     JSON.parse(await readFile(join(cwd, 'utakata.json'), 'utf8')).palette,
     palette,
+  );
+  const initializedPackage = JSON.parse(
+    await readFile(join(cwd, 'package.json'), 'utf8'),
+  );
+  assert.equal(initializedPackage.dependencies['lism-css'], '^1.1.0');
+  assert.equal(initializedPackage.dependencies['@base-ui/react'], '^1.9.0');
+  assert.ok(
+    (await readFile(join(cwd, 'node_modules/lism-css/package.json'))).length >
+      0,
   );
   const theme = await readFile(
     join(cwd, 'src/components/utakata/theme.css'),

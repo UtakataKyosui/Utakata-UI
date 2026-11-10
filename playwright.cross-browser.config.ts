@@ -4,6 +4,7 @@ import base from './playwright.config.js';
 // This bounded contract does not extend Chromium-only IME/forced-colors
 // evidence to other engines. Every selected test, including controls, must run.
 export const crossBrowserRuleIds = [
+  'lism.rendered-props',
   'baseline.rendered-axe',
   'theme.rendered-contrast',
   'baseline.keyboard-focus',
@@ -26,7 +27,11 @@ const projects = ['firefox', 'webkit'].flatMap((browserName) =>
 export default defineConfig({
   ...base,
   testIgnore: [],
-  testMatch: ['**/cross-browser.spec.ts', '**/layout.spec.ts'],
+  testMatch: [
+    '**/cross-browser.spec.ts',
+    '**/layout.spec.ts',
+    '**/lism.spec.ts',
+  ],
   projects,
   reporter: [
     ['list'],

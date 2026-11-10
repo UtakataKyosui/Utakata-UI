@@ -43,6 +43,9 @@ const text = {
       'スタイルはアプリのエントリーで `@utakata-ui/react/styles.css` を 1 度だけ読み込みます。詳しくは[導入方法](/getting-started)を参照してください。',
     usage: '使い方',
     props: 'Props',
+    lism: 'Lism の共通 Props',
+    lismNote:
+      'DOM を描画する部品・パーツは `p`、`g`、`w`、`fz`、`bgc`、`layout` とレスポンシブ値を受け取ります。既存の `size`・`variant`・ARIA と名前の型制約が優先します。状態管理だけの Root・Provider・Portal・Collection は対象外です。[Lism CSS を使う](/lism)を参照してください。',
     propsCaption: (name) => `${name} の Props`,
     propsNote:
       '「—」は型の要約がなく、既定値だけを記載している Props です。基になる Base UI の型を参照してください。',
@@ -66,6 +69,9 @@ const text = {
       'Import `@utakata-ui/react/styles.css` once in the application entry. See [Installation](/en/getting-started) for details.',
     usage: 'Usage',
     props: 'Props',
+    lism: 'Shared Lism Props',
+    lismNote:
+      'DOM-rendering components and parts accept `p`, `g`, `w`, `fz`, `bgc`, `layout` and responsive values. Existing `size`, `variant`, ARIA and name constraints take precedence. State-only roots, providers, portals and collections are excluded. See [Using Lism CSS](/en/lism).',
     propsCaption: (name) => `${name} props`,
     propsNote:
       'A "—" type means the manifest records only the default value; see the underlying Base UI type.',
@@ -244,6 +250,10 @@ ${example}
 \`\`\`
 `,
   ];
+  sections.push(`## ${t.lism} [#lism]
+
+${t.lismNote}
+`);
   if (props.length) {
     sections.push(`## ${t.props} [#props]
 
@@ -323,19 +333,31 @@ async function writeSiteStyles() {
   const stylesUrl = new URL('packages/react/src/styles/styles.css', repoRoot);
   const styles = await readFile(stylesUrl, 'utf8');
   const lismImport = '@import "lism-css/main.css";\n';
-  if (!styles.startsWith(lismImport)) {
+  const importAt = styles.indexOf(lismImport);
+  const layerOrder = styles.slice(0, importAt);
+  if (importAt < 0 || !/^@layer[\w\s.,-]+;\s*$/.test(layerOrder)) {
     throw new Error(
-      'styles.css no longer starts with the Lism import; update writeSiteStyles.',
+      'styles.css must declare its layer order before the Lism import; update writeSiteStyles.',
     );
   }
   const react = createRequire(new URL('packages/react/package.json', repoRoot));
-  const lism = await readFile(react.resolve('lism-css/main.css'), 'utf8');
+  const lism = await readFile(react.resolve('lism-css/base.css'), 'utf8');
+  const styling = await Promise.all(
+    [
+      'trait.css',
+      'primitives/layout.css',
+      'primitives/atomic.css',
+      'utility.css',
+      'props.css',
+    ].map((file) => readFile(react.resolve(`lism-css/${file}`), 'utf8')),
+  );
   const generated = new URL('site/generated/', docsRoot);
   await mkdir(generated, { recursive: true });
   await writeFile(new URL('lism.css', generated), lism);
+  await writeFile(new URL('lism-styling.css', generated), styling.join('\n'));
   await writeFile(
     new URL('utakata-components.css', generated),
-    styles.slice(lismImport.length),
+    layerOrder + styles.slice(importAt + lismImport.length),
   );
 }
 

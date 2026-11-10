@@ -12,6 +12,7 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 import { classedPart, type FloatingPartProps } from './parts.js';
 
 /**
@@ -26,12 +27,11 @@ export type TooltipRootProps = Omit<
 /** Tooltips contain short plain text only; interactive content belongs in Popover. */
 export type TooltipText = string | number | readonly (string | number)[];
 
-export type TooltipPopupProps = Omit<
-  FloatingPartProps<typeof BaseTooltip.Popup>,
-  'children' | 'role'
-> & {
-  children: TooltipText;
-};
+export type TooltipPopupProps = WithLismProps<
+  Omit<FloatingPartProps<typeof BaseTooltip.Popup>, 'children' | 'role'> & {
+    children: TooltipText;
+  }
+>;
 
 interface Description {
   id: string;
@@ -59,29 +59,33 @@ const triggerTarget = {
   nameFromContent: true,
 };
 
-const Trigger = forwardRef<
-  HTMLElement,
-  FloatingPartProps<typeof BaseTooltip.Trigger>
->(function TooltipTrigger(
-  { className, 'aria-describedby': describedBy, ...props },
-  ref,
-) {
-  const accessibilityRef = useAccessibilityRef(triggerTarget, ref);
-  const popupId = useContext(DescriptionContext)?.popupId;
-  return (
-    <BaseTooltip.Trigger
-      {...props}
-      ref={accessibilityRef}
-      aria-describedby={
-        [describedBy, popupId].filter(Boolean).join(' ') || undefined
-      }
-      className={withClassName('ui-tooltip__trigger', className)}
-    />
-  );
-});
+const Trigger = withLism(
+  forwardRef<HTMLElement, FloatingPartProps<typeof BaseTooltip.Trigger>>(
+    function TooltipTrigger(
+      { className, 'aria-describedby': describedBy, ...props },
+      ref,
+    ) {
+      const accessibilityRef = useAccessibilityRef(triggerTarget, ref);
+      const popupId = useContext(DescriptionContext)?.popupId;
+      return (
+        <BaseTooltip.Trigger
+          {...props}
+          ref={accessibilityRef}
+          aria-describedby={
+            [describedBy, popupId].filter(Boolean).join(' ') || undefined
+          }
+          className={withClassName('ui-tooltip__trigger', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Popup = forwardRef<HTMLDivElement, TooltipPopupProps>(
-  function TooltipPopup({ className, id, ...props }, ref) {
+const Popup = withLism(
+  forwardRef<HTMLDivElement, TooltipPopupProps>(function TooltipPopup(
+    { className, id, ...props },
+    ref,
+  ) {
     const context = useContext(DescriptionContext);
     const popupId = id ?? context?.id;
     const setPopupId = context?.setPopupId;
@@ -98,7 +102,7 @@ const Popup = forwardRef<HTMLDivElement, TooltipPopupProps>(
         className={withClassName('ui-tooltip__popup', className)}
       />
     );
-  },
+  }),
 );
 
 export const Tooltip = {

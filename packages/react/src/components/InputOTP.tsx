@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 type SlotLabeller = (position: number, length: number) => string;
 
@@ -28,43 +29,46 @@ type BaseRootProps = ComponentPropsWithoutRef<typeof BaseOTPField.Root>;
  * Submit explicitly or from `onValueComplete` instead. The code is labelled by
  * Field.Label or `aria-labelledby`, which name the first slot.
  */
-export type InputOTPRootProps = Omit<
-  BaseRootProps,
-  'className' | 'autoSubmit' | 'aria-label'
-> & {
-  className?: string;
-  /** Not supported: Base UI names only the first slot from a visible label. */
-  'aria-label'?: never;
-  /**
-   * Returns the accessible name of a slot after the first, for example
-   * "Digit 2 of 6". The first slot is named by the field label. Required so
-   * that slots are not announced as duplicates of the same field.
-   */
-  getSlotLabel: SlotLabeller;
-};
+export type InputOTPRootProps = WithLismProps<
+  Omit<BaseRootProps, 'className' | 'autoSubmit' | 'aria-label'> & {
+    className?: string;
+    /** Not supported: Base UI names only the first slot from a visible label. */
+    'aria-label'?: never;
+    /**
+     * Returns the accessible name of a slot after the first, for example
+     * "Digit 2 of 6". The first slot is named by the field label. Required so
+     * that slots are not announced as duplicates of the same field.
+     */
+    getSlotLabel: SlotLabeller;
+  }
+>;
 
 /** Base UI OTPField.Input props; `getSlotLabel` on Root names each slot. */
-export type InputOTPSlotProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseOTPField.Input>,
-  'className' | 'render' | 'aria-label' | 'aria-labelledby'
-> & {
-  className?: string;
-};
+export type InputOTPSlotProps = WithLismProps<
+  Omit<
+    ComponentPropsWithoutRef<typeof BaseOTPField.Input>,
+    'className' | 'render' | 'aria-label' | 'aria-labelledby'
+  > & {
+    className?: string;
+  }
+>;
 
-export type InputOTPSeparatorProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseOTPField.Separator>,
-  'className'
-> & {
-  className?: string;
-};
+export type InputOTPSeparatorProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseOTPField.Separator>, 'className'> & {
+    className?: string;
+  }
+>;
 
 const slotTarget = {
   name: 'InputOTP.Slot',
   fix: 'Place InputOTP.Root in Field.Root with a Field.Label, or pass aria-labelledby to Root.',
 };
 
-const Root = forwardRef<HTMLDivElement, InputOTPRootProps>(
-  function InputOTPRoot({ className, getSlotLabel, ...props }, ref) {
+const Root = withLism(
+  forwardRef<HTMLDivElement, InputOTPRootProps>(function InputOTPRoot(
+    { className, getSlotLabel, ...props },
+    ref,
+  ) {
     const labelledBy = props['aria-labelledby'];
     const naming = useMemo(
       () => ({ getSlotLabel, labelledBy }),
@@ -79,11 +83,14 @@ const Root = forwardRef<HTMLDivElement, InputOTPRootProps>(
         />
       </SlotNamingContext.Provider>
     );
-  },
+  }),
 );
 
-const Slot = forwardRef<HTMLInputElement, InputOTPSlotProps>(
-  function InputOTPSlot({ className, ...props }, ref) {
+const Slot = withLism(
+  forwardRef<HTMLInputElement, InputOTPSlotProps>(function InputOTPSlot(
+    { className, ...props },
+    ref,
+  ) {
     const naming = useContext(SlotNamingContext);
     const accessibilityRef = useAccessibilityRef(slotTarget, ref);
     return (
@@ -111,11 +118,14 @@ const Slot = forwardRef<HTMLInputElement, InputOTPSlotProps>(
         )}
       />
     );
-  },
+  }),
 );
 
-const Separator = forwardRef<HTMLDivElement, InputOTPSeparatorProps>(
-  function InputOTPSeparator({ className, ...props }, ref) {
+const Separator = withLism(
+  forwardRef<HTMLDivElement, InputOTPSeparatorProps>(function InputOTPSeparator(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseOTPField.Separator
         aria-hidden="true"
@@ -124,7 +134,7 @@ const Separator = forwardRef<HTMLDivElement, InputOTPSeparatorProps>(
         className={withClassName('ui-input-otp__separator', className)}
       />
     );
-  },
+  }),
 );
 
 export const InputOTP = { Root, Slot, Separator };

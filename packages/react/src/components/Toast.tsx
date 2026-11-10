@@ -9,15 +9,21 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-type ToastPartProps<T extends ElementType> = Omit<
-  ComponentPropsWithoutRef<T>,
-  'className'
-> & { className?: string };
+type ToastPartProps<T extends ElementType> = WithLismProps<
+  Omit<ComponentPropsWithoutRef<T>, 'className'> & { className?: string }
+>;
 
-export type ToastViewportProps = ToastPartProps<typeof BaseToast.Viewport>;
-export type ToastRootProps = ToastPartProps<typeof BaseToast.Root>;
-export type ToastActionProps = ToastPartProps<typeof BaseToast.Action>;
+export type ToastViewportProps = WithLismProps<
+  ToastPartProps<typeof BaseToast.Viewport>
+>;
+export type ToastRootProps = WithLismProps<
+  ToastPartProps<typeof BaseToast.Root>
+>;
+export type ToastActionProps = WithLismProps<
+  ToastPartProps<typeof BaseToast.Action>
+>;
 
 /** Close needs visible text or an explicit name; an empty button is a type error. */
 export type ToastCloseAccessibilityProps =
@@ -25,8 +31,9 @@ export type ToastCloseAccessibilityProps =
   | { 'aria-label': string }
   | { 'aria-labelledby': string };
 
-export type ToastCloseProps = ToastPartProps<typeof BaseToast.Close> &
-  ToastCloseAccessibilityProps;
+export type ToastCloseProps = WithLismProps<
+  ToastPartProps<typeof BaseToast.Close> & ToastCloseAccessibilityProps
+>;
 
 const rootDiagnostics = {
   name: 'Toast.Root',
@@ -42,8 +49,11 @@ const actionDiagnostics = {
  * The notification region. Place one per app inside Toast.Provider; Base UI
  * announces additions politely and moves focus here with F6.
  */
-const Viewport = forwardRef<HTMLDivElement, ToastViewportProps>(
-  function ToastViewport({ className, ...props }, ref) {
+const Viewport = withLism(
+  forwardRef<HTMLDivElement, ToastViewportProps>(function ToastViewport(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseToast.Viewport
         {...props}
@@ -51,66 +61,75 @@ const Viewport = forwardRef<HTMLDivElement, ToastViewportProps>(
         className={withClassName('ui-toast__viewport', className)}
       />
     );
-  },
+  }),
 );
 
 /** One notification; labelled by its Title and described by its Description. */
-const Root = forwardRef<HTMLDivElement, ToastRootProps>(function ToastRoot(
-  { className, ...props },
-  ref,
-) {
-  const accessibilityRef = useAccessibilityRef(rootDiagnostics, ref);
-  return (
-    <BaseToast.Root
-      {...props}
-      ref={accessibilityRef}
-      className={withClassName('ui-toast', className)}
-    />
-  );
-});
+const Root = withLism(
+  forwardRef<HTMLDivElement, ToastRootProps>(function ToastRoot(
+    { className, ...props },
+    ref,
+  ) {
+    const accessibilityRef = useAccessibilityRef(rootDiagnostics, ref);
+    return (
+      <BaseToast.Root
+        {...props}
+        ref={accessibilityRef}
+        className={withClassName('ui-toast', className)}
+      />
+    );
+  }),
+);
 
-const Content = forwardRef<
-  HTMLDivElement,
-  ToastPartProps<typeof BaseToast.Content>
->(function ToastContent({ className, ...props }, ref) {
-  return (
-    <BaseToast.Content
-      {...props}
-      ref={ref}
-      className={withClassName('ui-toast__content', className)}
-    />
-  );
-});
+const Content = withLism(
+  forwardRef<HTMLDivElement, ToastPartProps<typeof BaseToast.Content>>(
+    function ToastContent({ className, ...props }, ref) {
+      return (
+        <BaseToast.Content
+          {...props}
+          ref={ref}
+          className={withClassName('ui-toast__content', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Title = forwardRef<
-  HTMLHeadingElement,
-  ToastPartProps<typeof BaseToast.Title>
->(function ToastTitle({ className, ...props }, ref) {
-  return (
-    <BaseToast.Title
-      {...props}
-      ref={ref}
-      className={withClassName('ui-toast__title', className)}
-    />
-  );
-});
+const Title = withLism(
+  forwardRef<HTMLHeadingElement, ToastPartProps<typeof BaseToast.Title>>(
+    function ToastTitle({ className, ...props }, ref) {
+      return (
+        <BaseToast.Title
+          {...props}
+          ref={ref}
+          className={withClassName('ui-toast__title', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Description = forwardRef<
-  HTMLParagraphElement,
-  ToastPartProps<typeof BaseToast.Description>
->(function ToastDescription({ className, ...props }, ref) {
-  return (
-    <BaseToast.Description
-      {...props}
-      ref={ref}
-      className={withClassName('ui-toast__description', className)}
-    />
-  );
-});
+const Description = withLism(
+  forwardRef<
+    HTMLParagraphElement,
+    ToastPartProps<typeof BaseToast.Description>
+  >(function ToastDescription({ className, ...props }, ref) {
+    return (
+      <BaseToast.Description
+        {...props}
+        ref={ref}
+        className={withClassName('ui-toast__description', className)}
+      />
+    );
+  }),
+);
 
 /** Renders only when it has content, from children or the toast's actionProps. */
-const Action = forwardRef<HTMLButtonElement, ToastActionProps>(
-  function ToastAction({ className, ...props }, ref) {
+const Action = withLism(
+  forwardRef<HTMLButtonElement, ToastActionProps>(function ToastAction(
+    { className, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(actionDiagnostics, ref);
     return (
       <BaseToast.Action
@@ -119,7 +138,7 @@ const Action = forwardRef<HTMLButtonElement, ToastActionProps>(
         className={withClassName('ui-toast__action', className)}
       />
     );
-  },
+  }),
 );
 
 /**
@@ -127,8 +146,11 @@ const Action = forwardRef<HTMLButtonElement, ToastActionProps>(
  * or the button is focused, so its name is enforced by type rather than by
  * development diagnostics.
  */
-const Close = forwardRef<HTMLButtonElement, ToastCloseProps>(
-  function ToastClose({ className, ...props }, ref) {
+const Close = withLism(
+  forwardRef<HTMLButtonElement, ToastCloseProps>(function ToastClose(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseToast.Close
         {...props}
@@ -136,7 +158,7 @@ const Close = forwardRef<HTMLButtonElement, ToastCloseProps>(
         className={withClassName('ui-toast__close', className)}
       />
     );
-  },
+  }),
 );
 
 export const Toast = {

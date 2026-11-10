@@ -21,12 +21,14 @@ if (process.argv[2] === 'a11y') {
         palette: { type: 'string' },
         'dry-run': { type: 'boolean' },
         overwrite: { type: 'boolean' },
+        'no-install': { type: 'boolean' },
+        'package-manager': { type: 'string' },
         help: { type: 'boolean', short: 'h' },
       },
     });
     if (values.help || !positionals.length) {
       console.log(
-        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui init --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--palette <JSON>] [--dry-run] [--overwrite]\n  utakata-ui list [--registry <URL or directory>] [--cwd path]\n  utakata-ui add <name...> [--registry <URL or directory>] [--dir path] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\ninit saves registry and directory defaults in utakata.json.\nDependencies are printed for you to install; no package manager is run.',
+        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui init --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--palette <JSON>] [--dry-run] [--overwrite] [--no-install] [--package-manager npm|pnpm|yarn|bun]\n  utakata-ui list [--registry <URL or directory>] [--cwd path]\n  utakata-ui add <name...> [--registry <URL or directory>] [--dir path] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\ninit saves registry and directory defaults in utakata.json.\ninit installs Base UI and Lism CSS with the detected package manager. Use --no-install to only generate files; --dry-run never installs.',
       );
     } else {
       const [command, ...names] = positionals;
@@ -34,6 +36,13 @@ if (process.argv[2] === 'a11y') {
         throw new Error(`Unknown command: ${command}`);
       if (values.palette !== undefined && command !== 'init')
         throw new Error('--palette is only supported by init');
+      if (
+        (values['no-install'] || values['package-manager']) &&
+        command !== 'init'
+      )
+        throw new Error(
+          '--no-install and --package-manager are only supported by init',
+        );
       if (command !== 'add' && names.length)
         throw new Error(`${command} does not accept component names`);
       if (command === 'list') {
@@ -55,13 +64,15 @@ if (process.argv[2] === 'a11y') {
           directory: values.dir,
           dryRun: values['dry-run'],
           overwrite: values.overwrite,
+          install: !values['no-install'],
+          packageManager: values['package-manager'],
         });
         for (const file of result.files)
           console.log(
             `${values['dry-run'] ? '[dry-run] ' : ''}${file.action}\t${file.target}`,
           );
         console.log(
-          `\nInstall dependencies: pnpm add ${Object.entries(
+          `\n${result.dependencyInstallation?.executed ? 'Installed dependencies' : 'Install dependencies'}: ${result.dependencyInstallation?.manager ?? 'pnpm'} ${result.dependencyInstallation?.manager === 'npm' ? 'install' : 'add'} ${Object.entries(
             result.dependencies,
           )
             .map(([name, version]) => `${name}@${version}`)
