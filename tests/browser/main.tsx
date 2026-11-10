@@ -42,6 +42,7 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
 
@@ -1227,6 +1228,8 @@ createRoot(root).render(
     <PaletteFixture locale={paletteLocale} />
   ) : new URLSearchParams(location.search).has('layout') ? (
     <LayoutFixture />
+  ) : new URLSearchParams(location.search).has('interaction') ? (
+    <InteractionFixture />
   ) : (
     <Fixture />
   ),
