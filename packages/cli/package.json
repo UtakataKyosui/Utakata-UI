@@ -1,7 +1,7 @@
 {
   "name": "@utakata-ui/cli",
   "version": "0.1.0",
-  "description": "Install Utakata UI source components from its dedicated Base UI and Lism CSS registry.",
+  "description": "Install Utakata UI source components and check declared color accessibility contracts.",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -12,7 +12,10 @@
   },
   "files": [
     "bin",
-    "src"
+    "src/*.mjs",
+    "dist",
+    "A11Y.md",
+    "example.json"
   ],
   "repository": {
     "type": "git",
@@ -24,6 +27,11 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "test": "node --test tests/*.test.mjs"
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "pnpm build",
+    "test": "pnpm build && pnpm --workspace-root exec vitest run packages/cli/src/a11y/check.test.ts && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5"
   }
 }

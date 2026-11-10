@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { execFile, execFileSync } from 'node:child_process';
+import { execFile, execFileSync, spawnSync } from 'node:child_process';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
@@ -78,6 +78,35 @@ try {
     assert.ok(
       (await readFile(join(cwd, 'node_modules/@utakata-ui/cli', file))).length,
     );
+  const cli = join(cwd, 'node_modules/@utakata-ui/cli/bin/utakata-ui.mjs');
+  const config = join(cwd, 'colors.json');
+  const check = {
+    name: 'body',
+    kind: 'text',
+    foreground: '#000',
+    background: '#fff',
+    conveysMeaning: false,
+  };
+  for (const [foreground, status] of [
+    ['#000', 0],
+    ['#777', 1],
+    ['transparent', 2],
+  ]) {
+    await writeFile(config, JSON.stringify([{ ...check, foreground }]));
+    const result = spawnSync(
+      process.execPath,
+      [cli, 'a11y', '--config', config, '--json'],
+      {
+        cwd,
+        encoding: 'utf8',
+        timeout: 30_000,
+      },
+    );
+    assert.equal(result.status, status, result.stderr);
+    if (status !== 2)
+      assert.equal(JSON.parse(result.stdout)[0].violations.length, status);
+    else assert.match(result.stderr, /Unsupported color/);
+  }
   const registry = join(cwd, 'registry');
   await writeRegistry(registry);
   const invoke = (...args) =>
@@ -123,7 +152,7 @@ try {
   });
   await verifyHTTP(cwd, registry, metadata.version);
   console.log(
-    'Packed CLI: package-name execution, list, dry-run, source installation, repeat installation and HTTP download passed.',
+    'Packed CLI: package-name execution, list, dry-run, source installation, repeat installation, HTTP download and a11y exit codes passed.',
   );
 } finally {
   await rm(cwd, { recursive: true, force: true });
