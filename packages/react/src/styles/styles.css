@@ -172,7 +172,6 @@
         [data-disabled],
         [aria-disabled="true"]
       ):hover {
-      background-color: transparent;
       text-decoration-thickness: 2px;
     }
   }
@@ -214,7 +213,6 @@
     [data-disabled],
     [aria-disabled="true"]
   ):active {
-    background-color: transparent;
     text-decoration-thickness: 2px;
   }
 
