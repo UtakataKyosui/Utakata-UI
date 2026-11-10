@@ -47,6 +47,8 @@ pnpm なら `npx -y @utakata-ui/cli@0.1.0` を `pnpm dlx @utakata-ui/cli@0.1.0` 
 
 `init` は再実行でき、同じ内容は変更しません。競合があれば書き込み前に停止し、設定や CSS の変更は `--overwrite` で明示的に許可します。`--dry-run` では設定ファイルも作成しません。
 
+`init --palette '<JSON>'` で任意の配色も保存できます。[テーマ画面](/theming)で配色を選び、Registry URLを確認すると初期化コマンドをコピーできます。パレット指定時は配置先の `theme.css` が標準スタイルのimportと配色の上書きをまとめるため、グローバルエントリーでは `styles/styles.css` の代わりに `theme.css` を1度だけ読み込みます。保存した色は以後の `add` でも維持します。
+
 コンポーネント名は[コンポーネント一覧](/components)の小文字です（例: `alertdialog`、`dropdownmenu`、`nativeselect`）。[専用カタログ](/registry/v1/registry.json)でも確認できます。取得先は `--registry` または保存済み設定に限定し、別の registry への暗黙のフォールバックはありません。
 
 ## 依存関係を追加する [#dependencies]

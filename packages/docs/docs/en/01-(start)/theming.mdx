@@ -7,9 +7,13 @@ Utakata UI colors can be changed with CSS custom properties. You do not need to 
 
 ## Try colors [#try]
 
-You can change the primary color and the text color shown on top of it. The change applies to the examples inside Preview, and CSS to copy appears below. It does not affect the docs color scheme, and reloading restores the standard colors.
+You can edit all seven colors for light and dark schemes. The change applies to the examples inside Preview, with CSS and an initialization command containing your palette below. It does not affect the docs color scheme, and reloading restores the standard colors.
 
 <Component path="en/theme" />
+
+For source installation, check the Registry URL, copy the initialization command, and run it at your project root. The CLI saves the `light` / `dark` colors passed to `--palette` in `utakata.json` and generates `theme.css` in the target directory. Install the printed dependencies and import `theme.css` once from your global entry. Then add components with `utakata-ui add button`. If clipboard access fails, select the command field and copy manually. See [CLI installation](/en/registry).
+
+`--palette` accepts partial maps of `primary`, `on-primary`, `surface`, `text`, `muted`, `border` and `danger`, using opaque `#RGB` / `#RRGGBB` values. Omitted colors retain their defaults. Colors are not adjusted automatically.
 
 ## Apply to your app [#apply]
 

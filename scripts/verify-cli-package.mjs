@@ -137,7 +137,29 @@ try {
   await assert.rejects(readFile(join(cwd, 'src/components/utakata/LICENSE')), {
     code: 'ENOENT',
   });
-  assert.match(invoke('init', '--registry', registry), /utakata.json/);
+  const palette = {
+    light: { primary: '#6d28d9', 'on-primary': '#fff' },
+    dark: { primary: '#c4b5fd', 'on-primary': '#1e1535' },
+  };
+  assert.match(
+    invoke(
+      'init',
+      '--registry',
+      registry,
+      '--palette',
+      JSON.stringify(palette),
+    ),
+    /utakata.json/,
+  );
+  assert.deepEqual(
+    JSON.parse(await readFile(join(cwd, 'utakata.json'), 'utf8')).palette,
+    palette,
+  );
+  const theme = await readFile(
+    join(cwd, 'src/components/utakata/theme.css'),
+    'utf8',
+  );
+  assert.match(theme, /--ui-color-primary: #6d28d9/);
   assert.equal(
     JSON.parse(await readFile(join(cwd, 'utakata.json'), 'utf8')).directory,
     'src/components/utakata',
@@ -170,6 +192,10 @@ try {
     /lism-css/,
   );
   assert.match(invoke('add', 'button', 'field'), /unchanged/);
+  assert.equal(
+    await readFile(join(cwd, 'src/components/utakata/theme.css'), 'utf8'),
+    theme,
+  );
   await assert.rejects(readFile(join(cwd, 'components.json')), {
     code: 'ENOENT',
   });

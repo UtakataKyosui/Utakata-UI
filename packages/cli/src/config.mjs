@@ -1,6 +1,7 @@
 import { readFile, realpath } from 'node:fs/promises';
 import { basename, dirname, relative, resolve, sep } from 'node:path';
 import { checkAncestors, destinationPath } from './files.mjs';
+import { parsePalette } from './palette.mjs';
 
 export const configName = 'utakata.json';
 const defaultDirectory = 'src/components/utakata';
@@ -26,6 +27,7 @@ async function readConfig(root, ignoreInvalid) {
     )
       throw new Error('Expected schemaVersion: 1, registry and directory');
     projectDirectory(root, config.directory);
+    config.palette = parsePalette(config.palette);
     return config;
   } catch (error) {
     if (error.code === 'ENOENT' || ignoreInvalid) return undefined;
@@ -34,7 +36,7 @@ async function readConfig(root, ignoreInvalid) {
 }
 
 export async function projectOptions(
-  { cwd = process.cwd(), registry, directory },
+  { cwd = process.cwd(), registry, directory, palette },
   initializing = false,
 ) {
   const root = resolve(cwd);
@@ -51,6 +53,7 @@ export async function projectOptions(
       ? source
       : resolve(registry === undefined ? root : process.cwd(), source),
     directory: directory ?? config?.directory ?? defaultDirectory,
+    palette: parsePalette(palette ?? config?.palette),
   };
 }
 
@@ -63,7 +66,7 @@ async function physicalPath(path) {
   }
 }
 
-export async function configContents({ cwd, registry, directory }) {
+export async function configContents({ cwd, registry, directory, palette }) {
   return `${JSON.stringify(
     {
       schemaVersion: 1,
@@ -75,6 +78,7 @@ export async function configContents({ cwd, registry, directory }) {
       directory: relative(cwd, projectDirectory(cwd, directory))
         .split(sep)
         .join('/'),
+      ...(palette === undefined ? {} : { palette }),
     },
     null,
     2,

@@ -18,6 +18,7 @@ if (process.argv[2] === 'a11y') {
         registry: { type: 'string' },
         cwd: { type: 'string' },
         dir: { type: 'string' },
+        palette: { type: 'string' },
         'dry-run': { type: 'boolean' },
         overwrite: { type: 'boolean' },
         help: { type: 'boolean', short: 'h' },
@@ -25,12 +26,14 @@ if (process.argv[2] === 'a11y') {
     });
     if (values.help || !positionals.length) {
       console.log(
-        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui init --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui list [--registry <URL or directory>] [--cwd path]\n  utakata-ui add <name...> [--registry <URL or directory>] [--dir path] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\ninit saves registry and directory defaults in utakata.json.\nDependencies are printed for you to install; no package manager is run.',
+        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui init --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--palette <JSON>] [--dry-run] [--overwrite]\n  utakata-ui list [--registry <URL or directory>] [--cwd path]\n  utakata-ui add <name...> [--registry <URL or directory>] [--dir path] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\ninit saves registry and directory defaults in utakata.json.\nDependencies are printed for you to install; no package manager is run.',
       );
     } else {
       const [command, ...names] = positionals;
       if (!['init', 'list', 'add'].includes(command))
         throw new Error(`Unknown command: ${command}`);
+      if (values.palette !== undefined && command !== 'init')
+        throw new Error('--palette is only supported by init');
       if (command !== 'add' && names.length)
         throw new Error(`${command} does not accept component names`);
       if (command === 'list') {
@@ -47,6 +50,7 @@ if (process.argv[2] === 'a11y') {
           : addComponents)({
           registry: values.registry,
           names,
+          palette: values.palette,
           cwd: values.cwd,
           directory: values.dir,
           dryRun: values['dry-run'],

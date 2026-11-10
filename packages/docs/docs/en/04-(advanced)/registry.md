@@ -47,6 +47,8 @@ With pnpm, you can replace `npx -y @utakata-ui/cli@0.1.0` with `pnpm dlx @utakat
 
 You can rerun `init`: identical files remain unchanged, and conflicts stop the operation before writing. Use `--overwrite` to allow replacing configuration or CSS. `--dry-run` does not create the configuration file either.
 
+Use `init --palette '<JSON>'` to save custom colors too. Choose colors on the [theme page](/en/theming), check the Registry URL, and copy the initialization command. With a palette, `theme.css` imports the standard stylesheet and applies the overrides: import it once from your global entry instead of `styles/styles.css`. Subsequent `add` commands preserve the saved colors.
+
 Component names are the lowercase names from the [component list](/en/components) (for example `alertdialog`, `dropdownmenu`, `nativeselect`). You can also check the [dedicated catalog](/registry/v1/registry.json). The source must come from `--registry` or saved settings; there is no implicit fallback to another registry.
 
 ## Add dependencies [#dependencies]

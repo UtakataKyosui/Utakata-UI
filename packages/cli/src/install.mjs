@@ -7,6 +7,7 @@ import {
   projectOptions,
 } from './config.mjs';
 import { planFile, writePlan } from './files.mjs';
+import { paletteFile } from './palette.mjs';
 import { validateCatalog, validateItem, validName } from './registry.mjs';
 
 const limit = 8 * 1024 * 1024;
@@ -117,10 +118,13 @@ export async function addComponents({
   const plan = [];
   for (const file of files.values())
     plan.push(await planFile(root, destination, file, overwrite));
+  const theme = paletteFile(options.palette);
+  if (theme) plan.push(await planFile(root, destination, theme, overwrite));
   if (!dryRun) await writePlan(root, plan);
   return {
     files: plan.map(({ target, action }) => ({ target, action })),
     dependencies: Object.fromEntries(dependencies),
+    ...(theme ? { stylesheet: resolve(destination, theme.path) } : {}),
   };
 }
 
@@ -128,10 +132,14 @@ export async function initializeProject({
   registry,
   directory,
   cwd,
+  palette,
   dryRun = false,
   overwrite = false,
 }) {
-  const options = await projectOptions({ registry, directory, cwd }, true);
+  const options = await projectOptions(
+    { registry, directory, cwd, palette },
+    true,
+  );
   const destination = projectDirectory(options.cwd, options.directory);
   const items = await listComponents(options.registry);
   // Each component carries the same shared CSS and license. Validate the full
@@ -155,10 +163,13 @@ export async function initializeProject({
   ];
   for (const file of shared)
     plan.push(await planFile(options.cwd, destination, file, overwrite));
+  const theme = paletteFile(options.palette);
+  if (theme)
+    plan.push(await planFile(options.cwd, destination, theme, overwrite));
   if (!dryRun) await writePlan(options.cwd, plan);
   return {
     files: plan.map(({ target, action }) => ({ target, action })),
     dependencies: Object.fromEntries(dependencies),
-    stylesheet: resolve(destination, 'styles/styles.css'),
+    stylesheet: resolve(destination, theme?.path ?? 'styles/styles.css'),
   };
 }

@@ -231,3 +231,89 @@ test('config errors and missing init registry give actionable failures without w
     }
   });
 });
+
+test('palette survives re-init and add, uses separate scheme overrides and honors dry-run/conflicts', async () => {
+  await fixture(async ({ cwd, registry, invoke }) => {
+    const palette = {
+      light: { primary: '#6D28D9', 'on-primary': '#fff' },
+      dark: { primary: '#c4b5fd', 'on-primary': '#1e1535' },
+    };
+    const args = [
+      'init',
+      '--registry',
+      registry,
+      '--palette',
+      JSON.stringify(palette),
+    ];
+    assert.equal(invoke(...args, '--dry-run').status, 0);
+    assert.deepEqual(await readdir(cwd), []);
+    const init = invoke(...args);
+    assert.equal(init.status, 0, init.stderr);
+    assert.match(init.stdout, /utakata\/theme.css/);
+    const theme = join(cwd, 'src/components/utakata/theme.css');
+    const css = await readFile(theme, 'utf8');
+    assert.match(css, /@import "\.\/styles\/styles.css"/);
+    assert.match(css, /prefers-color-scheme: light/);
+    assert.match(css, /--ui-color-primary: #6d28d9/);
+    assert.match(css, /prefers-color-scheme: dark/);
+    const config = JSON.parse(
+      await readFile(join(cwd, 'utakata.json'), 'utf8'),
+    );
+    assert.equal(config.palette.light.primary, '#6d28d9');
+    assert.equal(invoke('init').status, 0);
+    assert.equal(invoke('add', 'button').status, 0);
+    assert.equal(await readFile(theme, 'utf8'), css);
+    const custom = invoke('add', 'button', '--dir', 'custom');
+    assert.equal(custom.status, 0, custom.stderr);
+    assert.equal(await readFile(join(cwd, 'custom/theme.css'), 'utf8'), css);
+    const changed = invoke('init', '--palette', '{"light":{"primary":"#000"}}');
+    assert.equal(changed.status, 1);
+    assert.equal(await readFile(theme, 'utf8'), css);
+    assert.equal(
+      invoke('init', '--palette', '{"light":{"primary":"#000"}}', '--overwrite')
+        .status,
+      0,
+    );
+    const partial = await readFile(theme, 'utf8');
+    assert.match(partial, /--ui-color-primary: #000/);
+    assert.doesNotMatch(partial, /prefers-color-scheme: dark/);
+  });
+});
+
+test('invalid palettes fail before writes, and add/list reject the init-only flag', async () => {
+  await fixture(async ({ cwd, registry, invoke }) => {
+    for (const palette of [
+      '{',
+      'null',
+      '{}',
+      '[]',
+      '{"light":{}}',
+      '{"system":{"primary":"#000"}}',
+      '{"light":{"unknown":"#000"}}',
+      '{"light":{"primary":"red"}}',
+      '{"light":{"primary":"#ffffff80"}}',
+      '{"light":{"primary":"#fff; color: red"}}',
+    ]) {
+      const result = invoke(
+        'init',
+        '--registry',
+        registry,
+        '--palette',
+        palette,
+      );
+      assert.equal(result.status, 1, result.stdout);
+      assert.deepEqual(await readdir(cwd), []);
+    }
+    for (const command of ['add', 'list']) {
+      const result = invoke(
+        command,
+        '--registry',
+        registry,
+        '--palette',
+        '{"light":{"primary":"#000"}}',
+      );
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /only supported by init/);
+    }
+  });
+});
