@@ -6,6 +6,7 @@ export function inspectReadiness({
   rules,
   protection,
   environment,
+  environmentPolicies,
   identity,
   attestations = {},
   now = Date.now(),
@@ -45,13 +46,18 @@ export function inspectReadiness({
       id: 'github.npm-environment',
       status:
         environment?.name === 'npm' &&
-        environment.protection_rules?.some(
+        environment.deployment_branch_policy?.custom_branch_policies === true &&
+        environment.protection_rules?.every(
           (rule) =>
-            rule.type === 'required_reviewers' && rule.reviewers?.length > 0,
-        )
+            rule.type !== 'required_reviewers' || !rule.reviewers?.length,
+        ) &&
+        environmentPolicies?.length === 1 &&
+        environmentPolicies[0].name === 'main' &&
+        environmentPolicies[0].type === 'branch'
           ? 'passed'
           : 'unverified',
-      expected: 'npm environment exists with a required reviewer',
+      expected:
+        'npm environment permits only main and has no manual reviewer gate for automatic publication',
       issue: '#8',
     },
     {
@@ -104,6 +110,10 @@ if (
     rules: read('gh', ['api', `${repository}/rules/branches/main`]),
     protection: read('gh', ['api', `${repository}/branches/main/protection`]),
     environment: read('gh', ['api', `${repository}/environments/npm`]),
+    environmentPolicies: read('gh', [
+      'api',
+      `${repository}/environments/npm/deployment-branch-policies`,
+    ])?.branch_policies,
     identity: read('npm', ['whoami', '--json']),
     attestations: process.argv[2]
       ? JSON.parse(readFileSync(process.argv[2], 'utf8'))

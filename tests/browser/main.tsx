@@ -1498,6 +1498,8 @@ const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
   new URLSearchParams(location.search).has('lism') ? (
     <LismFixture />
+  ) : new URLSearchParams(location.search).has('reader') ? (
+    <LayoutFixture variants={false} />
   ) : paletteLocale ? (
     <PaletteFixture locale={paletteLocale} />
   ) : new URLSearchParams(location.search).has('layout') ? (

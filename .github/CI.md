@@ -154,7 +154,7 @@ readiness.
 For account/scope setup, GitHub Environment protection, initial Actions publication,
 per-package Trusted Publisher values, and optional token/Secrets handling, see
 [npm publishing setup](NPM-PUBLISHING.md). Release workflows default to verification. Manual `token` mode uses only the npm
-Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and tag pushes
+Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and version-changing main pushes
 use Trusted Publishing. Initial publication needs no local login.
 
 The reviewable `.github/required-checks.ruleset.json` requires the always
@@ -181,7 +181,7 @@ the unit job. The build job also packs and installs it into an isolated
 consumer, then tests package-name execution, catalog listing, dry-run, source
 installation and repeated installs. Docs builds verify the registry's import
 graph and typecheck valid/invalid consumer code installed through the CLI.
-`Release CLI` uses `cli-vX.Y.Z` tags and its own `release-cli.yml` Trusted
+`Release CLI` uses version-changing main pushes for `packages/cli/package.json` and its own `release-cli.yml` Trusted
 Publisher. It does not require a published React package; sources are fetched
 from the separately hosted Utakata UI registry.
 
@@ -290,3 +290,25 @@ and writes the same explanation to the Actions step summary. A failed Docs lint
 job is therefore reported as `checks: failure; required for this change`; a skipped
 browser/screen-reader workflow on that PR is explicitly `not required`. Scope
 selection failures and missing/invalid outputs remain hard failures.
+
+
+## package.json-driven publication
+
+Release React and Release CLI run automatically on main pushes that touch their
+own package.json. `release-version.mjs` compares the exact push-before manifest
+with the checked-out manifest: only a stable version increase selects release.
+Unchanged versions skip all publication work; a missing comparison base, name
+mismatch or version decrease fails closed. Versions and archive filenames come
+only from package.json; tag events no longer publish. Manual verify/token/oidc
+remain available on main. No package version was bumped as part of this change.
+
+The user approved removing npm Environment's reviewer gate while retaining main
+restriction on 2026-11-11 JST. Remote readback confirms only main is allowed and
+no required reviewer remains; no Secrets or npm publisher settings were changed.
+The readiness preflight checks that new policy rather than requiring a reviewer.
+
+Client-only Vite fixtures and the generated createRoot consumer suppress only
+the known MODULE_LEVEL_DIRECTIVE warning for use client. Other warnings, including
+use server, still use the default logger. Public library files are emitted by
+tsc without bundling; packed consumer verification checks that every source client
+boundary is present in its shipped JS. No directive is removed from the package.

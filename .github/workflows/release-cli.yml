@@ -13,16 +13,34 @@ on:
         type: boolean
         default: false
   push:
-    tags:
-      - "cli-v*"
+    branches: [main]
+    paths: [packages/cli/package.json]
 permissions:
   contents: read
 concurrency:
   group: release-cli
   cancel-in-progress: false
 jobs:
+  version:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    outputs:
+      release: ${{ steps.version.outputs.release }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Select package.json version
+        id: version
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: node scripts/release-version.mjs cli
   prior:
-    if: github.event_name == 'push' || github.ref == 'refs/heads/main'
+    needs: version
+    if: needs.version.outputs.release == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 3
     permissions:
@@ -71,7 +89,7 @@ jobs:
       - name: Quality checks
         run: pnpm check
   release:
-    needs: [prior, verify]
+    needs: [version, prior, verify]
     # A reused gate is skipped here only because prior found unchanged passing evidence.
     if: >-
       !cancelled() && needs.prior.result == 'success' &&
@@ -88,23 +106,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Validate release ref
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          git merge-base --is-ancestor HEAD origin/main
-          # shellcheck disable=SC2016
-          node --input-type=module -e '
-            import { readFileSync } from "node:fs";
-            const { version } = JSON.parse(readFileSync("packages/cli/package.json"));
-            if (!/^\d+\.\d+\.\d+$/.test(version)) {
-              throw new Error("CLI releases require a stable version");
-            }
-            if (process.env.EVENT_NAME === "push" && process.env.REF_NAME !== `cli-v${version}`) {
-              throw new Error("Release tag must match cli-vX.Y.Z");
-            }
-          '
+      - name: Validate main release ref
+        run: git merge-base --is-ancestor HEAD origin/main
       - uses: pnpm/action-setup@v4.3.0
       - uses: actions/setup-node@v4.4.0
         with:
@@ -133,12 +136,12 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/cli-release"
           pnpm --filter @utakata-ui/cli pack --pack-destination "$RUNNER_TEMP/cli-release"
-          node scripts/verify-cli-package.mjs "$RUNNER_TEMP"/cli-release/*.tgz
+          node scripts/verify-cli-package.mjs "$RUNNER_TEMP/cli-release/utakata-ui-cli-${{ needs.version.outputs.version }}.tgz"
       - name: Publish with npm trusted publishing
         if: github.event_name == 'push' || inputs.release_mode == 'oidc'
-        run: npm publish "$RUNNER_TEMP"/cli-release/*.tgz --access public --provenance --tag latest --ignore-scripts
+        run: npm publish "$RUNNER_TEMP/cli-release/utakata-ui-cli-${{ needs.version.outputs.version }}.tgz" --access public --provenance --tag latest --ignore-scripts
       - name: Publish with npm Environment token
         if: github.event_name == 'workflow_dispatch' && inputs.release_mode == 'token'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: node scripts/publish-npm-token.mjs "$RUNNER_TEMP"/cli-release/*.tgz
+        run: node scripts/publish-npm-token.mjs "$RUNNER_TEMP/cli-release/utakata-ui-cli-${{ needs.version.outputs.version }}.tgz"
