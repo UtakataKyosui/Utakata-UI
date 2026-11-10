@@ -40,7 +40,7 @@ npx -y @utakata-ui/cli@0.1.0 init --registry https://example.com/registry/v1 --p
 
 パレット指定時は、`styles/styles.css` を読み込む代わりに配置先の `theme.css` をグローバルエントリーから1度だけ読み込みます。このファイルは内部で標準CSSを読み込み、OSの明暗設定ごとに色を上書きします。パレットは `utakata.json` に保存され、再初期化やコンポーネント追加でも維持します。変更するときは `init --palette '<JSON>' --overwrite` を使います。ドキュメントのテーマ画面から、選んだ配色を含むコマンドをコピーできます。
 
-CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一ファイルは変更せず、競合や不正な registry は書き込み前に拒否します。`init` の依存導入は `--ignore-scripts` で lifecycle scripts を無効にします。`--no-install` を使った場合は表示されたコマンドを実行してください。`--dry-run` ではファイルも依存も変更しません。`add` は package manager を実行しません。
+CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一ファイルは変更せず、競合や不正な registry は書き込み前に拒否します。`init` は依存パッケージの lifecycle scripts を無効にします（Yarn は設定値、それ以外は `--ignore-scripts`）。Yarn のワークスペース自体のスクリプトは Yarn の動作に従います。`--no-install` を使った場合は表示されたコマンドを実行してください。`--dry-run` ではファイルも依存も変更しません。`add` は package manager を実行しません。
 
 パレットなしの場合はグローバルエントリーから配置先の `styles/styles.css` を読み込みます。React・React DOM・TypeScript と CSS import を解決するバンドラーは利用先で用意してください。Tailwind CSS や `components.json` は不要です。
 

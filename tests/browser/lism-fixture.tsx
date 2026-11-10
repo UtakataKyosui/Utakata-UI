@@ -11,7 +11,7 @@ import {
 export function LismFixture() {
   const [saved, setSaved] = useState(0);
   return (
-    <Box as="main" isContainer>
+    <Box as="main" isContainer data-testid="lism-container">
       <h1>Lism styling contract</h1>
       <Card.Root p={{ base: '1rem', md: '2rem' }} data-testid="lism-card">
         <Card.Title>Account</Card.Title>

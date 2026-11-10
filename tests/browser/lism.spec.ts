@@ -8,8 +8,23 @@ async function verifyResponsiveProps(page: Page) {
   await expect.poll(padding).toBe('16px');
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect.poll(padding).toBe('32px');
+  // Lism breakpoints are container queries. A narrow ancestor at the same
+  // wide viewport must return to the base value.
+  const container = page.getByTestId('lism-container');
+  await container.evaluate((node) => {
+    node.style.width = '320px';
+  });
+  await expect.poll(padding).toBe('16px');
+  await container.evaluate((node) => {
+    node.style.removeProperty('width');
+  });
+  await expect.poll(padding).toBe('32px');
   await expect(card).not.toHaveAttribute('p');
-  return { narrowPadding: '16px', widePadding: await padding() };
+  return {
+    narrowPadding: '16px',
+    widePadding: await padding(),
+    narrowContainerAtWideViewport: '16px',
+  };
 }
 
 test.beforeEach(async ({ page }) => {

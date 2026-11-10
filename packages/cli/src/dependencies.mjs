@@ -59,7 +59,7 @@ export async function dependencyPlan(cwd, dependencies, requested) {
     manager,
     args: [
       manager === 'npm' ? 'install' : 'add',
-      '--ignore-scripts',
+      ...(manager === 'yarn' ? [] : ['--ignore-scripts']),
       ...packages,
     ],
   };
@@ -78,7 +78,21 @@ export function installDependencies(cwd, plan) {
         `"${plan.manager}.cmd" ${plan.args.map((arg) => `"${arg}"`).join(' ')}`,
       ]
     : plan.args;
-  const result = spawnSync(command, args, { cwd, stdio: 'inherit' });
+  const result = spawnSync(command, args, {
+    cwd,
+    stdio: 'inherit',
+    // Yarn Modern rejects Classic's --ignore-scripts. Both configuration
+    // variables are supported by their respective Yarn generation; Modern
+    // explicitly ignores the Classic setting. Keep workspace settings intact.
+    env:
+      plan.manager === 'yarn'
+        ? {
+            ...process.env,
+            YARN_ENABLE_SCRIPTS: 'false',
+            YARN_IGNORE_SCRIPTS: 'true',
+          }
+        : process.env,
+  });
   if (result.error) throw result.error;
   if (result.status !== 0)
     throw new Error(

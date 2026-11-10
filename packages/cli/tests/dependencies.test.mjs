@@ -30,6 +30,11 @@ test('dependency planning respects packageManager and lockfiles and rejects ambi
       (await dependencyPlan(cwd, dependencies, 'yarn')).manager,
       'yarn',
     );
+    assert.deepEqual((await dependencyPlan(cwd, dependencies, 'yarn')).args, [
+      'add',
+      '@base-ui/react@^1.9.0',
+      'lism-css@^1.1.0',
+    ]);
     await assert.rejects(
       dependencyPlan(cwd, dependencies, 'npm; echo bad'),
       /Use npm/,

@@ -26,7 +26,9 @@ export default function ButtonExample() {
         <Button disabled>Disabled button</Button>
       </Flex>
       <Flex g="0.75rem" fxw="wrap" ai="center">
-        <Button variant="secondary">Supporting action</Button>
+        <Button variant="secondary" px="1.5rem">
+          Supporting action
+        </Button>
         <Button variant="destructive">Delete account</Button>
         <Button variant="link">Show details</Button>
         <a href="https://utakata-ui.dev/">Go to the docs (link)</a>
