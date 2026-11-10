@@ -30,7 +30,7 @@ test.beforeEach(async ({ page, screenReader }) => {
   await screenReader.navigateToWebContent();
 });
 
-test.afterEach(async ({ browser, screenReader }) => {
+test.afterEach(async ({ browser, page, screenReader }) => {
   await test.info().attach('screen-reader-output', {
     body: JSON.stringify({
       reader: screenReader.name,
@@ -44,6 +44,15 @@ test.afterEach(async ({ browser, screenReader }) => {
     }),
     contentType: 'application/json',
   });
+  // Firefox on Windows can hang closing its accessibility tree after NVDA has
+  // exited. Close the page while the reader can still service it, then stop
+  // the reader explicitly. Cleanup failures must fail, not be swallowed by
+  // the adapter's best-effort finalizer.
+  try {
+    await page.close();
+  } finally {
+    await screenReader.stop();
+  }
 });
 
 test('[assistive.control-name] reader navigation announces the email control name and role', async ({
