@@ -12,8 +12,10 @@ Handle exactly one sub-issue per run, one branch and one PR.
    (title, branch, body) for the issue number; if a PR already covers it, stop
    and report that it is skipped.
 2. Start from the latest default branch: `git fetch origin main` then
-   `git checkout -B <branch> origin/main`. Use `feat/component-<name>` for new
-   components and `feat/<topic>` otherwise. Never stack on another feature branch.
+   `git checkout -b <branch> origin/main`. Use `feat/component-<name>` for new
+   components and `feat/<topic>` otherwise. If the branch name already exists
+   locally or on `origin`, stop and ask instead of resetting it (never use
+   `checkout -B` or force-push here). Never stack on another feature branch.
 3. Follow `skills/utakata-component/SKILL.md` and `AGENTS.md`. Update `index.ts`,
    manifest, quality rules, tests, ja/en docs and examples, and `skills/utakata-ui`
    together. Do not edit generated `dist`, `.blume` or component pages.
