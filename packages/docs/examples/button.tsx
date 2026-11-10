@@ -25,6 +25,18 @@ export default function ButtonExample() {
         ))}
         <Button disabled>無効なボタン</Button>
       </Flex>
+      <Flex style={{ gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Button variant="secondary">補助操作</Button>
+        <Button variant="destructive">アカウントを削除</Button>
+        <Button variant="link">詳細を表示</Button>
+        <a href="https://utakata-ui.dev/">ドキュメントへ移動（リンク）</a>
+        <Button iconOnly square aria-label="追加">
+          +
+        </Button>
+        <Button iconOnly square size="lg" variant="outline" aria-label="設定">
+          *
+        </Button>
+      </Flex>
     </Stack>
   );
 }

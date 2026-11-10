@@ -3,7 +3,14 @@
 export const coverage = {
   Button: {
     axes: {
-      variants: ['solid', 'outline', 'ghost'],
+      variants: [
+        'solid',
+        'secondary',
+        'outline',
+        'ghost',
+        'destructive',
+        'link',
+      ],
       sizes: ['sm', 'md', 'lg'],
     },
     selector: '.ui-button',
