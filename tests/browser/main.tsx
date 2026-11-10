@@ -12,6 +12,7 @@ import {
   Card,
   Checkbox,
   Collapsible,
+  Command,
   Dialog,
   DropdownMenu,
   Field,
@@ -719,6 +720,103 @@ function MenuStates() {
   );
 }
 
+const commandGroups = [
+  {
+    value: 'Pages',
+    items: [
+      { value: 'home', label: 'Home' },
+      { value: 'settings', label: 'Settings' },
+    ],
+  },
+  {
+    value: 'Actions',
+    items: [
+      { value: 'copy', label: 'Copy link' },
+      { value: 'delete', label: 'Delete project' },
+    ],
+  },
+];
+
+function CommandItems({ run }: { run: (value: string) => void }) {
+  return (
+    <>
+      <Command.Empty>No commands found</Command.Empty>
+      <Command.List>
+        {(group: (typeof commandGroups)[number]) => (
+          <Command.Group key={group.value} items={group.items}>
+            <Command.GroupLabel>{group.value}</Command.GroupLabel>
+            <Command.Collection>
+              {(item: (typeof commandGroups)[number]['items'][number]) => (
+                <Command.Item
+                  key={item.value}
+                  value={item}
+                  disabled={item.value === 'delete'}
+                  onClick={() => run(item.value)}
+                >
+                  {item.label}
+                  {item.value === 'copy' ? (
+                    <Command.Shortcut aria-hidden="true">
+                      Ctrl+L
+                    </Command.Shortcut>
+                  ) : null}
+                </Command.Item>
+              )}
+            </Command.Collection>
+          </Command.Group>
+        )}
+      </Command.List>
+    </>
+  );
+}
+
+function CommandStates() {
+  // An always-visible listbox would be seen by every page-wide listbox query in
+  // the other specs, so the standalone list is only rendered for #command.
+  const standalone = window.location.hash === '#command';
+  const [ran, setRan] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+  return (
+    <section aria-label="Command states">
+      <Button>Before command</Button>
+      {standalone ? (
+        <Command.Root items={commandGroups}>
+          <Command.Panel>
+            <Command.Input
+              aria-label="Find a command"
+              placeholder="Type a command"
+            />
+            <CommandItems run={(value) => setRan((all) => [...all, value])} />
+          </Command.Panel>
+        </Command.Root>
+      ) : null}
+      <Button>After command</Button>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Trigger render={<Button variant="outline" />}>
+          Open palette
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Backdrop />
+          <Dialog.Popup>
+            <Dialog.Title>Command palette</Dialog.Title>
+            <Command.Root items={commandGroups}>
+              <Command.Panel>
+                <Command.Input aria-label="Search commands" />
+                <CommandItems
+                  run={(value) => {
+                    setRan((all) => [...all, `palette:${value}`]);
+                    setOpen(false);
+                  }}
+                />
+              </Command.Panel>
+            </Command.Root>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
+      <output aria-label="Commands run">{JSON.stringify(ran)}</output>
+    </section>
+  );
+}
+
 function AlertDialogStates() {
   const [deletions, setDeletions] = useState(0);
   const [open, setOpen] = useState(false);
@@ -1208,6 +1306,7 @@ function Fixture() {
       <PopoverStates />
       <MenuStates />
       <AlertDialogStates />
+      <CommandStates />
       <SheetStates />
       <ToastStates />
       <ToggleGroupStates />

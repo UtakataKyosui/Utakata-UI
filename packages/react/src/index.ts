@@ -65,6 +65,11 @@ export type {
   CollapsibleTriggerProps,
 } from './components/Collapsible.js';
 export { Collapsible } from './components/Collapsible.js';
+export type {
+  CommandInputProps,
+  CommandRootProps,
+} from './components/Command.js';
+export { Command } from './components/Command.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
