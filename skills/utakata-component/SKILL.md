@@ -17,9 +17,12 @@ Add behavior-focused tests for affected accessible names, disabled behavior,
 label relationships, focus or dismissal. Follow the existing axe test pattern.
 Manual quality rules remain unverified until checked in a real browser.
 
-Update handwritten docs for changed usage. Generate reference content with
-`pnpm --filter @utakata-ui/docs generate:reference`; the generated
-`packages/docs/docs/components.md` is ignored and should not be committed.
+Update handwritten docs for changed usage in both `packages/docs/docs/` (ja)
+and `packages/docs/docs/en/`, and keep each example in `packages/docs/examples/`
+matched by its English version in `packages/docs/examples/en/`. Generate reference content with
+`pnpm --filter @utakata-ui/docs generate:reference`; generated component pages
+are ignored and should not be committed. When manifest text changes, update the
+reported keys in `packages/docs/i18n/ja/` until the translation audit passes.
 
 Run relevant tests first, then the checks required by `AGENTS.md`. Report public
 API changes and outstanding manual verification.

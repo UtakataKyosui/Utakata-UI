@@ -4,7 +4,7 @@
 
 - `packages/react/src`: Public exports in `index.ts`; components in `components/`, manifest and quality rules in `metadata/`, CSS in `styles/`, and tests in `tests/`.
 - `packages/mcp/src`: tools exposing the same manifest to agents.
-- `packages/docs`: Blume documentation; `docs/components.md` is generated.
+- `packages/docs`: Blume documentation (ja default, en under `docs/en/`). Component pages under `docs/components/` and `docs/en/components/` are generated except `preview.mdx`; Japanese manifest text comes from `i18n/ja/`; English pages use the English examples in `examples/en/`.
 - `skills/utakata-ui`: consumer-facing UI usage skill; keep it consistent with the public API.
 
 ## Implementation
@@ -14,7 +14,7 @@ Preserve Base UI keyboard, dismissal and focus behavior. Use Lism primitives and
 CSS custom properties rather than a second styling or interaction system.
 When changing public components, update `index.ts`, `manifest.ts`, relevant
 quality rules, tests and documentation together. TypeScript source imports use
-`.js` extensions. Do not edit generated `dist`, `.blume` or `docs/components.md`.
+`.js` extensions. Do not edit generated `dist`, `.blume` or generated component pages.
 
 ## Accessibility requirements
 

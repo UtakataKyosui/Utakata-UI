@@ -1,0 +1,17 @@
+{
+  "57c96fdee54f": "すぐに反映される設定のためのオン・オフのスイッチです。Base UI の Switch を基にしています。",
+  "453b287c0601": "`Switch.Root` に `Switch.Thumb` を入れます。名前は `Field.Root` の中の `Field.Label` か、囲む label 要素で付け、ラベルの文言はどちらの状態でも同じにします。Base UI は自身の隠れた input で name/value を送信します。送信ボタンで確定する選択には Checkbox を使います。開発時の診断は、名前の取得元が見つからない場合に警告します。",
+  "643447b16304": "Base UI は `role=\"switch\"`、`aria-checked`、Space での切り替えを公開します。つまみの位置が、色に加えて状態を伝えます。変化しない表示ラベルは利用側で用意します。",
+  "cdc789e64fda": "現在の状態を表すようにラベルを変えないでください（例: 「オン」/「オフ」）。",
+  "f4604759fd17": "中間や 3 状態の値に Switch を使わないでください。",
+  "845db6b27773": "Base UI の `SwitchRootProps`（`checked`、`defaultChecked`、`onCheckedChange`、`disabled`、`readOnly`、`required`、`name`、`value`）",
+  "9e462695b6d6": "Base UI の `SwitchThumbProps`",
+  "22c2e5d0e488": "スイッチは `role=\"switch\"`、`Field.Label` または囲む label からの変化しない名前、つまみの位置と同期した `aria-checked` を公開します。",
+  "f579bd5e4e81": "`Switch.Root` と `Switch.Thumb` を `Field.Root` の中で `Field.Label` と組み合わせるか、label で囲んでください。ラベルの文言は状態によらず変えません。",
+  "990653ce2864": "Space とクリックでそれぞれ 1 回切り替わります。無効と読み取り専用のスイッチは変化しません。",
+  "9c81901b6f9f": "Base UI の Switch のキーボード操作、無効状態、読み取り専用の挙動を維持してください。",
+  "b4aba2344ec4": "オンのスイッチはフォームで name と value を送信し、制御された更新は反映され、フォームのリセットは `defaultChecked` に戻します。",
+  "c792d4908d01": "`name`/`value` で Base UI の隠れた input を使い、別の input を追加しないでください。",
+  "1820571c6839": "オンとオフは、すべてのテーマと強制カラーモードで色だけでなくつまみの位置でも区別でき、フォーカスが見え、操作対象は 24×24 CSS px 以上で、動きを減らす設定では動きがなくなります。",
+  "662d81da5a38": "両方の状態、フォーカス、無効、強制カラーモード、動きを減らす設定、200% ズームを実ブラウザーで確認してください。"
+}

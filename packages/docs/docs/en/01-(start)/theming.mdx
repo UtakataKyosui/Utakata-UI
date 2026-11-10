@@ -1,0 +1,100 @@
+---
+title: Theme colors
+description: Change theme colors with CSS variables and apply them to your app
+---
+
+Utakata UI colors can be changed with CSS custom properties. You do not need to rewrite components or add another styling library.
+
+## Try colors [#try]
+
+You can change the primary color and the text color shown on top of it. The change applies to the examples inside Preview, and CSS to copy appears below. It does not affect the docs color scheme, and reloading restores the standard colors.
+
+<Component path="en/theme" />
+
+## Apply to your app [#apply]
+
+Load the library styles in your global CSS, then write the overrides after them. If you [copied the source with the CLI](/en/registry), replace the import with a relative path to where `src/components/utakata/styles/styles.css` actually lives.
+
+```css
+@import "@utakata-ui/react/styles.css";
+
+:root {
+  --ui-color-primary: #6d28d9;
+  --ui-color-on-primary: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ui-color-primary: #c4b5fd;
+    --ui-color-on-primary: #1e1535;
+  }
+}
+```
+
+By default the colors follow the OS light/dark setting. When you override them, set text and background colors as a pair for both light and dark. Overrides outside CSS layers take precedence over the library's `utakata.tokens` layer.
+
+## Variables you can change [#variables]
+
+| Variable | Purpose |
+| --- | --- |
+| `--ui-color-primary` | Primary actions and selected states |
+| `--ui-color-on-primary` | Text and icons on the primary color |
+| `--ui-color-surface` | Background of inputs, popups and similar |
+| `--ui-color-text` | Body text and labels |
+| `--ui-color-muted` | Supplementary descriptions |
+| `--ui-color-border` | Borders |
+| `--ui-color-danger` | Errors and dangerous states |
+| `--ui-focus-ring` | Focus box-shadow |
+| `--ui-radius-control` | Control corner radius |
+| `--ui-shadow-popup` | Popup shadow |
+
+Set your app's page background and body text color as needed.
+
+```css
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
+```
+
+## Apps where users choose a theme [#user-selection]
+
+Update `document.documentElement.dataset.brand` from the settings screen and switch colors on the root element. Setting it on the root lets the colors reach portals rendered under body, such as Dialog. Keep the initial SSR render fixed, and use browser APIs only in event handlers or client-side code.
+
+```tsx
+<label htmlFor="brand">Theme color</label>
+<select
+  id="brand"
+  defaultValue="blue"
+  onChange={(event) => {
+    document.documentElement.dataset.brand = event.target.value;
+  }}
+>
+  <option value="blue">Blue</option>
+  <option value="violet">Violet</option>
+</select>
+```
+
+```css
+:root[data-brand="violet"] {
+  --ui-color-primary: #6d28d9;
+  --ui-color-on-primary: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-brand="violet"] {
+    --ui-color-primary: #c4b5fd;
+    --ui-color-on-primary: #1e1535;
+  }
+}
+```
+
+Blue uses the standard colors as they are. This example does not save the choice. If you persist it, keep the choice usable where storage is unavailable, and design how the initial HTML reflects the saved choice in your app.
+
+When switching light and dark manually, adding `data-theme` alone does not change the library colors. Define `color-scheme` and the seven color variables above in separate light and dark selectors. You can remove the attribute when the user chooses to follow the OS.
+
+## Checks after changing colors [#verification]
+
+Check against 4.5:1 for normal text, 3:1 for large text and 3:1 for UI boundaries and states needed for identification, using the colors as composited on the actual background. The ratio above is computed from the two opaque colors you chose; it is not a verification of the whole screen.
+
+In both light and dark, check normal, selected, error and focus states, keyboard operation, forced colors, and 200% text size with reflow. Do not convey errors or selection by color alone; combine color with wording or shape. Real-browser and screen reader verification of a custom theme is your responsibility, and these checks have not been performed on real devices for this sample.

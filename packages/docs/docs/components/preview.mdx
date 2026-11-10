@@ -4,35 +4,35 @@ description: 開発中のコンポーネントを操作して確認できます�
 ---
 
 ライブラリ本体を使った実例です。Previewで操作し、Codeで実装を確認できます。
-APIの詳細は[コンポーネント仕様](./components)を参照してください。
+APIの詳細は[コンポーネント仕様](/components)を参照してください。
 
-## Button
+## Button [#button]
 
-詳しい使い方とAPIは[Button](./components/button)を参照してください。
+詳しい使い方とAPIは[Button](/components/button)を参照してください。
 
 3つのvariantとサイズ、無効状態の表示例です。ボタンを押すとクリック回数が変わります。
 
 <Component path="button" />
 
-## Field
+## Field [#field]
 
-詳しい使い方とAPIは[Field](./components/field)を参照してください。
+詳しい使い方とAPIは[Field](/components/field)を参照してください。
 
 ラベル・入力欄・補足と、無効状態の表示例です。入力内容は送信・保存されません。
 
 <Component path="field" />
 
-## Dialog
+## Dialog [#dialog]
 
-詳しい使い方とAPIは[Dialog](./components/dialog)を参照してください。
+詳しい使い方とAPIは[Dialog](/components/dialog)を参照してください。
 
 ボタンで開き、Tabキーで移動、Escapeキーや閉じるボタンで閉じられます。
 
 <Component path="dialog" />
 
-## Kbd
+## Kbd [#kbd]
 
-詳しい使い方とAPIは[Kbd](./components/kbd)を参照してください。
+詳しい使い方とAPIは[Kbd](/components/kbd)を参照してください。
 
 単一キーと組み合わせの表示例です。組み合わせは`KbdGroup`の`aria-label`で読み上げ用の名前を付けます。
 
@@ -40,9 +40,9 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 
 <Component path="kbd" />
 
-## Separator
+## Separator [#separator]
 
-詳しい使い方とAPIは[Separator](./components/separator)を参照してください。
+詳しい使い方とAPIは[Separator](/components/separator)を参照してください。
 
 横・縦の区切りです。既定は装飾として支援技術から隠し、`decorative={false}`で意味のある区切りにします。
 
@@ -50,89 +50,89 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 
 <Component path="separator" />
 
-## Badge
+## Badge [#badge]
 
-詳しい使い方とAPIは[Badge](./components/badge)を参照してください。
+詳しい使い方とAPIは[Badge](/components/badge)を参照してください。
 
 4つのvariant、アイコン付き、長い文言の表示例です。状態は色ではなく文言で伝えます。
 
 <Component path="badge" />
 
-## Skeleton
+## Skeleton [#skeleton]
 
-詳しい使い方とAPIは[Skeleton](./components/skeleton)を参照してください。
+詳しい使い方とAPIは[Skeleton](/components/skeleton)を参照してください。
 
 読み込み中の形状を示します。Skeleton自体は読み上げず、親の`aria-busy`と状態テキストで読み込みを伝えます。ボタンで読み込み完了を切り替えられます。
 
 <Component path="skeleton" />
 
-## Spinner
+## Spinner [#spinner]
 
-詳しい使い方とAPIは[Spinner](./components/spinner)を参照してください。
+詳しい使い方とAPIは[Spinner](/components/spinner)を参照してください。
 
 3つのサイズと、ボタン内で`decorative`として使う例です。単独では`role="status"`と視覚的に隠れたラベルで処理中を伝えます。
 
 <Component path="spinner" />
 
-## Card
+## Card [#card]
 
-詳しい使い方とAPIは[Card](./components/card)を参照してください。
+詳しい使い方とAPIは[Card](/components/card)を参照してください。
 
 フォームを含むCardと、見出しレベルを`level`で変えたCardの例です。Card自体はクリックできません。
 
 <Component path="card" />
 
-## Alert
+## Alert [#alert]
 
-詳しい使い方とAPIは[Alert](./components/alert)を参照してください。
+詳しい使い方とAPIは[Alert](/components/alert)を参照してください。
 
 ページ内の通知です。通常の通知は自動で読み上げません。ボタンを押すと`role="alert"`の領域にエラーが表示されます。
 
 <Component path="alert" />
 
-## Avatar
+## Avatar [#avatar]
 
-詳しい使い方とAPIは[Avatar](./components/avatar)を参照してください。
+詳しい使い方とAPIは[Avatar](/components/avatar)を参照してください。
 
 画像、読み込み失敗時のFallback、隣に名前がある装飾画像（`alt=""`）の例です。
 
 <Component path="avatar" />
 
-## Progress
+## Progress [#progress]
 
-詳しい使い方とAPIは[Progress](./components/progress)を参照してください。
+詳しい使い方とAPIは[Progress](/components/progress)を参照してください。
 
 確定値・0%・不確定状態の進捗バーです。`label`、`aria-label`、`aria-labelledby`のいずれかで名前を付けます。`value={null}`は不確定状態で、0%とは区別されます。
 
 <Component path="progress" />
 
-## Table
+## Table [#table]
 
-詳しい使い方とAPIは[Table](./components/table)を参照してください。
+詳しい使い方とAPIは[Table](/components/table)を参照してください。
 
 キャプション・行/列見出し・数値の右寄せ・セル内のリンクとボタンを含む表です。幅が足りないときは`Table.Container`だけが横スクロールし、フォーカスして矢印キーでスクロールできます。
 
 <Component path="table" />
 
-## Breadcrumb
+## Breadcrumb [#breadcrumb]
 
-詳しい使い方とAPIは[Breadcrumb](./components/breadcrumb)を参照してください。
+詳しい使い方とAPIは[Breadcrumb](/components/breadcrumb)を参照してください。
 
 現在位置までの階層を示すナビゲーションです。既定の名前は「パンくずリスト」で、区切りと省略記号は読み上げ対象から外れます。
 
 <Component path="breadcrumb" />
 
-## Pagination
+## Pagination [#pagination]
 
-詳しい使い方とAPIは[Pagination](./components/pagination)を参照してください。
+詳しい使い方とAPIは[Pagination](/components/pagination)を参照してください。
 
 通常のリンクでページを移動します。現在のページは`active`で示し、先頭では「前のページ」が無効になりTabキーの移動先から外れます。
 
 <Component path="pagination" />
 
-## Input
+## Input [#input]
 
-詳しい使い方とAPIは[Input](./components/input)を参照してください。
+詳しい使い方とAPIは[Input](/components/input)を参照してください。
 
 1行のテキスト入力です。`Field.Root`の中では`Field.Control`の代わりに置き、ラベル・補足・エラーを1つの入力欄に関連付けます。サイズ、読み取り専用、無効状態の表示例です。
 
@@ -140,153 +140,153 @@ APIの詳細は[コンポーネント仕様](./components)を参照してくだ�
 
 <Component path="input" />
 
-## Textarea
+## Textarea [#textarea]
 
-詳しい使い方とAPIは[Textarea](./components/textarea)を参照してください。
+詳しい使い方とAPIは[Textarea](/components/textarea)を参照してください。
 
 複数行の入力欄です。改行でき、縦方向にサイズを変えられます。文字数の上限は`Field.Description`などで文章でも伝えます。
 
 <Component path="textarea" />
 
-## NativeSelect
+## NativeSelect [#nativeselect]
 
-詳しい使い方とAPIは[NativeSelect](./components/nativeselect)を参照してください。
+詳しい使い方とAPIは[NativeSelect](/components/nativeselect)を参照してください。
 
 ブラウザー標準のselectです。OSの候補表示とキーボード操作をそのまま使います。`option`と`optgroup`を子要素に渡します。
 
 <Component path="nativeselect" />
 
-## Checkbox
+## Checkbox [#checkbox]
 
-詳しい使い方とAPIは[Checkbox](./components/checkbox)を参照してください。
+詳しい使い方とAPIは[Checkbox](/components/checkbox)を参照してください。
 
 未選択・選択・一部選択（indeterminate）を、色だけでなくチェックや横線の形でも示します。`Field.Label`またはラベル要素で名前を付けます。
 
 <Component path="checkbox" />
 
-## Switch
+## Switch [#switch]
 
-詳しい使い方とAPIは[Switch](./components/switch)を参照してください。
+詳しい使い方とAPIは[Switch](/components/switch)を参照してください。
 
 すぐに反映される設定のオン/オフです。つまみの位置でも状態を示し、ラベルの文言は切り替えても変えません。
 
 <Component path="switch" />
 
-## RadioGroup
+## RadioGroup [#radiogroup]
 
-詳しい使い方とAPIは[RadioGroup](./components/radiogroup)を参照してください。
+詳しい使い方とAPIは[RadioGroup](/components/radiogroup)を参照してください。
 
 縦・横配置と無効な項目を含む単一選択の例です。矢印キーで項目を移動・選択します。グループ名は`aria-labelledby`で見えるテキストを参照し、各項目は項目内のテキストで名前を付けます。
 
 <Component path="radiogroup" />
 
-## Select
+## Select [#select]
 
-詳しい使い方とAPIは[Select](./components/select)を参照してください。
+詳しい使い方とAPIは[Select](/components/select)を参照してください。
 
 ラベル付きの単一選択です。矢印キーや文字入力で移動し、Enterで選択、Escapeで値を変えずに閉じてTriggerにフォーカスが戻ります。ネイティブのピッカーを使いたい場合はNativeSelectを使います。
 
 <Component path="select" />
 
-## Slider
+## Slider [#slider]
 
-詳しい使い方とAPIは[Slider](./components/slider)を参照してください。
+詳しい使い方とAPIは[Slider](/components/slider)を参照してください。
 
 数値範囲から値を選ぶ例です。矢印キーでstepずつ、Page Up/Downで大きく、Home/Endで最小・最大に移動します。値は`Slider.Value`で表示し、読み上げ用の値は`format`や`getAriaValueText`で調整します。
 
 <Component path="slider" />
 
-## Collapsible
+## Collapsible [#collapsible]
 
-詳しい使い方とAPIは[Collapsible](./components/collapsible)を参照してください。
+詳しい使い方とAPIは[Collapsible](/components/collapsible)を参照してください。
 
 1つの領域を開閉します。トリガーはボタンとして`aria-expanded`で開閉状態を伝え、閉じた内容はTab移動の対象になりません。
 
 <Component path="collapsible" />
 
-## Accordion
+## Accordion [#accordion]
 
-詳しい使い方とAPIは[Accordion](./components/accordion)を参照してください。
+詳しい使い方とAPIは[Accordion](/components/accordion)を参照してください。
 
 見出し付きの複数項目を開閉します。`Accordion.Header`の`level`でページの見出し階層に合わせ、`multiple`で複数同時に開けます。
 
 <Component path="accordion" />
 
-## Tabs
+## Tabs [#tabs]
 
-詳しい使い方とAPIは[Tabs](./components/tabs)を参照してください。
+詳しい使い方とAPIは[Tabs](/components/tabs)を参照してください。
 
 矢印キー・Home・Endでタブ間を移動し、EnterかSpaceで切り替えます。初期表示するタブは`defaultValue`か`value`で必ず指定します。
 
 <Component path="tabs" />
 
-## Toggle
+## Toggle [#toggle]
 
-詳しい使い方とAPIは[Toggle](./components/toggle)を参照してください。
+詳しい使い方とAPIは[Toggle](/components/toggle)を参照してください。
 
 押下状態を`aria-pressed`と塗り・枠線で示すボタンです。アイコンだけの場合は`iconOnly`と`aria-label`が必須です。
 
 <Component path="toggle" />
 
-## Tooltip
+## Tooltip [#tooltip]
 
-詳しい使い方とAPIは[Tooltip](./components/tooltip)を参照してください。
+詳しい使い方とAPIは[Tooltip](/components/tooltip)を参照してください。
 
 ホバーとキーボードフォーカスで短い補足テキストを表示します。Escapeで閉じ、ポインターをPopup上へ移しても消えません。Triggerには別途アクセシブル名が必要で、Tooltipを唯一のラベルや必須情報の唯一の提示場所にしないでください。内容はテキストのみで、操作要素はPopoverへ置きます。
 
 <Component path="tooltip" />
 
-## Popover
+## Popover [#popover]
 
-詳しい使い方とAPIは[Popover](./components/popover)を参照してください。
+詳しい使い方とAPIは[Popover](/components/popover)を参照してください。
 
 Triggerに紐づく非モーダルのポップアップです。`Popover.Title`で名前、`Popover.Description`で説明を付けます。フォーカス移動・復帰、Escapeと外側操作での閉鎖はBase UIが担います。
 
 <Component path="popover" />
 
-## DropdownMenu
+## DropdownMenu [#dropdownmenu]
 
-詳しい使い方とAPIは[DropdownMenu](./components/dropdownmenu)を参照してください。
+詳しい使い方とAPIは[DropdownMenu](/components/dropdownmenu)を参照してください。
 
 ボタン操作の一覧です。矢印キー・Home/End・文字入力で項目を移動し、Enterで実行すると閉じてTriggerへフォーカスが戻ります。無効な項目は矢印キーで到達できますが実行されません。ページ移動のナビゲーションには使わず、リンクの一覧を使ってください。
 
 <Component path="dropdownmenu" />
 
-## AlertDialog
+## AlertDialog [#alertdialog]
 
-詳しい使い方とAPIは[AlertDialog](./components/alertdialog)を参照してください。
+詳しい使い方とAPIは[AlertDialog](/components/alertdialog)を参照してください。
 
 削除など重要な操作の確認です。開くとキャンセルにフォーカスし、外側をクリックしても閉じません。Escapeキーかキャンセルで閉じ、フォーカスは元のボタンに戻ります。
 
 <Component path="alertdialog" />
 
-## Toast
+## Toast [#toast]
 
-詳しい使い方とAPIは[Toast](./components/toast)を参照してください。
+詳しい使い方とAPIは[Toast](/components/toast)を参照してください。
 
 フォーカスを移さずに状態を知らせる一時通知です。ポインターを重ねるかフォーカスすると自動で消えるまでの時間が止まり、F6キーで通知領域へ移動できます。エラー通知は自動で消えない設定（`timeout: 0`）で表示します。
 
 <Component path="toast" />
 
-## InputGroup
+## InputGroup [#inputgroup]
 
-詳しい使い方とAPIは[InputGroup](./components/inputgroup)を参照してください。
+詳しい使い方とAPIは[InputGroup](/components/inputgroup)を参照してください。
 
 既存の`Input`・`Textarea`の前後や上下に、アイコン・単位・ボタンを添えます。ラベルは`Field.Label`で付け、装飾アイコンは`aria-hidden`、単位など意味のある文字は`aria-describedby`で入力欄に関連付けます。`align`は配置の指定で表示順を入れ替えないため、DOMの順序を見た目の順序に合わせて書きます。付属ボタンは既定で`type="button"`のため、押してもフォームは送信されません。
 
 <Component path="inputgroup" />
 
-## ToggleGroup
+## ToggleGroup [#togglegroup]
 
-詳しい使い方とAPIは[ToggleGroup](./components/togglegroup)を参照してください。
+詳しい使い方とAPIは[ToggleGroup](/components/togglegroup)を参照してください。
 
 `Toggle`をまとめ、Tabキーでグループへ1回だけ入り、`orientation`に応じた矢印キー・Home・Endで項目間を移動します。既定では1つだけ押下でき、`multiple`で個別に押下できます。どちらも未選択に戻せるため、必ず1つ選ぶ場合は`RadioGroup`を使います。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
 
 <Component path="togglegroup" />
 
-## ButtonGroup
+## ButtonGroup [#buttongroup]
 
-詳しい使い方とAPIは[ButtonGroup](./components/buttongroup)を参照してください。
+詳しい使い方とAPIは[ButtonGroup](/components/buttongroup)を参照してください。
 
 関連する`Button`の境界と角丸をつなげて表示します。各ボタンは通常どおりTabキーで1つずつ移動し、variant・size・無効状態・typeはボタン側の指定のままです。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
 

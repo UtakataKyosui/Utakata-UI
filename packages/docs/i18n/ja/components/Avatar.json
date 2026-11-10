@@ -1,0 +1,20 @@
+{
+  "502bf70bf5f5": "人物や組織の画像を、テキストの代替表示とともに表示します。Base UI の Avatar を基にしています。",
+  "73913e38b3c8": "`Avatar.Root` に `Avatar.Image` と `Avatar.Fallback` を入れます。イニシャルは Fallback の `children` として渡し、名前を分割したり生成したりはしません。表示された名前が隣にある場合は、名前が 2 度読まれないように `alt=\"\"` とし、Fallback に `aria-hidden=\"true\"` を付けます。画像は `object-fit: cover` で収め、サイズは `--ui-avatar-size` で指定します。",
+  "0a57ad2171cf": "Base UI は画像の読み込み後にだけ img を描画するため、支援技術は画像の alt か Fallback のテキストのどちらかを受け取ります。`alt` は型で必須です。`alt=\"\"` は装飾画像を示します。利用側は Fallback のテキストが同じ人物を表すようにします。",
+  "3fb9ed21997f": "`alt` を省略したり、人物の名前ではなく写真の内容を説明したりしないでください。",
+  "0630f91341e8": "Avatar をボタンとして使わず、独自の名前を持つ Button やリンクで囲んでください。",
+  "af4f575613df": "`string`（`Avatar.Image` で必須。装飾の場合は `\"\"`）",
+  "856ef33e20b5": "ミリ秒の `number`（`Avatar.Fallback`）",
+  "7f3934601500": "Base UI の `AvatarRootProps` と `size`",
+  "8ed42e3c8ee2": "Base UI の `AvatarImageProps`。`alt` は必須",
+  "b898be857535": "Base UI の `AvatarFallbackProps`（`delay`）",
+  "4d787c3ba6ed": "`Avatar.Image` は常に明示的な alt を持ちます。単独で表示する場合は人物や組織の名前、隣に名前が表示されている場合は `alt=\"\"` と `aria-hidden` の Fallback です。",
+  "1e56bc596a98": "名前を `alt` に渡すか、Avatar の隣に名前が表示されている場合は `alt=\"\"` とし、`Avatar.Fallback` に `aria-hidden=\"true\"` を付けてください。",
+  "25f0a267d729": "Fallback は、画像の読み込みまで、エラーの後、`src` の変更後に新しい画像が読み込まれるまで表示され、Fallback の `delay` に従います。",
+  "7e350cf7ccbb": "Base UI の Avatar の読み込み状態の処理を維持し、常に `Avatar.Fallback` の内容を用意してください。",
+  "34225afd9e1b": "実ブラウザーで、各サイズは円形で描画され、画像は `object-fit: cover` で歪まずに円を満たします。代替テキストは対応するすべてのテーマと強制カラーモードでアバターの背景に対して 4.5:1 以上のコントラストを保ち、強制カラーモードでも枠線が見える状態を保ちます。",
+  "08160a775391": "`Avatar.Image` の `object-fit: cover` と強制カラーモードの枠線を維持してください。`--ui-avatar-background` の上書きと代替テキストの色を背景に対して確認します。",
+  "18eb4cee71da": "実際のブラウザーズーム 200% でも代替テキストがアバター内で読み取れ、支援技術は画像の alt か代替テキストを 1 度だけ読み上げます。",
+  "daab923ca636": "実ブラウザーでブラウザーズームとスクリーンリーダーの出力を確認してください。実施するまでは未検証のままにします。"
+}

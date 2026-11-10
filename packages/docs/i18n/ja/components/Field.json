@@ -1,0 +1,14 @@
+{
+  "1f0e6fdc768c": "Base UI の Field のパーツで構成するフォームの項目です。",
+  "5f42fa26b131": "`Field.Root` に `Field.Label`・`Field.Control` と、必要に応じて Description や Error のパーツを入れます。",
+  "11c75071f6a1": "すべてのコントロールを表示される `Field.Label` と関連付けます。補足情報には Description と Error を使います。開発時の診断は、名前の取得元の欠落や、ラベル・説明の参照切れを警告します。",
+  "3cd0f59dc563": "プレースホルダーだけをラベルにしないでください。",
+  "8a8e787be7e3": "コントロールを構成するときに `Field.Label` を省略しないでください。",
+  "1a055d186bd5": "Base UI の `FieldRootProps`",
+  "32860e1c27e9": "Base UI の `FieldLabelProps`",
+  "57610cf40033": "Base UI の `FieldControlProps`",
+  "82362438ed30": "Base UI の `FieldDescriptionProps`",
+  "1fecd4379bba": "Base UI の `FieldErrorProps`",
+  "20a7b0512205": "コントロールがラベルと説明に関連付けられています。",
+  "95db5a2ddc1e": "`Field.Root` の中で Label・Control・Description を組み合わせてください。"
+}

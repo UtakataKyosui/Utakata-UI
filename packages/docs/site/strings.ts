@@ -1,0 +1,36 @@
+export type Locale = 'ja' | 'en';
+
+export const strings = {
+  ja: {
+    prop: 'Prop',
+    part: 'パーツ',
+    type: '型・説明',
+    default: '既定値',
+    props: 'Props',
+    none: 'なし',
+    required: '必須',
+    unspecified: '—',
+    severity: { error: '必須', warning: '推奨' },
+    remediation: '対応方法',
+    applicability: '適用範囲',
+    residual: '残る確認',
+    criteria: 'WCAG 達成基準',
+    states: '検証する状態',
+  },
+  en: {
+    prop: 'Prop',
+    part: 'Part',
+    type: 'Type / notes',
+    default: 'Default',
+    props: 'Props',
+    none: 'None',
+    required: 'Required',
+    unspecified: '—',
+    severity: { error: 'Required', warning: 'Recommended' },
+    remediation: 'Remediation',
+    applicability: 'Applicability',
+    residual: 'Residual checks',
+    criteria: 'WCAG success criteria',
+    states: 'Verified states',
+  },
+} as const;

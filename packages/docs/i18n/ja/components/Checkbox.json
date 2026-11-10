@@ -1,0 +1,20 @@
+{
+  "c595b2ed3cba": "チェックあり・なし・中間の状態を持つチェックボックスです。Base UI の Checkbox を基にしています。",
+  "9df3ee1babce": "`Checkbox.Root` に `Checkbox.Indicator` を入れます。名前は `Field.Root` の中の `Field.Label` か、囲む label 要素で付けます。空の Indicator は、チェック時にチェックマーク、中間状態でダッシュを描画し、独自の `children` は両方のマークを置き換えます。Base UI は自身の隠れた input で name/value を送信します。開発時の診断は、名前の取得元が見つからない場合に警告します。",
+  "5be3888a3a46": "Base UI は `role=\"checkbox\"`、`aria-checked`（mixed を含む）、Space での切り替えを公開します。状態は色だけでなくマークの形で示します。表示されるラベルと、グループの文脈は利用側で用意します。",
+  "b5a90b299a07": "ネイティブや隠れたチェックボックスの input を追加しないでください。",
+  "d5b0021083c5": "`indeterminate` を使う場合、Indicator の `children` にチェックの記号だけを渡さないでください。中間状態が見えなくなります。",
+  "a4337c9b7d6d": "状態が変わったときにラベルの文言を変えないでください。",
+  "25b970907b5e": "Base UI の `CheckboxRootProps`（`checked`、`defaultChecked`、`onCheckedChange`、`indeterminate`、`disabled`、`readOnly`、`required`、`name`、`value`）",
+  "ddeb2855e72e": "Base UI の `CheckboxIndicatorProps`。空の場合はチェックマークかダッシュを描画",
+  "19da72cf8d65": "チェックボックスは `role=\"checkbox\"`、`Field.Label` または囲む label からの名前、状態に一致する `aria-checked` の true・false・mixed を公開します。",
+  "bc0e88b941f0": "`Checkbox.Root` を `Field.Root` の中で `Field.Label` と組み合わせるか、label 要素で囲んでください。中間状態には `indeterminate` を使います。",
+  "55e8efe24bfe": "Space でチェックボックスが 1 回切り替わり、ラベルのクリックでも切り替わります。無効なチェックボックスは変化せず、通知もしません。",
+  "ee2809fcc448": "Base UI の Checkbox のキーボード操作と無効状態の挙動を維持してください。",
+  "2cd65d015e81": "チェックされたチェックボックスはフォームで name と value を送信し、制御された更新は反映されます。キャンセルされないフォームのリセットは `defaultChecked` に戻し、キャンセルされたリセットは現在の状態を保ちます。",
+  "c7a83a47c676": "`name`/`value` で Base UI の隠れた input を使い、別の隠れた input を追加しないでください。",
+  "81437b5a0f0f": "実ブラウザーのリセットボタンは、リセットがキャンセルされない場合に限り両方の `defaultChecked` の状態に戻します。キャンセルされたリセットでは選択状態と送信される値を保ちます。",
+  "fc866b38a03e": "すべてのリセットのリスナーの実行後に `defaultPrevented` を尊重し、`checkbox.reset-browser` を検証してください。",
+  "b63134bf61fa": "チェックなし・あり・中間・フォーカス・無効・エラーの各状態は、すべてのテーマと強制カラーモードで色だけでなく形でも区別でき、操作対象は 24×24 CSS px 以上です。",
+  "6b799d676ed3": "各状態をライト・ダークのテーマ、強制カラーモード、200% ズームで、実ブラウザーで確認してください。"
+}

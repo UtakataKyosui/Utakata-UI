@@ -74,7 +74,7 @@ function Example() {
 
 Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS MEDIAの解説](https://ics.media/entry/240411/)に沿って、長いURLの折り返しと日本語の厳格な禁則処理を適用します。
 
-既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のコンポーネントを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。
+既存のBlumeアプリを `pnpm dev` で起動し、「UIプレビュー」ページで開発中のコンポーネントを操作できます。`packages/docs/examples/` の実例をBlumeのPreview / Codeタブで表示しています。英語ページは同じ名前の `packages/docs/examples/en/` の実例を表示するため、実例を追加・変更したときは両方を更新してください。Blumeは実例のiframeを常に `lang="en"` で出力するため、ビルド後に `scripts/set-example-lang.mjs` がパスに応じて `ja` と `en` に書き換えます（`pnpm dev` では書き換えません）。
 
 プレビュー専用のCSSは `packages/docs/examples.css` から読み込み、Blumeの `examples.css` 設定でiframe内に隔離します。サンプルのTSXからグローバルCSSをimportするとドキュメント本体にも混入するため、CSSのimportはこの専用ファイルにまとめてください。利用側のアプリでは通常どおり `@utakata-ui/react/styles.css` を読み込みます。
 
@@ -192,7 +192,11 @@ pnpm check
 
 ### ドキュメントサイト
 
-ドキュメントサイトには [Blume](https://useblume.dev/docs/quickstart) を使用します。`packages/docs/docs` の Markdown と `blume.config.ts` で内容と設定を管理します。コンポーネント一覧の `components.md` と、実例・仕様を載せた `components/*.mdx` の個別ページは UI 本体の公開 manifest から起動・ビルド時に生成するため、直接編集しません。
+ドキュメントサイトには [Blume](https://useblume.dev/docs/quickstart) を使用します。`packages/docs/docs` の Markdown と `blume.config.ts` で内容と設定を管理します。既定の言語は日本語で、英語版は `packages/docs/docs/en/` に同じ構成で置きます。手書きのページを変更したときは、両方の言語を更新してください。
+
+`docs/components/` と `docs/en/components/` のコンポーネントページ（`preview.mdx` を除く）は、`scripts/generate-reference.mjs` が UI 本体の公開 manifest から起動・ビルド時に生成するため、直接編集しません。ページ内の Props の表や品質要件のカードは、`site/` にある Utakata UI のコンポーネントで静的に描画します。
+
+manifest は英語で書かれています（MCP と共有する公開仕様のため）。日本語版の文言は `packages/docs/i18n/ja/` の辞書から取得します。キーは英語の原文の SHA-256 の先頭12文字です。manifest の文言を変更すると、生成スクリプトと `pnpm --filter @utakata-ui/docs test:reference` が未翻訳と古いキーを報告して失敗します。報告されたキーで辞書を更新し、古いキーを削除してください。コード片はバッククォートで囲みます。
 
 `pnpm dev` で開発サーバーを起動します。`pnpm build:docs` は UI 本体を先にビルドし、検索インデックスを含む公開用の静的ファイルを `packages/docs/dist` に生成します。このディレクトリを静的ホスティングに配置できます。ローカルで成果物を確認する場合は `pnpm --filter @utakata-ui/docs preview` を実行します。
 
