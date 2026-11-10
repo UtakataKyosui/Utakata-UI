@@ -20,6 +20,7 @@ import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
+import { sheetQualityRules } from './components/Sheet.js';
 import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
@@ -123,6 +124,7 @@ export const qualityRules = {
   ],
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
+  Sheet: sheetQualityRules,
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,

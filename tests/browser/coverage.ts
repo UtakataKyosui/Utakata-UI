@@ -49,6 +49,14 @@ export const coverage = {
       semantic: 'coverage.public-configurations',
     },
   },
+  Sheet: {
+    axes: { sides: ['top', 'right', 'bottom', 'left'] },
+    selector: '.ui-sheet__popup',
+    states: {
+      open: 'sheet.focus-containment',
+      closed: 'sheet.dismissal-focus-return',
+    },
+  },
   Badge: {
     axes: { variants: ['solid', 'outline', 'subtle', 'destructive'] },
     selector: '.ui-badge',
