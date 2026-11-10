@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { gatesPassed } from './ci-gate.mjs';
@@ -42,6 +43,31 @@ function fixture(required) {
     ),
   };
 }
+
+test('aggregate CLI identifies the failing job without blaming irrelevant browser skips', () => {
+  const jobs = fixture(false);
+  jobs.scope.outputs.checks = 'true';
+  jobs.checks.result = 'failure';
+  const result = spawnSync(process.execPath, ['scripts/ci-gate.mjs'], {
+    cwd: new URL('..', import.meta.url),
+    env: {
+      ...process.env,
+      RESULTS: JSON.stringify(jobs),
+      EVENT_NAME: 'pull_request',
+      GITHUB_STEP_SUMMARY: '',
+    },
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stdout,
+    /checks: failure; required for this change — gate failed/,
+  );
+  assert.match(
+    result.stdout,
+    /browser-accessibility: skipped; not required for this change\n/,
+  );
+});
 
 test('non-component PRs pass with irrelevant browser, screen reader and package gates skipped', () => {
   for (const files of [

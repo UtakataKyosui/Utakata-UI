@@ -283,3 +283,10 @@ PR #138's run 42849682829 failed Biome formatting in
 `packages/docs/blume.config.ts`; its browser gate was correctly skipped. Format
 that config without changing its values rather than weakening merge protection.
 No remote ruleset or required-check settings are changed by this work.
+
+
+The aggregate logs each job's result and whether the changed paths require it,
+and writes the same explanation to the Actions step summary. A failed Docs lint
+job is therefore reported as `checks: failure; required for this change`; a skipped
+browser/screen-reader workflow on that PR is explicitly `not required`. Scope
+selection failures and missing/invalid outputs remain hard failures.
