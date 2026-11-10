@@ -6,6 +6,7 @@ export function LayoutFixture({ variants = true }: { variants?: boolean }) {
     <main className="layout-contract">
       <h1>Layout contract / 表示検証</h1>
       <p>Long content / 入力内容とエラーを確認して保存してください。</p>
+      {!variants && <Button>Before contact form</Button>}
       {variants &&
         componentManifest.components.Button.variants.flatMap((variant) =>
           componentManifest.components.Button.sizes.map((size) => (
