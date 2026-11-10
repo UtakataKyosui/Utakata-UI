@@ -171,7 +171,8 @@ remain external prerequisites. No npm/environment/publisher settings were change
 Blume hosts the documentation MCP at `/api/mcp`; it has no separate npm
 package or release workflow. The Docs build verifies generated agent Markdown
 against the public manifest: Props, defaults, composition, accessibility,
-component quality rules and the linked shared quality page. Missing pages or
+and usage cautions. Removed quality sections and the shared quality page must
+not be published. Missing component pages or
 unconverted reference components fail the build. This checks information
 preservation, not WCAG conformance or assistive-technology behavior. HTTP
 transport and tools require a local dev server or a deployed site to verify.

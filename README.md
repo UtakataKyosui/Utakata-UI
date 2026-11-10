@@ -118,7 +118,7 @@ CI は npm 11.5.1 以降を確認し、公開リポジトリでは provenance �
 
 エージェント向けの入口は、Blume がホストする HTTP MCP `/api/mcp` です。
 接続方法は [MCP ガイド](packages/docs/docs/03-(agents)/mcp.md) を参照してください。
-`search_docs` で探し、`get_page` でコンポーネント仕様と共通の品質要件を取得します。
+`search_docs` で探し、`get_page` でコンポーネントの Props・構成・アクセシビリティ上の注意点を取得します。
 MCP 専用の npm パッケージや公開ワークフローは不要です。
 
 ### 専用 registry と CLI
@@ -212,7 +212,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 ### アクセシビリティの品質チェック
 
-`packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。Blume MCP では各コンポーネントページに加えて `/components/quality`（英語は `/en/components/quality`）を取得すると、共通ルールを参照できます。
+`packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。これらはライブラリの検証用メタデータです。公開ドキュメントでは使い方・Props・アクセシビリティ上の注意点を案内します。
 
 `pnpm test:a11y` は登録された自動ルールを検証します。Button の名前と無効化、Field のラベル・説明の関連付け、Dialog の名前・説明と Escape による閉鎖・フォーカス復帰をはじめ、各コンポーネントの metadata に登録した自動ルールを対象とします。必須の自動ルールが失敗、または検証処理が未登録なら CI が失敗します。ルール ID の重複や、存在しないルールに対する検証処理もエラーです。失敗時のレポートにはルール ID・要件・修正方法を含めます。コンポーネント追加・変更時は、ルールと `accessibility.test.tsx` の検証処理を一緒に更新してください。
 

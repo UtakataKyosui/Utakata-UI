@@ -2,7 +2,6 @@ import type { ComponentMarkdown } from 'blume';
 import type { ComponentGridItem } from './ComponentGrid.js';
 import type { PartRow } from './PartTable.js';
 import type { PropRow } from './PropTable.js';
-import type { QualityRuleItem } from './QualityRules.js';
 import { type Locale, strings } from './strings.js';
 
 // Agent-facing Markdown for the static Utakata components in components.ts.
@@ -37,34 +36,10 @@ const partTable: ComponentMarkdown = ({ props }) => {
   )}`;
 };
 
-const qualityRules: ComponentMarkdown = ({ props }) => {
-  const t = strings[locale(props.locale)];
-  return (props.rules as unknown as QualityRuleItem[])
-    .map((rule) =>
-      [
-        `- **\`${rule.id}\`** (${t.severity[rule.severity]}): ${rule.requirement}`,
-        `  - ${t.remediation}: ${rule.remediation}`,
-        rule.applicability
-          ? `  - ${t.applicability}: ${rule.applicability}`
-          : '',
-        rule.residual ? `  - ${t.residual}: ${rule.residual}` : '',
-        rule.criteria?.length
-          ? `  - ${t.criteria}: ${rule.criteria.join(', ')}`
-          : '',
-      ]
-        .filter(Boolean)
-        .join('\n'),
-    )
-    .join('\n');
-};
-
 const componentGrid: ComponentMarkdown = ({ props }) =>
   (props.items as unknown as ComponentGridItem[])
     .map((item) => `- [${item.name}](${item.href}): ${item.description}`)
     .join('\n');
-
-const badgeList: ComponentMarkdown = ({ props }) =>
-  (props.items as string[]).map((item) => `\`${item}\``).join(', ');
 
 const note: ComponentMarkdown = ({ props, children }) =>
   `> **${props.title}**\n>\n${children
@@ -74,10 +49,8 @@ const note: ComponentMarkdown = ({ props, children }) =>
     .join('\n')}`;
 
 export const markdownComponents = {
-  BadgeList: badgeList,
   ComponentGrid: componentGrid,
   Note: note,
   PartTable: partTable,
   PropTable: propTable,
-  QualityRules: qualityRules,
 };

@@ -6,7 +6,7 @@ description: Build accessible React interfaces using the verified Utakata-UI com
 
 # Utakata-UI implementation guide
 
-Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or use Blume MCP's `get_page` tool for `/en/components/<slug>` and `/en/components/quality` (Japanese: `/components/<slug>` and `/components/quality`). Use `search_docs` to find the component. Treat the manifest as the authority for supported component names, variants, defaults, composition, and accessibility requirements. The hosted docs follow the deployed version; inspect the installed `@utakata-ui/react/manifest` when working with another version. Do not invent props or substitute components that are not exported by `packages/react/src/index.ts`.
+Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or use Blume MCP's `get_page` tool for `/en/components/<slug>` (Japanese: `/components/<slug>`). Use `search_docs` to find the component. Treat the manifest as the authority for supported component names, variants, defaults, composition, and accessibility requirements. The hosted docs follow the deployed version; inspect the installed `@utakata-ui/react/manifest` when working with another version. Do not invent props or substitute components that are not exported by `packages/react/src/index.ts`.
 
 ## Component usage
 

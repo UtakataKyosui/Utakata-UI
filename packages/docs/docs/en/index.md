@@ -27,14 +27,14 @@ Component quality is verified by combining type constraints on public Props, dev
 
 The intended workflow is that you describe the screen, design and interactions you want to an agent, and the agent selects, composes and implements components according to the public Utakata UI specification.
 
-Utakata UI packages Base UI behavior and Lism CSS styling as Utakata UI components so agents can build interfaces from a shared design. Through the [component reference](/en/components) and [MCP](/en/mcp), agents can look up the public API, supported Props, composition and accessibility quality requirements.
+Utakata UI packages Base UI behavior and Lism CSS styling as Utakata UI components so agents can build interfaces from a shared design. Through the [component reference](/en/components) and [MCP](/en/mcp), agents can look up the public API, supported Props, composition and accessibility notes.
 
-Keeping the components consistent with their specification and quality requirements, so agents can find what they need, is also the maintainers' responsibility.
+Keeping the components consistent with their public API and usage guidance, so agents can find what they need, is also the maintainers' responsibility.
 
 ## Documentation [#documentation]
 
 - Getting started: [Installation](/en/getting-started), [Theme colors](/en/theming)
-- Components: [Component list](/en/components), [UI preview](/en/components/preview), [Shared quality requirements](/en/components/quality)
+- Components: [Component list](/en/components), [UI preview](/en/components/preview)
 - AI agents: [Using MCP](/en/mcp)
 - Advanced: [Copying and modifying source](/en/registry)
 

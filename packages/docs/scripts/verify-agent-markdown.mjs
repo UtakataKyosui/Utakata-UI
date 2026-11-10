@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { componentManifest } from '@utakata-ui/react/manifest';
 import {
@@ -61,40 +61,11 @@ export function verifyPage(markdown, component, name, locale, dictionary = {}) {
   }
   for (const value of component.avoid ?? [])
     requireText(markdown, localize(value), `${name}.avoid`);
-  for (const state of component.verificationStates)
-    requireText(markdown, `\`${state}\``, `${name}.states`);
-  verifyRules(markdown, component.qualityRules, localize, name);
-  requireText(
-    markdown,
-    `${locale === 'en' ? '/en' : ''}/components/quality`,
-    `${name}.shared rules link`,
-  );
-}
-
-export function verifyRules(
-  markdown,
-  rules,
-  localize = (value) => value,
-  context = 'shared',
-) {
   assert.doesNotMatch(
     markdown,
-    /<QualityRules\b/,
-    `${context}: unconverted quality rules`,
+    /(?:components\/quality|\[#quality\]|^#{1,6}\s+(?:品質要件|Quality requirements))/m,
+    `${name}: removed quality requirements section`,
   );
-  for (const rule of rules) {
-    requireText(markdown, `\`${rule.id}\``, context);
-    for (const field of [
-      'requirement',
-      'remediation',
-      'applicability',
-      'residual',
-    ])
-      if (rule[field])
-        requireText(markdown, localize(rule[field]), `${rule.id}.${field}`);
-    for (const criterion of rule.criteria ?? [])
-      requireText(markdown, criterion, `${rule.id}.criteria`);
-  }
 }
 
 export async function verifyAgentMarkdown(root) {
@@ -120,20 +91,11 @@ export async function verifyAgentMarkdown(root) {
       verifyPage(markdown, component, name, locale, dictionary);
       count++;
     }
-    const dictionary = JSON.parse(
-      await readFile(
-        new URL('../i18n/ja/shared.json', import.meta.url),
-        'utf8',
-      ),
+    const files = await readdir(new URL(`${prefix}components/`, root));
+    assert.ok(
+      !files.some((file) => /^quality(?:\.|$)/.test(file)),
+      'Removed shared quality page is still published',
     );
-    const markdown = await readFile(
-      new URL(`${prefix}components/quality.md`, root),
-      'utf8',
-    );
-    verifyRules(markdown, componentManifest.sharedQualityRules, (value) =>
-      locale === 'ja' ? translate(dictionary, value) : value,
-    );
-    count++;
   }
   return count;
 }
