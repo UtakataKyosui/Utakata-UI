@@ -163,9 +163,10 @@ actors. Applying it changes remote merge policy and requires confirmation under
 AGENTS.md. After explicit user approval on 2026-11-10 JST, ruleset `26865507`
 was applied and read back: active on `refs/heads/main`, strict `accessibility`
 check from GitHub Actions (integration 15368), no bypass actors. This remote
-setting is not applied automatically by a source PR. The `npm` environment should require
-the repository owner's review; scope ownership and the npm publisher binding
-remain external prerequisites. No npm/environment/publisher settings were changed.
+setting is not applied automatically by a source PR. The `npm` environment now
+permits only the main branch and has no manual reviewer gate, following the
+user's explicit approval on 2026-11-11 JST. Scope ownership and the npm publisher
+binding remain external prerequisites; no Secrets or publisher settings changed.
 
 Blume hosts the documentation MCP at `/api/mcp`; it has no separate npm
 package or release workflow. The Docs build verifies generated agent Markdown
