@@ -21,7 +21,26 @@ const referencedIcon: ButtonProps = {
 };
 // @ts-expect-error Icon-only buttons require an explicit name source.
 const unnamedIcon: ButtonProps = { iconOnly: true };
-void [namedIcon, referencedIcon, unnamedIcon];
+const squareIcon: ButtonProps = {
+  iconOnly: true,
+  square: true,
+  'aria-label': 'Add',
+};
+// @ts-expect-error Square targets require iconOnly (and therefore a name).
+const squareText: ButtonProps = { square: true };
+// @ts-expect-error A square icon-only button still requires a name source.
+const squareUnnamed: ButtonProps = { iconOnly: true, square: true };
+// @ts-expect-error There is no xs size.
+const extraSmall: ButtonProps = { size: 'xs' };
+void [
+  namedIcon,
+  referencedIcon,
+  unnamedIcon,
+  squareIcon,
+  squareText,
+  squareUnnamed,
+  extraSmall,
+];
 
 describe('development accessibility diagnostics', () => {
   it('warns for missing names on each public control without crashing', async () => {
