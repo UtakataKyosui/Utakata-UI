@@ -39,7 +39,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -406,6 +406,44 @@ function ButtonGroupWrapper(props: ButtonGroupProps) { return <ButtonGroup {...p
 export const wrappedButtonGroup = <ButtonGroupWrapper aria-label="History" />;
 // @ts-expect-error Wrappers must preserve the required group name.
 export const wrappedButtonGroupInvalid = <ButtonGroupWrapper />;
+export const calendarDay: CalendarDate = '2026-11-10';
+export const calendarRange: CalendarRange = { from: '2026-11-10', to: '2026-11-12' };
+export const calendarSingleProps: CalendarProps = { 'aria-label': 'Booking date', value: calendarDay, weekStartsOn: 1, minDate: '2026-11-03', isDateDisabled: (date) => date.endsWith('-23') };
+export const calendarRangeProps: CalendarProps = { 'aria-labelledby': 'stay', mode: 'range', value: calendarRange, onValueChange: (range) => range.from };
+export const calendarMonthProps: CalendarProps = { 'aria-label': 'Month', month: '2026-11', onMonthChange: (month) => month.slice(0, 4) };
+export const calendar = <Calendar {...calendarSingleProps} />;
+// @ts-expect-error Calendar must be named by aria-label or aria-labelledby in shipped declarations.
+export const calendarUnnamed: CalendarProps = { value: '2026-11-10' };
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const calendarBothNames: CalendarProps = { 'aria-label': 'x', 'aria-labelledby': 'y' };
+// @ts-expect-error Dates are ISO strings, not Date objects, in shipped declarations.
+export const calendarDateObject: CalendarProps = { 'aria-label': 'x', value: new Date() };
+// @ts-expect-error Dates need the year-month-day shape in shipped declarations.
+export const calendarWordDate: CalendarDate = 'tomorrow';
+export const calendarRangeAsString: CalendarProps = {
+  'aria-label': 'x',
+  mode: 'range',
+  // @ts-expect-error Range mode requires a { from, to } object in shipped declarations.
+  value: '2026-11-10',
+};
+export const calendarSingleAsRange: CalendarProps = {
+  'aria-label': 'x',
+  // @ts-expect-error Single mode requires a date string in shipped declarations.
+  value: { from: '2026-11-10' },
+};
+// @ts-expect-error weekStartsOn is limited to 0 through 6 in shipped declarations.
+export const calendarBadWeek: CalendarProps = { 'aria-label': 'x', weekStartsOn: 7 };
+// @ts-expect-error Month values use the YYYY-MM shape in shipped declarations.
+export const calendarBadMonth: CalendarProps = { 'aria-label': 'x', month: 'November' };
+// @ts-expect-error JSX usage must also name the calendar.
+export const calendarUnnamedJsx = <Calendar />;
+const calendarUnnamedSpread = { weekStartsOn: 1 as const };
+// @ts-expect-error Spreads cannot bypass the required calendar name.
+export const calendarSpreadUnnamed = <Calendar {...calendarUnnamedSpread} />;
+function CalendarWrapper(props: CalendarProps) { return <Calendar {...props} />; }
+export const wrappedCalendar = <CalendarWrapper aria-label="Booking date" />;
+// @ts-expect-error Wrappers must preserve the required calendar name.
+export const wrappedCalendarInvalid = <CalendarWrapper />;
 export const inputGroupAddon: InputGroupAddonProps = { align: 'block-end' };
 export const inputGroupIconButton: InputGroupButtonProps = { iconOnly: true, 'aria-label': 'Clear' };
 export const inputGroup = <Field.Root><Field.Label>Search</Field.Label><InputGroup.Root><Input type="search" /><InputGroup.Addon {...inputGroupAddon}><InputGroup.Button {...inputGroupIconButton} /></InputGroup.Addon></InputGroup.Root></Field.Root>;

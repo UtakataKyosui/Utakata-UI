@@ -26,6 +26,7 @@ import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
 import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
 import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
+import { calendarChecks } from './quality/Calendar.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
@@ -170,6 +171,7 @@ describe('accessibility regression checks', () => {
       ...inputGroupChecks,
       ...toggleGroupChecks,
       ...buttonGroupChecks,
+      ...calendarChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

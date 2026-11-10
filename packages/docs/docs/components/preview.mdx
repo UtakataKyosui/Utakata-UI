@@ -291,3 +291,11 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 関連する`Button`の境界と角丸をつなげて表示します。各ボタンは通常どおりTabキーで1つずつ移動し、variant・size・無効状態・typeはボタン側の指定のままです。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
 
 <Component path="buttongroup" />
+
+## Calendar [#calendar]
+
+詳しい使い方とAPIは[Calendar](/components/calendar)を参照してください。
+
+1日または日付範囲を選ぶ月カレンダーです。日付は`"YYYY-MM-DD"`の文字列で、タイムゾーンや日付ライブラリには依存しません。Tabキーで日付へ1回だけ入り、矢印キー・Home・End・PageUp/PageDown（Shiftで年単位）で移動し、EnterまたはSpaceで選択します。選択不可の日（`minDate`・`maxDate`・`isDateDisabled`）にはフォーカスできますが選択できません。名前（`aria-label`か`aria-labelledby`）は型で必須です。
+
+<Component path="calendar" />

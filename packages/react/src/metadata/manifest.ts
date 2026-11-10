@@ -5,6 +5,7 @@ import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { buttonGroupManifest } from './components/ButtonGroup.js';
+import { calendarManifest } from './components/Calendar.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
@@ -175,6 +176,7 @@ const manifest = {
     InputGroup: inputGroupManifest,
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
+    Calendar: calendarManifest,
   },
 } as const;
 

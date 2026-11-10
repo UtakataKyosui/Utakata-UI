@@ -9,6 +9,7 @@ import {
   Breadcrumb,
   Button,
   ButtonGroup,
+  Calendar,
   Card,
   Checkbox,
   Collapsible,
@@ -831,6 +832,38 @@ function ToastStates() {
   );
 }
 
+function CalendarStates() {
+  const [value, setValue] = useState<unknown>(null);
+  const [single, setSingle] = useState('');
+  return (
+    <section aria-label="Calendar states">
+      <Button>Before calendar</Button>
+      <Calendar
+        aria-label="Booking dates"
+        mode="range"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        defaultValue={{ from: '2026-11-12', to: '2026-11-14' }}
+        minDate="2026-10-01"
+        isDateDisabled={(date) => date === '2026-11-18'}
+        onValueChange={setValue}
+      />
+      <Calendar
+        aria-label="Appointment date"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        weekStartsOn={1}
+        onValueChange={setSingle}
+      />
+      <Button>After calendar</Button>
+      <output aria-label="Calendar value">{JSON.stringify(value)}</output>
+      <output aria-label="Single value">{single}</output>
+    </section>
+  );
+}
+
 function ToggleGroupStates() {
   const [changes, setChanges] = useState<string[]>([]);
   return (
@@ -1175,6 +1208,7 @@ function Fixture() {
       <AlertDialogStates />
       <ToastStates />
       <ToggleGroupStates />
+      <CalendarStates />
       <ButtonGroupStates />
       <InputGroupStates />
       <section aria-label="Additional public configurations">

@@ -5,6 +5,7 @@ import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { buttonGroupQualityRules } from './components/ButtonGroup.js';
+import { calendarQualityRules } from './components/Calendar.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
@@ -152,6 +153,7 @@ export const qualityRules = {
   InputGroup: inputGroupQualityRules,
   ToggleGroup: toggleGroupQualityRules,
   ButtonGroup: buttonGroupQualityRules,
+  Calendar: calendarQualityRules,
   shared: [
     {
       id: 'theme.reduced-motion',

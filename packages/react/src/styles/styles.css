@@ -1800,6 +1800,164 @@
     flex-wrap: nowrap;
   }
 
+  /* Calendar: marks never rely on color alone (border, weight, underline, line-through). */
+  .ui-calendar {
+    color: var(--ui-color-text);
+    display: block;
+    /* Growable, so a flex parent can shrink it below its preferred width. */
+    flex: 1 1 18rem;
+    max-inline-size: 22rem;
+  }
+
+  .ui-calendar__header {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-block-end: 0.5rem;
+  }
+
+  .ui-calendar__title {
+    flex: 1;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .ui-calendar__nav {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    justify-content: center;
+    min-block-size: 2.5rem;
+    min-inline-size: 2.5rem;
+  }
+
+  .ui-calendar__nav[aria-disabled="true"] {
+    border-style: dashed;
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-calendar__grid {
+    border-collapse: collapse;
+    inline-size: 100%;
+    table-layout: fixed;
+  }
+
+  .ui-calendar__weekday {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0;
+  }
+
+  .ui-calendar__cell,
+  .ui-calendar__outside {
+    padding: 0;
+    text-align: center;
+  }
+
+  .ui-calendar__day {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    inline-size: 100%;
+    min-block-size: 2.5rem;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  /* Hover only where it is sustained; selected days keep their own tint. */
+  @media (hover: hover) {
+    .ui-calendar__day:where(:not([aria-disabled="true"])):hover,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):hover {
+      border-color: var(--ui-color-border);
+    }
+  }
+
+  @media (hover: hover) and (forced-colors: none) {
+    .ui-calendar__day:where(
+        :not([aria-disabled="true"], [data-selected])
+      ):hover,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        transparent
+      );
+    }
+  }
+
+  @media (forced-colors: none) {
+    .ui-calendar__day:where(
+        :not([aria-disabled="true"], [data-selected])
+      ):active,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 16%,
+        transparent
+      );
+    }
+  }
+
+  .ui-calendar__day[data-today] {
+    text-decoration: underline 2px;
+    text-underline-offset: 0.25em;
+  }
+
+  .ui-calendar__day[data-selected] {
+    background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+    border: 2px solid currentColor;
+    font-weight: 700;
+  }
+
+  .ui-calendar__day[data-range-start],
+  .ui-calendar__day[data-range-end] {
+    box-shadow: inset 0 0 0 1px var(--ui-color-primary);
+  }
+
+  .ui-calendar__day[aria-disabled="true"] {
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .ui-calendar__day[data-today][aria-disabled="true"] {
+    text-decoration-line: underline line-through;
+  }
+
+  .ui-calendar__day:focus-visible,
+  .ui-calendar__nav:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-calendar__day[data-range-start]:focus-visible,
+  .ui-calendar__day[data-range-end]:focus-visible {
+    box-shadow:
+      inset 0 0 0 1px var(--ui-color-primary),
+      var(--ui-focus-ring);
+  }
+
+  .ui-calendar__status {
+    block-size: 1px;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+  }
+
   /* Button group: joins borders and end radii; buttons keep every other style */
   .ui-button-group {
     display: inline-flex;
@@ -2216,6 +2374,20 @@
 
     .ui-pagination__link[aria-current="page"] {
       border-color: Highlight;
+    }
+
+    .ui-calendar__day[data-selected] {
+      border-color: Highlight;
+    }
+
+    .ui-calendar__day[aria-disabled="true"],
+    .ui-calendar__nav[aria-disabled="true"] {
+      color: GrayText;
+    }
+
+    .ui-calendar__day:focus-visible,
+    .ui-calendar__nav:focus-visible {
+      outline: 2px solid Highlight;
     }
 
     .ui-pagination__link[aria-disabled="true"] {

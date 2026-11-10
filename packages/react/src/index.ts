@@ -46,6 +46,14 @@ export { Button } from './components/Button.js';
 export type { ButtonGroupProps } from './components/ButtonGroup.js';
 export { ButtonGroup } from './components/ButtonGroup.js';
 export type {
+  CalendarDate,
+  CalendarLabels,
+  CalendarMonth,
+  CalendarProps,
+  CalendarRange,
+} from './components/Calendar.js';
+export { Calendar } from './components/Calendar.js';
+export type {
   CardContentProps,
   CardDescriptionProps,
   CardFooterProps,

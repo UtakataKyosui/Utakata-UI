@@ -36,6 +36,7 @@ const verificationStates = {
   InputGroup: ['invalid', 'disabled', 'readOnly'],
   ToggleGroup: ['single', 'multiple', 'disabled'],
   ButtonGroup: ['disabled', 'wrapping'],
+  Calendar: ['single', 'range', 'disabled', 'today'],
 } as const;
 
 export function withVerificationStates<

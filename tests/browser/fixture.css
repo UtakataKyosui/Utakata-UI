@@ -54,6 +54,12 @@ section[aria-label="Badge states"] {
   min-width: 0;
 }
 
+/* Other sections can widen the shared grid track at 200% text size; bound this one by the viewport minus main's padding. */
+section[aria-label="Calendar states"] {
+  max-width: calc(100vw - 2rem);
+  min-width: 0;
+}
+
 .fixture-skeletons {
   align-items: center;
   display: flex;

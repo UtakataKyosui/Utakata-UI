@@ -280,6 +280,16 @@ export const coverage = {
       disabled: 'toggle-group.keyboard',
     },
   },
+  Calendar: {
+    axes: {},
+    selector: '.ui-calendar',
+    states: {
+      single: 'calendar.keyboard',
+      range: 'calendar.visual-states',
+      disabled: 'calendar.keyboard',
+      today: 'calendar.visual-states',
+    },
+  },
   ButtonGroup: {
     axes: { orientations: ['horizontal', 'vertical'] },
     selector: '.ui-button-group',

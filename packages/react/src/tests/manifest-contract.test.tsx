@@ -36,6 +36,21 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Calendar keyboard and visuals and keeps zoom and speech manual', () => {
+    const rules = componentManifest.components.Calendar?.qualityRules ?? [];
+    for (const id of ['calendar.keyboard', 'calendar.visual-states'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['calendar.zoom-theme', 'calendar.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
     const rules = componentManifest.components.ToggleGroup?.qualityRules ?? [];
     for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
@@ -544,6 +559,7 @@ describe('public manifest contract', () => {
       'InputGroup',
       'ToggleGroup',
       'ButtonGroup',
+      'Calendar',
     ]);
   });
 
