@@ -10,7 +10,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or use Blum
 
 ## Component usage
 
-- Install the npm package with `pnpm add @utakata-ui/react` and import components from `@utakata-ui/react`. Only use `@utakata-ui/cli add` when the user explicitly asks to copy component source for modification; in a project that already contains copied source (for example `src/components/utakata/`), import from that location instead and do not add the npm package alongside it. The separate `@utakata-ui/cli a11y --config <path>` command checks declared color contracts without installing components.
+- Install the npm package with `pnpm add @utakata-ui/react` and import components from `@utakata-ui/react`. Only use `@utakata-ui/cli init` / `add` when the user explicitly asks to copy component source for modification; `init --registry <URL or directory>` saves defaults in `utakata.json` and copies shared CSS and LICENSE, then `add <name>` installs components. In a project that already contains copied source (for example `src/components/utakata/`), import from that location instead and do not add the npm package alongside it. The separate `@utakata-ui/cli a11y --config <path>` command checks declared color contracts without installing components.
 - Import styles from `@utakata-ui/react/styles.css`.
 - Use `Button` for actions and provide a visible text label. For icon-only content set `iconOnly` and provide `aria-label` or `aria-labelledby`; this is enforced by TypeScript. Resolve development name/reference warnings and validate computed names with axe. A warning-free render is not proof of accessibility.
 - Compose `Field.Root` with a visible `Field.Label` and `Field.Control`. Add `Field.Description` or `Field.Error` when useful.

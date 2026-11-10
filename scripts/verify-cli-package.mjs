@@ -119,18 +119,41 @@ try {
         '--',
         `@utakata-ui/cli@${metadata.version}`,
         ...args,
-        '--registry',
-        registry,
         '--cwd',
         cwd,
       ],
       { cwd, encoding: 'utf8', timeout: 30_000 },
     );
-  assert.match(invoke('list'), /button\tButton/);
-  assert.match(invoke('add', 'button', 'field', '--dry-run'), /\[dry-run\]/);
+  assert.match(invoke('list', '--registry', registry), /button\tButton/);
+  assert.match(
+    invoke('init', '--registry', registry, '--dry-run'),
+    /\[dry-run\]/,
+  );
+  await assert.rejects(readFile(join(cwd, 'utakata.json')), { code: 'ENOENT' });
+  assert.match(
+    invoke('add', 'button', 'field', '--registry', registry, '--dry-run'),
+    /\[dry-run\]/,
+  );
   await assert.rejects(readFile(join(cwd, 'src/components/utakata/LICENSE')), {
     code: 'ENOENT',
   });
+  assert.match(invoke('init', '--registry', registry), /utakata.json/);
+  assert.equal(
+    JSON.parse(await readFile(join(cwd, 'utakata.json'), 'utf8')).directory,
+    'src/components/utakata',
+  );
+  assert.match(
+    await readFile(
+      join(cwd, 'src/components/utakata/styles/styles.css'),
+      'utf8',
+    ),
+    /lism-css/,
+  );
+  await assert.rejects(
+    readFile(join(cwd, 'src/components/utakata/components/Button.tsx')),
+    { code: 'ENOENT' },
+  );
+  assert.match(invoke('list'), /button\tButton/);
   assert.match(invoke('add', 'button', 'field'), /pnpm add @base-ui\/react/);
   assert.match(
     await readFile(
@@ -152,7 +175,7 @@ try {
   });
   await verifyHTTP(cwd, registry, metadata.version);
   console.log(
-    'Packed CLI: package-name execution, list, dry-run, source installation, repeat installation, HTTP download and a11y exit codes passed.',
+    'Packed CLI: package-name execution, init, saved defaults, list, dry-run, source installation, repeat installation, HTTP download and a11y exit codes passed.',
   );
 } finally {
   await rm(cwd, { recursive: true, force: true });

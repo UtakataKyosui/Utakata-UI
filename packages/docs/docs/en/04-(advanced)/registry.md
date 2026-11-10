@@ -25,21 +25,29 @@ The CLI needs Node.js 22 or later. The target project uses React 18.3.1 or later
 
 Components are fetched from the registry served by the docs site. Publishing the docs and publishing the CLI to npm are separate tasks. How to try it inside the repository is described below.
 
-## List and add commands [#commands]
+## Initialize, list and add commands [#commands]
 
 Replace `REGISTRY_URL` with `/registry/v1` under the URL where these docs are published. example.com is only an example. If you publish under a subpath, include that path.
 
 ```sh
 REGISTRY_URL="https://example.com/registry/v1"
 
-npx -y @utakata-ui/cli@0.1.0 list --registry "$REGISTRY_URL"
-npx -y @utakata-ui/cli@0.1.0 add button dialog field --registry "$REGISTRY_URL" --dry-run
-npx -y @utakata-ui/cli@0.1.0 add button dialog field --registry "$REGISTRY_URL"
+npx -y @utakata-ui/cli@0.1.0 init --registry "$REGISTRY_URL" --dry-run
+npx -y @utakata-ui/cli@0.1.0 init --registry "$REGISTRY_URL"
+npx -y @utakata-ui/cli@0.1.0 list
+npx -y @utakata-ui/cli@0.1.0 add button dialog field --dry-run
+npx -y @utakata-ui/cli@0.1.0 add button dialog field
 ```
 
 With pnpm, you can replace `npx -y @utakata-ui/cli@0.1.0` with `pnpm dlx @utakata-ui/cli@0.1.0`. Specify a published CLI version.
 
-Component names are the lowercase names from the [component list](/en/components) (for example `alertdialog`, `dropdownmenu`, `nativeselect`). You can also check the [dedicated catalog](/registry/v1/registry.json). The source is always specified with `--registry`, so there is no implicit fallback to another registry.
+`init` saves `schemaVersion: 1`, `registry` and `directory` in `utakata.json` at the project root and copies shared CSS and LICENSE into the target directory. It does not add components yet. Run the printed dependency installation command and import the CSS as described below. Existing application entry files are not edited automatically.
+
+`init` supports the same `--dir` / `--cwd` flags as `add`. Subsequent `list` / `add` commands read settings only from the `--cwd` root (the current directory by default); they do not search parent directories. Explicit `--registry` / `--dir` flags override saved values without updating the configuration. Local registry paths are saved relative to the project root. You can also skip `init` and continue passing `--registry` on each command.
+
+You can rerun `init`: identical files remain unchanged, and conflicts stop the operation before writing. Use `--overwrite` to allow replacing configuration or CSS. `--dry-run` does not create the configuration file either.
+
+Component names are the lowercase names from the [component list](/en/components) (for example `alertdialog`, `dropdownmenu`, `nativeselect`). You can also check the [dedicated catalog](/registry/v1/registry.json). The source must come from `--registry` or saved settings; there is no implicit fallback to another registry.
 
 ## Add dependencies [#dependencies]
 
