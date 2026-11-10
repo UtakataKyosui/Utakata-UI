@@ -107,6 +107,40 @@ Popover・DropdownMenu・Select・AlertDialog の開いた popup も同様に po
 
 Firefox/WebKit、実際のスクリーンリーダー・点字出力、実ブラウザーのズーム、全状態のfocusの見やすさ、物理デバイスでの操作、独自CSS、利用者のページ構成は自動検証の保証範囲外。既存の手動品質ルールを自動合格へ変更しない。全WCAG適合の証明にはならない。
 
+### 操作状態の対応表と必須ブラウザー証拠
+
+一時的な操作状態（hover・押下）と確定した状態（選択・checked・open・pressed）を別の視覚表現で区別する。hover と押下は中立の色味の変化だけで表し、選択状態の表現（primary の塗り・内側の枠・チェックマーク・ドットの位置）を借りない。hover は `@media (hover: hover)` の中だけに置き、タッチでの hover 残りを防ぐ。disabled・readOnly では反応させない。`:hover` が無いことだけは不具合とせず、Base UI の状態属性と描画結果で判断した。
+
+| 部品                               | hover                                      | 押下                                                                                                            | focus-visible    | 選択・checked・open                                                                         | disabled・readOnly                      | invalid                       |
+| ---------------------------------- | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------- | --------------------------------------- | ----------------------------- |
+| Button                             | 背景の色味（variant 別）                   | `:active` で色味を強める                                                                                        | フォーカスリング | 該当なし                                                                                    | `disabled` を除外、opacity 0.55         | 該当なし                      |
+| Collapsible / Accordion の Trigger | 色味 8%                                    | 色味 14%                                                                                                        | フォーカスリング | `data-panel-open` でシェブロンが回転（`aria-expanded` も公開）                              | `data-disabled` を除外                  | 該当なし                      |
+| Tabs.Tab                           | 色味 8% と文字色を本文色へ                 | 色味 14%                                                                                                        | フォーカスリング | `data-active` で下線と太字。選択中の Tab は hover で変えない                                | `data-disabled` を除外                  | 該当なし                      |
+| Toggle / ToggleGroup.Item          | 未押下は色味 8%                            | 色味 14%                                                                                                        | フォーカスリング | `data-pressed` で primary の塗りと内側の枠。押下中の hover と押下は塗りだけを濃くし枠は保つ | `data-disabled` を除外                  | 該当なし                      |
+| Select.Trigger                     | 色味 8%                                    | Base UI は pointerdown でポップアップを開きポインターを渡すため `:active` から外れる。`data-pressed` で色味 14% | フォーカスリング | `data-popup-open` で primary の枠                                                           | `data-disabled`・`data-readonly` を除外 | `data-invalid` で danger の枠 |
+| Checkbox                           | 未チェックは色味、チェック済みは塗りを濃く | 同左をさらに強める                                                                                              | フォーカスリング | `data-checked` / `data-indeterminate` の塗りとマーク                                        | `data-disabled`・`data-readonly` を除外 | danger の枠は hover でも保つ  |
+| Switch                             | トラックを濃く                             | さらに濃く                                                                                                      | フォーカスリング | `data-checked` の塗りとつまみの位置                                                         | `data-disabled`・`data-readonly` を除外 | danger の枠は hover でも保つ  |
+| RadioGroup.Item                    | インジケーターの色味                       | 色味 14%                                                                                                        | フォーカスリング | `data-checked` の枠とドット                                                                 | `data-disabled`・`data-readonly` を除外 | `data-invalid` で danger の枠 |
+| Slider.Thumb                       | 色味 18%                                   | `data-dragging` または `:active` で色味 32%                                                                     | フォーカスリング | 値は値テキストと位置で公開                                                                  | `data-disabled` を除外                  | 該当なし                      |
+
+強制配色では作者指定の色味が無視されるため、hover は `Highlight` の枠、押下は `Highlight` の塗りと `HighlightText` で表す。ただし Toggle と ToggleGroup.Item では `Highlight` の対が押下済みを表すため、未押下の項目の押下は下線で示し、その対を借りない。選択・checked の `Highlight` / `HighlightText` の対は hover と押下で上書きしない。強制配色の押下では、Toggle の押下済み項目と Checkbox・Switch のチェック済み項目は元から `Highlight` のため追加の変化はない。Select の押下は開いた状態の `Highlight` の枠で示す。Checkbox・Switch・Radio・Slider.Thumb の押下は hover と同じ `Highlight` の枠で、押下専用の塗りは持たない（Slider.Thumb のドラッグ中を除く）。
+
+invalid（Select・RadioGroup.Item・Checkbox・Switch）は枠の色だけで表すため、強制配色では色が置き換わり視覚的な手がかりが残らない。誤りの通知は `Field.Error` などのエラー文で行い、色だけに依存させないことは利用側の責任である。
+
+監査し変更しなかったもの: Input・Textarea・NativeSelect は文字入力で hover を必須としない（フォーカス・disabled・readOnly・invalid は既存）。Select と DropdownMenu の項目は `data-highlighted` の表現が既にある。Breadcrumb と Pagination の `:hover` は `@media (hover: hover)` に包んだ。
+
+`theme.interaction-states`、`theme.interaction-disabled`、`theme.interaction-forced-colors`、`theme.interaction-reduced-motion`、`theme.hover-touch` は Chromium light/dark の必須 browser ルールです。`tests/browser/interaction-states.spec.ts` が `?interaction` の専用 fixture（`tests/browser/interaction-fixture.tsx`）で、実際のマウスの移動と押下を使って確認します。押下はコントロールの外で離すため、Toggle や Checkbox は作動しません。
+
+- `theme.interaction-states`: Button の全 variant × size と上表の各部品で、hover と押下が静止時と異なり、押下が hover とも異なること、hover と押下が選択状態の box-shadow や outline を借りないこと、静止・hover・押下の全てで文字 4.5:1（Checkbox のチェック済みマーク、Switch、Radio、Slider.Thumb は部品の境界または塗りの 3:1）を満たすこと、要素の位置と大きさが変わらないことを、色の遷移が終わってから測ります。
+- `theme.interaction-disabled`: 無効な Button の全 variant × size、各部品の disabled と読み取り専用の Switch が、通常配色と強制配色の両方で、静止時・hover・押下の算出スタイルと位置が同一であることを確認します。無効なコントロールにコントラストの閾値は適用しません。
+- `theme.interaction-forced-colors`: 強制配色のエミュレーションで、hover の `Highlight` の枠、押下の `Highlight` の塗り（Toggle と ToggleGroup.Item は下線）、選択・checked の `Highlight` / `HighlightText` の対が hover と押下で保たれることを確認します。
+- `theme.interaction-reduced-motion`: `prefers-reduced-motion: reduce` をエミュレートし、上表の各コントロールとその `::before`・`::after` の静止・hover・押下で、遷移の時間が 0 秒でアニメーション名が `none` であること、それでも hover の背景が静止時と異なること（動きがなくても状態が見えること）を確認します。
+- `theme.hover-touch`: 配布する stylesheet の全 `.ui-` の `:hover` 規則が `(hover: hover)` の内側にあることを CSSOM で走査します（走査対象が 0 件なら失敗）。あわせて `hasTouch` / `isMobile` の Chromium コンテキストで `(hover: hover)` が偽であることを確認したうえで、Button・Collapsible・Accordion をタップしても背景が静止時へ戻ることを確認します。
+
+既知の不正例（検出器が効くことの確認）: 裸の `:hover` 規則、disabled への hover 反応、読めない押下色、反応を消す上書き、hover での位置ずれ、hover での選択風の影、強制配色で選択対を上書きする hover、強制配色で枠の手がかりが無い hover、動きを減らす設定で残る遷移、タッチでの hover 残りは、いずれも検査が失敗することを検証します。fixture に登録した全コントロールと `data-case` が一致しなければ失敗し、invalid の部品が `data-invalid` を公開することも確認します。
+
+残る未検証（手動ルール `theme.interaction-platform` と [ACCESSIBILITY-MANUAL.md](ACCESSIBILITY-MANUAL.md) で追跡する）: 実際のタッチデバイス（エミュレーションのタップは物理タッチの証拠ではない）、ペン・ハイブリッド端末、OS の強制配色・ハイコントラスト、スクリーンリーダーの状態通知、実キーボードのフォーカスと押下の併用、独自 CSS で上書きした表現、上表にない部品の状態。Select の押下は pointerdown でポップアップが開くため、ポインターを離す前の `:active` の見た目は測定対象外で、`data-pressed` を測定している。
+
 ## CI改善で追加した契約
 
 Dialogのブラウザー操作と実支援技術出力、テーマの描画コントラストとフォーカスを
