@@ -1,6 +1,145 @@
+/* Blume inlines this file into .blume/src/generated/, so relative imports
+   start there. scripts/generate-reference.mjs writes site/generated/.
+   Lism's element reset sits below Tailwind's base styles so it cannot restyle
+   Blume's chrome; the Utakata component rules sit above them. */
+@import "../../../site/generated/lism.css" layer(base);
+@import "../../../site/generated/utakata-components.css" layer(components);
+@import "../../../site/theme-tokens.css";
+
 /* Site typography; Blume loads this separately from the example iframes. */
 body {
   overflow-wrap: anywhere;
   word-break: normal;
   line-break: strict;
+}
+
+.utakata-docs-block {
+  margin-block: 1.5rem;
+}
+
+.utakata-docs-block .ui-table-container {
+  max-inline-size: 100%;
+}
+
+.utakata-docs-block .ui-table__caption {
+  text-align: start;
+  font-weight: 600;
+  padding-block-end: 0.5rem;
+}
+
+.utakata-docs-rules,
+.utakata-docs-grid,
+.utakata-docs-badges {
+  list-style: none;
+  padding: 0;
+}
+
+.utakata-docs-rules {
+  display: grid;
+  gap: 1rem;
+}
+
+.utakata-docs-rule-header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.utakata-docs-rule-details {
+  display: grid;
+  gap: 0.25rem 1rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin-block-start: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.utakata-docs-rule-details dt {
+  color: var(--ui-color-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  .utakata-docs-rule-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .utakata-docs-rule-details dd + dt {
+    margin-block-start: 0.5rem;
+  }
+}
+
+.utakata-docs-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+
+.utakata-docs-link-card {
+  block-size: 100%;
+  position: relative;
+}
+
+.utakata-docs-link-card a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* The whole card is the link's target area; the link text stays the name. */
+.utakata-docs-link-card a::after {
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.utakata-docs-link-card:has(a:focus-visible) {
+  outline: 2px solid var(--ui-color-primary);
+  outline-offset: 2px;
+}
+
+.utakata-docs-link-card:hover {
+  border-color: var(--ui-color-text);
+}
+
+.utakata-docs-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block: 0.5rem 1.5rem;
+}
+
+.utakata-docs-pager .ui-pagination__list {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  border-block-start: 1px solid var(--ui-color-border);
+  padding-block-start: 1.5rem;
+}
+
+.utakata-docs-pager .ui-pagination__link {
+  align-items: flex-start;
+  border-color: var(--ui-color-border);
+  flex-direction: column;
+  inline-size: 100%;
+  padding: 0.75rem 1rem;
+}
+
+.utakata-docs-pager-next {
+  grid-column-end: -1;
+  text-align: end;
+}
+
+.utakata-docs-pager-next .ui-pagination__link {
+  align-items: flex-end;
+}
+
+.utakata-docs-pager-label {
+  color: var(--ui-color-muted);
+  font-size: 0.75rem;
+}
+
+.utakata-docs-pager-title {
+  font-weight: 600;
 }

@@ -11,7 +11,10 @@
       "!playwright-report",
       "!test-results",
       "!unit-stability-results",
-      "!packages/docs/docs/components.md"
+      "!packages/docs/docs/components.md",
+      "!packages/docs/docs/components",
+      "!packages/docs/docs/en/components",
+      "!packages/docs/site/generated"
     ]
   },
   "formatter": {
@@ -34,5 +37,18 @@
     "formatter": {
       "quoteStyle": "single"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off",
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    }
+  ]
 }

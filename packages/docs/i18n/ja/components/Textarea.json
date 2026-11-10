@@ -1,0 +1,17 @@
+{
+  "ae25a34f5809": "Field のラベル付けと検証に連携する、複数行のネイティブの textarea です。",
+  "2cf02f285ce6": "`Field.Root` の中では `Field.Control` の代わりに Textarea を使います。ネイティブの textarea を持つ Base UI の `Field.Control` を描画するため、1 つの textarea がラベル・説明・エラー・検証状態を受け取ります。`size` は余白と文字サイズだけを変え、`maxLength` には影響しません。サイズ変更は縦方向です。開発時の診断は、名前の取得元が見つからない場合に警告します。",
+  "57b1994ac507": "Enter での改行を含め、ネイティブの textarea のセマンティクスを保ちます。文字数の上限や必須の条件は、利用側が `Field.Description` などの表示テキストで伝えます。",
+  "effaa455a013": "Textarea を `Field.Control` の中に描画したり、同じ項目に 2 つ目の textarea を追加したりしないでください。",
+  "ac2d5dc6c2b2": "プレースホルダーだけをラベルにしたり、文字数の上限をプレースホルダーで伝えたりしないでください。",
+  "ba9c63172954": "`Field.Root` の中で Textarea はちょうど 1 つの textarea を描画し、`Field.Label` で名前が付き、`Field.Description` と `Field.Error` で説明され、エラー時は `aria-invalid` を持ちます。",
+  "971149d4bc0a": "`Field.Control` の代わりに Textarea を使ってください。Field の外では、label 要素、`aria-label`、`aria-labelledby` のいずれかで textarea に名前を付けます。",
+  "4fe8692be4db": "改行を含む複数行の値が `onChange` に届き、フォームで送信されます。`maxLength` はネイティブの要素に渡されます。",
+  "979f2cd05cc1": "`value`/`defaultValue`、`maxLength`、`name` をネイティブの textarea にそのまま渡してください。",
+  "9833c46bbeb7": "無効な textarea はフォーカスも編集もできず、送信もされません。読み取り専用の textarea は値を保ち、フォーカスできます。",
+  "9aee5a7fdfa6": "ネイティブの `disabled` と `readOnly` 属性を使ってください。",
+  "e8e7cbf114c9": "実ブラウザーで、Enter は改行を挿入し、`maxLength` は超過した入力を防ぎ、無効な textarea は Tab で飛ばされ、読み取り専用の値は編集できません。",
+  "ec24405eb617": "実際のキーボード入力を使う必須の `textarea.keyboard-input` ブラウザー検証を実行し、ネイティブの textarea の挙動を維持してください。",
+  "734273a7b3b6": "長いテキストは折り返し、textarea は縦方向にサイズを変更でき、枠線・フォーカス・無効・エラーの各状態は、すべてのテーマ、200% ズーム、強制カラーモードで区別できる状態を保ちます。",
+  "6224b48c0f6e": "折り返し、手動でのサイズ変更、ズーム、リフロー、コントラスト、強制カラーモードを実ブラウザーで確認してください。"
+}

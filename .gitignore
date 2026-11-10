@@ -9,7 +9,11 @@ unit-stability-results/
 .fallow/
 packages/docs/.blume/
 packages/docs/docs/components.md
-packages/docs/docs/components/
+packages/docs/docs/components/*
+!packages/docs/docs/components/preview.mdx
+packages/docs/docs/en/components/*
+!packages/docs/docs/en/components/preview.mdx
+packages/docs/site/generated/
 .claude/settings.local.json
 .claude/*.local.md
 .codex/*.local.*

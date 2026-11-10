@@ -1,11 +1,17 @@
 {
   "entry": [
     "packages/docs/blume.config.ts",
+    "packages/docs/components.ts",
+    "packages/docs/docs/**/meta.ts",
+    "packages/docs/site/static/*.astro",
     "packages/docs/docs/**/*.mdx",
     "packages/docs/examples.css",
+    "packages/docs/theme.css",
+    "packages/docs/site/theme-tokens.css",
     "packages/docs/examples/**/*.tsx",
     "tests/browser/main.tsx",
     "scripts/required-browser-checks.mjs"
   ],
-  "ignoreDependencies": ["@markuplint/jsx-parser", "@markuplint/react-spec"]
+  "ignoreDependencies": ["@markuplint/jsx-parser", "@markuplint/react-spec"],
+  "ignoreUnresolvedImports": ["../../../site/**"]
 }

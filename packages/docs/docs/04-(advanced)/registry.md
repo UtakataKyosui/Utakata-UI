@@ -4,11 +4,11 @@ title: ソースを取り込んで改変する
 description: 専用のregistryとCLIでコンポーネントのソースを取得する
 ---
 
-Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です（[導入方法](./getting-started)）。このページの CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。
+Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です（[導入方法](/getting-started)）。このページの CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。
 
 CLI は **Base UI + Lism CSS** の構成に合わせた専用 registry から、コンポーネントのソース・型・アクセシビリティ診断・共通 CSS を自分のプロジェクトへコピーします。Tailwind CSS、shadcn CLI、`components.json` のセットアップは不要です。
 
-## npm パッケージとの違い
+## npm パッケージとの違い [#comparison]
 
 | 項目                                                | npm パッケージ               | CLI で取り込んだソース                                       |
 | --------------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
@@ -19,13 +19,13 @@ CLI は **Base UI + Lism CSS** の構成に合わせた専用 registry から、
 
 1つのアプリでは、どちらか一方の方式に揃えてください。
 
-## 前提
+## 前提 [#requirements]
 
 CLI には Node.js 22 以降が必要です。利用先は React 18.3.1 以降・React DOM・TypeScript と、CSS import を解決するバンドラーを使用します。
 
 コンポーネントの取得先は、docs サイトが配信する registry です。docs の公開と CLI の npm 公開は別の作業です。リポジトリ内での試し方は後述します。
 
-## 一覧と追加コマンド
+## 一覧と追加コマンド [#commands]
 
 `REGISTRY_URL` を、この docs を公開した URL の `/registry/v1` に置き換えて実行します。example.com は例示用です。サブパスで公開する場合は、そのパスも含めてください。
 
@@ -39,9 +39,9 @@ npx -y @utakata-ui/cli@0.1.0 add button dialog field --registry "$REGISTRY_URL"
 
 pnpm なら `npx -y @utakata-ui/cli@0.1.0` を `pnpm dlx @utakata-ui/cli@0.1.0` に置き換えられます。CLI のバージョンは公開済みの番号を指定してください。
 
-コンポーネント名は[コンポーネント一覧](./components)の小文字です（例: `alertdialog`、`dropdownmenu`、`nativeselect`）。[専用カタログ](/registry/v1/registry.json)でも確認できます。取得先は常に `--registry` で指定するため、別の registry への暗黙のフォールバックはありません。
+コンポーネント名は[コンポーネント一覧](/components)の小文字です（例: `alertdialog`、`dropdownmenu`、`nativeselect`）。[専用カタログ](/registry/v1/registry.json)でも確認できます。取得先は常に `--registry` で指定するため、別の registry への暗黙のフォールバックはありません。
 
-## 依存関係を追加する
+## 依存関係を追加する [#dependencies]
 
 CLI はソースを配置し、必要な依存パッケージのインストール用コマンドを表示します。package manager の実行や `package.json` の変更は行いません。表示されたコマンドを利用先で実行してください。現在の標準構成は次のとおりです。
 
@@ -51,7 +51,7 @@ pnpm add @base-ui/react@^1.9.0 lism-css@^1.1.0
 
 React・React DOM とその型定義はアプリ側で用意します。ソースを取り込む場合、`@utakata-ui/react` はインストールしません。
 
-## 配置先と読み込み
+## 配置先と読み込み [#location]
 
 既定の配置先は `src/components/utakata/` です。`--dir` で変更でき、`--cwd` で利用先のプロジェクトルートを指定できます。配置先はプロジェクトルートの下に限定しています。
 
@@ -70,11 +70,11 @@ export function SaveButton() {
 }
 ```
 
-CSS はグローバルエントリー（Next.js ならルート layout 等）で1度だけ読み込みます。[テーマカラー](./theming)から色も変更できます。
+CSS はグローバルエントリー（Next.js ならルート layout 等）で1度だけ読み込みます。[テーマカラー](/theming)から色も変更できます。
 
 相対 import 先の補助コード、型情報・品質メタデータ、共通 CSS、ライセンスも同じツリー構造で配置します。`KbdGroup` は `kbd` に含まれます。Lism のレイアウト部品は `lism-css/react` から直接 import できます。
 
-## 更新と既存ファイル
+## 更新と既存ファイル [#updates]
 
 同じ内容のファイルは変更せず、内容が異なる既存ファイルがある場合は追加処理を停止します。検証・競合の確認は書き込み前に行います。複数コンポーネントが同じ補助ファイルを使う場合も、一致を確認します。
 
@@ -86,9 +86,9 @@ npx -y @utakata-ui/cli@0.1.0 add button --registry "$REGISTRY_URL" --overwrite -
 
 コピーしたソースは npm パッケージの更新では更新されません。registry はそのビルド時点の UI バージョンを `packageVersion` に記録しています。再現可能な取得先が必要な場合は、同じビルド成果物をバージョン別の URL で保持してください。
 
-ラベルの型制約、開発時の診断、Base UI のキーボード・フォーカス処理を編集後も維持し、[導入方法](./getting-started)のアクセシビリティ要件を確認します。独自スタイルや完成画面の適合は、利用側でも検証してください。
+ラベルの型制約、開発時の診断、Base UI のキーボード・フォーカス処理を編集後も維持し、[導入方法](/getting-started)のアクセシビリティ要件を確認します。独自スタイルや完成画面の適合は、利用側でも検証してください。
 
-## 専用 registry の形式
+## 専用 registry の形式 [#format]
 
 配布先は `/registry/v1/registry.json` と `/registry/v1/button.json` 等です。カタログは `kind: "utakata-ui/catalog"`、各コンポーネントは `kind: "utakata-ui/component"`、形式のバージョンは `schemaVersion: 1` です。
 
@@ -96,7 +96,7 @@ npx -y @utakata-ui/cli@0.1.0 add button --registry "$REGISTRY_URL" --overwrite -
 
 CLI は形式・ファイルのハッシュ・パス・依存指定を検査します。ハッシュは内容の整合性を確認するもので、配布者の認証署名ではありません。リモートでは HTTPS、ローカル開発では localhost の HTTP またはディレクトリを利用できます。HTTP リダイレクトには追従しません。取得先には最終的な配信 URL を指定してください。
 
-## ビルドと公開前の確認
+## ビルドと公開前の確認 [#build]
 
 ```sh
 pnpm build:docs
@@ -108,7 +108,7 @@ node packages/cli/bin/utakata-ui.mjs add button --registry packages/docs/dist/re
 
 `pnpm dev` は registry を生成しません。HTTP で試す場合はビルド後に `pnpm --filter @utakata-ui/docs preview` を使い、その URL の `/registry/v1` を指定します。
 
-## CLI を npm で公開する
+## CLI を npm で公開する [#publishing]
 
 CLI は追加の実行時依存を持たない `packages/cli` パッケージです。コンポーネント本体は registry から取得するため、CLI を公開するために React パッケージを先に npm 公開する必要はありません。
 

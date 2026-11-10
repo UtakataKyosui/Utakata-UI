@@ -1,0 +1,18 @@
+{
+  "a2915b713d03": "Field のラベル付けと連携する、スタイル付きのネイティブの単一選択 select です。",
+  "b1021f860c52": "`Field.Root` の中では `Field.Control` の代わりに NativeSelect を使い、option/optgroup 要素を `children` として渡します。ネイティブの select を持つ Base UI の `Field.Control` を描画し、`className` と `ref` は select に適用されます。`size` は見た目の大きさで、ネイティブの size 属性と multiple 属性には対応していません。短くなじみのある選択肢や、プラットフォームのピッカーで動作させる必要があるフォームには NativeSelect を、選択肢の内容が豊富な場合は独自の Select を使います。開発時の診断は、名前の取得元が見つからない場合に警告します。",
+  "ba87b0fd89dc": "ネイティブの select のセマンティクス、プラットフォームのピッカー、キーボードでの選択を保ちます。矢印は装飾です（`aria-hidden`、`pointer-events: none`）。表示されるラベルと意味のある選択肢の文言は利用側で用意します。",
+  "87a741d1e15d": "`multiple` や、リストボックス表示にする size 属性を使わないでください。対象外です。",
+  "5721baf00425": "プレースホルダーの選択肢だけをラベルにしないでください。",
+  "ef62dd9ace84": "option 要素と optgroup 要素",
+  "0c3fb1061b49": "`Field.Root` の中で NativeSelect は 1 つのネイティブの select を描画し、`Field.Label` で名前が付き、`Field.Description` で説明されます。装飾の矢印は支援技術から隠れ、ポインターの入力を無視します。",
+  "f7e2d77aaf9c": "`Field.Control` の代わりに NativeSelect を使ってください。Field の外では、label 要素、`aria-label`、`aria-labelledby` のいずれかで select に名前を付けます。",
+  "ebbbb187f0e8": "選択肢、optgroup、無効な選択肢はネイティブの挙動を保ちます。選択した値は `onChange` に届き、フォームで送信され、フォームのリセットで `defaultValue` に戻ります。",
+  "c4901a308f59": "option/optgroup の `children`、`value`/`defaultValue`、`name`、`form` をネイティブの select にそのまま渡してください。",
+  "6c400eb4e9e0": "無効な select はフォーカスも変更もできず、送信もされません。",
+  "af25521cb2de": "ネイティブの `disabled` 属性か、`Field.Root` の `disabled` を使ってください。",
+  "c0834ce3edb5": "Chromium のライト・ダークで、すべてのサイズ、ラベル・説明・エラーの関連付け、キーボードでの選択、無効時の Tab 除外、フォームの値とリセット、操作対象の大きさ、描画上の文字・枠線・フォーカス・矢印のコントラストを検証します。",
+  "c7ed53437067": "必須のブラウザー検証で `native-select.browser-behavior` を実行し、ネイティブの select の挙動と表示スタイルを維持してください。",
+  "0cbbf564c728": "対応する Windows・macOS・iOS の構成で、プラットフォームの選択肢ピッカー、実機の強制カラーモード、実際の文字の拡大、スクリーンリーダーの読み上げを検証します。",
+  "b4625e532b1e": "Windows・macOS・iOS のブラウザーで、キーボードとポインターでピッカーを開き、強制カラーモードとズームを確認してください。"
+}

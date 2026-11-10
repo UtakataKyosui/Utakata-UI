@@ -1,0 +1,23 @@
+{
+  "f7bcd78aab51": "1 つのトリガーで 1 つの領域を表示・非表示にします。Base UI の Collapsible を基にしています。",
+  "fad3f83b8ecb": "`Collapsible.Root` に、表示テキストを持つ `Collapsible.Trigger` を 1 つと `Collapsible.Panel` を 1 つ入れます。閉じたパネルは既定でアンマウントされ、`keepMounted` を指定すると DOM 内で隠れたまま残ります。高さは `--collapsible-panel-height` でアニメーションし、`prefers-reduced-motion` では無効になります。",
+  "221814cc0b94": "Base UI はトリガーを `aria-expanded` と `aria-controls` 付きのネイティブの button として描画し、閉じた内容を Tab 順序から取り除きます。開発時の診断は名前のないトリガーを警告します。トリガーの文言と周囲の見出し構造は利用側で用意します。",
+  "7b492a01c16d": "連動する複数の区画に Collapsible を使わず、Accordion を使ってください。",
+  "9df8a7d2b555": "開閉状態を `useState` に重複して持たず、`open` と `onOpenChange` を使ってください。",
+  "6361b8f35ac5": "独自の CSS で閉じたパネルを表示しないでください。",
+  "d245436a6709": "Base UI の `CollapsibleRootProps`（`open`、`defaultOpen`、`onOpenChange`、`disabled`）",
+  "b25f50dfacda": "Base UI の `CollapsibleTriggerProps`。button を描画",
+  "609fedc61ba9": "Base UI の `CollapsiblePanelProps`（`keepMounted`、`hiddenUntilFound`）",
+  "801634c2dee9": "トリガーは `aria-expanded` を公開する名前付きのボタンで、開いている間は `aria-controls` でパネルを参照します。",
+  "37921a0d8a7d": "`Collapsible.Root` の中で表示テキストを持つ `Collapsible.Trigger` を使ってください。Base UI の状態属性を置き換えないでください。",
+  "eea5e32e9231": "閉じたパネルの内容は、`keepMounted` の場合も含め、アクセシビリティツリーと Tab 順序から取り除かれるか隠れます。",
+  "c09be7c0e10c": "非表示の状態は `Collapsible.Panel` に任せ、閉じたパネルに独自の CSS で display を強制しないでください。",
+  "0889639f6731": "`defaultOpen` と制御された `open` は対応する状態を描画し、無効な Collapsible は切り替わりません。",
+  "5358af7b72ad": "制御して使う場合は `onOpenChange` とともに `open` を渡し、`disabled` は `Collapsible.Root` に指定してください。状態を別の `useState` に複製しないでください。",
+  "a59dccd5d637": "実ブラウザーで、Tab でトリガーに到達し、Enter でパネルが開き、Space で閉じ、フォーカスはトリガーにとどまります。閉じたパネルの内容（`keepMounted` の場合も含む）は Tab で飛ばされ、開いた内容には到達でき、フォーカスしたトリガーはビューポート内で見えるフォーカスインジケーターを保ちます。",
+  "8c33366d7512": "Base UI の Collapsible のキーボード操作と非表示状態の処理を維持してください。閉じたパネルに display を強制したり、フォーカスインジケーターを取り除いたりしないでください。",
+  "708e4ca500c3": "実ブラウザーで、開閉のインジケーターは色ではなく回転で変化し、高さとインジケーターのトランジションは既定で動き、`prefers-reduced-motion` で取り除かれます。強制カラーモードでは、フォーカスしたトリガーが 2px 以上のシステムカラーのアウトラインを保ちます。",
+  "a6d04f3259a5": "`prefers-reduced-motion` による上書き、回転するインジケーター、強制カラーモードで現れる透明なフォーカスアウトラインを維持してください。",
+  "7738e58d4c33": "実際のブラウザーズーム 200% と実際のハイコントラストモードで、トリガーとパネルの内容が欠落なくリフローします。",
+  "9f0daa7dcb8c": "ブラウザーズーム、ダークテーマ、ハイコントラストモードを実ブラウザーで確認してください。実施するまでは未検証のままにします。"
+}
