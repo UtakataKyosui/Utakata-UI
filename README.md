@@ -21,12 +21,11 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 `packages` 配下を次のワークスペースに分けています。
 
-| ディレクトリ        | パッケージ                    | 役割                                               |
-| ------------------- | ----------------------------- | -------------------------------------------------- |
-| `packages/docs`     | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト                     |
-| `packages/react`    | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest（標準の導入方法） |
-| `packages/cli`      | `@utakata-ui/cli`             | ソースを取り込んで改変する場合の補助 CLI           |
-| `packages/a11y-cli` | `@utakata-ui/a11y-cli`        | 配色の利用契約（コントラスト等）を検査する CLI     |
+| ディレクトリ     | パッケージ                    | 役割                                                   |
+| ---------------- | ----------------------------- | ------------------------------------------------------ |
+| `packages/docs`  | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト                         |
+| `packages/react` | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest（標準の導入方法）     |
+| `packages/cli`   | `@utakata-ui/cli`             | ソース取得と配色の利用契約（コントラスト等）の検査 CLI |
 
 docs は UI 本体をワークスペース依存として参照し、Blume の HTTP MCP でドキュメントを提供します。UI 本体は docs に依存しません。
 

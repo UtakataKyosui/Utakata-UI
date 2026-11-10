@@ -1,6 +1,8 @@
 # @utakata-ui/cli
 
-Utakata UI 専用の **Base UI + Lism CSS** registry から、コンポーネントのソースを取得する CLI です。Node.js 22 以降が必要です。実行時依存はありません。
+Utakata UI 専用の **Base UI + Lism CSS** registry からのソース取得と、配色のアクセシビリティ検査を行う CLI です。Node.js 22 以降が必要です。実行時依存はありません。
+
+配色検査は `utakata-ui a11y --config colors.json [--json]` で実行します。旧 `@utakata-ui/a11y-cli` の機能を統合しました。設定形式、判定、終了コードは共通です。詳細とローカル実行手順は [A11Y.md](./A11Y.md) を参照してください。
 
 Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です。この CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。取り込んだソースは `@utakata-ui/react` の更新を受け取りません。
 
