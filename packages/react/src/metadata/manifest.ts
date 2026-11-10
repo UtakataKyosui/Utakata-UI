@@ -19,6 +19,7 @@ import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
+import { sheetManifest } from './components/Sheet.js';
 import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
@@ -132,6 +133,7 @@ const manifest = {
     },
     Kbd: kbdManifest,
     Separator: separatorManifest,
+    Sheet: sheetManifest,
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,

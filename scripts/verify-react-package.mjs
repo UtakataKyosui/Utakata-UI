@@ -39,7 +39,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -342,6 +342,22 @@ function AlertDialogWrapper(props: AlertDialogRootProps) { return <AlertDialog.R
 export const wrappedAlertDialog = <AlertDialogWrapper defaultOpen />;
 // @ts-expect-error Wrappers must preserve the modal contract.
 export const wrappedAlertDialogInvalid = <AlertDialogWrapper modal={false} />;
+export const sheetPopup: SheetPopupProps = { side: 'left', className: 'panel' };
+export const sheet = <Sheet.Root><Sheet.Trigger>Open filters</Sheet.Trigger><Sheet.Portal><Sheet.Backdrop /><Sheet.Popup {...sheetPopup}><Sheet.Title>Filters</Sheet.Title><Sheet.Description>Narrow the list.</Sheet.Description><Sheet.Close>Close</Sheet.Close></Sheet.Popup></Sheet.Portal></Sheet.Root>;
+export const sheetDefaultSide = <Sheet.Popup><Sheet.Title>Filters</Sheet.Title></Sheet.Popup>;
+// @ts-expect-error Sides are limited to the four edges in shipped declarations.
+export const sheetInvalidSide: SheetPopupProps = { side: 'center' };
+// @ts-expect-error JSX usage must also use a supported side.
+export const sheetInvalidSideJsx = <Sheet.Popup side="center" />;
+const sheetUnsafeProps = { side: 'center' };
+// @ts-expect-error Spreads cannot pass an unsupported side.
+export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+function SheetWrapper(props: SheetPopupProps) { return <Sheet.Popup {...props} />; }
+export const wrappedSheet = <SheetWrapper side="top" />;
+// @ts-expect-error Wrappers must preserve the side contract.
+export const wrappedSheetInvalid = <SheetWrapper side="center" />;
 export const toastTextClose: ToastCloseProps = { children: 'Dismiss' };
 export const toastLabelledClose: ToastCloseProps = { 'aria-label': 'Close notification' };
 export const toastClose = <Toast.Close {...toastTextClose} />;
