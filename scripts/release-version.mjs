@@ -10,7 +10,10 @@ const packages = {
 export function selectRelease({ current, previous, expectedName, event }) {
   if (
     current.name !== expectedName ||
-    !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(current.version)
+    !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(current.version) ||
+    !current.version
+      .split('.')
+      .every((part) => Number.isSafeInteger(Number(part)))
   )
     throw new Error(
       'Release requires the expected package name and a stable package.json version.',
@@ -23,7 +26,12 @@ export function selectRelease({ current, previous, expectedName, event }) {
     );
   if (current.version === previous.version)
     return { release: false, version: current.version };
-  if (!/^\d+\.\d+\.\d+$/.test(previous.version))
+  if (
+    !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(previous.version) ||
+    !previous.version
+      .split('.')
+      .every((part) => Number.isSafeInteger(Number(part)))
+  )
     throw new Error('Previous package.json version must be stable.');
   const next = current.version.split('.').map(Number);
   const old = previous.version.split('.').map(Number);

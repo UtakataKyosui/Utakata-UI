@@ -15,7 +15,13 @@ test('only an increased package.json version selects an automatic release', () =
   assert.deepEqual(decide('0.1.0'), { release: false, version: '0.1.0' });
   for (const version of ['0.1.1', '0.2.0', '1.0.0', '0.10.0'])
     assert.deepEqual(decide(version), { release: true, version });
-  for (const version of ['0.0.9', '0.1.0-beta.1', '01.2.3', 'v1.0.0'])
+  for (const version of [
+    '0.0.9',
+    '0.1.0-beta.1',
+    '01.2.3',
+    'v1.0.0',
+    '9007199254740992.0.0',
+  ])
     assert.throws(() => decide(version));
 });
 
