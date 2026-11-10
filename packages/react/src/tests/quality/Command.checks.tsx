@@ -22,11 +22,11 @@ export const commandGroups = [
     ],
   },
 ];
-export type CommandGroup = (typeof commandGroups)[number];
-export type CommandEntry = CommandGroup['items'][number];
+type CommandGroup = (typeof commandGroups)[number];
+type CommandEntry = CommandGroup['items'][number];
 
 /** "Delete project" is disabled so checks can prove it never runs. */
-export function CommandList({
+function CommandList({
   run,
   label = 'Search commands',
 }: {
@@ -63,7 +63,7 @@ export function CommandList({
 }
 
 /** A command palette in a Dialog; running a command closes the Dialog. */
-export function CommandPalette({ run }: { run: (value: string) => void }) {
+function CommandPalette({ run }: { run: (value: string) => void }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -84,8 +84,8 @@ export function CommandPalette({ run }: { run: (value: string) => void }) {
   );
 }
 
-export const input = () => screen.getByRole<HTMLInputElement>('combobox');
-export const optionNames = () =>
+const input = () => screen.getByRole<HTMLInputElement>('combobox');
+const optionNames = () =>
   screen.queryAllByRole('option').map((option) => option.textContent);
 
 const flush = () =>
@@ -94,7 +94,7 @@ const flush = () =>
   });
 
 /** Types text as a user edit (an input event with inputType insertText). */
-export async function typeText(text: string) {
+async function typeText(text: string) {
   await act(async () => {
     fireEvent.input(input(), {
       target: { value: text },
@@ -106,7 +106,7 @@ export async function typeText(text: string) {
 }
 
 /** Dispatches a key as DOM events; real keyboard input is covered in browser tests. */
-export async function press(key: string, init: KeyboardEventInit = {}) {
+async function press(key: string, init: KeyboardEventInit = {}) {
   await act(async () => {
     fireEvent.keyDown(document.activeElement ?? document.body, {
       key,
