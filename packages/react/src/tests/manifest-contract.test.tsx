@@ -438,6 +438,29 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Command interaction and keeps real IME and speech manual', () => {
+    const rules = componentManifest.components.Command?.qualityRules ?? [];
+    for (const id of [
+      'command.keyboard-execute',
+      'command.dialog-focus',
+      'command.visual-forced',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of ['command.real-ime', 'command.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for Combobox interaction and keeps real IME and speech manual', () => {
     const rules = componentManifest.components.Combobox?.qualityRules ?? [];
     for (const id of [
@@ -579,6 +602,7 @@ describe('public manifest contract', () => {
       'RadioGroup',
       'Select',
       'Combobox',
+      'Command',
       'Slider',
       'Collapsible',
       'Accordion',

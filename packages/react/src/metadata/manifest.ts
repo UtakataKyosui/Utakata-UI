@@ -9,6 +9,7 @@ import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
+import { commandManifest } from './components/Command.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
@@ -166,6 +167,7 @@ const manifest = {
     RadioGroup: radioGroupManifest,
     Select: selectManifest,
     Combobox: comboboxManifest,
+    Command: commandManifest,
     Slider: sliderManifest,
     Collapsible: collapsibleManifest,
     Accordion: accordionManifest,

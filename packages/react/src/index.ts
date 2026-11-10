@@ -73,6 +73,11 @@ export type {
   ComboboxTriggerProps,
 } from './components/Combobox.js';
 export { Combobox } from './components/Combobox.js';
+export type {
+  CommandInputProps,
+  CommandRootProps,
+} from './components/Command.js';
+export { Command } from './components/Command.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
