@@ -1,13 +1,30 @@
 import { release, version } from 'node:os';
 import { screenReader as nativeReader } from '@guidepup/guidepup';
-import { screenReaderTest as test } from '@guidepup/playwright';
-import { expect } from '@playwright/test';
+import {
+  type ScreenReaderPlaywright,
+  screenReaderTest as test,
+} from '@guidepup/playwright';
+import { expect, type Locator } from '@playwright/test';
+
+async function tabToControl(reader: ScreenReaderPlaywright, target: Locator) {
+  for (let count = 0; count < 32; count++) {
+    await reader.press('Tab', { capture: true });
+    if (await target.evaluate((node) => node === document.activeElement))
+      return;
+  }
+  throw new Error(
+    'Reader keyboard did not reach the target control within 32 Tab presses.',
+  );
+}
 
 test.beforeEach(async ({ page, screenReader }) => {
   // Setup installs assets for the directly pinned core package. The adapter
   // must use that same singleton rather than a second installed core version.
   expect(screenReader).toBe(nativeReader);
-  await page.goto('/?layout');
+  // The browser matrix covers every visual variant. Reader output needs only
+  // the named field and modal; traversing 21 unrelated buttons adds minutes of
+  // spoken usage hints on VoiceOver before reaching either target.
+  await page.goto('/?reader');
   // Bringing a tab to front does not select it in the OS screen reader.
   // The official integration activates the browser and enters web content.
   await screenReader.navigateToWebContent();
@@ -35,12 +52,10 @@ test('[assistive.control-name] reader navigation announces the email control nam
 }) => {
   const input = page.getByLabel('Contact email / 連絡先', { exact: true });
   await expect(input).toBeVisible();
-  await screenReader.navigateNextUntil(
-    (phrase) =>
-      phrase.includes('Contact email') && /edit|text field/i.test(phrase),
-    { maxNavigationAttempts: 80 },
-  );
-  expect(await screenReader.lastSpokenPhrase()).toContain('Contact email');
+  await tabToControl(screenReader, input);
+  const phrase = await screenReader.lastSpokenPhrase();
+  expect(phrase).toContain('Contact email');
+  expect(phrase).toMatch(/edit|text.*field/i);
 });
 
 test('[assistive.dialog-output] opening and closing the dialog announces context and returns focus', async ({
@@ -51,19 +66,16 @@ test('[assistive.dialog-output] opening and closing the dialog announces context
     name: 'Review / 確認',
     exact: true,
   });
-  // DOM focus alone does not move NVDA's browse cursor. A real user reaches
-  // the trigger with the reader before opening the modal, so establish both.
-  await screenReader.navigateNextUntil(/Review/, { maxNavigationAttempts: 80 });
-  await trigger.focus();
-  const opened = await screenReader.capture(() => page.keyboard.press('Enter'));
+  await tabToControl(screenReader, trigger);
+  await screenReader.press('Enter', { capture: true });
+  const opened = await screenReader.lastSpokenPhrase();
   await expect(page.getByRole('dialog')).toBeVisible();
-  expect(opened.spokenPhrase).toContain('設定確認');
-  const closed = await screenReader.capture(() =>
-    page.keyboard.press('Escape'),
-  );
+  expect(opened).toContain('設定確認');
+  await screenReader.press('Escape', { capture: true });
+  const closed = await screenReader.lastSpokenPhrase();
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(trigger).toBeFocused();
-  expect(closed.spokenPhrase).toContain('Review');
+  expect(closed).toContain('Review');
 });
 
 test('output detector rejects a control whose accessible name was replaced', async ({
@@ -74,16 +86,16 @@ test('output detector rejects a control whose accessible name was replaced', asy
   // locator before the capture action can focus the same control.
   const input = page.locator('.layout-contract input');
   await expect(input).toHaveCount(1);
+  await page
+    .getByText('Contact email / 連絡先', { exact: true })
+    .evaluate((node) => node.remove());
   await input.evaluate((node) => {
     node.removeAttribute('aria-labelledby');
     node.setAttribute('aria-label', 'Negative control');
   });
-  await screenReader.navigateNextUntil(
-    (phrase) =>
-      phrase.includes('Negative control') && /edit|text field/i.test(phrase),
-    { maxNavigationAttempts: 80 },
-  );
+  await tabToControl(screenReader, input);
   const phrase = await screenReader.lastSpokenPhrase();
   expect(phrase).toContain('Negative control');
+  expect(phrase).toMatch(/edit|text.*field/i);
   expect(() => expect(phrase).toContain('Contact email')).toThrow();
 });

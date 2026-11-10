@@ -1,29 +1,31 @@
 import { Button, Dialog, Field } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 
-export function LayoutFixture() {
+export function LayoutFixture({ variants = true }: { variants?: boolean }) {
   return (
     <main className="layout-contract">
       <h1>Layout contract / 表示検証</h1>
       <p>Long content / 入力内容とエラーを確認して保存してください。</p>
-      {componentManifest.components.Button.variants.flatMap((variant) =>
+      {variants &&
+        componentManifest.components.Button.variants.flatMap((variant) =>
+          componentManifest.components.Button.sizes.map((size) => (
+            <Button key={`${variant}-${size}`} variant={variant} size={size}>
+              {variant} {size} 保存
+            </Button>
+          )),
+        )}
+      {variants &&
         componentManifest.components.Button.sizes.map((size) => (
-          <Button key={`${variant}-${size}`} variant={variant} size={size}>
-            {variant} {size} 保存
+          <Button
+            key={`square-${size}`}
+            iconOnly
+            square
+            size={size}
+            aria-label={`Square ${size}`}
+          >
+            +
           </Button>
-        )),
-      )}
-      {componentManifest.components.Button.sizes.map((size) => (
-        <Button
-          key={`square-${size}`}
-          iconOnly
-          square
-          size={size}
-          aria-label={`Square ${size}`}
-        >
-          +
-        </Button>
-      ))}
+        ))}
       <Field.Root invalid>
         <Field.Label>Contact email / 連絡先</Field.Label>
         <Field.Control type="email" defaultValue="invalid" />
