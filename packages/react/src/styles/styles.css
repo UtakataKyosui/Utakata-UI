@@ -12,6 +12,7 @@
     --ui-color-muted: #596579;
     --ui-color-border: #8993a5;
     --ui-color-danger: #b42318;
+    --ui-color-on-danger: #fff;
     --ui-radius-control: 0.375rem;
     --ui-shadow-popup: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
     --ui-focus-ring: 0 0 0 3px
@@ -27,6 +28,7 @@
       --ui-color-muted: #c1cad8;
       --ui-color-border: #748099;
       --ui-color-danger: #ffb4ab;
+      --ui-color-on-danger: #3a0a06;
     }
   }
 }
@@ -75,9 +77,49 @@
     padding: 0.75rem 1.25rem;
   }
 
+  /* Square target for iconOnly buttons; sm stays at 2rem (32 CSS px). */
+  .ui-button--square {
+    inline-size: var(--ui-button-square-size);
+    padding: 0;
+  }
+
+  .ui-button--square.ui-button--sm {
+    --ui-button-square-size: 2rem;
+  }
+
+  .ui-button--square.ui-button--md {
+    --ui-button-square-size: 2.5rem;
+  }
+
+  .ui-button--square.ui-button--lg {
+    --ui-button-square-size: 3rem;
+  }
+
   .ui-button--solid {
     background: var(--ui-color-primary);
     color: var(--ui-color-on-primary);
+  }
+
+  .ui-button--secondary {
+    background: color-mix(
+      in srgb,
+      var(--ui-color-text) 6%,
+      var(--ui-color-surface)
+    );
+    border-color: var(--ui-color-border);
+    color: var(--ui-color-text);
+  }
+
+  .ui-button--destructive {
+    background: var(--ui-color-danger);
+    color: var(--ui-color-on-danger);
+  }
+
+  .ui-button--link {
+    background: transparent;
+    color: var(--ui-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .ui-button--outline {
@@ -112,6 +154,26 @@
         var(--ui-color-text)
       );
     }
+
+    .ui-button--destructive:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-danger) 88%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-button--link:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):hover {
+      text-decoration-thickness: 2px;
+    }
   }
 
   .ui-button:not(:disabled, [data-disabled], [aria-disabled="true"]):active {
@@ -132,6 +194,26 @@
       var(--ui-color-primary) 76%,
       var(--ui-color-text)
     );
+  }
+
+  .ui-button--destructive:not(
+    :disabled,
+    [data-disabled],
+    [aria-disabled="true"]
+  ):active {
+    background-color: color-mix(
+      in srgb,
+      var(--ui-color-danger) 76%,
+      var(--ui-color-text)
+    );
+  }
+
+  .ui-button--link:not(
+    :disabled,
+    [data-disabled],
+    [aria-disabled="true"]
+  ):active {
+    text-decoration-thickness: 2px;
   }
 
   .ui-field {
@@ -618,8 +700,10 @@
     text-underline-offset: 0.2em;
   }
 
-  .ui-breadcrumb__link:hover {
-    text-decoration-thickness: 2px;
+  @media (hover: hover) {
+    .ui-breadcrumb__link:hover {
+      text-decoration-thickness: 2px;
+    }
   }
 
   /* Current page: not underlined and bold, so not conveyed by color alone. */
@@ -649,9 +733,11 @@
     text-decoration: none;
   }
 
-  .ui-pagination__link[href]:hover {
-    border-color: var(--ui-color-border);
-    text-decoration: underline;
+  @media (hover: hover) {
+    .ui-pagination__link[href]:hover {
+      border-color: var(--ui-color-border);
+      text-decoration: underline;
+    }
   }
 
   .ui-pagination__link[aria-current="page"] {
@@ -1384,6 +1470,324 @@
       var(--ui-focus-ring);
   }
 
+  /* Interaction states: hover and press are neutral tints that never reuse the
+     selected treatment (primary fill, inset ring, checked mark), so a transient
+     reaction cannot be mistaken for a committed state. Hover applies only where
+     the device can sustain it. Disabled and read-only controls do not react.
+     Forced colors have their own rules below because author tints are ignored
+     there and would otherwise outrank the system-color pairs. */
+  @media (hover: hover) and (forced-colors: none) {
+    .ui-collapsible__trigger:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):hover,
+    .ui-accordion__trigger:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):hover,
+    .ui-toggle:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"], [data-pressed])
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        transparent
+      );
+    }
+
+    .ui-tabs__tab:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"], [data-active])
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        transparent
+      );
+      color: var(--ui-color-text);
+    }
+
+    .ui-toggle[data-pressed]:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 28%,
+        transparent
+      );
+    }
+
+    .ui-select__trigger:where(
+        :not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"],
+          [data-readonly]
+        )
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-checkbox:where(
+        :not(
+          [data-disabled],
+          [data-readonly],
+          [data-checked],
+          [data-indeterminate]
+        )
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-checkbox:where(:not([data-disabled], [data-readonly])):is(
+        [data-checked],
+        [data-indeterminate]
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 88%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(:not([data-disabled], [data-readonly])):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-muted) 85%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly])
+      )[data-checked]:hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 88%,
+        var(--ui-color-text)
+      );
+    }
+
+    /* A failed validation keeps its danger border while the fill reacts. */
+    .ui-checkbox:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      ):is([data-checked], [data-indeterminate]):hover {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 88%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      ):hover {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-muted) 85%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      )[data-checked]:hover {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 88%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-radio-group__item:where(
+        :not(:disabled, [data-disabled], [data-readonly])
+      ):hover
+      .ui-radio-group__indicator {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-slider__thumb:where(:not([data-disabled])):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 18%,
+        var(--ui-color-surface)
+      );
+    }
+  }
+
+  @media (forced-colors: none) {
+    .ui-collapsible__trigger:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):active,
+    .ui-accordion__trigger:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):active,
+    .ui-toggle:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"], [data-pressed])
+      ):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 14%,
+        transparent
+      );
+    }
+
+    .ui-tabs__tab:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"], [data-active])
+      ):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 14%,
+        transparent
+      );
+      color: var(--ui-color-text);
+    }
+
+    .ui-toggle[data-pressed]:where(
+        :not(:disabled, [data-disabled], [aria-disabled="true"])
+      ):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 36%,
+        transparent
+      );
+    }
+
+    /* Base UI opens the popup on pointer down and hands the pointer to it, so
+       the trigger leaves :active; data-pressed carries the press and the open
+       state from then on. */
+    .ui-select__trigger:where(
+        :not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"],
+          [data-readonly]
+        )
+      ):is(:active, [data-pressed]) {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 14%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-checkbox:where(
+        :not(
+          [data-disabled],
+          [data-readonly],
+          [data-checked],
+          [data-indeterminate]
+        )
+      ):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 14%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-checkbox:where(:not([data-disabled], [data-readonly])):is(
+        [data-checked],
+        [data-indeterminate]
+      ):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 76%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(:not([data-disabled], [data-readonly])):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-muted) 70%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly])
+      )[data-checked]:active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 76%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-checkbox:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      ):is([data-checked], [data-indeterminate]):active {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 76%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      ):active {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-muted) 70%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-switch:where(
+        :not([data-disabled], [data-readonly], [data-invalid])
+      )[data-checked]:active {
+      border-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 76%,
+        var(--ui-color-text)
+      );
+    }
+
+    .ui-radio-group__item:where(
+        :not(:disabled, [data-disabled], [data-readonly])
+      ):active
+      .ui-radio-group__indicator {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 14%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-slider__thumb:where(:not([data-disabled]))[data-dragging],
+    .ui-slider__thumb:where(:not([data-disabled])):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 32%,
+        var(--ui-color-surface)
+      );
+    }
+  }
+
+  /* Select: an open popup and a failed validation are visible on the trigger. */
+  .ui-select__trigger[data-popup-open] {
+    border-color: var(--ui-color-primary);
+  }
+
+  .ui-select__trigger[data-invalid] {
+    border-color: var(--ui-color-danger);
+  }
+
+  .ui-radio-group__item[data-invalid] .ui-radio-group__indicator {
+    border-color: var(--ui-color-danger);
+  }
+
   /* Toggle group: layout only; items keep the Toggle look and focus ring */
   .ui-toggle-group {
     display: inline-flex;
@@ -1994,6 +2398,107 @@
       border-color: Highlight;
       color: HighlightText;
       forced-color-adjust: none;
+    }
+
+    /* Author tints are ignored in forced colors: hover shows a Highlight border
+       and press a Highlight fill. Selected, checked and disabled items keep
+       their own system-color pairs and do not react. */
+    @media (hover: hover) {
+      .ui-button:not(:disabled, [data-disabled], [aria-disabled="true"]):hover,
+      .ui-collapsible__trigger:not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"]
+        ):hover,
+      .ui-accordion__trigger:not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"]
+        ):hover,
+      .ui-tabs__tab:not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"],
+          [data-active]
+        ):hover,
+      .ui-toggle:not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"],
+          [data-pressed]
+        ):hover,
+      .ui-select__trigger:not(
+          :disabled,
+          [data-disabled],
+          [aria-disabled="true"],
+          [data-readonly]
+        ):hover {
+        border-color: Highlight;
+      }
+
+      .ui-checkbox:not(
+          [data-disabled],
+          [data-readonly],
+          [data-checked],
+          [data-indeterminate]
+        ):hover,
+      .ui-switch:not([data-disabled], [data-readonly], [data-checked]):hover,
+      .ui-slider__thumb:not([data-disabled]):hover {
+        border-color: Highlight;
+      }
+
+      .ui-radio-group__item:not(
+          :disabled,
+          [data-disabled],
+          [data-readonly]
+        ):hover
+        .ui-radio-group__indicator:not([data-checked]) {
+        border-color: Highlight;
+      }
+    }
+
+    .ui-button:not(:disabled, [data-disabled], [aria-disabled="true"]):active,
+    .ui-collapsible__trigger:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):active,
+    .ui-accordion__trigger:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):active,
+    .ui-tabs__tab:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"],
+        [data-active]
+      ):active,
+    .ui-select__trigger:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"],
+        [data-readonly]
+      ):active,
+    .ui-slider__thumb:not([data-disabled])[data-dragging] {
+      background-color: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    /* The Highlight pair marks a pressed toggle, so a press on an unpressed
+       toggle is shown by an underline instead of borrowing that pair. */
+    .ui-toggle:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"],
+        [data-pressed]
+      ):active {
+      text-decoration: underline;
+    }
+
+    .ui-select__trigger[data-popup-open] {
+      border-color: Highlight;
     }
 
     .ui-input-group:has(

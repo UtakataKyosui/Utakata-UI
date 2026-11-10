@@ -67,6 +67,9 @@ Dialogの混在ルールは `dialog.browser-keyboard` と `dialog.assistive-outp
 テーマは `theme.rendered-contrast`、`theme.interaction-contrast`、`theme.focus-visibility`、
 `theme.target-size`、`theme.reflow`、`theme.text-size`、`theme.text-spacing`、
 `theme.reduced-motion` を別々に実行し、実機確認は `theme.platform-rendering` に残す。
+操作状態は `theme.interaction-states`、`theme.interaction-disabled`、
+`theme.interaction-forced-colors`、`theme.interaction-reduced-motion`、`theme.hover-touch` に分け、実機の確認は `theme.interaction-platform` に残し、対応表は
+[ACCESSIBILITY-TOOLS.md](ACCESSIBILITY-TOOLS.md) に置く。
 各自動ルールの適用範囲・基準・残存確認はquality metadataに記載する。
 既存の他部品の複合ルールをすべて分解したわけではない。分解は実際のテスト追加と同時に行い、
 手動ルールの名前や分類を変更しただけで合格扱いにしない。

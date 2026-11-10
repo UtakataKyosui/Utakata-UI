@@ -61,6 +61,18 @@ export const qualityRules = {
       severity: 'error',
       remediation: 'Preserve Base UI disabled behavior and native semantics.',
     },
+    {
+      id: 'button.destructive-text',
+      requirement:
+        'A destructive button states its action in text and is not the only safeguard; confirmation is the consumer responsibility.',
+      verification: 'manual',
+      severity: 'error',
+      remediation:
+        'Name the destructive action in visible text, do not rely on color, and confirm irreversible actions (for example with AlertDialog).',
+      applicability: 'Consumer content using variant="destructive".',
+      residual:
+        'Whether the label and confirmation are understandable is not machine-verifiable.',
+    },
   ],
   Field: [
     {
@@ -223,6 +235,75 @@ export const qualityRules = {
       criteria: ['1.4.3'],
     },
     {
+      id: 'theme.interaction-states',
+      requirement:
+        'Hover and press on enabled controls change their appearance without the selected treatment, keep rendered contrast (text 4.5:1, control shape 3:1) in light and dark, and do not shift layout.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Use a neutral tint for hover and press, keep selected, checked and pressed marks separate, and avoid size or border-width changes.',
+      applicability:
+        'Button variant × size, Collapsible/Accordion triggers, Tabs.Tab, Toggle and ToggleGroup items, Select.Trigger, Checkbox, Switch, RadioGroup.Item and Slider.Thumb with real mouse hover and press in both standard themes.',
+      residual:
+        'Keyboard focus, touch input, physical devices, custom CSS and states not in the fixture need separate evidence.',
+      criteria: ['1.4.3', '1.4.11', '1.4.1'],
+    },
+    {
+      id: 'theme.interaction-disabled',
+      requirement:
+        'Disabled and read-only controls render identically at rest, on hover and while pressed.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Exclude :disabled, [data-disabled], [aria-disabled="true"] and [data-readonly] from hover and press rules.',
+      applicability:
+        'Disabled Button variant × size, triggers, tabs, toggles, Select, Checkbox, Switch, RadioGroup.Item and Slider.Thumb, plus a read-only Switch, in standard and forced colors.',
+      residual:
+        'Disabled controls are exempt from contrast; consumer-defined disabled styling needs revalidation.',
+      criteria: ['4.1.2'],
+    },
+    {
+      id: 'theme.interaction-forced-colors',
+      requirement:
+        'In forced colors hover shows a Highlight border, press a Highlight fill, and selected or checked controls keep their Highlight pairs.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Keep the forced-colors overrides for hover, press and selected states; author tints are ignored there.',
+      applicability:
+        'The same controls as theme.interaction-states in Chromium forced-colors emulation.',
+      residual:
+        'Physical OS high-contrast modes and system palettes other than the emulated one stay manual.',
+      criteria: ['1.4.1', '1.4.11'],
+    },
+    {
+      id: 'theme.interaction-reduced-motion',
+      requirement:
+        'With reduced motion, hover and press still change enabled controls but no transition or animation runs on them.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Add every new state transition to the prefers-reduced-motion override.',
+      applicability:
+        'The same controls as theme.interaction-states, including their ::before and ::after, with prefers-reduced-motion emulated.',
+      residual:
+        'OS preference propagation and physical device perception stay manual.',
+      criteria: ['2.3.3 (product requirement)'],
+    },
+    {
+      id: 'theme.hover-touch',
+      requirement:
+        'Every Utakata hover style applies only under (hover: hover) so a tap on a device without hover leaves no sticky hover.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Wrap :hover declarations in @media (hover: hover) and keep information and operations independent of hover.',
+      applicability:
+        'Every .ui- rule in the shipped stylesheet, plus a tap in a Chromium touch context that reports no hover support.',
+      residual:
+        'Physical touch devices, hybrid pointer/touch devices and hover-only information in consumer CSS are not covered.',
+    },
+    {
       id: 'theme.rendered-contrast',
       requirement:
         'Rendered enabled Button variants and Field text meet 4.5:1 in light and dark themes.',
@@ -246,6 +327,15 @@ export const qualityRules = {
       residual:
         'Physical OS high contrast and complex occlusion require manual evidence.',
       criteria: ['2.4.7', '2.4.11'],
+    },
+    {
+      id: 'theme.interaction-platform',
+      requirement:
+        'Verify hover, press, focus and selection on physical touch devices, with a real keyboard, in OS high-contrast modes and with assistive-technology state announcements.',
+      verification: 'manual',
+      severity: 'error',
+      remediation:
+        'Record browser, OS, device, procedure and findings before release.',
     },
     {
       id: 'theme.platform-rendering',

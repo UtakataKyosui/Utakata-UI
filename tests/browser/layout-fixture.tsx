@@ -13,6 +13,17 @@ export function LayoutFixture() {
           </Button>
         )),
       )}
+      {componentManifest.components.Button.sizes.map((size) => (
+        <Button
+          key={`square-${size}`}
+          iconOnly
+          square
+          size={size}
+          aria-label={`Square ${size}`}
+        >
+          +
+        </Button>
+      ))}
       <Field.Root invalid>
         <Field.Label>Contact email / 連絡先</Field.Label>
         <Field.Control type="email" defaultValue="invalid" />

@@ -224,3 +224,17 @@ section[aria-label="InputGroup states"] .ui-field,
 section[aria-label="InputGroup states"] form {
   inline-size: 240px;
 }
+
+.interaction-states {
+  gap: 1.5rem;
+}
+
+.interaction-states section {
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.interaction-states .ui-radio-group,
+.interaction-states .ui-slider {
+  min-inline-size: 12rem;
+}

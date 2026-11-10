@@ -25,6 +25,24 @@ export default function ButtonExample() {
         ))}
         <Button disabled>Disabled button</Button>
       </Flex>
+      <Flex style={{ gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Button variant="secondary">Supporting action</Button>
+        <Button variant="destructive">Delete account</Button>
+        <Button variant="link">Show details</Button>
+        <a href="https://utakata-ui.dev/">Go to the docs (link)</a>
+        <Button iconOnly square aria-label="Add">
+          +
+        </Button>
+        <Button
+          iconOnly
+          square
+          size="lg"
+          variant="outline"
+          aria-label="Settings"
+        >
+          *
+        </Button>
+      </Flex>
     </Stack>
   );
 }
