@@ -101,7 +101,11 @@
       );
     }
 
-    .ui-button--solid:not(:disabled, [data-disabled], [aria-disabled="true"]):hover {
+    .ui-button--solid:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):hover {
       background-color: color-mix(
         in srgb,
         var(--ui-color-primary) 88%,
@@ -118,7 +122,11 @@
     );
   }
 
-  .ui-button--solid:not(:disabled, [data-disabled], [aria-disabled="true"]):active {
+  .ui-button--solid:not(
+    :disabled,
+    [data-disabled],
+    [aria-disabled="true"]
+  ):active {
     background-color: color-mix(
       in srgb,
       var(--ui-color-primary) 76%,
