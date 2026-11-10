@@ -25,4 +25,20 @@ export default defineConfig({
   },
   // Keep library resets and tokens inside the example iframe documents.
   examples: { css: 'examples.css' },
+  github: {
+    owner: 'UtakataKyosui',
+    repo: 'Utakata-UI',
+    branch: 'main'
+  },
+  lastModified: "git",
+  dateFormat: {
+    dateStyle: 'full',
+    timeZone: 'Asia/Tokyo',
+    calendar: 'japanese'
+  },
+  footer: {
+    socials: {
+      x: 'https://twitter.com/utakatakyosui'
+    }
+  }
 });
