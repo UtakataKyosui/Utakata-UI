@@ -196,7 +196,7 @@ describe('accessibility regression checks', () => {
     expect(result.violations.map(({ id }) => id)).toContain('button-name');
   });
 
-  it.each(['solid', 'outline', 'ghost'] as const)(
+  it.each(componentManifest.components.Button.variants)(
     'audits the %s button',
     async (variant) => {
       const { container } = render(<Button variant={variant}>Save</Button>);

@@ -438,6 +438,33 @@ function Wrapper(props: ButtonProps) { return <Button {...props} />; }
 export const wrappedValid = <Wrapper iconOnly aria-label="Save" />;
 // @ts-expect-error Wrappers must preserve the required name contract.
 export const wrappedInvalid = <Wrapper iconOnly />;
+export const squareNamed = <Button iconOnly square size="lg" aria-label="Add" />;
+export const squareReferenced = <Button iconOnly square aria-labelledby="add-label" />;
+export const squareProps: ButtonProps = { iconOnly: true, square: true, 'aria-label': 'Add' };
+// @ts-expect-error square requires iconOnly in shipped declarations.
+export const squareWithoutIconOnly = <Button square>Add</Button>;
+// @ts-expect-error square without iconOnly must also fail through typed object props.
+export const squareWithoutIconOnlyProps: ButtonProps = { square: true, children: 'Add' };
+// @ts-expect-error A square icon-only button still requires a name source.
+export const squareUnnamed = <Button iconOnly square />;
+// @ts-expect-error A square icon-only button must require a name through typed object props.
+export const squareUnnamedProps: ButtonProps = { iconOnly: true, square: true };
+const squareUnnamedSpread = { iconOnly: true as const, square: true as const };
+// @ts-expect-error Spreads cannot bypass the name required by square icon buttons.
+export const squareSpreadUnnamed = <Button {...squareUnnamedSpread} />;
+const squareTextSpread = { square: true as const };
+// @ts-expect-error Spreads cannot add square to a text button.
+export const squareSpreadWithoutIconOnly = <Button {...squareTextSpread}>Add</Button>;
+export const wrappedSquareValid = <Wrapper iconOnly square aria-label="Add" />;
+// @ts-expect-error Wrappers must preserve the square icon name requirement.
+export const wrappedSquareUnnamed = <Wrapper iconOnly square />;
+// @ts-expect-error Wrappers must preserve that square requires iconOnly.
+export const wrappedSquareWithoutIconOnly = <Wrapper square>Add</Wrapper>;
+// @ts-expect-error There is no xs size in shipped declarations.
+export const extraSmallButton = <Button size="xs">Save</Button>;
+export const secondaryAction = <Button variant="secondary">Edit</Button>;
+export const destructiveAction = <Button variant="destructive">Delete account</Button>;
+export const linkAction = <Button variant="link">Show details</Button>;
 // @ts-expect-error Unsupported designs must fail against the public API.
 export const unsupportedVariant = <Button variant="unsupported">Save</Button>;
 export const shortcut = <KbdGroup aria-label="Control and K"><Kbd>Ctrl</Kbd><Kbd size="sm">K</Kbd></KbdGroup>;
@@ -493,6 +520,8 @@ import { componentManifest } from '@utakata-ui/react/manifest';
 assert.ok(componentManifest);
 assert.ok(componentManifest.components.Button.verificationStates.includes('disabled'));
 assert.match(renderToStaticMarkup(createElement(Button, null, 'Save')), /Save/);
+assert.match(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /ui-button--square/);
+assert.doesNotMatch(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /square=/);
 assert.ok(import.meta.resolve('@utakata-ui/react/styles.css').endsWith('.css'));
 `,
   );

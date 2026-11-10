@@ -34,6 +34,61 @@ describe('Button', () => {
     expect(componentManifest.components.Button.variants).toContain('outline');
     expect(componentManifest.components.Button.sizes).toContain('lg');
   });
+
+  it.each(['secondary', 'destructive', 'link'] as const)(
+    'renders the %s variant as a native button with its own class',
+    (variant) => {
+      render(<Button variant={variant}>Action</Button>);
+      const button = screen.getByRole('button', { name: 'Action' });
+      expect(button).toHaveClass(`ui-button--${variant}`);
+      expect(componentManifest.components.Button.variants).toContain(variant);
+    },
+  );
+
+  it('adds a square target only for named icon-only buttons and keeps size', () => {
+    render(
+      <>
+        <Button iconOnly square size="lg" aria-label="Add">
+          +
+        </Button>
+        <Button iconOnly aria-label="Plain">
+          +
+        </Button>
+      </>,
+    );
+    expect(screen.getByRole('button', { name: 'Add' })).toHaveClass(
+      'ui-button--square',
+      'ui-button--lg',
+    );
+    expect(screen.getByRole('button', { name: 'Plain' })).not.toHaveClass(
+      'ui-button--square',
+    );
+    expect(screen.getByRole('button', { name: 'Add' })).not.toHaveAttribute(
+      'square',
+    );
+  });
+
+  it('does not activate a disabled destructive button', () => {
+    let activations = 0;
+    render(
+      <Button variant="destructive" disabled onClick={() => activations++}>
+        Delete account
+      </Button>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Delete account' }));
+    expect(activations).toBe(0);
+  });
+
+  it('keeps a link-styled action a button and navigation a real link', () => {
+    render(
+      <>
+        <Button variant="link">Show details</Button>
+        <a href="/docs">Documentation</a>
+      </>,
+    );
+    expect(screen.getByRole('button', { name: 'Show details' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Documentation' })).toBeTruthy();
+  });
 });
 
 describe('Field', () => {

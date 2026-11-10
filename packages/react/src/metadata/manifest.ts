@@ -44,7 +44,7 @@ const manifest = {
         'An action control built on the native button behavior from Base UI.',
       props: {
         variant: {
-          type: 'solid | outline | ghost',
+          type: 'solid | secondary | outline | ghost | destructive | link',
           default: 'solid',
         },
         size: {
@@ -55,17 +55,30 @@ const manifest = {
           type: 'boolean; true requires aria-label or aria-labelledby',
           default: false,
         },
+        square: {
+          type: 'boolean; allowed only with iconOnly',
+          default: false,
+        },
         disabled: {
           type: 'boolean',
           default: false,
         },
       },
-      variants: ['solid', 'outline', 'ghost'],
+      variants: [
+        'solid',
+        'secondary',
+        'outline',
+        'ghost',
+        'destructive',
+        'link',
+      ],
       sizes: ['sm', 'md', 'lg'],
       composition:
-        'Place visible text inside Button. For icon-only content use iconOnly with aria-label or aria-labelledby. Development diagnostics warn about missing name sources and dangling label/description references.',
+        "Place visible text inside Button. For icon-only content use iconOnly with aria-label or aria-labelledby; add square for an equal-width target (sm 32px, md 40px, lg 48px; there is no xs). Use secondary for supporting actions and destructive for dangerous actions, with the consequence stated in text; confirmation (for example AlertDialog) is the consumer's responsibility. link styles an action as text but stays a button; for navigation use a real link element (an anchor with href), not a Button. Development diagnostics warn about missing name sources and dangling label/description references.",
       avoid: [
         'Do not replace an action button with a non-semantic element.',
+        'Do not use destructive for navigation or rely on its color alone; state the action in text.',
+        'Do not use variant="link" on a button for navigation; render a link element instead.',
         'Do not pass unsupported visual props; use variant, size, className, and CSS custom properties.',
       ],
       example: '<Button variant="solid" size="md">Save</Button>',

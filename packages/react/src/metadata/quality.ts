@@ -60,6 +60,18 @@ export const qualityRules = {
       severity: 'error',
       remediation: 'Preserve Base UI disabled behavior and native semantics.',
     },
+    {
+      id: 'button.destructive-text',
+      requirement:
+        'A destructive button states its action in text and is not the only safeguard; confirmation is the consumer responsibility.',
+      verification: 'manual',
+      severity: 'error',
+      remediation:
+        'Name the destructive action in visible text, do not rely on color, and confirm irreversible actions (for example with AlertDialog).',
+      applicability: 'Consumer content using variant="destructive".',
+      residual:
+        'Whether the label and confirmation are understandable is not machine-verifiable.',
+    },
   ],
   Field: [
     {
