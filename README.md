@@ -127,13 +127,14 @@ MCP 専用の npm パッケージや公開ワークフローは不要です。
 書き換える必要がある利用者向けに、補助手段として Base UI + Lism CSS のソースを専用 registry から配布します。
 取り込んだソースは npm パッケージの更新を受け取りません。
 `packages/cli` の `@utakata-ui/cli` は追加の実行時依存を持たず、Tailwind CSS や
-shadcn CLI・`components.json` を使用しません。`list`・`add`・`--dry-run` を提供し、
+shadcn CLI・`components.json` を使用しません。`init` で `utakata.json` と共有 CSS を用意し、
+以後は `list`・`add` の registry・配置先指定を省略できます。`--dry-run` を提供し、
 既存ファイルとの競合は明示的な `--overwrite` がなければ停止します。
 依存パッケージのインストールコマンドは表示のみで、利用側で実行します。
 
 `pnpm build:docs` は `packages/docs/.vercel/output/static/registry/v1/` にカタログと各コンポーネントの
 JSON を生成します。CLI の npm 公開と docs のデプロイの両方が必要です。
-導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/registry.md) を参照してください。
+導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/04-(advanced)/registry.md) を参照してください。
 `Release CLI`（`.github/workflows/release-cli.yml`）の手動実行は `verify`（既定）で検証のみ、`token` / `oidc` で公開、
 `cli-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
 `release-cli.yml` 用に設定し、Environment のタグ制限にも `cli-v*` を含めてください。

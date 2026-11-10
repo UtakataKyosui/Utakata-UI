@@ -6,15 +6,23 @@ Utakata UI 専用の **Base UI + Lism CSS** registry からのソース取得と
 
 Utakata UI の標準の導入方法は npm パッケージ `@utakata-ui/react` です。この CLI は、コンポーネントの実装自体を書き換える必要がある場合の補助手段です。取り込んだソースは `@utakata-ui/react` の更新を受け取りません。
 
-配信済み registry の URL を指定して使用します。
+`init` で配信済み registry の URL と配置先を保存すると、以後の `list` / `add` で指定を省略できます。
 
 ```sh
-npx -y @utakata-ui/cli@0.1.0 list --registry https://example.com/registry/v1
-npx -y @utakata-ui/cli@0.1.0 add button --registry https://example.com/registry/v1 --dry-run
-npx -y @utakata-ui/cli@0.1.0 add button --registry https://example.com/registry/v1
+npx -y @utakata-ui/cli@0.1.0 init --registry https://example.com/registry/v1 --dry-run
+npx -y @utakata-ui/cli@0.1.0 init --registry https://example.com/registry/v1
+npx -y @utakata-ui/cli@0.1.0 list
+npx -y @utakata-ui/cli@0.1.0 add button --dry-run
+npx -y @utakata-ui/cli@0.1.0 add button
 ```
 
 example.com は例示用です。実際の配信 URL に置き換えてください。
+
+`init` はプロジェクトルートに `utakata.json`（`schemaVersion: 1`、`registry`、`directory`）を作り、配置先へ共有 CSS と LICENSE をコピーします。コンポーネントは `add` で追加します。表示された依存インストール用コマンドを実行し、グローバルエントリーから CSS を1度だけ読み込んでください。既存のアプリや `package.json`、エントリーファイルは変更しません。
+
+`init` は再実行できます。同じファイルは変更せず、異なる設定・CSS は `--overwrite` を指定した場合だけ上書きします。`--dry-run` では設定もCSSも書き込みません。ローカル registry のパスはプロジェクトルートからの相対パスで保存します。設定は `--cwd` のルート（省略時は実行ディレクトリ）のみを参照し、親ディレクトリは探索しません。
+
+`init` を使わず、従来どおり `list` / `add` に `--registry` を渡すこともできます。明示した `--registry` / `--dir` は保存済みの設定より優先され、設定ファイル自体は変更しません。
 
 - `--dir`: コピー先。既定は `src/components/utakata`。
 - `--cwd`: 利用先プロジェクトのルート。コピー先はその下に限定します。
@@ -27,7 +35,7 @@ CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一�
 
 独自の `schemaVersion: 1`、`kind: "utakata-ui/catalog" | "utakata-ui/component"` 形式を使用します。registry のディレクトリも `--registry` に渡せるため、npm 公開前はリポジトリの `bin/utakata-ui.mjs` からローカルで試せます。
 
-詳しい導入・更新・配布手順はリポジトリの `packages/docs/docs/registry.md` を参照してください。
+詳しい導入・更新・配布手順はリポジトリの `packages/docs/docs/04-(advanced)/registry.md` を参照してください。
 
 ## License
 

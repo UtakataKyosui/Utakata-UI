@@ -25,21 +25,29 @@ CLI には Node.js 22 以降が必要です。利用先は React 18.3.1 以降�
 
 コンポーネントの取得先は、docs サイトが配信する registry です。docs の公開と CLI の npm 公開は別の作業です。リポジトリ内での試し方は後述します。
 
-## 一覧と追加コマンド [#commands]
+## 初期化・一覧・追加コマンド [#commands]
 
 `REGISTRY_URL` を、この docs を公開した URL の `/registry/v1` に置き換えて実行します。example.com は例示用です。サブパスで公開する場合は、そのパスも含めてください。
 
 ```sh
 REGISTRY_URL="https://example.com/registry/v1"
 
-npx -y @utakata-ui/cli@0.1.0 list --registry "$REGISTRY_URL"
-npx -y @utakata-ui/cli@0.1.0 add button dialog field --registry "$REGISTRY_URL" --dry-run
-npx -y @utakata-ui/cli@0.1.0 add button dialog field --registry "$REGISTRY_URL"
+npx -y @utakata-ui/cli@0.1.0 init --registry "$REGISTRY_URL" --dry-run
+npx -y @utakata-ui/cli@0.1.0 init --registry "$REGISTRY_URL"
+npx -y @utakata-ui/cli@0.1.0 list
+npx -y @utakata-ui/cli@0.1.0 add button dialog field --dry-run
+npx -y @utakata-ui/cli@0.1.0 add button dialog field
 ```
 
 pnpm なら `npx -y @utakata-ui/cli@0.1.0` を `pnpm dlx @utakata-ui/cli@0.1.0` に置き換えられます。CLI のバージョンは公開済みの番号を指定してください。
 
-コンポーネント名は[コンポーネント一覧](/components)の小文字です（例: `alertdialog`、`dropdownmenu`、`nativeselect`）。[専用カタログ](/registry/v1/registry.json)でも確認できます。取得先は常に `--registry` で指定するため、別の registry への暗黙のフォールバックはありません。
+`init` はプロジェクトルートの `utakata.json` に `schemaVersion: 1`・`registry`・`directory` を保存し、配置先に共有 CSS と LICENSE を用意します。コンポーネントはまだ追加しません。表示された依存インストール用コマンドと CSS の読み込み手順は、後述のとおり利用先で実行してください。既存のエントリーファイルは自動編集しません。
+
+`init` の `--dir` / `--cwd` は `add` と共通です。以後の `list` / `add` は `--cwd` のルート（省略時は実行ディレクトリ）の設定を参照し、親ディレクトリは探索しません。`--registry` / `--dir` を明示すると保存値より優先し、設定自体は変更しません。ローカル registry はプロジェクトルートからの相対パスで保存します。`init` を使わず、従来どおり毎回 `--registry` を指定する方法も利用できます。
+
+`init` は再実行でき、同じ内容は変更しません。競合があれば書き込み前に停止し、設定や CSS の変更は `--overwrite` で明示的に許可します。`--dry-run` では設定ファイルも作成しません。
+
+コンポーネント名は[コンポーネント一覧](/components)の小文字です（例: `alertdialog`、`dropdownmenu`、`nativeselect`）。[専用カタログ](/registry/v1/registry.json)でも確認できます。取得先は `--registry` または保存済み設定に限定し、別の registry への暗黙のフォールバックはありません。
 
 ## 依存関係を追加する [#dependencies]
 

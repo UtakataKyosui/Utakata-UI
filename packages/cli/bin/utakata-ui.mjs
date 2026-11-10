@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util';
-import { addComponents, listComponents } from '../src/install.mjs';
+import { projectOptions } from '../src/config.mjs';
+import {
+  addComponents,
+  initializeProject,
+  listComponents,
+} from '../src/install.mjs';
 
 if (process.argv[2] === 'a11y') {
   const { runA11y } = await import('../dist/a11y/cli.js');
@@ -20,19 +25,26 @@ if (process.argv[2] === 'a11y') {
     });
     if (values.help || !positionals.length) {
       console.log(
-        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui list --registry <URL or directory>\n  utakata-ui add <name...> --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\nDependencies are printed for you to install; no package manager is run.',
+        'Utakata UI (Base UI + Lism CSS)\n\n  utakata-ui init --registry <URL or directory> [--dir src/components/utakata] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui list [--registry <URL or directory>] [--cwd path]\n  utakata-ui add <name...> [--registry <URL or directory>] [--dir path] [--cwd path] [--dry-run] [--overwrite]\n  utakata-ui a11y --config <path> [--json]\n\ninit saves registry and directory defaults in utakata.json.\nDependencies are printed for you to install; no package manager is run.',
       );
     } else {
-      if (!values.registry)
-        throw new Error(
-          '--registry is required (the URL or directory containing registry.json)',
-        );
       const [command, ...names] = positionals;
+      if (!['init', 'list', 'add'].includes(command))
+        throw new Error(`Unknown command: ${command}`);
+      if (command !== 'add' && names.length)
+        throw new Error(`${command} does not accept component names`);
       if (command === 'list') {
-        for (const item of await listComponents(values.registry))
+        const { registry } = await projectOptions({
+          registry: values.registry,
+          directory: values.dir,
+          cwd: values.cwd,
+        });
+        for (const item of await listComponents(registry))
           console.log(`${item.name}\t${item.title}`);
-      } else if (command === 'add') {
-        const result = await addComponents({
+      } else {
+        const result = await (command === 'init'
+          ? initializeProject
+          : addComponents)({
           registry: values.registry,
           names,
           cwd: values.cwd,
@@ -52,9 +64,11 @@ if (process.argv[2] === 'a11y') {
             .join(' ')}`,
         );
         console.log(
-          'Import the generated styles/styles.css once from your global entry. Preserve labels, focus behavior and contrast when customizing.',
+          `Import ${result.stylesheet ?? 'the generated styles/styles.css'} once from your global entry. Preserve labels, focus behavior and contrast when customizing.`,
         );
-      } else throw new Error(`Unknown command: ${command}`);
+        if (command === 'init')
+          console.log('Next: utakata-ui add button (use --cwd again if set).');
+      }
     }
   } catch (error) {
     console.error(`Utakata UI: ${error.message}`);

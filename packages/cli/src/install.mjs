@@ -1,5 +1,12 @@
-import { lstat, mkdir, readFile, stat, writeFile } from 'node:fs/promises';
-import { dirname, isAbsolute, relative, resolve, sep } from 'node:path';
+import { readFile, stat } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import {
+  configContents,
+  configName,
+  projectDirectory,
+  projectOptions,
+} from './config.mjs';
+import { planFile, writePlan } from './files.mjs';
 import { validateCatalog, validateItem, validName } from './registry.mjs';
 
 const limit = 8 * 1024 * 1024;
@@ -48,37 +55,6 @@ export async function listComponents(registry) {
   return validateCatalog(await readRegistry(registry, 'registry.json')).items;
 }
 
-async function checkAncestors(root, target) {
-  const parts = relative(root, target).split(sep);
-  let path = root;
-  for (const part of ['', ...parts]) {
-    path = resolve(path, part);
-    try {
-      const info = await lstat(path);
-      if (info.isSymbolicLink()) throw new Error(`Refusing symlink: ${path}`);
-      if (path !== target && !info.isDirectory())
-        throw new Error(`Not a directory: ${path}`);
-      if (path === target && !info.isFile())
-        throw new Error(`Not a file: ${path}`);
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw error;
-    }
-  }
-}
-
-function destinationPath(root, directory) {
-  const destination = resolve(root, directory);
-  const inside = relative(root, destination);
-  if (
-    !inside ||
-    inside.startsWith(`..${sep}`) ||
-    inside === '..' ||
-    isAbsolute(inside)
-  )
-    throw new Error('--dir must be a subdirectory of --cwd');
-  return destination;
-}
-
 function mergeDependencies(dependencies, item) {
   for (const [dependency, version] of Object.entries(item.dependencies)) {
     if (
@@ -120,52 +96,23 @@ async function collectComponents(registry, names) {
   return { files, dependencies };
 }
 
-async function planFile(root, destination, file, overwrite) {
-  const target = resolve(destination, file.path);
-  await checkAncestors(root, target);
-  let existing;
-  try {
-    existing = await readFile(target, 'utf8');
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error;
-  }
-  const action =
-    existing === file.content
-      ? 'unchanged'
-      : existing === undefined
-        ? 'create'
-        : 'overwrite';
-  if (action === 'overwrite' && !overwrite)
-    throw new Error(
-      `Existing file differs: ${target}. Review it before using --overwrite.`,
-    );
-  return { target, action, content: file.content };
-}
-
-async function writePlan(root, plan) {
-  for (const file of plan) {
-    if (file.action === 'unchanged') continue;
-    await mkdir(dirname(file.target), { recursive: true });
-    await checkAncestors(root, file.target);
-    await writeFile(file.target, file.content, {
-      flag: file.action === 'create' ? 'wx' : 'w',
-    });
-  }
-}
-
 export async function addComponents({
   registry,
   names,
   cwd = process.cwd(),
-  directory = 'src/components/utakata',
+  directory,
   dryRun = false,
   overwrite = false,
 }) {
   if (!names.length || names.some((name) => !validName(name)))
     throw new Error('Specify component names, for example: add button dialog');
-  const root = resolve(cwd);
-  const destination = destinationPath(root, directory);
-  const { files, dependencies } = await collectComponents(registry, names);
+  const options = await projectOptions({ registry, directory, cwd });
+  const root = options.cwd;
+  const destination = projectDirectory(root, options.directory);
+  const { files, dependencies } = await collectComponents(
+    options.registry,
+    names,
+  );
   // Complete validation and conflict detection before writing any file.
   const plan = [];
   for (const file of files.values())
@@ -174,5 +121,44 @@ export async function addComponents({
   return {
     files: plan.map(({ target, action }) => ({ target, action })),
     dependencies: Object.fromEntries(dependencies),
+  };
+}
+
+export async function initializeProject({
+  registry,
+  directory,
+  cwd,
+  dryRun = false,
+  overwrite = false,
+}) {
+  const options = await projectOptions({ registry, directory, cwd }, true);
+  const destination = projectDirectory(options.cwd, options.directory);
+  const items = await listComponents(options.registry);
+  // Each component carries the same shared CSS and license. Validate the full
+  // item, but initialize only those shared files, without installing a component.
+  const { files, dependencies } = await collectComponents(options.registry, [
+    items[0].name,
+  ]);
+  const shared = [...files.values()].filter(
+    (file) => file.path === 'LICENSE' || file.path.startsWith('styles/'),
+  );
+  const plan = [
+    await planFile(
+      options.cwd,
+      options.cwd,
+      {
+        path: configName,
+        content: await configContents(options),
+      },
+      overwrite,
+    ),
+  ];
+  for (const file of shared)
+    plan.push(await planFile(options.cwd, destination, file, overwrite));
+  if (!dryRun) await writePlan(options.cwd, plan);
+  return {
+    files: plan.map(({ target, action }) => ({ target, action })),
+    dependencies: Object.fromEntries(dependencies),
+    stylesheet: resolve(destination, 'styles/styles.css'),
   };
 }
