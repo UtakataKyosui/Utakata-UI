@@ -91,6 +91,49 @@
     color: var(--ui-color-text);
   }
 
+  /* Hover is available only on devices that can sustain it. */
+  @media (hover: hover) {
+    .ui-button:not(:disabled, [data-disabled], [aria-disabled="true"]):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        var(--ui-color-surface)
+      );
+    }
+
+    .ui-button--solid:not(
+        :disabled,
+        [data-disabled],
+        [aria-disabled="true"]
+      ):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-primary) 88%,
+        var(--ui-color-text)
+      );
+    }
+  }
+
+  .ui-button:not(:disabled, [data-disabled], [aria-disabled="true"]):active {
+    background-color: color-mix(
+      in srgb,
+      var(--ui-color-text) 16%,
+      var(--ui-color-surface)
+    );
+  }
+
+  .ui-button--solid:not(
+    :disabled,
+    [data-disabled],
+    [aria-disabled="true"]
+  ):active {
+    background-color: color-mix(
+      in srgb,
+      var(--ui-color-primary) 76%,
+      var(--ui-color-text)
+    );
+  }
+
   .ui-field {
     display: grid;
     gap: 0.375rem;
