@@ -11,6 +11,7 @@ import { collapsibleManifest } from './components/Collapsible.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
+import { inputOTPManifest } from './components/InputOTP.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
@@ -149,6 +150,7 @@ const manifest = {
     Switch: switchManifest,
     RadioGroup: radioGroupManifest,
     Select: selectManifest,
+    InputOTP: inputOTPManifest,
     Slider: sliderManifest,
     Collapsible: collapsibleManifest,
     Accordion: accordionManifest,

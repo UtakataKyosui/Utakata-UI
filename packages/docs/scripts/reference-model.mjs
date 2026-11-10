@@ -27,6 +27,7 @@ export const categories = [
       'Checkbox',
       'RadioGroup',
       'Switch',
+      'InputOTP',
       'Slider',
     ],
   },

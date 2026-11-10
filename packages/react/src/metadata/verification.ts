@@ -23,6 +23,7 @@ const verificationStates = {
   Switch: ['enabled', 'disabled', 'readOnly'],
   RadioGroup: ['selected', 'disabled'],
   Select: ['open', 'dismissed'],
+  InputOTP: ['empty', 'complete', 'invalid', 'disabled'],
   Slider: ['minimum', 'maximum'],
   Collapsible: ['open', 'closed'],
   Accordion: ['open', 'closed', 'disabled'],

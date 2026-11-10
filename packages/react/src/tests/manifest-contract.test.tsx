@@ -415,6 +415,24 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for InputOTP keyboard and paste and keeps autofill and speech manual', () => {
+    const rules = componentManifest.components.InputOTP?.qualityRules ?? [];
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input-otp.keyboard-paste',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+    for (const id of ['input-otp.autofill-ime', 'input-otp.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
     expect(componentManifest.components.RadioGroup?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -531,6 +549,7 @@ describe('public manifest contract', () => {
       'Switch',
       'RadioGroup',
       'Select',
+      'InputOTP',
       'Slider',
       'Collapsible',
       'Accordion',

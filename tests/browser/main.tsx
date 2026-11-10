@@ -17,6 +17,7 @@ import {
   Field,
   Input,
   InputGroup,
+  InputOTP,
   Kbd,
   KbdGroup,
   NativeSelect,
@@ -151,6 +152,59 @@ function SelectStates() {
       </form>
       <Button>After select</Button>
       <output aria-label="Select changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+const slotLabel = (position: number, length: number) =>
+  `Digit ${position} of ${length}`;
+
+function InputOTPStates() {
+  const [events, setEvents] = useState<string[]>([]);
+  return (
+    <section aria-label="Input OTP">
+      <Button>Before code</Button>
+      <Field.Root>
+        <Field.Label>Verification code</Field.Label>
+        <InputOTP.Root
+          name="code"
+          length={4}
+          getSlotLabel={slotLabel}
+          onValueComplete={(value) =>
+            setEvents((previous) => [...previous, `complete:${value}`])
+          }
+        >
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+          <InputOTP.Separator />
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+      </Field.Root>
+      <Field.Root invalid>
+        <Field.Label>Backup code</Field.Label>
+        <InputOTP.Root
+          length={2}
+          defaultValue="12"
+          getSlotLabel={slotLabel}
+          validationType="alphanumeric"
+        >
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+        <Field.Error match>
+          The code is not valid. Request a new code.
+        </Field.Error>
+      </Field.Root>
+      <Field.Root disabled>
+        <Field.Label>Disabled code</Field.Label>
+        <InputOTP.Root length={2} getSlotLabel={slotLabel}>
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+      </Field.Root>
+      <Button>After code</Button>
+      <output aria-label="Input OTP events">{JSON.stringify(events)}</output>
     </section>
   );
 }
@@ -1153,6 +1207,7 @@ function Fixture() {
       <SwitchStates />
       <RadioGroupStates />
       <SelectStates />
+      <InputOTPStates />
       <SliderStates />
       <BadgeStates />
       <SkeletonStates />

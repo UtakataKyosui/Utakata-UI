@@ -769,6 +769,55 @@
     min-block-size: 3rem;
   }
 
+  .ui-input-otp {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ui-input-otp__slot {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    font: inherit;
+    font-size: 1.25rem;
+    inline-size: 2.5rem;
+    min-block-size: 3rem;
+    padding: 0;
+    text-align: center;
+  }
+
+  .ui-input-otp__slot:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+  }
+
+  .ui-input-otp__slot:read-only {
+    border-style: dashed;
+  }
+
+  .ui-input-otp__slot:disabled {
+    border-style: solid;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-input-otp__slot[data-invalid],
+  .ui-input-otp__slot[aria-invalid="true"] {
+    border-color: var(--ui-color-danger);
+    border-width: 2px;
+  }
+
+  .ui-input-otp__separator {
+    background: var(--ui-color-border);
+    block-size: 1px;
+    inline-size: 0.75rem;
+  }
+
   .ui-textarea {
     line-height: 1.5;
     overflow-wrap: break-word;
@@ -1775,8 +1824,21 @@
   }
 
   @media (forced-colors: active) {
-    .ui-separator {
+    .ui-separator,
+    .ui-input-otp__separator {
       background: CanvasText;
+    }
+
+    .ui-input-otp__slot {
+      border-color: CanvasText;
+    }
+
+    .ui-input-otp__slot:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ui-input-otp__slot:disabled {
+      border-color: GrayText;
     }
 
     .ui-badge,

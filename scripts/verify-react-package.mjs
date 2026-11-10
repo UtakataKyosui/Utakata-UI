@@ -39,7 +39,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -81,6 +81,17 @@ export const selectMultiple: SelectRootProps<string> = { multiple: true };
 export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
 // @ts-expect-error Select.Trigger className must be a string in shipped declarations.
 export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
+const otpSlotLabel = (position: number, length: number) => 'Digit ' + position + ' of ' + length;
+export const otpProps: InputOTPRootProps = { length: 6, name: 'code', getSlotLabel: otpSlotLabel, validationType: 'numeric' };
+export const otp = <Field.Root><Field.Label>Verification code</Field.Label><InputOTP.Root {...otpProps}><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Separator /><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Slot /></InputOTP.Root></Field.Root>;
+// @ts-expect-error InputOTP.Root requires getSlotLabel in shipped declarations.
+export const otpNoSlotLabel: InputOTPRootProps = { length: 6 };
+// @ts-expect-error InputOTP does not provide autoSubmit in shipped declarations.
+export const otpAutoSubmit: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, autoSubmit: true };
+// @ts-expect-error InputOTP.Root aria-label would leave the first slot unnamed in shipped declarations.
+export const otpRootLabel: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, 'aria-label': 'Code' };
+// @ts-expect-error InputOTP.Root className must be a string in shipped declarations.
+export const otpFunctionClass: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, className: () => 'x' };
 type SliderRootProps = ComponentProps<typeof Slider.Root>;
 export const sliderProps: SliderRootProps = { defaultValue: 50, min: 0, max: 100, step: 5, name: 'volume' };
 export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider.Label><Slider.Control><Slider.Track><Slider.Indicator /><Slider.Thumb getAriaValueText={(value) => value + ' percent'} /></Slider.Track></Slider.Control></Slider.Root>;

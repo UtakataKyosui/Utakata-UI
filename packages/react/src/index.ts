@@ -77,6 +77,12 @@ export type {
   InputGroupTextProps,
 } from './components/InputGroup.js';
 export { InputGroup } from './components/InputGroup.js';
+export type {
+  InputOTPRootProps,
+  InputOTPSeparatorProps,
+  InputOTPSlotProps,
+} from './components/InputOTP.js';
+export { InputOTP } from './components/InputOTP.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';

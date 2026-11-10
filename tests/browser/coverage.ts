@@ -175,6 +175,16 @@ export const coverage = {
       dismissed: 'select.popup-position-dismiss',
     },
   },
+  InputOTP: {
+    axes: {},
+    selector: '.ui-input-otp',
+    states: {
+      empty: 'input-otp.keyboard-paste',
+      complete: 'input-otp.keyboard-paste',
+      invalid: 'input-otp.keyboard-paste',
+      disabled: 'input-otp.keyboard-paste',
+    },
+  },
   Slider: {
     axes: {},
     selector: '.ui-slider',
