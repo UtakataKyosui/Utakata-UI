@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -33,6 +39,29 @@ try {
     readFileSync(join(packageDirectory, 'package.json'), 'utf8'),
   );
   assert.equal(metadata.license, 'MIT');
+  // tsc must preserve each client boundary in the archive consumed by Next/RSC.
+  const sources = new URL('../packages/react/src/components/', import.meta.url);
+  for (const file of readdirSync(sources).filter((name) =>
+    name.endsWith('.tsx'),
+  )) {
+    const source = readFileSync(new URL(file, sources), 'utf8');
+    if (/^['"]use client['"];/.test(source.trimStart())) {
+      const output = readFileSync(
+        join(
+          packageDirectory,
+          'dist/components',
+          file.replace(/\.tsx$/, '.js'),
+        ),
+        'utf8',
+      );
+      assert.match(
+        output.trimStart(),
+        /^['"]use client['"];/,
+        `${file}: packed client directive was lost`,
+      );
+    }
+  }
+
   for (const file of ['LICENSE', 'README.md', 'src/styles/styles.css']) {
     assert.ok(readFileSync(join(packageDirectory, file)).length > 0);
   }
@@ -616,6 +645,22 @@ import { Button } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 import '@utakata-ui/react/styles.css';
 createRoot(document.getElementById('root')!).render(createElement(Button, null, componentManifest.components.Button.description));
+`,
+  );
+  writeFileSync(
+    join(directory, 'vite.config.mjs'),
+    `
+export default {
+  build: {
+    rolldownOptions: {
+      // This generated app calls createRoot: it has no server/client boundary.
+      onLog(level, warning, defaultHandler) {
+        if (level === 'warn' && warning.code === 'MODULE_LEVEL_DIRECTIVE' && /["']use client["']/.test(warning.message)) return;
+        defaultHandler(level, warning);
+      }
+    }
+  }
+};
 `,
   );
   run(process.execPath, ['node_modules/vite/bin/vite.js', 'build']);

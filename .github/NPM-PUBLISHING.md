@@ -9,7 +9,7 @@
 | `token`      | 検証後に npm へ公開。初回にも使用可能  | `npm` Environment の `NPM_TOKEN`   |
 | `oidc`       | 検証後に npm Trusted Publishing で公開 | 対象パッケージの Trusted Publisher |
 
-タグ push での公開は引き続き OIDC を使用します。Token への自動切り替えは行いません。
+通常は各パッケージの package.json の version 増加を main への push で検出し、OIDC で自動公開します。タグは公開トリガーにしません。Token への自動切り替えは行いません。
 この手順書の追加は、Token の発行・設定変更・公開を実行したことを意味しません。
 
 ## 1. アカウントとスコープを準備する
@@ -22,21 +22,18 @@
 - Node はルート `package.json` の engines、pnpm は packageManager の指定に合わせます。
   CI と同じく npm 11.5.1 以降を使用します。
 
-## 2. GitHub の公開承認を設定する
+## 2. GitHub の公開元を main に制限する
 
-リポジトリの **Settings → Environments → New environment** から `npm` を作成します。
+`npm` Environment の Deployment branches and tags は Selected branches and tags とし、
+branch `main` だけを許可します。自動公開のため Required reviewers は設定しません。
+main への変更は必須 Quality チェックで検証し、公開ジョブは同じコミットの配布物を検査します。
 
-1. Required reviewers に公開を承認する管理者を設定します。利用可能なら自己承認も禁止します。
-   プランによって必要な保護機能が使えない場合は、承認保護を確認済みにせず記録します。
-2. Deployment branches and tags を Selected branches and tags にします。
-   検証用の branch `main` と、公開するパッケージに対応した tag パターン
-   `react-v*`、`cli-v*` をそれぞれ追加します。
-3. 通常の OIDC 運用では、Environment secrets に npm の公開 Token を登録する必要はありません。
+手動実行も main に限定されます。`release_mode: verify` は Environment を使用せず、
+Secret を受け取らない検証モードです。通常の main 自動公開では OIDC を使います。
 
-各 Release ジョブは、公開する実行（`token` / `oidc` の選択、またはタグ push）だけ
-`environment: npm` を使用し、承認を待ちます。手動実行では `main` を選択し、
-`release_mode: verify` が公開しない検証モードです。`verify` は `npm` Environment を
-使わないため、承認待ちにならず、Environment の `NPM_TOKEN` も渡されません。
+2026-11-11 JSTにユーザーの明示承認を受けて、既存 `npm` Environment の手動承認を解除し、
+旧 `react-v*` / `cli-v*` / `mcp-v*` 許可を削除しました。読み戻しでは main のみ許可されています。
+Secret・Trusted Publisher の値は変更していません。
 
 ## 3. 初回を GitHub Actions で公開する
 
@@ -50,7 +47,7 @@
    同じコミット、または検証に影響しない変更だけなら、main の Quality や前回の
    Release で成功した検証を再利用し、配布物の build・pack・配布テストだけを行います。
    すべて再実行するには **full_verification** を選びます。
-5. `npm` Environment の承認要求でコミットと公開対象を確認し、承認します。
+5. 全品質チェックと配布テストが成功した後、指定したバージョンが公開されます。
    全検証と配布テストの成功後、テストしたものと同じ tgz を公開します。
 6. 実行ログと npm のパッケージページで、バージョンと provenance を確認します。
    公開済みのバージョンは再利用できません。成功した同一バージョンの公開ジョブを再実行しないでください。
@@ -78,12 +75,11 @@ CI は GitHub-hosted runner と `id-token: write` を設定済みです。
 期限切れの場合は npm 側で削除・再作成します。
 詳細は [npm Trusted Publishing 公式手順](https://docs.npmjs.com/trusted-publishers/) を参照してください。
 
-次のバージョンに更新した変更を main にマージし、対応する Release を main で
-`release_mode: verify` により検証します。続いて `release_mode: oidc` で実行し、承認して公開します。
-タグで公開する場合は、確認した main のコミットにパッケージ固有のタグを付けて push します。
-たとえば React の次版が `0.1.1` なら `react-v0.1.1` です。
-手動で公開した同じバージョンのタグを push すると再公開になるため、いずれか一方の方法を使用します。
-タグと package.json のバージョンが違う場合や、コミットが main に含まれない場合は失敗します。
+公開対象の `packages/react/package.json` または `packages/cli/package.json` の version を
+安定版の新しい値に更新してmainへマージします。対象パッケージのバージョンが増加した場合だけ、
+品質チェック・build・pack・外部利用者テスト後に自動公開します。
+バージョンが同じ変更は公開せず、低下・不正なバージョン・比較元の取得失敗はエラーになります。
+タグからのバージョン抽出やタグpushによる公開は行いません。手動 `verify` は随時実行できます。
 
 OIDC 公開の成功後、npm の Publishing access で Token による公開を禁止する設定を検討し、
 不要な公開 Token を失効させます。パッケージページのバージョン・provenance と CI の結果を確認します。
@@ -118,7 +114,7 @@ OIDC への移行が完了するまでは、Token を更新して `release_mode:
 ## 6. 未設定・認証失敗の切り分け
 
 - `pnpm verify:release-readiness` は読み取り専用です。ローカル認証、main の必須チェック、
-  npm Environment と承認者を確認し、不明な項目は unverified として非ゼロ終了します。
+  npm Environment の main 限定と手動承認がないことを確認し、不明な項目は unverified として非ゼロ終了します。
   ローカル認証は任意の補助確認です。Actions の Token/OIDC 公開にはローカルログインは不要で、
   ローカル未認証でも手動リリースできます。この preflight は公開ジョブの必須ゲートではありません。
 - スコープ権限・Publisher の確認証拠を渡す方法は [CI ガイド](CI.md) を参照してください。
@@ -126,7 +122,7 @@ OIDC への移行が完了するまでは、Token を更新して `release_mode:
 - ENEEDAUTH/E404 は、スコープ権限、Publisher の owner/repository/workflow/environment、
   `npm publish` 許可、有効期限、npm バージョン、`id-token: write` を確認します。
   E404 だけでパッケージが存在しないと断定しません。
-- Environment 待ちやスキップでは、承認者と branch/tag の許可パターンを確認します。
+- Environment 待ちやスキップでは、version 選択結果と main の許可パターンを確認します。
 - バージョン重複は再試行で解決しません。公開済み内容を確認してから次のバージョンを準備します。
 
 設定・公開の証拠には日時、対象バージョン、確認者、CI run、公開ページを記録し、認証情報は含めません。
