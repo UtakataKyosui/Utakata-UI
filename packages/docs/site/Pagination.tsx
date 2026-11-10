@@ -1,4 +1,5 @@
 import { Pagination as UtakataPagination } from '@utakata-ui/react';
+import { mountBase } from './base-path.js';
 
 interface PageLink {
   route: string;
@@ -9,22 +10,26 @@ export interface PaginationProps {
   prev: PageLink | null;
   next: PageLink | null;
   strings?: { previous?: string; next?: string; pagination?: string };
+  /** Deployment base (`import.meta.env.BASE_URL`), passed by the Astro wrapper. */
+  base?: string;
 }
 
 function PagerLink({
   direction,
   page,
   label,
+  base,
 }: {
   direction: 'previous' | 'next';
   page: PageLink;
   label: string;
+  base: string | undefined;
 }) {
   const Link =
     direction === 'next' ? UtakataPagination.Next : UtakataPagination.Previous;
   return (
     <UtakataPagination.Item className={`utakata-docs-pager-${direction}`}>
-      <Link href={page.route}>
+      <Link href={mountBase(base, page.route)}>
         <span className="utakata-docs-pager-label">{label}</span>
         <span className="utakata-docs-pager-title">{page.label}</span>
       </Link>
@@ -33,7 +38,12 @@ function PagerLink({
 }
 
 /** Blume's prev/next layout slot, rendered with Utakata Pagination. */
-export default function Pagination({ prev, next, strings }: PaginationProps) {
+export default function Pagination({
+  prev,
+  next,
+  strings,
+  base,
+}: PaginationProps) {
   if (!(prev || next)) return null;
   const t = {
     pagination: 'Pagination',
@@ -48,9 +58,16 @@ export default function Pagination({ prev, next, strings }: PaginationProps) {
     >
       <UtakataPagination.List>
         {prev && (
-          <PagerLink direction="previous" page={prev} label={t.previous} />
+          <PagerLink
+            direction="previous"
+            page={prev}
+            label={t.previous}
+            base={base}
+          />
         )}
-        {next && <PagerLink direction="next" page={next} label={t.next} />}
+        {next && (
+          <PagerLink direction="next" page={next} label={t.next} base={base} />
+        )}
       </UtakataPagination.List>
     </UtakataPagination.Root>
   );

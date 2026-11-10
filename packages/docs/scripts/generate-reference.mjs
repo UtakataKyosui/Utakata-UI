@@ -247,6 +247,11 @@ function qualitySections(rules, locale, localize, level) {
     .join('\n');
 }
 
+/** Each locale has its own examples; the default locale's sit at the root. */
+function examplePath(locale, slug) {
+  return locale === 'ja' ? slug : `${locale}/${slug}`;
+}
+
 function componentPage({
   name,
   component,
@@ -279,7 +284,7 @@ description: ${frontmatterString(description)}
 
 ## ${t.preview} [#preview]
 
-<Component path="${slug}" />
+<Component path="${examplePath(locale, slug)}" />
 
 ## ${t.import} [#import]
 

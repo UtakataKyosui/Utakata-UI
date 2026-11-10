@@ -12,7 +12,7 @@ See [Button](/en/components/button) for detailed usage and the API.
 
 Three variants, sizes and the disabled state. Pressing the button changes the click count.
 
-<Component path="button" />
+<Component path="en/button" />
 
 ## Field [#field]
 
@@ -20,7 +20,7 @@ See [Field](/en/components/field) for detailed usage and the API.
 
 A label, input and description, plus the disabled state. Input is not submitted or saved.
 
-<Component path="field" />
+<Component path="en/field" />
 
 ## Dialog [#dialog]
 
@@ -28,7 +28,7 @@ See [Dialog](/en/components/dialog) for detailed usage and the API.
 
 Open it with the button, move with Tab, and close it with Escape or the close button.
 
-<Component path="dialog" />
+<Component path="en/dialog" />
 
 ## Kbd [#kbd]
 
@@ -38,7 +38,7 @@ Single keys and key combinations. Name a combination for screen readers with `ar
 
 `Kbd` and `KbdGroup` are display-only. `tabIndex`, `contentEditable` and keyboard event handlers cannot be specified. Implement shortcut handling in your application. For values that bypass TypeScript, dynamic JSX and custom CSS, check this constraint yourself.
 
-<Component path="kbd" />
+<Component path="en/kbd" />
 
 ## Separator [#separator]
 
@@ -48,7 +48,7 @@ Horizontal and vertical separators. By default they are decorative and hidden fr
 
 `Separator` is not interactive. `tabIndex` and `contentEditable`, which would make it focusable, are rejected by the types. Use a dedicated component for resizing.
 
-<Component path="separator" />
+<Component path="en/separator" />
 
 ## Badge [#badge]
 
@@ -56,7 +56,7 @@ See [Badge](/en/components/badge) for detailed usage and the API.
 
 Four variants, a badge with an icon and long text. State is conveyed by wording, not color.
 
-<Component path="badge" />
+<Component path="en/badge" />
 
 ## Skeleton [#skeleton]
 
@@ -64,7 +64,7 @@ See [Skeleton](/en/components/skeleton) for detailed usage and the API.
 
 Shows the shape of loading content. Skeleton itself is not announced; the parent's `aria-busy` and status text convey loading. The button toggles loading completion.
 
-<Component path="skeleton" />
+<Component path="en/skeleton" />
 
 ## Spinner [#spinner]
 
@@ -72,7 +72,7 @@ See [Spinner](/en/components/spinner) for detailed usage and the API.
 
 Three sizes, and `decorative` use inside a button. On its own it conveys progress with `role="status"` and a visually hidden label.
 
-<Component path="spinner" />
+<Component path="en/spinner" />
 
 ## Card [#card]
 
@@ -80,7 +80,7 @@ See [Card](/en/components/card) for detailed usage and the API.
 
 A Card containing a form and a Card whose heading level is changed with `level`. Card itself is not clickable.
 
-<Component path="card" />
+<Component path="en/card" />
 
 ## Alert [#alert]
 
@@ -88,7 +88,7 @@ See [Alert](/en/components/alert) for detailed usage and the API.
 
 In-page notices. Regular notices are not announced automatically. Pressing the button shows an error in a `role="alert"` region.
 
-<Component path="alert" />
+<Component path="en/alert" />
 
 ## Avatar [#avatar]
 
@@ -96,7 +96,7 @@ See [Avatar](/en/components/avatar) for detailed usage and the API.
 
 An image, the Fallback shown when loading fails, and a decorative image (`alt=""`) next to a visible name.
 
-<Component path="avatar" />
+<Component path="en/avatar" />
 
 ## Progress [#progress]
 
@@ -104,7 +104,7 @@ See [Progress](/en/components/progress) for detailed usage and the API.
 
 Determinate, 0% and indeterminate progress bars. Name it with `label`, `aria-label` or `aria-labelledby`. `value={null}` is indeterminate and distinct from 0%.
 
-<Component path="progress" />
+<Component path="en/progress" />
 
 ## Table [#table]
 
@@ -112,7 +112,7 @@ See [Table](/en/components/table) for detailed usage and the API.
 
 A table with a caption, row and column headers, right-aligned numbers and links and buttons in cells. When space is short only `Table.Container` scrolls horizontally, and you can focus it and scroll with the arrow keys.
 
-<Component path="table" />
+<Component path="en/table" />
 
 ## Breadcrumb [#breadcrumb]
 
@@ -120,7 +120,7 @@ See [Breadcrumb](/en/components/breadcrumb) for detailed usage and the API.
 
 Navigation showing the hierarchy up to the current location. The default name is "パンくずリスト" (breadcrumb); separators and the ellipsis are hidden from screen readers.
 
-<Component path="breadcrumb" />
+<Component path="en/breadcrumb" />
 
 ## Pagination [#pagination]
 
@@ -128,7 +128,7 @@ See [Pagination](/en/components/pagination) for detailed usage and the API.
 
 Moves between pages with ordinary links. The current page is marked with `active`; on the first page "Previous" is disabled and removed from the Tab order.
 
-<Component path="pagination" />
+<Component path="en/pagination" />
 
 ## Input [#input]
 
@@ -138,7 +138,7 @@ Single-line text input. Inside `Field.Root`, place it instead of `Field.Control`
 
 Each size and state of the built-in theme is verified in real browsers. Check custom backgrounds and CSS, actual text zoom, assistive technology output and wording comprehension yourself as well. `input.visual-theme` is a required browser rule and is kept separate from manual check results.
 
-<Component path="input" />
+<Component path="en/input" />
 
 ## Textarea [#textarea]
 
@@ -146,7 +146,7 @@ See [Textarea](/en/components/textarea) for detailed usage and the API.
 
 Multi-line input. It accepts line breaks and can be resized vertically. Also state a character limit in text, for example with `Field.Description`.
 
-<Component path="textarea" />
+<Component path="en/textarea" />
 
 ## NativeSelect [#nativeselect]
 
@@ -154,7 +154,7 @@ See [NativeSelect](/en/components/nativeselect) for detailed usage and the API.
 
 The browser's native select. It keeps the OS option list and keyboard behavior. Pass `option` and `optgroup` as children.
 
-<Component path="nativeselect" />
+<Component path="en/nativeselect" />
 
 ## Checkbox [#checkbox]
 
@@ -162,7 +162,7 @@ See [Checkbox](/en/components/checkbox) for detailed usage and the API.
 
 Unchecked, checked and indeterminate states are shown by a check mark or dash, not only by color. Name it with `Field.Label` or a label element.
 
-<Component path="checkbox" />
+<Component path="en/checkbox" />
 
 ## Switch [#switch]
 
@@ -170,7 +170,7 @@ See [Switch](/en/components/switch) for detailed usage and the API.
 
 On/off for a setting that takes effect immediately. The thumb position also shows the state, and the label wording does not change when toggled.
 
-<Component path="switch" />
+<Component path="en/switch" />
 
 ## RadioGroup [#radiogroup]
 
@@ -178,7 +178,7 @@ See [RadioGroup](/en/components/radiogroup) for detailed usage and the API.
 
 Single selection in vertical and horizontal layouts, including a disabled item. Arrow keys move and select. The group name references visible text with `aria-labelledby`, and each item is named by its own text.
 
-<Component path="radiogroup" />
+<Component path="en/radiogroup" />
 
 ## Select [#select]
 
@@ -186,7 +186,7 @@ See [Select](/en/components/select) for detailed usage and the API.
 
 Labeled single selection. Move with the arrow keys or by typing, select with Enter, and press Escape to close without changing the value and return focus to the Trigger. Use NativeSelect if you want the native picker.
 
-<Component path="select" />
+<Component path="en/select" />
 
 ## Slider [#slider]
 
@@ -194,7 +194,7 @@ See [Slider](/en/components/slider) for detailed usage and the API.
 
 Choosing a value from a numeric range. Arrow keys move by step, Page Up/Down by larger amounts, and Home/End to the minimum and maximum. Show the value with `Slider.Value` and adjust the announced value with `format` or `getAriaValueText`.
 
-<Component path="slider" />
+<Component path="en/slider" />
 
 ## Collapsible [#collapsible]
 
@@ -202,7 +202,7 @@ See [Collapsible](/en/components/collapsible) for detailed usage and the API.
 
 Opens and closes one region. The trigger is a button that conveys its state with `aria-expanded`, and collapsed content is not reachable with Tab.
 
-<Component path="collapsible" />
+<Component path="en/collapsible" />
 
 ## Accordion [#accordion]
 
@@ -210,7 +210,7 @@ See [Accordion](/en/components/accordion) for detailed usage and the API.
 
 Opens and closes multiple items with headings. Match the page heading hierarchy with `level` on `Accordion.Header`, and allow several open items with `multiple`.
 
-<Component path="accordion" />
+<Component path="en/accordion" />
 
 ## Tabs [#tabs]
 
@@ -218,7 +218,7 @@ See [Tabs](/en/components/tabs) for detailed usage and the API.
 
 Move between tabs with the arrow keys, Home and End, and switch with Enter or Space. Always specify the initial tab with `defaultValue` or `value`.
 
-<Component path="tabs" />
+<Component path="en/tabs" />
 
 ## Toggle [#toggle]
 
@@ -226,7 +226,7 @@ See [Toggle](/en/components/toggle) for detailed usage and the API.
 
 A button that shows its pressed state with `aria-pressed` and fill and border. Icon-only toggles require `iconOnly` and `aria-label`.
 
-<Component path="toggle" />
+<Component path="en/toggle" />
 
 ## Tooltip [#tooltip]
 
@@ -234,7 +234,7 @@ See [Tooltip](/en/components/tooltip) for detailed usage and the API.
 
 Shows short supplementary text on hover and keyboard focus. Escape closes it, and it stays open when the pointer moves onto the Popup. The Trigger needs its own accessible name; do not make the Tooltip the only label or the only place required information appears. Content is text only; put interactive elements in a Popover.
 
-<Component path="tooltip" />
+<Component path="en/tooltip" />
 
 ## Popover [#popover]
 
@@ -242,7 +242,7 @@ See [Popover](/en/components/popover) for detailed usage and the API.
 
 A non-modal popup tied to a Trigger. Name it with `Popover.Title` and describe it with `Popover.Description`. Base UI handles moving and restoring focus and closing on Escape or outside interaction.
 
-<Component path="popover" />
+<Component path="en/popover" />
 
 ## DropdownMenu [#dropdownmenu]
 
@@ -250,7 +250,7 @@ See [DropdownMenu](/en/components/dropdownmenu) for detailed usage and the API.
 
 A list of button actions. Move between items with the arrow keys, Home/End and typing; Enter runs an item, closes the menu and returns focus to the Trigger. Disabled items are reachable with the arrow keys but do not run. Do not use it for page navigation; use a list of links instead.
 
-<Component path="dropdownmenu" />
+<Component path="en/dropdownmenu" />
 
 ## AlertDialog [#alertdialog]
 
@@ -258,7 +258,7 @@ See [AlertDialog](/en/components/alertdialog) for detailed usage and the API.
 
 Confirms important actions such as deletion. Opening it focuses Cancel, and clicking outside does not close it. Escape or Cancel closes it and returns focus to the original button.
 
-<Component path="alertdialog" />
+<Component path="en/alertdialog" />
 
 ## Toast [#toast]
 
@@ -266,7 +266,7 @@ See [Toast](/en/components/toast) for detailed usage and the API.
 
 A temporary notification that reports status without moving focus. Hovering or focusing pauses the auto-dismiss timer, and F6 moves to the notification region. Error notifications are shown without auto-dismiss (`timeout: 0`).
 
-<Component path="toast" />
+<Component path="en/toast" />
 
 ## InputGroup [#inputgroup]
 
@@ -274,7 +274,7 @@ See [InputGroup](/en/components/inputgroup) for detailed usage and the API.
 
 Attaches icons, units and buttons before, after, above or below an existing `Input` or `Textarea`. Label it with `Field.Label`, hide decorative icons with `aria-hidden`, and associate meaningful text such as units with the input through `aria-describedby`. `align` only sets placement and does not reorder content, so write the DOM order to match the visual order. The attached button defaults to `type="button"`, so pressing it does not submit the form.
 
-<Component path="inputgroup" />
+<Component path="en/inputgroup" />
 
 ## ToggleGroup [#togglegroup]
 
@@ -282,7 +282,7 @@ See [ToggleGroup](/en/components/togglegroup) for detailed usage and the API.
 
 Groups `Toggle` items. Tab enters the group once, and the arrow keys matching `orientation`, Home and End move between items. By default only one item can be pressed; `multiple` lets items be pressed independently. Both modes can return to nothing pressed, so use `RadioGroup` when exactly one must be chosen. The group name (`aria-label` or `aria-labelledby`) is required by the types.
 
-<Component path="togglegroup" />
+<Component path="en/togglegroup" />
 
 ## ButtonGroup [#buttongroup]
 
@@ -290,4 +290,4 @@ See [ButtonGroup](/en/components/buttongroup) for detailed usage and the API.
 
 Joins the borders and corner radii of related `Button` elements. Each button is still reached one at a time with Tab, and variant, size, disabled state and type stay as set on each button. The group name (`aria-label` or `aria-labelledby`) is required by the types.
 
-<Component path="buttongroup" />
+<Component path="en/buttongroup" />

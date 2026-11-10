@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { componentManifest } from '@utakata-ui/react/manifest';
 import {
@@ -8,10 +8,12 @@ import {
   exportsByFile,
   isProse,
   sharedTranslatableStrings,
+  slugOf,
   sourceKey,
   translatableStrings,
   translate,
 } from './reference-model.mjs';
+import { exampleLang, setHtmlLang } from './set-example-lang.mjs';
 
 const readJson = async (path) =>
   JSON.parse(await readFile(new URL(path, import.meta.url), 'utf8'));
@@ -81,4 +83,29 @@ test('only prose is translated; code-like values pass through', () => {
     ),
     'ネイティブの Props',
   );
+});
+
+test('every example has an English counterpart without Japanese text', async () => {
+  const examples = new URL('../examples/', import.meta.url);
+  const names = (await readdir(examples)).filter((file) =>
+    file.endsWith('.tsx'),
+  );
+  for (const name of Object.keys(componentManifest.components)) {
+    assert.ok(names.includes(`${slugOf(name)}.tsx`), `${name} has no example`);
+  }
+  for (const file of names) {
+    const source = await readFile(new URL(`en/${file}`, examples), 'utf8');
+    assert.doesNotMatch(source, /[\u3040-\u30ff\u4e00-\u9fff]/u, `en/${file}`);
+  }
+});
+
+test('example frames get the language of their locale', () => {
+  assert.equal(exampleLang('button'), 'ja');
+  assert.equal(exampleLang('en/button'), 'en');
+  assert.equal(exampleLang('entry'), 'ja');
+  assert.equal(
+    setHtmlLang('<html lang="en"><body></body></html>', 'ja'),
+    '<html lang="ja"><body></body></html>',
+  );
+  assert.throws(() => setHtmlLang('<html><body></body></html>', 'ja'));
 });
