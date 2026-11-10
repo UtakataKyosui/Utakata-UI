@@ -186,6 +186,12 @@ section[aria-label="AlertDialog states"] {
   min-width: 0;
 }
 
+section[aria-label="Sheet states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
 section[aria-label="Toast states"] {
   align-items: flex-start;
   flex-direction: column;
@@ -228,4 +234,18 @@ section[aria-label="Command states"] {
 section[aria-label="Command states"] .ui-command {
   inline-size: 280px;
   max-inline-size: 100%;
+}
+
+.interaction-states {
+  gap: 1.5rem;
+}
+
+.interaction-states section {
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.interaction-states .ui-radio-group,
+.interaction-states .ui-slider {
+  min-inline-size: 12rem;
 }

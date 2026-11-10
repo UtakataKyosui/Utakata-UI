@@ -267,6 +267,13 @@ See [Command](/en/components/command) for detailed usage and the API.
 An always-visible, searchable list of commands. It has no popup or selected value: run a command from `Command.Item` `onClick` (a click, or Enter on the highlighted item). Placed in a `Dialog` it becomes a command palette; close the `Dialog` from `onClick` and focus returns to the button that opened it. Focus stays in the input while the arrow keys move the highlight. Name the input with `aria-label` or similar and put a no-results message in `Command.Empty`. A shortcut such as Ctrl/Cmd+K that opens the palette is the consumer's responsibility; keep an operation that opens it without the shortcut. Use `Combobox` to choose and submit a value, and `Select` for a fixed list without search.
 
 <Component path="en/command" />
+## Sheet [#sheet]
+
+See [Sheet](/en/components/sheet) for detailed usage and the API.
+
+A modal panel attached to the top, right, bottom or left edge, built on Dialog. `side` selects the edge (default `right`). Tab stays inside the panel, and Escape, `Sheet.Close` and a press on the backdrop close it and return focus to the trigger. Long content scrolls inside the panel, and the slide transition is removed when reduced motion is requested. Always provide a `Sheet.Title` and a visible `Sheet.Close`.
+
+<Component path="en/sheet" />
 
 ## Toast [#toast]
 

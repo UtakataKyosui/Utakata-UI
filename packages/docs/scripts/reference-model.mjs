@@ -37,6 +37,7 @@ export const categories = [
       'Dialog',
       'AlertDialog',
       'Command',
+      'Sheet',
       'Popover',
       'Tooltip',
       'Toast',

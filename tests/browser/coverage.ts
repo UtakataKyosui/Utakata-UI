@@ -3,7 +3,14 @@
 export const coverage = {
   Button: {
     axes: {
-      variants: ['solid', 'outline', 'ghost'],
+      variants: [
+        'solid',
+        'secondary',
+        'outline',
+        'ghost',
+        'destructive',
+        'link',
+      ],
       sizes: ['sm', 'md', 'lg'],
     },
     selector: '.ui-button',
@@ -40,6 +47,14 @@ export const coverage = {
     states: {
       decorative: 'coverage.public-configurations',
       semantic: 'coverage.public-configurations',
+    },
+  },
+  Sheet: {
+    axes: { sides: ['top', 'right', 'bottom', 'left'] },
+    selector: '.ui-sheet__popup',
+    states: {
+      open: 'sheet.focus-containment',
+      closed: 'sheet.dismissal-focus-return',
     },
   },
   Badge: {
