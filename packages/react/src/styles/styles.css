@@ -1225,9 +1225,11 @@
     padding: 0;
   }
 
-  .ui-combobox__trigger:hover,
-  .ui-combobox__clear:hover {
-    color: var(--ui-color-text);
+  @media (hover: hover) {
+    .ui-combobox__trigger:hover,
+    .ui-combobox__clear:hover {
+      color: var(--ui-color-text);
+    }
   }
 
   .ui-combobox__trigger:focus-visible,
