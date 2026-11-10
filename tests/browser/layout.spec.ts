@@ -206,17 +206,19 @@ for (const [name, css, error] of [
 
 async function verifyInteractionContrast(page: Page) {
   const measurements = [];
-  for (const button of await page
-    .locator('.layout-contract > .ui-button')
-    .all()) {
+  for (const [index, button] of (
+    await page.locator('.layout-contract > .ui-button').all()
+  ).entries()) {
     await button.hover();
     const selector = `.${(await button.getAttribute('class'))?.trim().split(/\s+/).join('.')}`;
     const hover = await measureRenderedColors(page, selector);
     for (const item of hover)
       expect(item.text, 'hover contrast').toBeGreaterThanOrEqual(4.5);
     await button.focus();
-    await page.keyboard.press('Shift+Tab');
-    await page.keyboard.press('Tab');
+    // Keep the round trip inside the document. Shift+Tab from its first
+    // control enters browser chrome, whose return path differs by engine.
+    for (const key of index === 0 ? ['Tab', 'Shift+Tab'] : ['Shift+Tab', 'Tab'])
+      await page.keyboard.press(key);
     await expect(button).toBeFocused();
     const focus = await measureRenderedColors(page, selector);
     for (const item of focus)

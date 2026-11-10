@@ -31,6 +31,7 @@
     "@axe-core/playwright": "4.14.0",
     "@biomejs/biome": "2.6.4",
     "@guidepup/guidepup": "0.40.0",
+    "@guidepup/playwright": "0.21.0",
     "@guidepup/setup": "0.29.3",
     "@markuplint/jsx-parser": "5.4.0",
     "@markuplint/react-spec": "5.4.0",

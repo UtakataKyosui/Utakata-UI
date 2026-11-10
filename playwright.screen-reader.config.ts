@@ -6,6 +6,7 @@ export default defineConfig({
   testDir: './tests/screen-reader',
   testIgnore: [],
   workers: 1,
+  fullyParallel: false,
   timeout: 90_000,
   globalTimeout: 300_000,
   projects: [
