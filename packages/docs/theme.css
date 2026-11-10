@@ -27,50 +27,9 @@ body {
   padding-block-end: 0.5rem;
 }
 
-.utakata-docs-rules,
-.utakata-docs-grid,
-.utakata-docs-badges {
+.utakata-docs-grid {
   list-style: none;
   padding: 0;
-}
-
-.utakata-docs-rules {
-  display: grid;
-  gap: 1rem;
-}
-
-.utakata-docs-rule-header {
-  align-items: center;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: space-between;
-}
-
-.utakata-docs-rule-details {
-  display: grid;
-  gap: 0.25rem 1rem;
-  grid-template-columns: max-content minmax(0, 1fr);
-  margin-block-start: 0.75rem;
-  font-size: 0.875rem;
-}
-
-.utakata-docs-rule-details dt {
-  color: var(--ui-color-muted);
-  font-weight: 600;
-}
-
-@media (max-width: 40rem) {
-  .utakata-docs-rule-details {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .utakata-docs-rule-details dd + dt {
-    margin-block-start: 0.5rem;
-  }
-}
-
-.utakata-docs-grid {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
@@ -101,13 +60,6 @@ body {
 
 .utakata-docs-link-card:hover {
   border-color: var(--ui-color-text);
-}
-
-.utakata-docs-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-block: 0.5rem 1.5rem;
 }
 
 .utakata-docs-pager .ui-pagination__list {

@@ -16,20 +16,19 @@ No dedicated MCP npm package is needed. If you previously used a local stdio con
 
 ## Use the tools [#tools]
 
-| Tool             | Purpose                                                                          |
-| ---------------- | -------------------------------------------------------------------------------- |
-| `search_docs`    | Search component names, Props, composition and quality requirements with `query` |
-| `get_page`       | Read the page specified by `route` as Markdown                                   |
-| `list_pages`     | List available pages                                                             |
-| `get_navigation` | Read the site's navigation                                                       |
+| Tool             | Purpose                                                                         |
+| ---------------- | ------------------------------------------------------------------------------- |
+| `search_docs`    | Search component names, Props, composition and accessibility notes with `query` |
+| `get_page`       | Read the page specified by `route` as Markdown                                  |
+| `list_pages`     | List available pages                                                            |
+| `get_navigation` | Read the site's navigation                                                      |
 
 Pages are also available as MCP resources. For example, to use Button:
 
 1. Pass `{"query":"Button"}` to `search_docs` to find the page.
-2. Pass `{"route":"/en/components/button"}` to `get_page` to read Props, composition and component-specific quality requirements.
-3. Pass `{"route":"/en/components/quality"}` to `get_page` to read shared quality requirements.
+2. Pass `{"route":"/en/components/button"}` to `get_page` to read Props, composition and accessibility notes.
 
-Japanese pages use `/components/button` and `/components/quality`. Shared quality requirements apply to every component; read them alongside each component page.
+The Japanese page is `/components/button`.
 
 The hosted site describes the deployed version. When using another UI version, also inspect the installed `@utakata-ui/react/manifest` and type declarations. MCP does not inspect copied and edited implementations or verification results for custom themes. Its tools only read specifications; they do not rewrite files or install packages.
 

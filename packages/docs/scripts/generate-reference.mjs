@@ -36,13 +36,7 @@ const text = {
     indexDescription:
       '用途別のコンポーネント一覧と、各ページで確認できる内容です。',
     indexIntro:
-      '各コンポーネントのページでは、操作できるプレビュー、インポート方法、使い方、Props、パーツ構成、アクセシビリティ、品質要件を確認できます。導入手順は[導入方法](/getting-started)を参照してください。',
-    qualityTitle: '共通の品質要件',
-    qualityDescription: 'すべてのコンポーネントに適用される品質要件です。',
-    qualityIntro:
-      'すべてのコンポーネントに共通する要件です。各コンポーネントのページには、そのコンポーネント固有の要件を記載しています。',
-    verificationIntro:
-      '要件は検証方法ごとに分類しています。「自動テスト」は jsdom と axe、「実ブラウザー検証」は Playwright による実ブラウザーでの検証、「手動確認」は支援技術や表示の確認です。手動確認は、記録された結果がない限り未検証として扱います。',
+      '各コンポーネントのページでは、操作できるプレビュー、インポート方法、使い方、Props、パーツ構成、アクセシビリティを確認できます。導入手順は[導入方法](/getting-started)を参照してください。',
     preview: 'プレビュー',
     import: 'インポート',
     importNote:
@@ -56,15 +50,6 @@ const text = {
     partsCaption: (name) => `${name} のパーツ`,
     accessibility: 'アクセシビリティ',
     avoid: '避けること',
-    quality: '品質要件',
-    qualityLink:
-      'このコンポーネント固有の要件です。全コンポーネント共通の要件は[共通の品質要件](/components/quality)を参照してください。',
-    states: '検証する状態',
-    verification: {
-      automated: '自動テスト',
-      browser: '実ブラウザー検証',
-      manual: '手動確認',
-    },
     required: '必須',
     none: 'なし',
   },
@@ -74,13 +59,7 @@ const text = {
     indexDescription:
       'Components grouped by purpose, and what each component page covers.',
     indexIntro:
-      'Each component page has an interactive preview, the import statement, usage, props, parts, accessibility notes and quality requirements. See [Installation](/en/getting-started) to install the package.',
-    qualityTitle: 'Shared quality requirements',
-    qualityDescription: 'Quality requirements that apply to every component.',
-    qualityIntro:
-      'These requirements apply to every component. Each component page lists the requirements specific to that component.',
-    verificationIntro:
-      'Requirements are grouped by how they are verified. Automated checks run in jsdom with axe, browser checks run in real browsers through Playwright, and manual checks cover assistive technology and visual review. Manual checks stay unverified until results are recorded.',
+      'Each component page has an interactive preview, the import statement, usage, props, parts and accessibility notes. See [Installation](/en/getting-started) to install the package.',
     preview: 'Preview',
     import: 'Import',
     importNote:
@@ -94,15 +73,6 @@ const text = {
     partsCaption: (name) => `${name} parts`,
     accessibility: 'Accessibility',
     avoid: 'Avoid',
-    quality: 'Quality requirements',
-    qualityLink:
-      'These requirements are specific to this component. See [Shared quality requirements](/en/components/quality) for the requirements every component follows.',
-    states: 'Verified states',
-    verification: {
-      automated: 'Automated checks',
-      browser: 'Browser checks',
-      manual: 'Manual checks',
-    },
     required: 'Required',
     none: 'None',
   },
@@ -218,35 +188,6 @@ function defaultCell(value, localize, t) {
   return `\`${JSON.stringify(value)}\``;
 }
 
-function ruleItems(rules, localize) {
-  return rules.map((rule) => ({
-    id: rule.id,
-    severity: rule.severity,
-    requirement: localize(rule.requirement),
-    remediation: localize(rule.remediation),
-    ...(rule.applicability
-      ? { applicability: localize(rule.applicability) }
-      : {}),
-    ...(rule.residual ? { residual: localize(rule.residual) } : {}),
-    ...(rule.criteria ? { criteria: [...rule.criteria] } : {}),
-  }));
-}
-
-function qualitySections(rules, locale, localize, level) {
-  const t = text[locale];
-  return ['automated', 'browser', 'manual']
-    .map((verification) => {
-      const group = rules.filter((rule) => rule.verification === verification);
-      if (!group.length) return '';
-      return `${'#'.repeat(level)} ${t.verification[verification]} [#${verification}]
-
-<QualityRules locale="${locale}" rules=${attribute(ruleItems(group, localize))} />
-`;
-    })
-    .filter(Boolean)
-    .join('\n');
-}
-
 /** Each locale has its own examples; the default locale's sit at the root. */
 function examplePath(locale, slug) {
   return locale === 'ja' ? slug : `${locale}/${slug}`;
@@ -325,15 +266,6 @@ ${prose(localize(component.accessibility))}
 ${component.avoid.map((item) => `- ${prose(localize(item))}`).join('\n')}
 `);
   }
-  sections.push(`## ${t.quality} [#quality]
-
-${t.qualityLink}
-
-**${t.states}**
-
-<BadgeList label=${attribute(t.states)} items=${attribute([...component.verificationStates])} />
-
-${qualitySections(component.qualityRules, locale, localize, 3)}`);
   return sections.join('\n');
 }
 
@@ -362,20 +294,6 @@ description: ${frontmatterString(t.indexDescription)}
 ${t.indexIntro}
 
 ${groups.join('\n')}`;
-}
-
-function qualityPage(locale, dictionaries) {
-  const t = text[locale];
-  return `---
-title: ${t.qualityTitle}
-description: ${frontmatterString(t.qualityDescription)}
----
-
-${t.qualityIntro}
-
-${t.verificationIntro}
-
-${qualitySections(manifest.sharedQualityRules, locale, localizer(locale, dictionaries.shared), 2)}`;
 }
 
 function meta(fields) {
@@ -459,20 +377,11 @@ async function generate() {
       indexPage(locale, dictionaries),
     );
     await writeFile(
-      new URL('quality.mdx', directory),
-      qualityPage(locale, dictionaries),
-    );
-    await writeFile(
       new URL('meta.ts', directory),
       meta({
         title: text[locale].group,
         order: 2,
-        pages: [
-          'index',
-          'preview',
-          'quality',
-          ...categories.map(({ slug }) => slug),
-        ],
+        pages: ['index', 'preview', ...categories.map(({ slug }) => slug)],
       }),
     );
     for (const category of categories) {
