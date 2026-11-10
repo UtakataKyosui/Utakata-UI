@@ -11,7 +11,7 @@ and existing tests before editing. Read `skills/utakata-ui/SKILL.md` for usage.
 
 Preserve Base UI interactions and Lism layout primitives. Match existing ref,
 className and CSS conventions. Keep exports, manifest defaults, variants and
-composition requirements aligned. Update MCP tests when tool output changes.
+composition requirements aligned. Verify generated reference Markdown consumed by Blume MCP when manifest output changes.
 
 Add behavior-focused tests for affected accessible names, disabled behavior,
 label relationships, focus or dismissal. Follow the existing axe test pattern.

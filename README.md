@@ -25,13 +25,12 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 | ------------------- | ----------------------------- | -------------------------------------------------- |
 | `packages/docs`     | `@utakata-ui/docs`（private） | 一般公開用のドキュメントサイト                     |
 | `packages/react`    | `@utakata-ui/react`           | UI ライブラリ本体と公開 manifest（標準の導入方法） |
-| `packages/mcp`      | `@utakata-ui/mcp`             | manifest を参照する MCP サーバー                   |
 | `packages/cli`      | `@utakata-ui/cli`             | ソースを取り込んで改変する場合の補助 CLI           |
 | `packages/a11y-cli` | `@utakata-ui/a11y-cli`        | 配色の利用契約（コントラスト等）を検査する CLI     |
 
-docs と MCP は UI 本体をワークスペース依存として参照します。UI 本体は docs・MCP に依存しません。
+docs は UI 本体をワークスペース依存として参照し、Blume の HTTP MCP でドキュメントを提供します。UI 本体は docs に依存しません。
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、`packages/mcp` は manifest の検索・参照用 MCP サーバーです。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、Blume の MCP は manifest から生成したドキュメントを検索・取得します。
 
 導入は npm パッケージで行います。
 
@@ -78,11 +77,11 @@ Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS
 
 プレビュー専用のCSSは `packages/docs/examples.css` から読み込み、Blumeの `examples.css` 設定でiframe内に隔離します。サンプルのTSXからグローバルCSSをimportするとドキュメント本体にも混入するため、CSSのimportはこの専用ファイルにまとめてください。利用側のアプリでは通常どおり `@utakata-ui/react/styles.css` を読み込みます。
 
-`pnpm build:docs` でUI本体とdocsをビルドします。VercelのRoot Directoryは `packages/docs` のまま使用し、ビルドコマンドと出力先は同ディレクトリの `vercel.json` に定義しています。
+`pnpm build:docs` でUI本体とdocsをビルドします。VercelのRoot Directoryは `packages/docs` のまま使用し、ビルドコマンドは同ディレクトリの `vercel.json` に定義しています。Blumeの `vercel()` アダプターが `.vercel/output/` にサーバーと静的アセットを生成します。Vercel側でOutput Directoryを上書きしている場合は解除してください。
 
 ### npm リリース（React）
 
-`packages/react` を MIT ライセンスで公開します。ルート・docs・MCP はこのリリースの対象外です。
+`packages/react` を MIT ライセンスで公開します。ルート・docs はこのリリースの対象外です。
 GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動実行の既定 `release_mode: verify` で検証と
 パッケージ作成を行い、`token` / `oidc` を選ぶと検証後に公開します。また、`react-vX.Y.Z` タグへの push で同じ検証の後に npm へ公開します。
 タグのバージョンは `packages/react/package.json` と一致する安定版に限り、コミットは
@@ -116,15 +115,12 @@ CI は npm 11.5.1 以降を確認し、公開リポジトリでは provenance �
 公開前には実ブラウザーのキーボード・スクリーンリーダー・テーマ確認を別途記録してください。
 詳細は [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) を参照してください。
 
-### npm リリース（MCP）
+### MCP
 
-`@utakata-ui/mcp` は npm 公開後に `npx -y @utakata-ui/mcp@0.1.0` で起動できます。
-MCP クライアントへの設定例と公開手順は [MCP ガイド](packages/docs/docs/mcp.md) を参照してください。
-React の依存バージョンを先に公開し、MCP は必ず `pnpm pack` で配布用 tgz を作成します。
-`Release MCP`（`.github/workflows/release-mcp.yml`）の手動実行は `verify`（既定）で検証のみ、`token` / `oidc` で公開、
-`mcp-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
-`release-mcp.yml` 用に別途登録し、Environment の制限にも `mcp-v*` を含めてください。
-CI は packed MCP を一時プロジェクトで起動し、stdio 接続・3ツール・manifest の一致を検証します。
+エージェント向けの入口は、Blume がホストする HTTP MCP `/api/mcp` です。
+接続方法は [MCP ガイド](packages/docs/docs/03-(agents)/mcp.md) を参照してください。
+`search_docs` で探し、`get_page` でコンポーネント仕様と共通の品質要件を取得します。
+MCP 専用の npm パッケージや公開ワークフローは不要です。
 
 ### 専用 registry と CLI
 
@@ -136,8 +132,8 @@ shadcn CLI・`components.json` を使用しません。`list`・`add`・`--dry-r
 既存ファイルとの競合は明示的な `--overwrite` がなければ停止します。
 依存パッケージのインストールコマンドは表示のみで、利用側で実行します。
 
-`pnpm build:docs` は `packages/docs/dist/registry/v1/` にカタログと各コンポーネントの
-JSON を生成します。CLI の npm 公開と docs の静的ホスティングの両方が必要です。
+`pnpm build:docs` は `packages/docs/.vercel/output/static/registry/v1/` にカタログと各コンポーネントの
+JSON を生成します。CLI の npm 公開と docs のデプロイの両方が必要です。
 導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/registry.md) を参照してください。
 `Release CLI`（`.github/workflows/release-cli.yml`）の手動実行は `verify`（既定）で検証のみ、`token` / `oidc` で公開、
 `cli-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
@@ -198,9 +194,13 @@ pnpm check
 
 manifest は英語で書かれています（MCP と共有する公開仕様のため）。日本語版の文言は `packages/docs/i18n/ja/` の辞書から取得します。キーは英語の原文の SHA-256 の先頭12文字です。manifest の文言を変更すると、生成スクリプトと `pnpm --filter @utakata-ui/docs test:reference` が未翻訳と古いキーを報告して失敗します。報告されたキーで辞書を更新し、古いキーを削除してください。コード片はバッククォートで囲みます。
 
-`pnpm dev` で開発サーバーを起動します。`pnpm build:docs` は UI 本体を先にビルドし、検索インデックスを含む公開用の静的ファイルを `packages/docs/dist` に生成します。このディレクトリを静的ホスティングに配置できます。ローカルで成果物を確認する場合は `pnpm --filter @utakata-ui/docs preview` を実行します。
+`pnpm dev` で開発サーバーを起動します。`pnpm build:docs` は UI 本体を先にビルドし、Vercel向けのサーバー出力を `packages/docs/.vercel/output/` に生成します。実例の言語補正とregistry生成も、その中の `static/` を対象に実行します。Vercelサーバービルドは `blume preview` に対応しないため、ローカル確認には `pnpm dev` を使ってください。
 
-`pnpm build` は3パッケージを依存順にビルドします。個別のビルドには `pnpm --filter @utakata-ui/react build`、MCP とその依存には `pnpm --filter @utakata-ui/mcp... build` を使用します。
+各ページの `.md` / `.mdx` と `llms.txt` を配信し、`Accept: text/markdown` にも応答します。カスタムコンポーネントのMarkdown変換は `site/markdown.ts` に定義しています。ドキュメントを検索・取得するHTTP MCPは `/api/mcp` で公開し、接続方法は解説ページ `/mcp` にまとめています。公開URLはVercelの環境から自動検出され、Connect to MCPメニューに使用されます。
+
+レート制限は `memory({ requests: 30, window: 600 })` を明示しています。対象はBlumeのアシスタント、APIプレイグラウンドのプロキシ、Mixedbread検索で、MCPやMarkdown配信には適用されません。現在これらの有料ルートは使用していません。Vercelではインスタンスごとにカウントされるため、全インスタンスを通じた厳密な制限が必要になった場合は `blume/ratelimit` の `upstash()` などと共有ストアの環境変数を設定してください。
+
+`pnpm build` は各パッケージを依存順にビルドします。UI 本体のみは `pnpm --filter @utakata-ui/react build`、MCP を含む docs は `pnpm build:docs` を使用します。
 
 ### コミット前のチェック
 
@@ -210,7 +210,7 @@ Fallow は CI と同じ 3.38.1 を使い、`origin/main` との差分を検査�
 
 ### アクセシビリティの品質チェック
 
-`packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。MCP のコンポーネント取得・検索結果には、共通ルールも含めて返します。
+`packages/react/src/metadata/quality.ts` に、ルール ID・要件・検証方法（`automated` / `manual`）・重大度（`error` / `warning`）・修正方法を定義しています。コンポーネント固有のルールは manifest の各コンポーネントの `qualityRules`、共通ルールは `sharedQualityRules` から参照できます。Blume MCP では各コンポーネントページに加えて `/components/quality`（英語は `/en/components/quality`）を取得すると、共通ルールを参照できます。
 
 `pnpm test:a11y` は登録された自動ルールを検証します。Button の名前と無効化、Field のラベル・説明の関連付け、Dialog の名前・説明と Escape による閉鎖・フォーカス復帰をはじめ、各コンポーネントの metadata に登録した自動ルールを対象とします。必須の自動ルールが失敗、または検証処理が未登録なら CI が失敗します。ルール ID の重複や、存在しないルールに対する検証処理もエラーです。失敗時のレポートにはルール ID・要件・修正方法を含めます。コンポーネント追加・変更時は、ルールと `accessibility.test.tsx` の検証処理を一緒に更新してください。
 
@@ -224,19 +224,12 @@ PR は merge-base からの全差分に必要なゲートを選択し、main・�
 
 コンポーネント追加・変更時は `packages/react/src/tests/accessibility.test.tsx` に代表的な状態を追加してください。jsdom ではレイアウトを評価できないため、色コントラスト検査のみ無効化しています。リリース前には実ブラウザーでコントラスト、Tab / Shift+Tab の順序、フォーカス表示、Dialog のフォーカス移動・閉じ込め・Escape・復帰、スクリーンリーダーでの読み上げを手動確認してください。自動検査の成功は WCAG 適合全体を保証しません。
 
-MCP サーバーはビルド後に stdio transport で起動できます。
-
-```sh
-pnpm build
-node packages/mcp/dist/server.js
-```
-
 ## 設計方針
 
 - **Foundation:** Lism CSS の Box、Stack、Flex、Grid、Container、Text、Heading と CSS カスタムプロパティを利用します。
 - **Behavior:** 操作を伴うコンポーネントのフォーカス・キーボード・ARIA 挙動は Base UI に委ねます。
 - **Composition:** Field と Dialog は Base UI の compound parts を公開し、意味のある HTML と柔軟な合成を優先します。
-- **AI Interface:** manifest は機械可読な公開仕様で、Agent Skill と MCP の `list_components`、`get_component`、`search_components` ツールから参照できます。`llms.txt` は入口を示します。
+- **AI Interface:** manifest は機械可読な公開仕様で、Agent Skill と、manifest から生成したドキュメントを検索・取得する Blume MCP の `search_docs`、`get_page` ツールから参照できます。`llms.txt` は入口を示します。
 - **Quality:** Vitest、Testing Library、axe-core で代表コンポーネントを検証します。自動検査は手動のアクセシビリティ確認に代わるものではありません。
 
 ## 初期スコープとトレードオフ

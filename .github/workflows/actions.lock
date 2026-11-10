@@ -19,10 +19,6 @@ workflows:
         - 'actions/checkout@v4.4.0'
         - 'actions/setup-node@v4.4.0'
         - 'pnpm/action-setup@v4.3.0'
-    '.github/workflows/release-mcp.yml':
-        - 'actions/checkout@v4.4.0'
-        - 'actions/setup-node@v4.4.0'
-        - 'pnpm/action-setup@v4.3.0'
     '.github/workflows/release.yml':
         - 'actions/checkout@v4.4.0'
         - 'actions/setup-node@v4.4.0'

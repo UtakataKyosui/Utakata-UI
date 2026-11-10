@@ -100,11 +100,11 @@ CLI は形式・ファイルのハッシュ・パス・依存指定を検査し�
 
 ```sh
 pnpm build:docs
-node packages/cli/bin/utakata-ui.mjs list --registry packages/docs/dist/registry/v1
-node packages/cli/bin/utakata-ui.mjs add button --registry packages/docs/dist/registry/v1 --cwd /path/to/my-app --dry-run
+node packages/cli/bin/utakata-ui.mjs list --registry packages/docs/.vercel/output/static/registry/v1
+node packages/cli/bin/utakata-ui.mjs add button --registry packages/docs/.vercel/output/static/registry/v1 --cwd /path/to/my-app --dry-run
 ```
 
-ビルドは React のソースから専用 JSON を生成し、`packages/docs/dist/registry/v1/` に配置します。`dist` 全体を静的ホスティングに配置すると配信できます。追加の API サーバーは不要です。JSON の URL が HTML に書き換わらないことを確認してください。
+ビルドは React のソースから専用 JSON を生成し、`packages/docs/.vercel/output/static/registry/v1/` に配置します。Vercel のサーバー出力と一緒にデプロイすると、`/registry/v1/` から静的ファイルとして配信されます。追加の API サーバーは不要です。JSON の URL が HTML に書き換わらないことを確認してください。
 
 `pnpm dev` は registry を生成しません。HTTP で試す場合はビルド後に `pnpm --filter @utakata-ui/docs preview` を使い、その URL の `/registry/v1` を指定します。
 

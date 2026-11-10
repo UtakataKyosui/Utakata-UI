@@ -35,6 +35,8 @@ export async function setExampleLang(distUrl) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const count = await setExampleLang(new URL('../dist/', import.meta.url));
+  const count = await setExampleLang(
+    new URL('../.vercel/output/static/', import.meta.url),
+  );
   console.log(`Set the document language of ${count} example frames.`);
 }

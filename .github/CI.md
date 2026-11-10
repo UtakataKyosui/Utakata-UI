@@ -13,17 +13,17 @@ unreadable prior run gives full gates. Manual runs always execute all gates.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
-| Change                                                       | Required work                                                                                              |
-| ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
-| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                                   |
-| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                           |
-| React component/API/metadata                                 | Types, related unit tests, React and MCP build/packed consumers, Docs, browser, fallow; Markuplint for TSX |
-| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                          |
-| React unit fixture                                           | Types, related unit tests, fallow                                                                          |
-| MCP implementation                                           | Types, related unit tests, MCP build, fallow                                                               |
-| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                                 |
-| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                              |
-| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                                 |
+| Change                                                       | Required work                                                                                      |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Root README/accessibility policy                             | Changed-file Biome; agent checks if instructions changed                                           |
+| Docs content/examples                                        | Docs build; types/Markuplint for source examples                                                   |
+| React component/API/metadata                                 | Types, related unit tests, React build/packed consumers, Docs, browser, fallow; Markuplint for TSX |
+| React CSS                                                    | React/Docs build, rendered browser checks, fallow                                                  |
+| React unit fixture                                           | Types, related unit tests, fallow                                                                  |
+| Docs HTTP MCP configuration                                  | Docs build and generated agent Markdown contract checks                                            |
+| Dedicated registry CLI                                       | Changed-file Biome, CLI tests, packed CLI consumer, fallow                                         |
+| Browser fixture/reporter                                     | Types, browser, fallow; Markuplint for markup                                                      |
+| Dependency/shared config/scope script/unknown implementation | Full gates                                                                                         |
 
 Root config/dependency changes clear the diff base: lint and tests run fully.
 Other PRs use Biome's changed mode, Vitest's affected import graph (including
@@ -84,7 +84,7 @@ no development optimizer that can reload a page during the first test. Unit
 tests run independently from lint/types/Markuplint; CI limits Vitest to two
 workers to bound contention without extending test timeouts. Docs builds run
 independently from packed-package verification. Docs-only PRs do not install
-isolated React/MCP/CLI consumers. CLI tests/pack verification run only when the
+isolated React/CLI consumers. CLI tests/pack verification run only when the
 CLI is relevant (or on full gates).
 
 `scripts/ci-gate.mjs` derives the required jobs from scope outputs: an applicable
@@ -168,12 +168,13 @@ setting is not applied automatically by a source PR. The `npm` environment shoul
 the repository owner's review; scope ownership and the npm publisher binding
 remain external prerequisites. No npm/environment/publisher settings were changed.
 
-MCP builds require the React package first. The build job packs both packages
-with pnpm, installs the archives into an isolated consumer, then verifies the
-installed MCP executable, stdio initialization, all tools, invalid inputs and
-manifest parity. `Release MCP` uses `mcp-vX.Y.Z` tags and a separate npm Trusted
-Publisher for `release-mcp.yml`; manual main runs default to verify and can explicitly publish with token or OIDC. Tagged releases
-also require the exact React dependency version to exist on npm before publish.
+Blume hosts the documentation MCP at `/api/mcp`; it has no separate npm
+package or release workflow. The Docs build verifies generated agent Markdown
+against the public manifest: Props, defaults, composition, accessibility,
+component quality rules and the linked shared quality page. Missing pages or
+unconverted reference components fail the build. This checks information
+preservation, not WCAG conformance or assistive-technology behavior. HTTP
+transport and tools require a local dev server or a deployed site to verify.
 
 The dedicated registry CLI has dependency-free Node tests (`pnpm test:cli`) in
 the unit job. The build job also packs and installs it into an isolated

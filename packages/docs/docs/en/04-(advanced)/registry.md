@@ -100,11 +100,11 @@ The CLI validates the format, file hashes, paths and dependency specifications. 
 
 ```sh
 pnpm build:docs
-node packages/cli/bin/utakata-ui.mjs list --registry packages/docs/dist/registry/v1
-node packages/cli/bin/utakata-ui.mjs add button --registry packages/docs/dist/registry/v1 --cwd /path/to/my-app --dry-run
+node packages/cli/bin/utakata-ui.mjs list --registry packages/docs/.vercel/output/static/registry/v1
+node packages/cli/bin/utakata-ui.mjs add button --registry packages/docs/.vercel/output/static/registry/v1 --cwd /path/to/my-app --dry-run
 ```
 
-The build generates the dedicated JSON from the React source and places it in `packages/docs/dist/registry/v1/`. Deploying the whole `dist` to static hosting serves it; no extra API server is needed. Check that JSON URLs are not rewritten to HTML.
+The build generates the dedicated JSON from the React source and places it in `packages/docs/.vercel/output/static/registry/v1/`. Deploying the Vercel server output serves these static files at `/registry/v1/`; no extra API server is needed. Check that JSON URLs are not rewritten to HTML.
 
 `pnpm dev` does not generate the registry. To try it over HTTP, run `pnpm --filter @utakata-ui/docs preview` after building and specify `/registry/v1` under that URL.
 

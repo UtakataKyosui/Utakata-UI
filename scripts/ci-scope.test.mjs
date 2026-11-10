@@ -26,10 +26,9 @@ test('component changes retain consumer, browser, docs and unit coverage', () =>
     'fallow',
   ])
     assert.equal(scope[flag], true, flag);
-  assert.equal(scope.mcp, true);
 });
 
-test('React exports and manifest changes verify the downstream packed MCP consumer', () => {
+test('React exports and manifest changes verify the packed library and Blume docs', () => {
   for (const file of [
     'packages/react/src/index.ts',
     'packages/react/src/metadata/manifest.ts',
@@ -37,31 +36,27 @@ test('React exports and manifest changes verify the downstream packed MCP consum
   ]) {
     const scope = selectScope([file]);
     assert.equal(scope.react, true, file);
-    assert.equal(scope.mcp, true, file);
+    assert.equal(scope.docs, true, file);
     assert.equal(scope.build, true, file);
   }
-  assert.equal(selectScope(['packages/react/README.md']).mcp, false);
+  assert.equal(selectScope(['packages/react/README.md']).docs, false);
   assert.equal(
-    selectScope(['packages/react/src/tests/diagnostics.test.tsx']).mcp,
+    selectScope(['packages/react/src/tests/diagnostics.test.tsx']).docs,
     false,
   );
 });
 
-test('CSS keeps browser/build checks; MCP changes do not start browsers or docs', () => {
+test('CSS keeps browser/build checks; docs MCP config selects docs without a separate package gate', () => {
   assert.equal(
     selectScope(['packages/react/src/styles/styles.css']).browser,
     true,
   );
-  const mcp = selectScope(['packages/mcp/src/tools.ts']);
-  assert.equal(mcp.mcp, true);
-  assert.equal(mcp.tests, true);
-  assert.equal(mcp.browser, false);
-  assert.equal(mcp.docs, false);
-  const packedMcp = selectScope(['scripts/verify-mcp-package.mjs']);
-  assert.equal(packedMcp.mcp, true);
-  assert.equal(packedMcp.build, true);
-  assert.equal(packedMcp.browser, false);
-  assert.equal(packedMcp.docs, false);
+  const docs = selectScope(['packages/docs/blume.config.ts']);
+  assert.equal(docs.docs, true);
+  assert.equal(docs.types, true);
+  assert.equal(docs.browser, false);
+  assert.equal(docs.build, false);
+  assert.equal('mcp' in docs, false);
 });
 
 test('docs and unit fixtures only run their relevant gates', () => {
@@ -128,7 +123,6 @@ test('CLI work has its own gate; shared browser and release policy invalidate al
   for (const file of [
     '.github/workflows/browser.yml',
     '.github/workflows/release.yml',
-    '.github/workflows/release-mcp.yml',
     '.github/workflows/release-cli.yml',
     'scripts/prior-verification.mjs',
     'scripts/verified-runs.mjs',

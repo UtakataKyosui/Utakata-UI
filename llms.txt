@@ -8,7 +8,7 @@
 - [Agent implementation guide](skills/utakata-ui/SKILL.md)
 - [React package exports](packages/react/src/index.ts)
 - [Component manifest](packages/react/src/metadata/manifest.ts)
-- [MCP server tools](packages/mcp/src/server.ts)
+- [HTTP MCP connection and tools](packages/docs/docs/03-(agents)/mcp.md)
 
 ## Principles
 
