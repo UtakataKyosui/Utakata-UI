@@ -21,7 +21,10 @@ test.beforeEach(async ({ page, screenReader }) => {
   // Setup installs assets for the directly pinned core package. The adapter
   // must use that same singleton rather than a second installed core version.
   expect(screenReader).toBe(nativeReader);
-  await page.goto('/?layout');
+  // The browser matrix covers every visual variant. Reader output needs only
+  // the named field and modal; traversing 21 unrelated buttons adds minutes of
+  // spoken usage hints on VoiceOver before reaching either target.
+  await page.goto('/?reader');
   // Bringing a tab to front does not select it in the OS screen reader.
   // The official integration activates the browser and enters web content.
   await screenReader.navigateToWebContent();
@@ -50,7 +53,9 @@ test('[assistive.control-name] reader navigation announces the email control nam
   const input = page.getByLabel('Contact email / 連絡先', { exact: true });
   await expect(input).toBeVisible();
   await tabToControl(screenReader, input);
-  expect(await screenReader.lastSpokenPhrase()).toContain('Contact email');
+  const phrase = await screenReader.lastSpokenPhrase();
+  expect(phrase).toContain('Contact email');
+  expect(phrase).toMatch(/edit|text.*field/i);
 });
 
 test('[assistive.dialog-output] opening and closing the dialog announces context and returns focus', async ({
@@ -91,5 +96,6 @@ test('output detector rejects a control whose accessible name was replaced', asy
   await tabToControl(screenReader, input);
   const phrase = await screenReader.lastSpokenPhrase();
   expect(phrase).toContain('Negative control');
+  expect(phrase).toMatch(/edit|text.*field/i);
   expect(() => expect(phrase).toContain('Contact email')).toThrow();
 });
