@@ -24,6 +24,7 @@ const verificationStates = {
   Switch: ['enabled', 'disabled', 'readOnly'],
   RadioGroup: ['selected', 'disabled'],
   Select: ['open', 'dismissed'],
+  Combobox: ['open', 'dismissed', 'composing', 'focused'],
   Command: ['open', 'dismissed', 'focused'],
   Slider: ['minimum', 'maximum'],
   Collapsible: ['open', 'closed'],

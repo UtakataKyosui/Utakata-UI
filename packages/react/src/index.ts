@@ -66,6 +66,14 @@ export type {
 } from './components/Collapsible.js';
 export { Collapsible } from './components/Collapsible.js';
 export type {
+  ComboboxButtonAccessibilityProps,
+  ComboboxClearProps,
+  ComboboxInputProps,
+  ComboboxRootProps,
+  ComboboxTriggerProps,
+} from './components/Combobox.js';
+export { Combobox } from './components/Combobox.js';
+export type {
   CommandInputProps,
   CommandRootProps,
 } from './components/Command.js';

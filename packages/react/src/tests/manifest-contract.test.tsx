@@ -461,6 +461,29 @@ describe('public manifest contract', () => {
         ]),
       );
   });
+  it('requires browser evidence for Combobox interaction and keeps real IME and speech manual', () => {
+    const rules = componentManifest.components.Combobox?.qualityRules ?? [];
+    for (const id of [
+      'combobox.keyboard-selection',
+      'combobox.dismiss-focus',
+      'combobox.ime-browser',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of ['combobox.real-ime', 'combobox.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
     expect(componentManifest.components.RadioGroup?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -578,6 +601,7 @@ describe('public manifest contract', () => {
       'Switch',
       'RadioGroup',
       'Select',
+      'Combobox',
       'Command',
       'Slider',
       'Collapsible',

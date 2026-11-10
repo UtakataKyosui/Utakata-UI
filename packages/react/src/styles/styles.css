@@ -864,7 +864,8 @@
   /* forms-basic */
   .ui-input,
   .ui-textarea,
-  .ui-native-select__control {
+  .ui-native-select__control,
+  .ui-combobox__input {
     background: var(--ui-color-surface);
     border: 1px solid var(--ui-color-border);
     border-radius: var(--ui-radius-control);
@@ -876,7 +877,8 @@
   }
 
   .ui-input::placeholder,
-  .ui-textarea::placeholder {
+  .ui-textarea::placeholder,
+  .ui-combobox__input::placeholder {
     color: var(--ui-color-muted);
     opacity: 1;
   }
@@ -885,6 +887,7 @@
   .ui-input:focus-visible,
   .ui-textarea:focus-visible,
   .ui-native-select__control:focus-visible,
+  .ui-combobox__input:focus-visible,
   .ui-checkbox:focus-visible,
   .ui-switch:focus-visible {
     box-shadow: var(--ui-focus-ring);
@@ -893,13 +896,15 @@
   }
 
   .ui-input:read-only,
-  .ui-textarea:read-only {
+  .ui-textarea:read-only,
+  .ui-combobox__input:read-only {
     border-style: dashed;
   }
 
   .ui-input:disabled,
   .ui-textarea:disabled,
-  .ui-native-select__control:disabled {
+  .ui-native-select__control:disabled,
+  .ui-combobox__input:disabled {
     border-style: solid;
     cursor: not-allowed;
     opacity: 0.55;
@@ -911,6 +916,8 @@
   .ui-textarea[aria-invalid="true"],
   .ui-native-select__control[data-invalid],
   .ui-native-select__control[aria-invalid="true"],
+  .ui-combobox__input[data-invalid],
+  .ui-combobox__input[aria-invalid="true"],
   .ui-checkbox[data-invalid],
   .ui-switch[data-invalid] {
     border-color: var(--ui-color-danger);
@@ -1237,6 +1244,177 @@
   }
 
   .ui-select__group-label {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.375rem 0.5rem 0.125rem;
+  }
+
+  /* Combobox: a bare input keeps the shared field frame; inside the input group the group draws the frame and the input stays borderless. */
+  .ui-combobox__input-group {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-combobox__input {
+    min-block-size: 2.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .ui-combobox__input-group .ui-combobox__input {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: inherit;
+    flex: 1 1 0%;
+    /* A zero width keeps the intrinsic input width out of the grid track sizing. */
+    inline-size: 0;
+    min-inline-size: 0;
+    outline: none;
+  }
+
+  /* Focus, read-only, disabled and invalid states of the input move to the frame. */
+  .ui-combobox__input-group:has(.ui-combobox__input:focus-visible) {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .ui-combobox__input-group:has(.ui-combobox__input:read-only) {
+    border-style: dashed;
+  }
+
+  .ui-combobox__input-group:has(.ui-combobox__input:disabled) {
+    border-color: color-mix(in srgb, var(--ui-color-border) 55%, transparent);
+    border-style: solid;
+    cursor: not-allowed;
+  }
+
+  .ui-combobox__input-group:has(
+    .ui-combobox__input[data-invalid],
+    .ui-combobox__input[aria-invalid="true"]
+  ) {
+    border-color: var(--ui-color-danger);
+  }
+
+  .ui-combobox__trigger,
+  .ui-combobox__clear {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: calc(var(--ui-radius-control) - 0.125rem);
+    color: var(--ui-color-muted);
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font: inherit;
+    justify-content: center;
+    min-block-size: 2rem;
+    min-inline-size: 2rem;
+    padding: 0;
+  }
+
+  @media (hover: hover) {
+    .ui-combobox__trigger:hover,
+    .ui-combobox__clear:hover {
+      color: var(--ui-color-text);
+    }
+  }
+
+  .ui-combobox__trigger:focus-visible,
+  .ui-combobox__clear:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 0;
+  }
+
+  .ui-combobox__trigger:disabled,
+  .ui-combobox__clear:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* Without children, CSS draws the chevron and the clear mark. */
+  .ui-combobox__trigger:empty::before {
+    block-size: 0.5rem;
+    border-block-end: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    content: "";
+    inline-size: 0.5rem;
+    transform: translateY(-25%) rotate(45deg);
+  }
+
+  .ui-combobox__clear:empty::before {
+    content: "×" / "";
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .ui-combobox__positioner {
+    outline: 0;
+    z-index: 50;
+  }
+
+  .ui-combobox__popup {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    max-block-size: var(--available-height, 20rem);
+    min-inline-size: var(--anchor-width, 10rem);
+    overflow-y: auto;
+    padding: 0.25rem;
+  }
+
+  .ui-combobox__list {
+    outline: 0;
+  }
+
+  /* The status region stays mounted so announcements work; only pad it when it has text. */
+  .ui-combobox__empty:not(:empty) {
+    color: var(--ui-color-muted);
+    padding: 0.5rem;
+  }
+
+  .ui-combobox__item {
+    align-items: center;
+    border-radius: calc(var(--ui-radius-control) - 0.125rem);
+    cursor: default;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr 1rem;
+    min-block-size: 2rem;
+    outline: 0;
+    overflow-wrap: anywhere;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .ui-combobox__item[data-highlighted] {
+    background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: -2px;
+  }
+
+  .ui-combobox__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* Default selection mark when ItemIndicator has no children. */
+  .ui-combobox__item-indicator:empty::before {
+    content: "✓" / "";
+  }
+
+  .ui-combobox__group-label {
     color: var(--ui-color-muted);
     font-size: 0.875rem;
     font-weight: 600;
@@ -2443,6 +2621,7 @@
     }
 
     .ui-select__item[data-highlighted],
+    .ui-combobox__item[data-highlighted],
     .ui-command__item[data-highlighted] {
       outline-color: Highlight;
     }
@@ -2607,6 +2786,23 @@
 
     .ui-input-group:has(> .ui-input:disabled, > .ui-textarea:disabled) {
       border-color: GrayText;
+    }
+
+    .ui-combobox__input-group:has(.ui-combobox__input:focus-visible) {
+      outline: 2px solid Highlight;
+    }
+
+    .ui-combobox__input-group:has(.ui-combobox__input:disabled) {
+      border-color: GrayText;
+    }
+
+    .ui-combobox__trigger:focus-visible,
+    .ui-combobox__clear:focus-visible {
+      outline: 2px solid Highlight;
+    }
+
+    .ui-combobox__popup {
+      border-color: CanvasText;
     }
 
     .ui-tooltip__popup,
