@@ -28,17 +28,17 @@ export default defineConfig({
   github: {
     owner: 'UtakataKyosui',
     repo: 'Utakata-UI',
-    branch: 'main'
+    branch: 'main',
   },
-  lastModified: "git",
+  lastModified: 'git',
   dateFormat: {
     dateStyle: 'full',
     timeZone: 'Asia/Tokyo',
-    calendar: 'japanese'
+    calendar: 'japanese',
   },
   footer: {
     socials: {
-      x: 'https://twitter.com/utakatakyosui'
-    }
-  }
+      x: 'https://twitter.com/utakatakyosui',
+    },
+  },
 });
