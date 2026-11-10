@@ -1,4 +1,5 @@
 ---
+
 name: utakata-subissue-pr
 description: Implement one Epic sub-issue (for example a shadcn/ui gap issue under #98) as a single focused draft PR, skipping issues that already have a PR.
 ---
