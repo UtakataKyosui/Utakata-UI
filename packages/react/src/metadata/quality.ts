@@ -8,6 +8,7 @@ import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
+import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
@@ -144,6 +145,7 @@ export const qualityRules = {
   RadioGroup: radioGroupQualityRules,
   Select: selectQualityRules,
   InputOTP: inputOTPQualityRules,
+  Combobox: comboboxQualityRules,
   Command: commandQualityRules,
   Slider: sliderQualityRules,
   Collapsible: collapsibleQualityRules,

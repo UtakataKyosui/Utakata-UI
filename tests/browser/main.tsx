@@ -12,6 +12,7 @@ import {
   Card,
   Checkbox,
   Collapsible,
+  Combobox,
   Command,
   Dialog,
   DropdownMenu,
@@ -208,6 +209,85 @@ function InputOTPStates() {
       </Field.Root>
       <Button>After code</Button>
       <output aria-label="Input OTP events">{JSON.stringify(events)}</output>
+    </section>
+  );
+}
+
+const comboboxFruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'grape', label: 'Grape' },
+];
+
+function ComboboxStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  const [submits, setSubmits] = useState(0);
+  return (
+    <section aria-label="Combobox input">
+      <Button>Before combobox</Button>
+      <form
+        aria-label="Combobox form"
+        ref={(form) => {
+          if (!form) return;
+          // Count implicit submissions and keep the fixture page loaded.
+          const count = (event: Event) => {
+            event.preventDefault();
+            setSubmits((previous) => previous + 1);
+          };
+          form.addEventListener('submit', count);
+          return () => form.removeEventListener('submit', count);
+        }}
+      >
+        <Field.Root>
+          <Field.Label>Fruit</Field.Label>
+          <Combobox.Root
+            name="fruit"
+            items={comboboxFruits}
+            onValueChange={(value: (typeof comboboxFruits)[number] | null) =>
+              setChanges((previous) => [
+                ...previous,
+                value ? value.value : 'null',
+              ])
+            }
+          >
+            <Combobox.InputGroup>
+              <Combobox.Input placeholder="Search fruit" />
+              <Combobox.Clear aria-label="Clear fruit" />
+              <Combobox.Trigger aria-label="Show fruit options" />
+            </Combobox.InputGroup>
+            <Combobox.Portal>
+              <Combobox.Positioner>
+                <Combobox.Popup>
+                  <Combobox.Empty>No fruit found</Combobox.Empty>
+                  <Combobox.List>
+                    {(item: (typeof comboboxFruits)[number]) => (
+                      <Combobox.Item
+                        key={item.value}
+                        value={item}
+                        disabled={item.value === 'banana'}
+                      >
+                        {item.label}
+                        <Combobox.ItemIndicator />
+                      </Combobox.Item>
+                    )}
+                  </Combobox.List>
+                </Combobox.Popup>
+              </Combobox.Positioner>
+            </Combobox.Portal>
+          </Combobox.Root>
+          <Field.Description>Choose one fruit.</Field.Description>
+        </Field.Root>
+      </form>
+      <Button>After combobox</Button>
+      <Combobox.Root items={comboboxFruits}>
+        <Combobox.Input
+          aria-label="Standalone fruit"
+          placeholder="Search without a group"
+        />
+      </Combobox.Root>
+      <output aria-label="Combobox changes">{JSON.stringify(changes)}</output>
+      <output aria-label="Combobox submits">{submits}</output>
     </section>
   );
 }
@@ -1342,6 +1422,7 @@ function Fixture() {
       <RadioGroupStates />
       <SelectStates />
       <InputOTPStates />
+      <ComboboxStates />
       <SliderStates />
       <BadgeStates />
       <SkeletonStates />

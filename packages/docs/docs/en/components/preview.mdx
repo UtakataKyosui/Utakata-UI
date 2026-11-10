@@ -195,6 +195,13 @@ See [InputOTP](/en/components/inputotp) for detailed usage and the API.
 Entering a multi-character one-time code. Paste and autofill are distributed across the slots, arrow keys and Home/End move between slots, and Backspace removes characters. `Field.Label` names the first slot and `getSlotLabel` announces the position of later slots. Completing the code never submits the form automatically.
 
 <Component path="en/inputotp" />
+## Combobox [#combobox]
+
+See [Combobox](/en/components/combobox) for detailed usage and the API.
+
+Single selection with a text input that filters the options. Focus always stays in the input: arrow keys move the highlight, Enter selects, and Escape closes the popup (Escape with the popup closed clears the input and the selection). Enter that confirms an IME conversion does not select. Name the input with `Field.Label` or similar, and put the no-results message in `Combobox.Empty`. `Combobox.Trigger` and `Combobox.Clear` are pointer-only buttons outside the Tab order and require `aria-label`. Multiple selection, asynchronous options and free-text values are out of scope. Use Select for a fixed list and NativeSelect for the native picker.
+
+<Component path="en/combobox" />
 
 ## Slider [#slider]
 
