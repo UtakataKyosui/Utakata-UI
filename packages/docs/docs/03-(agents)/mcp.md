@@ -1,92 +1,49 @@
 ---
 
 title: MCP
-description: AI エージェントから UI の仕様を参照する
+description: HTTP MCP でドキュメントとコンポーネント仕様を参照する
 ---
 
-Utakata UI は Agent Coding を前提としています。MCP は、エージェントがコンポーネントを選び、公開 API とアクセシビリティ要件に沿って UI を構築するための仕様参照の入口です。UI 本体と同じ manifest を使い、コンポーネントの仕様と品質要件を提供します。
+Utakata UI の MCP は、Blume がドキュメントサイト上で提供する読み取り専用の Streamable HTTP サーバーです。UI 本体の公開 manifest から生成したコンポーネント仕様・Props・構成方法・アクセシビリティ要件を、日本語と英語で検索・取得できます。
 
-## 他のプロジェクトから使う [#setup]
+## 接続する [#setup]
 
-MCP は npm パッケージ `@utakata-ui/mcp` として配布できる構成です。**以下の npx 設定は npm 公開後に使用できます。** docs の公開だけでは npm パッケージは公開されません。公開前の利用方法は後述の「ローカル開発」を参照してください。
+デプロイ後、各ページの **Connect to MCP** メニューから、クライアント用の設定またはサーバー URL をコピーしてください。接続先は公開サイトのオリジンに `/api/mcp` を付けた URL です。HTTP MCP に対応するクライアントが必要です。
 
-Node.js 22 以降と、ローカルの stdio サーバーを起動できる MCP クライアントが必要です。利用側のアプリに Utakata UI や MCP サーバーをインストールしたり、このリポジトリを clone する必要はありません。
+`/mcp` はこの解説ページ、`/api/mcp` が MCP エンドポイントです。サイトのトップページや `/registry/v1/` は接続先ではありません。クライアントの既存の設定を上書きせず、HTTP サーバーを1件追加してください。
 
-クライアントの MCP 設定で、起動コマンドを `npx`、引数を `-y`、`@utakata-ui/mcp@0.1.0` に設定します。`mcpServers` 形式に対応するクライアントでは、次の設定を既存の設定に追加できます。
+MCP 専用の npm パッケージをインストールする必要はありません。以前のローカル stdio 設定を使用している場合は、そのエントリーを HTTP 接続に置き換えて再接続してください。
 
-```json
-{
-  "mcpServers": {
-    "utakata-ui": {
-      "command": "npx",
-      "args": ["-y", "@utakata-ui/mcp@0.1.0"]
-    }
-  }
-}
-```
+## ツールを使う [#tools]
 
-設定の保存場所と再読み込み方法はクライアントにより異なります。既存の MCP 設定を上書きせず、サーバー1件を追加してください。[MCP 公式のローカルサーバー接続ガイド](https://modelcontextprotocol.io/docs/develop/connect-local-servers)も参考にできます。
+| ツール           | 用途                                                        |
+| ---------------- | ----------------------------------------------------------- |
+| `search_docs`    | `query` でコンポーネント名・Props・構成・品質要件を検索する |
+| `get_page`       | `route` で指定したページを Markdown として取得する          |
+| `list_pages`     | 参照できるページを一覧する                                  |
+| `get_navigation` | サイトのナビゲーションを取得する                            |
 
-pnpm を使う場合は `command` を `pnpm`、`args` を `["dlx", "@utakata-ui/mcp@0.1.0"]` に変更できます。Windows で `npx` の起動が `ENOENT` になる場合は、`command` を `cmd`、`args` を `["/c", "npx", "-y", "@utakata-ui/mcp@0.1.0"]` にしてください。
+ページは MCP リソースとしても参照できます。例えば Button を使う場合は、次の順に取得します。
 
-GUI アプリから Node.js が見つからない場合は、そのクライアントから参照できる PATH を設定するか、実行ファイルの絶対パスを指定します。初回のパッケージ取得には npm registry へのネットワーク接続が必要です。API キーや Utakata UI 用のアカウントは不要です。
+1. `search_docs` に `{"query":"Button"}` を渡してページを探します。
+2. `get_page` に `{"route":"/components/button"}` を渡して Props・構成・コンポーネント固有の品質要件を読みます。
+3. `get_page` に `{"route":"/components/quality"}` を渡して共通の品質要件も読みます。
 
-バージョンを固定することで、クライアントの再起動時に仕様が意図せず変わることを防げます。更新するときは、公開済みのバージョンを確認して設定の番号を変更し、MCP クライアントを再接続してください。
+英語ページは `/en/components/button` と `/en/components/quality` です。共通の品質要件は全コンポーネントに適用されるため、各コンポーネントのページと併せて確認してください。
 
-## 接続を確認する [#verify]
+公開サイトはデプロイされた版の仕様を提供します。別バージョンの UI を使う場合は、インストール済みの `@utakata-ui/react/manifest` と型定義も確認してください。コピーして編集した実装や独自テーマの検証結果は読み取りません。MCP ツールは仕様の参照用で、ファイルの書き換えやインストールは行いません。
 
-接続後に `list_components`、`get_component`、`search_components` が表示されることを確認します。例えばエージェントに「Utakata UI の Button の仕様とアクセシビリティ要件を調べて」と依頼すると、`get_component` に `{"name":"Button"}` を渡して参照できます。
+## Markdown で読む [#markdown]
 
-| ツール              | 引数                      | 内容                                          |
-| ------------------- | ------------------------- | --------------------------------------------- |
-| `list_components`   | なし                      | 全コンポーネントの仕様と品質要件              |
-| `get_component`     | `name`: コンポーネント名  | 指定した仕様。大文字・小文字は区別しません    |
-| `search_components` | `query`: 空白以外の検索語 | 名前・Props・構成・アクセシビリティ要件の検索 |
+各ページの URL に `.md` を付けると、カスタムコンポーネントを変換した Markdown を取得できます。`.mdx` では元のコンポーネント記法を保持します。`Accept: text/markdown` ヘッダーでも Markdown を取得できます。MCP の `get_page` とページリソースも同じ変換を使います。
 
-MCP は依存するバージョンの UI パッケージと同じ manifest を参照します。コピーして編集したコンポーネントの実装や、独自テーマの検証結果を読み取るものではありません。利用中の UI のバージョンと MCP の依存バージョンを合わせてください。
-
-パッケージの導入は[導入方法](/getting-started)、配色の変更は[テーマカラー](/theming)を参照してください。MCP のツールは仕様を参照するもので、ファイルの書き換えやパッケージのインストールは行いません。
-
-## stdio と URL 接続の違い [#stdio]
-
-この MCP は各ユーザーの環境で動く stdio サーバーです。クライアントがプロセスを起動し、標準入出力で通信します。ターミナルで直接実行して表示が出ずに待機するのは正常です。
-
-HTTP サーバーや接続用 URL は提供しません。URL 接続だけに対応するクライアントでは使用できません。docs の URL や `/registry/v1/` の registry URL を MCP の接続先に指定しても接続できません。
-
-## ローカル開発・公開前の利用 [#local]
-
-リポジトリのルートで次を実行します。開発用の Node.js・pnpm はルートの `package.json` の指定に従ってください。
+## ローカル開発 [#local-development]
 
 ```sh
-pnpm --filter @utakata-ui/mcp... build
-pnpm --filter @utakata-ui/mcp start
+pnpm install
+pnpm dev
 ```
 
-ビルド後、クライアントの `command` を `node`、`args` を `["/絶対パス/Utakata-UI/packages/mcp/dist/server.js"]` に設定します。これにより npm 公開前でもローカルで使用できます。
+起動ログのローカル URL に `/api/mcp` を付けて接続します（既定は `http://localhost:4321/api/mcp`）。本番用には `pnpm build:docs` で Vercel のサーバー出力を生成してデプロイします。静的ホスティングだけでは HTTP MCP を実行できません。
 
-## 提供側の公開手順 [#publishing]
-
-1. npm の `@utakata-ui` スコープの公開権限を確認し、依存する `@utakata-ui/react` のバージョンを先に公開します。MCP の tgz は React のパッケージ本体を含まず、具体的なバージョンを依存関係として指定します。
-2. バージョンを更新し、品質検査・パッケージ作成・外部プロジェクトでの MCP 接続を検証します。
-
-```sh
-pnpm check
-pnpm --filter @utakata-ui/react pack --pack-destination /tmp
-pnpm --filter @utakata-ui/mcp pack --pack-destination /tmp
-node scripts/verify-mcp-package.mjs /tmp/utakata-ui-mcp-0.1.0.tgz /tmp/utakata-ui-react-0.1.0.tgz
-```
-
-`pnpm pack` は MCP のビルドも実行し、`workspace:*` の依存指定を公開用のバージョンへ置き換えます。MCP には `npm pack` を使わず、生成した tgz を公開してください。検証では tgz を一時プロジェクトへインストールし、実行コマンド・stdio の接続・3ツール・入力エラー・manifest の一致を確認します。
-
-初回も GitHub Actions の `Release MCP` で公開できます。`npm` Environment の Secret
-`NPM_TOKEN` に公開用 Granular Access Token を設定し、main を選択して
-`release_mode: verify` で確認後、`release_mode: token` で実行して承認します。
-Token は対象スコープへの公開権限と Bypass 2FA を必要とします。
-以後は Trusted Publisher を登録して `release_mode: oidc`、または `mcp-vX.Y.Z` タグ push で公開します。
-タグと MCP の安定版バージョンは一致し、コミットが main に含まれる必要があります。
-同じバージョンを手動とタグの両方で公開しないでください。
-設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
-
-GitHub の `npm` Environment で必要な公開制限を設定し、`@utakata-ui/mcp` の npm Trusted Publisher に owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-mcp.yml`、environment `npm` を登録してください。Environment のタグ制限を使う場合は `mcp-v*` も許可します。React の Trusted Publisher とは別に設定します。CI は公開前に React の依存バージョンが npm に存在することを確認します。
-
-GitHub や npm の設定変更・タグの push・実際の公開は、このリポジトリの実装や docs のデプロイでは自動実行されません。
+パッケージの導入は[導入方法](/getting-started)、配色の変更は[テーマカラー](/theming)を参照してください。

@@ -10,7 +10,9 @@ Inspect `git status --short` and the relevant diff. Include untracked files
 belonging to the request and preserve pre-existing work.
 
 - Components/CSS: relevant Vitest tests, `pnpm test:a11y`, lint, typecheck and build.
-- MCP: `packages/mcp/src/tools.test.ts`, typecheck and build; compare manifest output.
+- Docs MCP: `pnpm build:docs`; verify generated Markdown includes manifest Props,
+  composition and component/shared quality requirements, then check the HTTP
+  `/api/mcp` tools and page resources when a local server is available.
 - Docs: `pnpm build:docs`; component reference content is generated.
 - Agent configuration/hooks: `pnpm test:agents`; inspect discovery links and commands.
 - Dependency/configuration changes: full `pnpm check` when dependencies and

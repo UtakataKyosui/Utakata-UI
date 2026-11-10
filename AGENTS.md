@@ -3,7 +3,7 @@
 ## Repository map
 
 - `packages/react/src`: Public exports in `index.ts`; components in `components/`, manifest and quality rules in `metadata/`, CSS in `styles/`, and tests in `tests/`.
-- `packages/mcp/src`: tools exposing the same manifest to agents.
+- `packages/docs/blume.config.ts`: Blume's HTTP MCP at `/api/mcp`, serving generated component reference Markdown from the public manifest.
 - `packages/docs`: Blume documentation (ja default, en under `docs/en/`). Component pages under `docs/components/` and `docs/en/components/` are generated except `preview.mdx`; Japanese manifest text comes from `i18n/ja/`; English pages use the English examples in `examples/en/`.
 - `skills/utakata-ui`: consumer-facing UI usage skill; keep it consistent with the public API.
 

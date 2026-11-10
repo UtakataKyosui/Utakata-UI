@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { getComponent, listComponents, searchComponents } from './tools.js';
+import { componentManifest } from '../metadata/manifest.js';
 
-describe('manifest tools', () => {
+describe('public manifest contract', () => {
   it('requires browser evidence for InputGroup keyboard and states and keeps zoom manual', () => {
-    const rules = getComponent('InputGroup')?.qualityRules ?? [];
+    const rules = componentManifest.components.InputGroup?.qualityRules ?? [];
     for (const id of ['input-group.keyboard', 'input-group.visual-states'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -20,7 +20,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for ButtonGroup keyboard and layout and keeps zoom manual', () => {
-    const rules = getComponent('ButtonGroup')?.qualityRules ?? [];
+    const rules = componentManifest.components.ButtonGroup?.qualityRules ?? [];
     for (const id of ['button-group.keyboard', 'button-group.visual-layout'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -37,7 +37,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
-    const rules = getComponent('ToggleGroup')?.qualityRules ?? [];
+    const rules = componentManifest.components.ToggleGroup?.qualityRules ?? [];
     for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -54,7 +54,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Toast timers, keyboard and layout and keeps platform checks manual', () => {
-    const rules = getComponent('Toast')?.qualityRules ?? [];
+    const rules = componentManifest.components.Toast?.qualityRules ?? [];
     for (const id of [
       'toast.pause-on-hover-focus',
       'toast.close-action-keyboard',
@@ -75,7 +75,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for AlertDialog focus and dismissal and keeps platform checks manual', () => {
-    const rules = getComponent('AlertDialog')?.qualityRules ?? [];
+    const rules = componentManifest.components.AlertDialog?.qualityRules ?? [];
     for (const id of [
       'alert-dialog.initial-focus-containment',
       'alert-dialog.dismissal-focus-return',
@@ -96,7 +96,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
-    const rules = getComponent('DropdownMenu')?.qualityRules ?? [];
+    const rules = componentManifest.components.DropdownMenu?.qualityRules ?? [];
     for (const id of [
       'dropdown-menu.keyboard',
       'dropdown-menu.activate-dismiss',
@@ -117,7 +117,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Popover dismissal and forced-colors focus and keeps platform checks manual', () => {
-    const rules = getComponent('Popover')?.qualityRules ?? [];
+    const rules = componentManifest.components.Popover?.qualityRules ?? [];
     for (const id of ['popover.open-dismiss-focus', 'popover.forced-focus'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -134,7 +134,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Tooltip interaction and visuals and keeps platform checks manual', () => {
-    const rules = getComponent('Tooltip')?.qualityRules ?? [];
+    const rules = componentManifest.components.Tooltip?.qualityRules ?? [];
     for (const id of [
       'tooltip.focus-hover-escape',
       'tooltip.hoverable',
@@ -155,7 +155,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Toggle keyboard and visuals and keeps zoom manual', () => {
-    const rules = getComponent('Toggle')?.qualityRules ?? [];
+    const rules = componentManifest.components.Toggle?.qualityRules ?? [];
     for (const id of ['toggle.keyboard', 'toggle.visual-theme'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -172,7 +172,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Tabs keyboard and layout and keeps zoom and speech manual', () => {
-    const rules = getComponent('Tabs')?.qualityRules ?? [];
+    const rules = componentManifest.components.Tabs?.qualityRules ?? [];
     for (const id of ['tabs.keyboard', 'tabs.indicator-layout'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -187,7 +187,7 @@ describe('manifest tools', () => {
       );
   });
   it('requires browser evidence for Accordion keyboard and motion and keeps zoom and speech manual', () => {
-    const rules = getComponent('Accordion')?.qualityRules ?? [];
+    const rules = componentManifest.components.Accordion?.qualityRules ?? [];
     for (const id of ['accordion.keyboard-focus', 'accordion.motion-forced'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -202,7 +202,7 @@ describe('manifest tools', () => {
       );
   });
   it('requires browser evidence for Collapsible keyboard and motion and keeps zoom manual', () => {
-    const rules = getComponent('Collapsible')?.qualityRules ?? [];
+    const rules = componentManifest.components.Collapsible?.qualityRules ?? [];
     for (const id of [
       'collapsible.keyboard-focus',
       'collapsible.motion-forced',
@@ -222,7 +222,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Pagination keyboard and reflow and keeps zoom manual', () => {
-    const rules = getComponent('Pagination')?.qualityRules ?? [];
+    const rules = componentManifest.components.Pagination?.qualityRules ?? [];
     for (const id of [
       'pagination.disabled-direction',
       'pagination.target-reflow',
@@ -242,7 +242,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Breadcrumb reflow and focus and keeps zoom manual', () => {
-    expect(getComponent('Breadcrumb')?.qualityRules).toEqual(
+    expect(componentManifest.components.Breadcrumb?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'breadcrumb.reflow-focus',
@@ -257,7 +257,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Table scrolling and focus and keeps zoom manual', () => {
-    expect(getComponent('Table')?.qualityRules).toEqual(
+    expect(componentManifest.components.Table?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'table.reflow-focus',
@@ -272,7 +272,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Progress visuals and keeps OS checks manual', () => {
-    expect(getComponent('Progress')?.qualityRules).toEqual(
+    expect(componentManifest.components.Progress?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'progress.visual-motion',
@@ -287,7 +287,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Avatar visuals and keeps zoom manual', () => {
-    expect(getComponent('Avatar')?.qualityRules).toEqual(
+    expect(componentManifest.components.Avatar?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'avatar.visual-theme',
@@ -302,7 +302,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Alert visuals and keeps announcements manual', () => {
-    expect(getComponent('Alert')?.qualityRules).toEqual(
+    expect(componentManifest.components.Alert?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'alert.visual-theme',
@@ -317,7 +317,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Card layout and keeps zoom manual', () => {
-    expect(getComponent('Card')?.qualityRules).toEqual(
+    expect(componentManifest.components.Card?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'card.layout-theme',
@@ -332,7 +332,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Spinner motion and keeps OS checks manual', () => {
-    expect(getComponent('Spinner')?.qualityRules).toEqual(
+    expect(componentManifest.components.Spinner?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'spinner.motion-theme',
@@ -347,7 +347,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Skeleton motion and keeps OS checks manual', () => {
-    expect(getComponent('Skeleton')?.qualityRules).toEqual(
+    expect(componentManifest.components.Skeleton?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'skeleton.motion-theme',
@@ -362,7 +362,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Badge visuals and keeps zoom and speech manual', () => {
-    const rules = getComponent('Badge')?.qualityRules ?? [];
+    const rules = componentManifest.components.Badge?.qualityRules ?? [];
     expect(rules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -378,7 +378,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Slider keyboard and pointer and keeps speech manual', () => {
-    const rules = getComponent('Slider')?.qualityRules ?? [];
+    const rules = componentManifest.components.Slider?.qualityRules ?? [];
     for (const id of ['slider.keyboard', 'slider.pointer'])
       expect(rules).toEqual(
         expect.arrayContaining([
@@ -395,7 +395,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Select interaction and keeps speech manual', () => {
-    const rules = getComponent('Select')?.qualityRules ?? [];
+    const rules = componentManifest.components.Select?.qualityRules ?? [];
     for (const id of [
       'select.keyboard-selection',
       'select.escape-focus-return',
@@ -416,7 +416,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
-    expect(getComponent('RadioGroup')?.qualityRules).toEqual(
+    expect(componentManifest.components.RadioGroup?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'radio-group.keyboard',
@@ -427,7 +427,7 @@ describe('manifest tools', () => {
     );
   });
   it('requires browser evidence for Switch keyboard interaction', () => {
-    expect(getComponent('Switch')?.qualityRules).toEqual(
+    expect(componentManifest.components.Switch?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'switch.keyboard-pointer',
@@ -438,7 +438,7 @@ describe('manifest tools', () => {
     );
   });
   it('exposes the required Checkbox reset browser rule', () => {
-    expect(getComponent('Checkbox')?.qualityRules).toEqual(
+    expect(componentManifest.components.Checkbox?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'checkbox.reset-browser',
@@ -449,7 +449,7 @@ describe('manifest tools', () => {
     );
   });
   it('exposes NativeSelect browser coverage separately from platform evidence', () => {
-    expect(getComponent('NativeSelect')?.qualityRules).toEqual(
+    expect(componentManifest.components.NativeSelect?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'native-select.browser-behavior',
@@ -464,7 +464,7 @@ describe('manifest tools', () => {
     );
   });
   it('exposes the required Textarea keyboard browser rule', () => {
-    expect(getComponent('Textarea')?.qualityRules).toEqual(
+    expect(componentManifest.components.Textarea?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'textarea.keyboard-input',
@@ -475,7 +475,7 @@ describe('manifest tools', () => {
     );
   });
   it('distinguishes required Input browser checks from residual manual evidence', () => {
-    expect(getComponent('Input')?.qualityRules).toEqual(
+    expect(componentManifest.components.Input?.qualityRules).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           id: 'input.visual-theme',
@@ -490,7 +490,12 @@ describe('manifest tools', () => {
     );
   });
   it('exposes component and shared review rules to agents', () => {
-    expect(getComponent('Dialog')?.qualityRules.map(({ id }) => id)).toEqual(
+    expect(
+      [
+        ...componentManifest.components.Dialog.qualityRules,
+        ...componentManifest.sharedQualityRules,
+      ].map(({ id }) => id),
+    ).toEqual(
       expect.arrayContaining([
         'dialog.accessible-name',
         'dialog.escape-focus-return',
@@ -500,13 +505,10 @@ describe('manifest tools', () => {
         'content.labels-headings',
       ]),
     );
-    expect(
-      searchComponents('dialog.escape-focus-return').map(({ name }) => name),
-    ).toEqual(['Dialog']);
   });
 
   it('lists every public component', () => {
-    expect(listComponents().map(({ name }) => name)).toEqual([
+    expect(Object.keys(componentManifest.components)).toEqual([
       'Button',
       'Field',
       'Dialog',
@@ -546,7 +548,7 @@ describe('manifest tools', () => {
   });
 
   it('exposes strict icon naming and development diagnostics', () => {
-    expect(getComponent('Button')).toMatchObject({
+    expect(componentManifest.components.Button).toMatchObject({
       props: {
         iconOnly: {
           default: false,
@@ -555,27 +557,5 @@ describe('manifest tools', () => {
       },
       composition: expect.stringContaining('Development diagnostics'),
     });
-  });
-
-  it('retrieves a component by case-insensitive name', () => {
-    expect(getComponent('field')).toMatchObject({
-      name: 'Field',
-      parts: ['Root', 'Label', 'Control', 'Description', 'Error'],
-      partProps: { Control: 'Base UI FieldControlProps' },
-      avoid: expect.arrayContaining([
-        'Do not omit Field.Label when composing a control.',
-      ]),
-    });
-    expect(getComponent('Missing')).toBeUndefined();
-  });
-
-  it('searches names and component guidance', () => {
-    expect(searchComponents('modal').map(({ name }) => name)).toEqual([
-      'Dialog',
-      'Popover',
-      'DropdownMenu',
-      'AlertDialog',
-    ]);
-    expect(searchComponents('   ')).toEqual([]);
   });
 });

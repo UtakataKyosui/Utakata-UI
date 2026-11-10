@@ -34,7 +34,6 @@ jobs:
       browser: ${{ steps.scope.outputs.browser }}
       docs: ${{ steps.scope.outputs.docs }}
       react: ${{ steps.scope.outputs.react }}
-      mcp: ${{ steps.scope.outputs.mcp }}
       cli: ${{ steps.scope.outputs.cli }}
       fallow: ${{ steps.scope.outputs.fallow }}
     steps:
@@ -150,12 +149,9 @@ jobs:
             tail -n 30 "$RUNNER_TEMP/pnpm-install.ndjson"
             exit 1
           }
-      - name: Build React (also required by MCP)
-        if: needs.scope.outputs.react == 'true' || needs.scope.outputs.mcp == 'true'
+      - name: Build React
+        if: needs.scope.outputs.react == 'true'
         run: pnpm --filter @utakata-ui/react build
-      - name: Build MCP
-        if: needs.scope.outputs.mcp == 'true'
-        run: pnpm --filter @utakata-ui/mcp build
       - name: Cache consumer npm downloads
         uses: actions/cache@v6.1.0
         with:
@@ -167,13 +163,6 @@ jobs:
           mkdir -p "$RUNNER_TEMP/react-consumer"
           npm pack ./packages/react --pack-destination "$RUNNER_TEMP/react-consumer"
           node scripts/verify-react-package.mjs "$RUNNER_TEMP"/react-consumer/*.tgz
-      - name: Verify packed MCP stdio and tools
-        if: needs.scope.outputs.mcp == 'true'
-        run: |
-          mkdir -p "$RUNNER_TEMP/mcp-consumer" "$RUNNER_TEMP/react-for-mcp"
-          pnpm --filter @utakata-ui/react pack --pack-destination "$RUNNER_TEMP/react-for-mcp"
-          pnpm --filter @utakata-ui/mcp pack --pack-destination "$RUNNER_TEMP/mcp-consumer"
-          node scripts/verify-mcp-package.mjs "$RUNNER_TEMP"/mcp-consumer/*.tgz "$RUNNER_TEMP"/react-for-mcp/*.tgz
       - name: Verify packed dedicated CLI
         if: needs.scope.outputs.cli == 'true'
         run: |

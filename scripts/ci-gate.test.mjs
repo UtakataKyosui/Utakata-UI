@@ -95,7 +95,6 @@ test('Quality and React release share the complete two-theme browser gate', () =
 test('releases skip a verification job only when prior evidence was reused', () => {
   for (const [name, gates] of [
     ['release', ['checks', 'browser']],
-    ['release-mcp', ['checks']],
     ['release-cli', ['checks']],
   ]) {
     const workflow = readFileSync(
@@ -135,7 +134,7 @@ test('releases skip a verification job only when prior evidence was reused', () 
       );
     }
     // Publication always rebuilds, packs and tests the exact archive it uploads.
-    assert.match(publish, /verify-(react|mcp|cli)-package\.mjs/);
+    assert.match(publish, /verify-(react|cli)-package\.mjs/);
     assert.doesNotMatch(publish, /run: pnpm check/);
     // The React archive has no prepack, so it must be built before any pack.
     const reactPack = publish.search(
@@ -152,7 +151,7 @@ test('releases skip a verification job only when prior evidence was reused', () 
 });
 
 test('releases default to verification and expose the token only to explicit manual publication', () => {
-  for (const name of ['release', 'release-mcp', 'release-cli']) {
+  for (const name of ['release', 'release-cli']) {
     const workflow = readFileSync(
       new URL(`../.github/workflows/${name}.yml`, import.meta.url),
       'utf8',
@@ -181,11 +180,5 @@ test('releases default to verification and expose the token only to explicit man
     );
     assert.match(workflow, /git merge-base --is-ancestor HEAD origin\/main/);
     assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
-    if (name === 'release-mcp') {
-      assert.match(
-        workflow,
-        /Require published React dependency\n {8}if: github.event_name == 'push' \|\| inputs.release_mode != 'verify'/,
-      );
-    }
   }
 });

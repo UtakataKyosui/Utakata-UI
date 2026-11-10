@@ -11,7 +11,6 @@ const flags = [
   'browser',
   'docs',
   'react',
-  'mcp',
   'cli',
   'agents',
   'fallow',
@@ -30,13 +29,12 @@ const rules = [
   ],
   [
     /^packages\/react\/(?!src\/tests\/)(?!.*\.(md|txt)$)(?!.*\/LICENSE$)/,
-    ['react', 'mcp', 'browser', 'docs', 'fallow'],
+    ['react', 'browser', 'docs', 'fallow'],
   ],
   [/^packages\/react\/.*\.[cm]?[jt]sx?$/, ['types', 'tests', 'fallow']],
   [/^packages\/react\/src\/tests\//, ['tests', 'fallow']],
   [/^packages\/react\/src\/components\/.*\.tsx$/, ['markup']],
   [/^packages\/react\/.*(?:\.(md|txt)|\/LICENSE)$/, ['react']],
-  [/^packages\/mcp\/(?!.*\.(md|txt)$)/, ['types', 'tests', 'mcp', 'fallow']],
   [/^packages\/cli\/|^scripts\/verify-cli-package\.mjs$/, ['cli', 'fallow']],
   [/^packages\/docs\//, ['docs']],
   [/^packages\/docs\/.*\.[jt]sx?$/, ['types', 'fallow']],
@@ -47,7 +45,6 @@ const rules = [
   ],
   [/^tests\/browser\/.*\.(tsx|html)$/, ['markup']],
   [/^scripts\/verify-react-package\.mjs$/, ['react', 'fallow']],
-  [/^scripts\/verify-mcp-package\.mjs$/, ['mcp', 'fallow']],
   [/^scripts\/accessibility-lint\.test\.mjs$/, ['markup', 'fallow']],
   [
     /\.(md|txt)$|^\.github\/workflows\/(actions\.lock|verify-lockfile\.yml|release\.yml)$|^\.gitignore$/,
@@ -66,7 +63,7 @@ export function selectScope(files, full = false) {
     for (const flag of selected) scope[flag] = true;
   }
   scope.checks = scope.lint || scope.types || scope.tests || scope.markup;
-  scope.build = scope.react || scope.mcp || scope.cli;
+  scope.build = scope.react || scope.cli;
   scope.full = full;
   return scope;
 }

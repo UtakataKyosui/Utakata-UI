@@ -22,7 +22,6 @@
     "packages/docs/**/*.tsx",
     "packages/react/src/**/*.ts",
     "packages/react/src/**/*.tsx",
-    "packages/mcp/src/**/*.ts",
     "packages/docs/blume.config.ts",
     "vitest.config.ts",
     "playwright.config.ts",

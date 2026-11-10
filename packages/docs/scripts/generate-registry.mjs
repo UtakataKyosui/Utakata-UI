@@ -106,6 +106,8 @@ export async function writeRegistry(directory) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   await writeRegistry(
-    fileURLToPath(new URL('../dist/registry/v1/', import.meta.url)),
+    fileURLToPath(
+      new URL('../.vercel/output/static/registry/v1/', import.meta.url),
+    ),
   );
 }

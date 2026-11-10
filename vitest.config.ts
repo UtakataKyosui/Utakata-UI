@@ -18,7 +18,6 @@ export default defineConfig({
     include: [
       'packages/a11y-cli/src/**/*.test.ts',
       'packages/react/src/**/*.test.tsx',
-      'packages/mcp/src/**/*.test.ts',
     ],
   },
 });

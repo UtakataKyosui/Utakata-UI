@@ -30,7 +30,7 @@
    プランによって必要な保護機能が使えない場合は、承認保護を確認済みにせず記録します。
 2. Deployment branches and tags を Selected branches and tags にします。
    検証用の branch `main` と、公開するパッケージに対応した tag パターン
-   `react-v*`、`mcp-v*`、`cli-v*` をそれぞれ追加します。
+   `react-v*`、`cli-v*` をそれぞれ追加します。
 3. 通常の OIDC 運用では、Environment secrets に npm の公開 Token を登録する必要はありません。
 
 各 Release ジョブは、公開する実行（`token` / `oidc` の選択、またはタグ push）だけ
@@ -55,10 +55,7 @@
 6. 実行ログと npm のパッケージページで、バージョンと provenance を確認します。
    公開済みのバージョンは再利用できません。成功した同一バージョンの公開ジョブを再実行しないでください。
 
-MCP は **Release MCP**、CLI は **Release CLI** で同じ操作を行います。
-MCP の公開前には依存する React のバージョンを先に公開してください。
-MCP は pnpm pack による workspace 依存の変換と外部利用テストを行い、
-公開時には React の依存バージョンが npm に存在することも確認します。
+CLI は **Release CLI** で同じ操作を行います。
 CLI は React の npm 公開を必要としません。
 
 ローカルで `npm login` や `npm publish` を実行する必要はありません。
@@ -72,7 +69,6 @@ npm の対象パッケージの **Settings → Trusted publishing → GitHub Act
 | パッケージ          | Organization or user | Repository   | Workflow filename | Environment name |
 | ------------------- | -------------------- | ------------ | ----------------- | ---------------- |
 | `@utakata-ui/react` | `UtakataKyosui`      | `Utakata-UI` | `release.yml`     | `npm`            |
-| `@utakata-ui/mcp`   | `UtakataKyosui`      | `Utakata-UI` | `release-mcp.yml` | `npm`            |
 | `@utakata-ui/cli`   | `UtakataKyosui`      | `Utakata-UI` | `release-cli.yml` | `npm`            |
 
 Allowed actions では直接公開の `npm publish` を許可します。stage のみでは現在の CI は公開できません。
@@ -126,7 +122,7 @@ OIDC への移行が完了するまでは、Token を更新して `release_mode:
   ローカル認証は任意の補助確認です。Actions の Token/OIDC 公開にはローカルログインは不要で、
   ローカル未認証でも手動リリースできます。この preflight は公開ジョブの必須ゲートではありません。
 - スコープ権限・Publisher の確認証拠を渡す方法は [CI ガイド](CI.md) を参照してください。
-  現在の preflight の対象は React です。MCP・CLI はそれぞれ別に設定を確認します。
+  現在の preflight の対象は React です。CLI は別に設定を確認します。
 - ENEEDAUTH/E404 は、スコープ権限、Publisher の owner/repository/workflow/environment、
   `npm publish` 許可、有効期限、npm バージョン、`id-token: write` を確認します。
   E404 だけでパッケージが存在しないと断定しません。
