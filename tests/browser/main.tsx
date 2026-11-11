@@ -20,6 +20,7 @@ import {
   Input,
   InputGroup,
   InputOTP,
+  Item,
   Kbd,
   KbdGroup,
   NativeSelect,
@@ -382,6 +383,96 @@ function SpinnerStates() {
       {componentManifest.components.Spinner.sizes.map((size) => (
         <Spinner key={size} size={size} label={`Loading ${size}`} />
       ))}
+    </section>
+  );
+}
+
+const itemLongText =
+  'Quarterly_report_with_a_very_long_unbroken_identifier_that_must_wrap and a long sentence.';
+
+function ItemStates() {
+  const [primary, setPrimary] = useState(0);
+  const [edit, setEdit] = useState(0);
+  const [remove, setRemove] = useState(0);
+  return (
+    <section aria-label="Item states">
+      <Button>Before item</Button>
+      <Item.Group aria-label="Item examples">
+        <Item.Root data-case="link">
+          <Item.Icon>
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
+              <path d="M3 1h7l3 3v11H3z" fill="currentColor" />
+            </svg>
+          </Item.Icon>
+          <Item.Body>
+            <Item.Link href="#report" onClick={(e) => e.preventDefault()}>
+              {itemLongText}
+            </Item.Link>
+            <Item.Description>{itemLongText}</Item.Description>
+          </Item.Body>
+          <Item.Meta>{itemLongText}</Item.Meta>
+          <Item.Actions>
+            <Button
+              iconOnly
+              square
+              aria-label="Edit report"
+              onClick={() => setEdit((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+            <Button
+              iconOnly
+              square
+              aria-label="Delete report"
+              onClick={() => setRemove((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+          </Item.Actions>
+        </Item.Root>
+        <Item.Root data-case="button">
+          <Item.Body>
+            <Item.Button onClick={() => setPrimary((n) => n + 1)}>
+              Open details
+            </Item.Button>
+            <Item.Description>Opens a details panel</Item.Description>
+          </Item.Body>
+          <Item.Meta>Draft</Item.Meta>
+        </Item.Root>
+        <Item.Root data-case="static">
+          <Item.Body>
+            <Item.Title>Static row</Item.Title>
+            <Item.Description>No operation</Item.Description>
+          </Item.Body>
+          <Item.Meta>Read only</Item.Meta>
+        </Item.Root>
+      </Item.Group>
+      <Button>After item</Button>
+      <p data-testid="item-counts">
+        primary {primary} edit {edit} delete {remove}
+      </p>
     </section>
   );
 }
@@ -1429,6 +1520,7 @@ function Fixture() {
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
+      <ItemStates />
       <AlertStates />
       <AvatarStates />
       <ProgressStates />

@@ -88,6 +88,16 @@ export const coverage = {
     selector: '.ui-card',
     states: { longContent: 'card.layout-theme' },
   },
+  Item: {
+    axes: {},
+    selector: '.ui-item',
+    states: {
+      static: 'item.layout-focus',
+      link: 'item.layout-focus',
+      button: 'item.layout-focus',
+      longContent: 'item.layout-focus',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',

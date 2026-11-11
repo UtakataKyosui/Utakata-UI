@@ -14,6 +14,7 @@ import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
+import { itemQualityRules } from './components/Item.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
@@ -124,6 +125,7 @@ export const qualityRules = {
         'Record browser, assistive technology and findings before release.',
     },
   ],
+  Item: itemQualityRules,
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
   Sheet: sheetQualityRules,

@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Item, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type ItemButtonProps, type ItemIconProps, type ItemLinkProps, type ItemRootProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -222,6 +222,27 @@ export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile
 export const cardEmptyTitle: CardTitleProps = { level: '2' };
 // @ts-expect-error Card className must be a string in shipped declarations.
 export const cardFunctionClass = <Card.Root className={() => 'x'} />;
+export const itemLinkProps: ItemLinkProps = { href: '/report', children: 'Report' };
+export const itemRouterLink: ItemLinkProps = { render: <a href="/docs">Docs</a>, children: 'Docs' };
+export const itemButtonProps: ItemButtonProps = { children: 'Open' };
+export const item = <Item.Group aria-label="Files"><Item.Root><Item.Icon><svg aria-hidden="true" /></Item.Icon><Item.Body><Item.Link {...itemLinkProps} /><Item.Description>Detail</Item.Description></Item.Body><Item.Meta>Today</Item.Meta><Item.Actions><Button iconOnly aria-label="Delete report">x</Button></Item.Actions></Item.Root><Item.Root><Item.Body><Item.Button {...itemButtonProps} /></Item.Body></Item.Root></Item.Group>;
+// @ts-expect-error An Item link needs href or a render element in shipped declarations.
+export const itemNoDestination: ItemLinkProps = { children: 'Report' };
+// @ts-expect-error An Item link needs children as its accessible name in shipped declarations.
+export const itemLinkNoName: ItemLinkProps = { href: '/' };
+// @ts-expect-error An Item button is always type="button" in shipped declarations.
+export const itemSubmit: ItemButtonProps = { children: 'Go', type: 'submit' };
+// @ts-expect-error An Item button cannot navigate with href in shipped declarations.
+export const itemButtonHref: ItemButtonProps = { children: 'Go', href: '/' };
+// @ts-expect-error The Item row itself cannot be clickable in shipped declarations.
+export const itemRootClick: ItemRootProps = { onClick: () => {} };
+// @ts-expect-error The Item row itself cannot be a tab stop in shipped declarations.
+export const itemRootTabIndex: ItemRootProps = { tabIndex: 0 };
+// @ts-expect-error The Item icon is decorative and cannot be exposed in shipped declarations.
+export const itemIconVisible: ItemIconProps = { 'aria-hidden': false };
+const itemFocusableProps = { tabIndex: 0 as const };
+// @ts-expect-error Spreads cannot make the Item row focusable in shipped declarations.
+export const itemRootSpread = <Item.Root {...itemFocusableProps} />;
 type AlertRootProps = ComponentProps<typeof Alert.Root>;
 export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
 export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;
