@@ -46,7 +46,7 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
-import { CarouselFixture } from './carousel-fixture.js';
+import { CarouselFixture, CarouselPage } from './carousel-fixture.js';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
@@ -1498,7 +1498,9 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  new URLSearchParams(location.search).has('lism') ? (
+  new URLSearchParams(location.search).has('carousel') ? (
+    <CarouselPage />
+  ) : new URLSearchParams(location.search).has('lism') ? (
     <LismFixture />
   ) : new URLSearchParams(location.search).has('reader') ? (
     <LayoutFixture variants={false} />

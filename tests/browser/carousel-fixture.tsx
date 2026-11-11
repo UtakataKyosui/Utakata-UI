@@ -35,3 +35,11 @@ const slides: CarouselSlide[] = [
 export function CarouselFixture() {
   return <Carousel slides={slides} labels={labels} />;
 }
+
+export function CarouselPage() {
+  return (
+    <main className="layout-contract">
+      <CarouselFixture />
+    </main>
+  );
+}
