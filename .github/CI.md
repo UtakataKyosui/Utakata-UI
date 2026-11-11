@@ -26,6 +26,12 @@ baseline runs all gates. Inherited evidence keeps the earliest original expiry;
 re-exporting does not extend its 14-day lifetime. Manual Quality runs and release
 `full_verification` bypass reuse. Fallow remains a fresh PR diff audit.
 
+To verify reuse on a PR, wait for a passing Quality run with a
+`ci-verification-<attempt>` artifact, then push an edit limited to this CI guide.
+In the next run's **CI execution plan**, confirm that the changed documentation
+is checked and that any reused unit, build, docs, or browser gate links to the
+earlier run and attempt. The aggregate `accessibility` check must still pass.
+
 A stable version-only edit to the React manifest runs lint, React build/packed
 consumers and Docs/registry generation, without unrelated unit/browser jobs.
 Dependency, export, script, engine or other metadata changes retain full gates.
