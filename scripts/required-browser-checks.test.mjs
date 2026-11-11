@@ -29,6 +29,25 @@ const fixture = (project, status = 'passed') => ({
   results: [{ status }],
 });
 
+test('reporter ignores the temporary index inherited from a commit hook', (t) => {
+  const directory = mkdtempSync(join(tmpdir(), 'utakata-hook-index-'));
+  const index = join(directory, 'index');
+  const contents = 'invalid temporary index';
+  writeFileSync(index, contents);
+  const original = process.env.GIT_INDEX_FILE;
+  t.after(() => {
+    if (original === undefined) delete process.env.GIT_INDEX_FILE;
+    else process.env.GIT_INDEX_FILE = original;
+    rmSync(directory, { recursive: true, force: true });
+  });
+  process.env.GIT_INDEX_FILE = index;
+  assert.equal(
+    run([fixture('chromium-light'), fixture('chromium-dark')]),
+    undefined,
+  );
+  assert.equal(readFileSync(index, 'utf8'), contents);
+});
+
 test('evidence persists rule mapping, failures and residual checks; stale results cannot pass', () => {
   const directory = mkdtempSync(join(tmpdir(), 'utakata-evidence-'));
   try {

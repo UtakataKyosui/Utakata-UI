@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import {
   mkdirSync,
@@ -350,12 +350,12 @@ function readRecord(run, repository, hashes) {
 }
 
 function hasProtocol(sha) {
-  try {
-    git('cat-file', '-e', `${sha}:scripts/ci-evidence.mjs`);
-    return true;
-  } catch {
-    return false;
-  } // Legacy run or unavailable source cannot provide evidence.
+  // Legacy runs and unavailable commits are expected misses.
+  return (
+    spawnSync('git', ['cat-file', '-e', `${sha}:scripts/ci-evidence.mjs`], {
+      stdio: 'ignore',
+    }).status === 0
+  );
 }
 
 function downloadProof(run, repository, artifactName) {

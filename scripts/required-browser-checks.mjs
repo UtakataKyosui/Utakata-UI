@@ -1,8 +1,11 @@
-import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { digest, sourceFingerprint } from './evidence-contract.mjs';
+import {
+  digest,
+  readEvidenceGit,
+  sourceFingerprint,
+} from './evidence-contract.mjs';
 
 // Evidence is valid only for this commit and this rule/environment contract.
 export function validateEvidence(
@@ -147,8 +150,7 @@ export default class RequiredBrowserChecks {
       (result && result.status !== 'passed');
     if (this.tests) {
       const commit =
-        process.env.GITHUB_SHA ||
-        execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+        process.env.GITHUB_SHA || readEvidenceGit('rev-parse', 'HEAD').trim();
       const contract = createHash('sha256')
         .update(
           JSON.stringify({
@@ -163,10 +165,7 @@ export default class RequiredBrowserChecks {
       const evidence = {
         schemaVersion: 1,
         commit,
-        sourceDirty:
-          execFileSync('git', ['status', '--porcelain'], {
-            encoding: 'utf8',
-          }).trim().length > 0,
+        sourceDirty: readEvidenceGit('status', '--porcelain').trim().length > 0,
         contract,
         source: this.source,
         requireAttachments: this.requireAttachments,

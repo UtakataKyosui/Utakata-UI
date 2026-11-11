@@ -6,13 +6,26 @@ export function digest(value) {
   return createHash('sha256').update(value).digest('hex');
 }
 
+export function readEvidenceGit(...args) {
+  // Hooks can inherit a temporary commit index. Read the worktree's own
+  // index and prevent status from writing a stat refresh back to it.
+  const env = { ...process.env };
+  delete env.GIT_INDEX_FILE;
+  return execFileSync('git', ['--no-optional-locks', ...args], {
+    encoding: 'utf8',
+    env,
+  });
+}
+
 /** Includes unstaged and new nonignored source. Dist/results/caches remain
  * ignored; a dirty-tree run cannot be mistaken for the clean commit. */
 export function sourceFingerprint() {
-  const paths = execFileSync(
-    'git',
-    ['ls-files', '-z', '--cached', '--others', '--exclude-standard'],
-    { encoding: 'utf8' },
+  const paths = readEvidenceGit(
+    'ls-files',
+    '-z',
+    '--cached',
+    '--others',
+    '--exclude-standard',
   )
     .split('\0')
     .filter(Boolean)
