@@ -672,6 +672,7 @@ describe('public manifest contract', () => {
       'ToggleGroup',
       'ButtonGroup',
       'Calendar',
+      'DatePicker',
     ]);
   });
 

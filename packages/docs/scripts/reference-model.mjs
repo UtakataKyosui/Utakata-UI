@@ -21,6 +21,7 @@ export const categories = [
       'Field',
       'Input',
       'InputGroup',
+      'DatePicker',
       'Textarea',
       'NativeSelect',
       'Select',

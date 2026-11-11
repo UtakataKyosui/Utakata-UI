@@ -11,6 +11,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
+import { datePickerManifest } from './components/DatePicker.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
@@ -197,6 +198,7 @@ const manifest = {
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
     Calendar: calendarManifest,
+    DatePicker: datePickerManifest,
   },
 } as const;
 

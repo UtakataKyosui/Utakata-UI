@@ -13,10 +13,10 @@ import {
   useState,
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
+import { type CalendarDate, formatDate, parseDate } from './calendarDate.js';
 import { withClassName } from './classNames.js';
 
-/** A calendar day as an ISO 8601 date string, for example "2026-11-10". */
-export type CalendarDate = `${number}-${number}-${number}`;
+export type { CalendarDate } from './calendarDate.js';
 
 /** A calendar month as "YYYY-MM", for example "2026-11". */
 export type CalendarMonth = `${number}-${number}`;
@@ -87,24 +87,9 @@ type RangeProps = {
 export type CalendarProps = CalendarBaseProps & (SingleProps | RangeProps);
 
 const DAY = 86_400_000;
-const pad = (value: number, length = 2) => String(value).padStart(length, '0');
-
 type Selection = { from: number; to: number | null } | null;
 type Mode = 'single' | 'range';
 type AnyValue = CalendarDate | CalendarRange | null | undefined;
-
-function formatDate(ms: number): CalendarDate {
-  const date = new Date(ms);
-  return `${pad(date.getUTCFullYear(), 4)}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}` as CalendarDate;
-}
-
-/** Epoch ms at UTC midnight, or null for anything but a real calendar day. */
-function parseDate(value: string | null | undefined): number | null {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value ?? '');
-  if (!match) return null;
-  const ms = Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-  return formatDate(ms) === value ? ms : null;
-}
 
 function parseMonth(value: string | undefined): number | null {
   return /^\d{4}-\d{2}$/.test(value ?? '') ? parseDate(`${value}-01`) : null;

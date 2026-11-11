@@ -11,6 +11,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
+import { datePickerQualityRules } from './components/DatePicker.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
@@ -162,6 +163,7 @@ export const qualityRules = {
   ToggleGroup: toggleGroupQualityRules,
   ButtonGroup: buttonGroupQualityRules,
   Calendar: calendarQualityRules,
+  DatePicker: datePickerQualityRules,
   shared: [
     {
       id: 'lism.rendered-props',

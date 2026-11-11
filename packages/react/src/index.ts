@@ -86,6 +86,11 @@ export type {
   CommandRootProps,
 } from './components/Command.js';
 export { Command } from './components/Command.js';
+export type {
+  DatePickerLabels,
+  DatePickerProps,
+} from './components/DatePicker.js';
+export { DatePicker } from './components/DatePicker.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';

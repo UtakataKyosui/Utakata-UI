@@ -2489,6 +2489,53 @@
     overflow: auto;
   }
 
+  .ui-date-picker {
+    display: grid;
+    gap: 0.375rem;
+    min-inline-size: 0;
+  }
+
+  .ui-date-picker__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ui-date-picker__controls > .ui-input {
+    flex: 1 1 10rem;
+    min-inline-size: 0;
+  }
+
+  .ui-date-picker__controls > .ui-button {
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-date-picker__hint,
+  .ui-date-picker__error {
+    margin: 0;
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-date-picker__hint {
+    color: var(--ui-color-muted);
+  }
+
+  .ui-date-picker__error {
+    color: var(--ui-color-danger);
+  }
+
+  .ui-popover__popup.ui-date-picker__popup {
+    inline-size: min(100%, 22rem);
+    min-inline-size: min(15rem, var(--available-width, 100vw));
+    max-inline-size: min(22rem, var(--available-width, 100vw));
+    max-block-size: var(--available-height, none);
+    overflow: auto;
+  }
+
   .ui-popover__popup {
     max-inline-size: min(24rem, var(--available-width), calc(100vw - 1rem));
     padding: 1rem;

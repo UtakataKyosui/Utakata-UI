@@ -41,6 +41,7 @@ const verificationStates = {
   ToggleGroup: ['single', 'multiple', 'disabled'],
   ButtonGroup: ['disabled', 'wrapping'],
   Calendar: ['single', 'range', 'disabled', 'today'],
+  DatePicker: ['empty', 'selected', 'invalid', 'disabled', 'open'],
 } as const;
 
 export function withVerificationStates<

@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Collapsible, Combobox, Command, DatePicker, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type DatePickerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -521,6 +521,14 @@ function ButtonGroupWrapper(props: ButtonGroupProps) { return <ButtonGroup {...p
 export const wrappedButtonGroup = <ButtonGroupWrapper aria-label="History" />;
 // @ts-expect-error Wrappers must preserve the required group name.
 export const wrappedButtonGroupInvalid = <ButtonGroupWrapper />;
+export const datePickerProps: DatePickerProps = { label: 'Booking date', value: '2026-11-10', name: 'date' };
+export const datePicker = <DatePicker {...datePickerProps} />;
+// @ts-expect-error DatePicker requires a visible label.
+export const datePickerWithoutLabel = <DatePicker name="date" />;
+// @ts-expect-error DatePicker accepts a single ISO date and not a range.
+export const datePickerWithRange = <DatePicker label="Date" value={{ from: '2026-11-10' }} />;
+// @ts-expect-error DatePicker accepts ISO date strings and not Date objects.
+export const datePickerWithDate = <DatePicker label="Date" value={new Date()} />;
 export const calendarDay: CalendarDate = '2026-11-10';
 export const calendarRange: CalendarRange = { from: '2026-11-10', to: '2026-11-12' };
 export const calendarSingleProps: CalendarProps = { 'aria-label': 'Booking date', value: calendarDay, weekStartsOn: 1, minDate: '2026-11-03', isDateDisabled: (date) => date.endsWith('-23') };

@@ -329,3 +329,11 @@ Dialogを基にした、上・右・下・左の端に付くモーダルのパ�
 1日または日付範囲を選ぶ月カレンダーです。日付は`"YYYY-MM-DD"`の文字列で、タイムゾーンや日付ライブラリには依存しません。Tabキーで日付へ1回だけ入り、矢印キー・Home・End・PageUp/PageDown（Shiftで年単位）で移動し、EnterまたはSpaceで選択します。選択不可の日（`minDate`・`maxDate`・`isDateDisabled`）にはフォーカスできますが選択できません。名前（`aria-label`か`aria-labelledby`）は型で必須です。
 
 <Component path="calendar" />
+
+## DatePicker [#datepicker]
+
+詳しい使い方とAPIは[DatePicker](/components/datepicker)を参照してください。
+
+日付を `YYYY-MM-DD` 形式で入力するか、カレンダーから1日を選びます。選べない日や実在しない日はエラーになり、入力内容は修正できるように残ります。Escape でカレンダーを閉じるとボタンにフォーカスが戻ります。フォームのリセットで初期値に戻せます。
+
+<Component path="datepicker" />

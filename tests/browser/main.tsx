@@ -10,11 +10,13 @@ import {
   Button,
   ButtonGroup,
   Calendar,
+  type CalendarDate,
   Card,
   Checkbox,
   Collapsible,
   Combobox,
   Command,
+  DatePicker,
   Dialog,
   DropdownMenu,
   Field,
@@ -1100,6 +1102,56 @@ function ToastStates() {
   );
 }
 
+function DatePickerStates() {
+  const [date, setDate] = useState<CalendarDate | null>('2026-11-10');
+  const [submissions, setSubmissions] = useState(0);
+  return (
+    <section aria-label="Date Picker states">
+      <form
+        aria-label="Booking date form"
+        ref={(form) => {
+          if (!form) return;
+          const count = (event: Event) => {
+            event.preventDefault();
+            setSubmissions((previous) => previous + 1);
+          };
+          form.addEventListener('submit', count);
+          return () => form.removeEventListener('submit', count);
+        }}
+      >
+        <DatePicker
+          label="Booking date"
+          name="bookingDate"
+          locale="en-US"
+          today="2026-11-10"
+          minDate="2026-11-05"
+          defaultValue="2026-11-10"
+          value={date}
+          onValueChange={setDate}
+          labels={{
+            openCalendar: 'Open booking calendar',
+            calendarTitle: 'Choose booking date',
+            formatHint: 'Use YYYY-MM-DD.',
+            invalidDate: 'Enter a valid ISO date.',
+            unavailableDate: 'This date is unavailable.',
+          }}
+          calendarLabels={{
+            previousMonth: 'Previous month',
+            nextMonth: 'Next month',
+            selected: 'Selected',
+          }}
+        />
+        <DatePicker label="Closed date" disabled />
+        <Button type="submit">Submit booking</Button>
+        <Button type="reset" variant="outline">
+          Reset booking
+        </Button>
+        <output aria-label="Booking submissions">{submissions}</output>
+      </form>
+    </section>
+  );
+}
+
 function CalendarStates() {
   const [value, setValue] = useState<unknown>(null);
   const [single, setSingle] = useState('');
@@ -1481,6 +1533,7 @@ function Fixture() {
       <ToastStates />
       <ToggleGroupStates />
       <CalendarStates />
+      <DatePickerStates />
       <ButtonGroupStates />
       <InputGroupStates />
       <section aria-label="Additional public configurations">

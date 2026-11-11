@@ -32,6 +32,7 @@ import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
 import { commandChecks } from './quality/Command.checks.js';
+import { datePickerChecks } from './quality/DatePicker.checks.js';
 import { dropdownMenuChecks } from './quality/DropdownMenu.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { inputGroupChecks } from './quality/InputGroup.checks.js';
@@ -180,6 +181,7 @@ describe('accessibility regression checks', () => {
       ...toggleGroupChecks,
       ...buttonGroupChecks,
       ...calendarChecks,
+      ...datePickerChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

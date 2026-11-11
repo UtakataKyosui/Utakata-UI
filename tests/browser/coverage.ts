@@ -317,6 +317,17 @@ export const coverage = {
       disabled: 'toggle-group.keyboard',
     },
   },
+  DatePicker: {
+    axes: {},
+    selector: '.ui-date-picker',
+    states: {
+      empty: 'date-picker.keyboard',
+      selected: 'date-picker.keyboard',
+      invalid: 'date-picker.keyboard',
+      disabled: 'date-picker.keyboard',
+      open: 'date-picker.visual-states',
+    },
+  },
   Calendar: {
     axes: {},
     selector: '.ui-calendar',
