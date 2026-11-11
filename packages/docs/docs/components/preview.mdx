@@ -130,6 +130,14 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="pagination" />
 
+## NavigationMenu [#navigationmenu]
+
+詳しい使い方とAPIは[NavigationMenu](/components/navigationmenu)を参照してください。
+
+リンクと、さらにリンクを並べた開閉パネルを持つサイトのナビゲーションです。`NavigationMenu.Root`には`aria-label`か`aria-labelledby`で名前を付けます。Tabキーで各リンクとトリガーを順に移動し、Enter・Space・クリック・タップ・ホバーでパネルが開きます。下矢印でも開き、左右の矢印キーでトリガーを移動し、Escapeで閉じてトリガーにフォーカスが戻ります。ポインターをトリガーからパネルへ動かしても開いたままです。現在のページのリンクには`active`を付けます。パネルのリンクを押してもパネルは開いたままなので、単一ページのルーティングでは`closeOnClick`を付けてください。アプリケーションのコマンドにはDropdownMenuかMenubarを使います。
+
+<Component path="navigationmenu" />
+
 ## Input [#input]
 
 詳しい使い方とAPIは[Input](/components/input)を参照してください。

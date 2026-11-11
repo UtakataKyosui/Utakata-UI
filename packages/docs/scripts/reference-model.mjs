@@ -53,7 +53,7 @@ export const categories = [
   {
     slug: 'navigation',
     title: { ja: 'ナビゲーション', en: 'Navigation' },
-    components: ['Breadcrumb', 'Pagination'],
+    components: ['Breadcrumb', 'Pagination', 'NavigationMenu'],
   },
   {
     slug: 'feedback',

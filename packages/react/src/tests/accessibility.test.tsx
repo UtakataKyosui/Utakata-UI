@@ -37,6 +37,7 @@ import { inputGroupChecks } from './quality/InputGroup.checks.js';
 import { inputOTPChecks } from './quality/InputOTP.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
+import { navigationMenuChecks } from './quality/NavigationMenu.checks.js';
 import { paginationChecks } from './quality/Pagination.checks.js';
 import { popoverChecks } from './quality/Popover.checks.js';
 import { progressChecks } from './quality/Progress.checks.js';
@@ -173,6 +174,7 @@ describe('accessibility regression checks', () => {
       ...tooltipChecks,
       ...popoverChecks,
       ...dropdownMenuChecks,
+      ...navigationMenuChecks,
       ...alertDialogChecks,
       ...toastChecks,
       ...inputGroupChecks,

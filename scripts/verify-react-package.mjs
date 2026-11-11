@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -438,6 +438,31 @@ const sheetUnsafeProps = { side: 'center' };
 export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
 // @ts-expect-error className must be a string, not a state function, in shipped declarations.
 export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+export const navigationMenuNamed: NavigationMenuRootProps = { 'aria-label': 'Main' };
+export const navigationMenuLabelled: NavigationMenuRootProps = { 'aria-labelledby': 'site-heading', orientation: 'vertical' };
+export const navigationMenuLink: NavigationMenuLinkProps = { href: '/a', active: true };
+export const navigationMenu = <NavigationMenu.Root {...navigationMenuNamed}><NavigationMenu.List><NavigationMenu.Item><NavigationMenu.Link href="/" active>Home</NavigationMenu.Link></NavigationMenu.Item><NavigationMenu.Item value="more"><NavigationMenu.Trigger>More<NavigationMenu.Icon /></NavigationMenu.Trigger><NavigationMenu.Content><NavigationMenu.Link {...navigationMenuLink}>A</NavigationMenu.Link></NavigationMenu.Content></NavigationMenu.Item></NavigationMenu.List><NavigationMenu.Portal><NavigationMenu.Positioner sideOffset={8}><NavigationMenu.Popup><NavigationMenu.Viewport /></NavigationMenu.Popup></NavigationMenu.Positioner></NavigationMenu.Portal></NavigationMenu.Root>;
+// @ts-expect-error The navigation needs aria-label or aria-labelledby in shipped declarations.
+export const navigationMenuUnnamed: NavigationMenuRootProps = {};
+// @ts-expect-error JSX usage must also name the navigation.
+export const navigationMenuUnnamedJsx = <NavigationMenu.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const navigationMenuBothNames: NavigationMenuRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+// @ts-expect-error Orientation is limited to horizontal and vertical in shipped declarations.
+export const navigationMenuOrientation: NavigationMenuRootProps = { 'aria-label': 'a', orientation: 'diagonal' };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const navigationMenuClass: NavigationMenuRootProps = { 'aria-label': 'a', className: () => 'x' };
+const navigationMenuUnnamedProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the required navigation name.
+export const navigationMenuSpreadUnnamed = <NavigationMenu.Root {...navigationMenuUnnamedProps} />;
+// @ts-expect-error A link needs href or render in shipped declarations.
+export const navigationMenuLinkNoDestination: NavigationMenuLinkProps = {};
+// @ts-expect-error Mark the current page with active, not aria-current.
+export const navigationMenuLinkCurrent: NavigationMenuLinkProps = { href: '/a', 'aria-current': 'page' };
+function NavigationMenuWrapper(props: NavigationMenuRootProps) { return <NavigationMenu.Root {...props} />; }
+export const wrappedNavigationMenu = <NavigationMenuWrapper aria-label="Main" />;
+// @ts-expect-error Wrappers must preserve the required navigation name.
+export const wrappedNavigationMenuInvalid = <NavigationMenuWrapper />;
 type SheetRootProps = ComponentProps<typeof Sheet.Root>;
 export const sheetRoot: SheetRootProps = { defaultOpen: true };
 // @ts-expect-error A Sheet is always modal in shipped declarations.

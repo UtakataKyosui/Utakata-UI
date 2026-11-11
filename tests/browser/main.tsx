@@ -23,6 +23,7 @@ import {
   Kbd,
   KbdGroup,
   NativeSelect,
+  NavigationMenu,
   Pagination,
   Popover,
   Progress,
@@ -855,6 +856,129 @@ function MenuStates() {
   );
 }
 
+function NavigationMenuFixture({ rtl = false }: { rtl?: boolean }) {
+  const [followed, setFollowed] = useState<string[]>([]);
+  const follow = (name: string) => () =>
+    setFollowed((previous) => [...previous, name]);
+  const suffix = rtl ? ' rtl' : '';
+  const panel = (label: string, links: [string, string][]) => (
+    <NavigationMenu.Content>
+      <ul aria-label={label} className="fixture-nav-links">
+        {links.map(([name, href]) => (
+          <li key={name}>
+            <NavigationMenu.Link href={href} onClick={follow(name)}>
+              {name}
+            </NavigationMenu.Link>
+          </li>
+        ))}
+      </ul>
+    </NavigationMenu.Content>
+  );
+  return (
+    <section
+      aria-label={`Navigation menu states${suffix}`}
+      dir={rtl ? 'rtl' : 'ltr'}
+    >
+      <Button>Before navigation</Button>
+      <NavigationMenu.Root aria-label={`Primary${suffix}`}>
+        <NavigationMenu.List>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-home"
+              active
+              onClick={follow('Home')}
+            >
+              Home
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="products">
+            <NavigationMenu.Trigger>
+              Products
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Products', [
+              ['UI kit', '#nav-ui'],
+              ['Icons', '#nav-icons'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="company">
+            <NavigationMenu.Trigger>
+              Company
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Company', [
+              ['About', '#nav-about'],
+              ['Careers', '#nav-careers'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Trigger disabled>
+              Legacy
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-pricing"
+              onClick={follow('Pricing')}
+            >
+              Pricing
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+        </NavigationMenu.List>
+        <NavigationMenu.Portal>
+          <NavigationMenu.Positioner sideOffset={4}>
+            <NavigationMenu.Popup>
+              <NavigationMenu.Viewport />
+            </NavigationMenu.Popup>
+          </NavigationMenu.Positioner>
+        </NavigationMenu.Portal>
+      </NavigationMenu.Root>
+      <Button>After navigation</Button>
+      <output aria-label="Navigation followed">
+        {JSON.stringify(followed)}
+      </output>
+    </section>
+  );
+}
+
+function NavigationMenuStates() {
+  return (
+    <>
+      <NavigationMenuFixture />
+      <NavigationMenuFixture rtl />
+      <section aria-label="Navigation menu vertical states">
+        <NavigationMenu.Root aria-label="Sidebar" orientation="vertical">
+          <NavigationMenu.List>
+            <NavigationMenu.Item value="docs">
+              <NavigationMenu.Trigger>
+                Docs
+                <NavigationMenu.Icon />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content>
+                <ul aria-label="Docs">
+                  <li>
+                    <NavigationMenu.Link href="#nav-guide">
+                      Guide
+                    </NavigationMenu.Link>
+                  </li>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner sideOffset={4} side="inline-end">
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu.Root>
+      </section>
+    </>
+  );
+}
+
 const commandGroups = [
   {
     value: 'Pages',
@@ -1442,6 +1566,7 @@ function Fixture() {
       <TooltipStates />
       <PopoverStates />
       <MenuStates />
+      <NavigationMenuStates />
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />

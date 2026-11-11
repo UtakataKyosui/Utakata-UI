@@ -280,6 +280,15 @@ export const coverage = {
       closed: 'dropdown-menu.activate-dismiss',
     },
   },
+  NavigationMenu: {
+    axes: {},
+    selector: '.ui-navigation-menu',
+    states: {
+      open: 'navigation-menu.keyboard',
+      closed: 'navigation-menu.pointer',
+      current: 'navigation-menu.forced-colors',
+    },
+  },
   AlertDialog: {
     axes: {},
     selector: '.ui-alert-dialog__trigger',

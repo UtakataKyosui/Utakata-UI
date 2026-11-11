@@ -16,6 +16,7 @@ import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
+import { navigationMenuQualityRules } from './components/NavigationMenu.js';
 import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
@@ -155,6 +156,7 @@ export const qualityRules = {
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
+  NavigationMenu: navigationMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
   InputGroup: inputGroupQualityRules,

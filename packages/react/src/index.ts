@@ -101,6 +101,11 @@ export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
 export { NativeSelect } from './components/NativeSelect.js';
 export type {
+  NavigationMenuLinkProps,
+  NavigationMenuRootProps,
+} from './components/NavigationMenu.js';
+export { NavigationMenu } from './components/NavigationMenu.js';
+export type {
   PaginationDirectionProps,
   PaginationEllipsisProps,
   PaginationLinkProps,

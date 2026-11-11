@@ -264,6 +264,29 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for NavigationMenu keyboard, pointer, touch and forced colors and keeps platform checks manual', () => {
+    const rules =
+      componentManifest.components.NavigationMenu?.qualityRules ?? [];
+    for (const id of [
+      'navigation-menu.keyboard',
+      'navigation-menu.pointer',
+      'navigation-menu.touch',
+      'navigation-menu.forced-colors',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'navigation-menu.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Breadcrumb reflow and focus and keeps zoom manual', () => {
     expect(componentManifest.components.Breadcrumb?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -633,6 +656,7 @@ describe('public manifest contract', () => {
       'Table',
       'Breadcrumb',
       'Pagination',
+      'NavigationMenu',
       'Input',
       'Textarea',
       'NativeSelect',

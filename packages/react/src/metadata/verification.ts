@@ -17,6 +17,7 @@ const verificationStates = {
   Table: ['overflow'],
   Breadcrumb: ['current', 'wrapping'],
   Pagination: ['disabled', 'current'],
+  NavigationMenu: ['open', 'closed', 'current'],
   Input: ['enabled', 'disabled', 'readOnly', 'invalid'],
   Textarea: ['enabled', 'disabled', 'readOnly', 'invalid'],
   NativeSelect: ['enabled', 'disabled', 'invalid'],

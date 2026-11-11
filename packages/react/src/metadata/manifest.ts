@@ -16,6 +16,7 @@ import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
+import { navigationMenuManifest } from './components/NavigationMenu.js';
 import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
@@ -172,6 +173,7 @@ const manifest = {
     Table: tableManifest,
     Breadcrumb: breadcrumbManifest,
     Pagination: paginationManifest,
+    NavigationMenu: navigationMenuManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
