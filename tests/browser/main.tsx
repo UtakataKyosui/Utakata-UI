@@ -14,6 +14,7 @@ import {
   Collapsible,
   Combobox,
   Command,
+  ContextMenu,
   Dialog,
   DropdownMenu,
   Field,
@@ -815,6 +816,48 @@ function PopoverStates() {
   );
 }
 
+function ContextMenuStates() {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  return (
+    <section aria-label="Context menu states">
+      <Button>Before context menu</Button>
+      <ContextMenu.Root>
+        <ContextMenu.Trigger>
+          <Button variant="outline">File area</Button>
+        </ContextMenu.Trigger>
+        <ContextMenu.Portal>
+          <ContextMenu.Positioner>
+            <ContextMenu.Popup aria-label="File actions">
+              <ContextMenu.Group>
+                <ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel>
+                <ContextMenu.Item onClick={record('Edit')}>
+                  Edit
+                </ContextMenu.Item>
+                <ContextMenu.Item onClick={record('Duplicate')}>
+                  Duplicate
+                </ContextMenu.Item>
+              </ContextMenu.Group>
+              <ContextMenu.Separator />
+              <ContextMenu.Item disabled onClick={record('Delete')}>
+                Delete
+              </ContextMenu.Item>
+              <ContextMenu.Item onClick={record('Share')}>
+                Share
+              </ContextMenu.Item>
+            </ContextMenu.Popup>
+          </ContextMenu.Positioner>
+        </ContextMenu.Portal>
+      </ContextMenu.Root>
+      <Button>After context menu</Button>
+      <output aria-label="Context menu actions">
+        {JSON.stringify(actions)}
+      </output>
+    </section>
+  );
+}
+
 function MenuStates() {
   const [actions, setActions] = useState<string[]>([]);
   const record = (name: string) => () =>
@@ -1442,6 +1485,7 @@ function Fixture() {
       <TooltipStates />
       <PopoverStates />
       <MenuStates />
+      <ContextMenuStates />
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />

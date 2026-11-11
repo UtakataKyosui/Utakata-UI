@@ -651,6 +651,7 @@ describe('public manifest contract', () => {
       'Tooltip',
       'Popover',
       'DropdownMenu',
+      'ContextMenu',
       'AlertDialog',
       'Toast',
       'InputGroup',

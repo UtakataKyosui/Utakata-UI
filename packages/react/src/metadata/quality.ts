@@ -10,6 +10,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
+import { contextMenuQualityRules } from './components/ContextMenu.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
@@ -155,6 +156,7 @@ export const qualityRules = {
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
+  ContextMenu: contextMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
   InputGroup: inputGroupQualityRules,

@@ -35,6 +35,7 @@ const verificationStates = {
   Tooltip: ['hover', 'focus', 'dismissed'],
   Popover: ['open', 'closed'],
   DropdownMenu: ['open', 'closed'],
+  ContextMenu: ['open', 'closed'],
   AlertDialog: ['open', 'closed'],
   Toast: ['visible', 'paused', 'dismissed'],
   InputGroup: ['invalid', 'disabled', 'readOnly'],

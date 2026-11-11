@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, ContextMenu, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -407,6 +407,22 @@ function TooltipWrapper(props: TooltipPopupProps) { return <Tooltip.Popup {...pr
 export const wrappedTooltip = <TooltipWrapper>Copy</TooltipWrapper>;
 // @ts-expect-error Wrappers must preserve the plain-text contract.
 export const wrappedTooltipInvalid = <TooltipWrapper><a href="/">Help</a></TooltipWrapper>;
+export const contextMenuPopup: ContextMenuPopupProps = { 'aria-label': 'File actions' };
+export const contextMenu = <ContextMenu.Root><ContextMenu.Trigger><Button>File</Button></ContextMenu.Trigger><ContextMenu.Portal><ContextMenu.Positioner><ContextMenu.Popup {...contextMenuPopup}><ContextMenu.Group><ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel><ContextMenu.Item disabled>Delete</ContextMenu.Item></ContextMenu.Group><ContextMenu.Separator /></ContextMenu.Popup></ContextMenu.Positioner></ContextMenu.Portal></ContextMenu.Root>;
+export const contextMenuLabelled: ContextMenuPopupProps = { 'aria-labelledby': 'file-heading' };
+// @ts-expect-error The menu needs aria-label or aria-labelledby in shipped declarations.
+export const contextMenuUnnamed: ContextMenuPopupProps = {};
+// @ts-expect-error JSX usage must also name the menu.
+export const contextMenuUnnamedJsx = <ContextMenu.Popup />;
+const contextMenuUnnamedProps = { className: 'menu' };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const contextMenuSpreadUnnamed = <ContextMenu.Popup {...contextMenuUnnamedProps} />;
+function ContextMenuWrapper(props: ContextMenuPopupProps) { return <ContextMenu.Popup {...props} />; }
+export const wrappedContextMenu = <ContextMenuWrapper aria-label="File actions" />;
+// @ts-expect-error Wrappers must preserve the required name contract.
+export const wrappedContextMenuInvalid = <ContextMenuWrapper />;
+// @ts-expect-error className is a string, not a Base UI state function, in shipped declarations.
+export const contextMenuStateClass: ContextMenuPopupProps = { 'aria-label': 'x', className: () => 'x' };
 type AlertDialogRootProps = ComponentProps<typeof AlertDialog.Root>;
 export const alertDialogRoot: AlertDialogRootProps = { defaultOpen: true };
 export const alertDialogPopup: AlertDialogPopupProps = { className: 'confirm' };

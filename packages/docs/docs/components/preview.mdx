@@ -267,6 +267,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="dropdownmenu" />
 
+## ContextMenu [#contextmenu]
+
+詳しい使い方とAPIは[ContextMenu](/components/contextmenu)を参照してください。
+
+右クリック、長押し、領域内の要素にフォーカスした状態でのContextMenuキー / Shift+F10で開く操作メニューです。矢印キー・Home/End・文字入力・Escape・フォーカス復帰はDropdownMenuと同じBase UIの挙動で、Item・Group・Separatorは共有します。Popupには`aria-label`か`aria-labelledby`が必要です。タッチやキーボードで気づけない操作があるため、同じ操作を見えるボタン（DropdownMenuなど）でも必ず提供してください。
+
+<Component path="contextmenu" />
+
 ## AlertDialog [#alertdialog]
 
 詳しい使い方とAPIは[AlertDialog](/components/alertdialog)を参照してください。

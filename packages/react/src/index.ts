@@ -78,6 +78,8 @@ export type {
   CommandRootProps,
 } from './components/Command.js';
 export { Command } from './components/Command.js';
+export type { ContextMenuPopupProps } from './components/ContextMenu.js';
+export { ContextMenu } from './components/ContextMenu.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';

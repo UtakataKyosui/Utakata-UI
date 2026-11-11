@@ -2378,6 +2378,11 @@
     padding: 0.25rem;
   }
 
+  /* The context menu anchors to a point, so there is no anchor width. */
+  .ui-context-menu__popup {
+    min-inline-size: 10rem;
+  }
+
   .ui-dropdown-menu__item {
     align-items: center;
     border-radius: 0.25rem;

@@ -12,6 +12,7 @@ export const categories = [
       'Toggle',
       'ToggleGroup',
       'DropdownMenu',
+      'ContextMenu',
     ],
   },
   {

@@ -10,6 +10,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
+import { contextMenuManifest } from './components/ContextMenu.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
@@ -190,6 +191,7 @@ const manifest = {
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
     DropdownMenu: dropdownMenuManifest,
+    ContextMenu: contextMenuManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
     InputGroup: inputGroupManifest,
