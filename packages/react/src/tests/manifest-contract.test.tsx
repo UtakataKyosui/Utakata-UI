@@ -354,6 +354,21 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Chart keyboard, theme and motion and keeps zoom manual', () => {
+    expect(componentManifest.components.Chart?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'chart.keyboard-theme-motion',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'chart.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Spinner motion and keeps OS checks manual', () => {
     expect(componentManifest.components.Spinner?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -631,6 +646,7 @@ describe('public manifest contract', () => {
       'Avatar',
       'Progress',
       'Table',
+      'Chart',
       'Breadcrumb',
       'Pagination',
       'Input',

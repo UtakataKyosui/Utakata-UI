@@ -55,6 +55,17 @@ export type {
 } from './components/Card.js';
 export { Card } from './components/Card.js';
 export type {
+  ChartCaptionProps,
+  ChartDataProps,
+  ChartDescriptionProps,
+  ChartLegendItemProps,
+  ChartLegendProps,
+  ChartMarkerProps,
+  ChartPlotProps,
+  ChartRootProps,
+} from './components/Chart.js';
+export { Chart } from './components/Chart.js';
+export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,
 } from './components/Checkbox.js';
@@ -182,6 +193,7 @@ export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
+export type { ChartSeries } from './metadata/components/Chart.js';
 export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';

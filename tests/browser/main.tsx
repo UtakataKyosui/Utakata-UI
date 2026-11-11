@@ -10,6 +10,7 @@ import {
   Button,
   ButtonGroup,
   Card,
+  Chart,
   Checkbox,
   Collapsible,
   Combobox,
@@ -528,6 +529,77 @@ function TableStates() {
         </Table.Root>
       </Table.Container>
       <Button>After table</Button>
+    </section>
+  );
+}
+
+const chartSeries = componentManifest.components.Chart.series;
+
+function ChartStates() {
+  return (
+    <section aria-label="Chart states">
+      <Button>Before chart</Button>
+      <Chart.Root data-case="visits">
+        <Chart.Caption>Monthly visits</Chart.Caption>
+        <Chart.Description>
+          Visits rose from 120 in April to 180 in May.
+        </Chart.Description>
+        <Chart.Plot aria-label="Line chart of monthly visits by channel">
+          <svg viewBox="0 0 120 50" aria-hidden="true">
+            {chartSeries.map((series, index) => (
+              <g key={series}>
+                <polyline
+                  points={`0,${45 - index * 6} 120,${35 - index * 6}`}
+                  fill="none"
+                  stroke={`var(--ui-chart-series-${series})`}
+                  strokeDasharray={`var(--ui-chart-dash-${series})`}
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx={60}
+                  cy={36 - index * 6}
+                  r={3}
+                  fill={`var(--ui-chart-series-${series})`}
+                />
+              </g>
+            ))}
+          </svg>
+        </Chart.Plot>
+        <Chart.Legend>
+          {chartSeries.map((series) => (
+            <Chart.LegendItem key={series} series={series}>
+              Channel {series} with a long series name that must wrap
+            </Chart.LegendItem>
+          ))}
+        </Chart.Legend>
+        <Chart.Data summary="Show data table">
+          <Table.Container aria-label="Monthly visits by channel">
+            <Table.Root>
+              <Table.Caption>Monthly visits by channel</Table.Caption>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head scope="col">Month</Table.Head>
+                  <Table.Head scope="col">Channel 1</Table.Head>
+                  <Table.Head scope="col">Channel 2</Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Head scope="row">April</Table.Head>
+                  <Table.Cell>120</Table.Cell>
+                  <Table.Cell>80</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Head scope="row">May</Table.Head>
+                  <Table.Cell>180</Table.Cell>
+                  <Table.Cell>95</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table.Root>
+          </Table.Container>
+        </Chart.Data>
+      </Chart.Root>
+      <Button>After chart</Button>
     </section>
   );
 }
@@ -1433,6 +1505,7 @@ function Fixture() {
       <AvatarStates />
       <ProgressStates />
       <TableStates />
+      <ChartStates />
       <BreadcrumbStates />
       <PaginationStates />
       <CollapsibleStates />

@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Chart, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type ChartLegendItemProps, type ChartMarkerProps, type ChartPlotProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -287,6 +287,29 @@ export const tableRoleSpread = <Table.Container {...tableRoleProps} />;
 const tableFocusProps = { 'aria-label': 'x', tabIndex: -1 };
 // @ts-expect-error Spreads cannot remove the container from the tab order.
 export const tableFocusSpread = <Table.Container {...tableFocusProps} />;
+export const chartPlot: ChartPlotProps = { 'aria-label': 'Monthly visits line chart' };
+export const chartLegendItem: ChartLegendItemProps = { series: '2', children: 'Signups' };
+export const chartMarker: ChartMarkerProps = { series: '3', x: 4, y: 5 };
+export const chart = <Chart.Root><Chart.Caption>Visits</Chart.Caption><Chart.Description>Visits rose.</Chart.Description><Chart.Plot {...chartPlot}><svg viewBox="0 0 10 10"><Chart.Marker {...chartMarker} /></svg></Chart.Plot><Chart.Legend><Chart.LegendItem {...chartLegendItem} /></Chart.Legend><Chart.Data summary="Show data table"><Table.Container aria-label="Visits data"><Table.Root><Table.Caption>Visits</Table.Caption></Table.Root></Table.Container></Chart.Data></Chart.Root>;
+// @ts-expect-error Chart.Plot requires a name in shipped declarations.
+export const unnamedChartPlot: ChartPlotProps = {};
+// @ts-expect-error Chart.Plot role is fixed in shipped declarations.
+export const chartPlotRole: ChartPlotProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Chart.Plot cannot become a tab stop in shipped declarations.
+export const chartPlotFocus: ChartPlotProps = { 'aria-label': 'x', tabIndex: 0 };
+const chartPlotSpreadProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Spreads cannot override the Chart.Plot image role.
+export const chartPlotSpread = <Chart.Plot {...chartPlotSpreadProps} />;
+// @ts-expect-error A legend item needs a series so a marker shape identifies it.
+export const chartLegendNoSeries: ChartLegendItemProps = { children: 'Signups' };
+// @ts-expect-error A legend item needs visible text.
+export const chartLegendNoText: ChartLegendItemProps = { series: '1' };
+// @ts-expect-error Only series 1 to 6 are defined.
+export const chartLegendBadSeries: ChartLegendItemProps = { series: '7', children: 'x' };
+// @ts-expect-error A marker needs a series.
+export const chartMarkerNoSeries: ChartMarkerProps = {};
+// @ts-expect-error The data disclosure needs visible summary text.
+export const chartDataNoSummary = <Chart.Data><Table.Container aria-label="x" /></Chart.Data>;
 export const hrefLink: BreadcrumbLinkProps = { href: '/' };
 export const routerLink: BreadcrumbLinkProps = { render: <a href="/docs">Docs</a> };
 export const breadcrumb = <Breadcrumb.Root><Breadcrumb.List><Breadcrumb.Item><Breadcrumb.Link {...hrefLink}>Home</Breadcrumb.Link></Breadcrumb.Item><Breadcrumb.Separator /><Breadcrumb.Item><Breadcrumb.Page>Docs</Breadcrumb.Page></Breadcrumb.Item></Breadcrumb.List></Breadcrumb.Root>;

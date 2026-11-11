@@ -6,6 +6,7 @@ import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { cardQualityRules } from './components/Card.js';
+import { chartQualityRules } from './components/Chart.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
@@ -135,6 +136,7 @@ export const qualityRules = {
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
   Table: tableQualityRules,
+  Chart: chartQualityRules,
   Breadcrumb: breadcrumbQualityRules,
   Pagination: paginationQualityRules,
   Input: inputQualityRules,
