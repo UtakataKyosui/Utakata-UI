@@ -94,9 +94,8 @@ export function installDependencies(cwd, plan) {
           }
         : process.env,
   });
-  if (result.error) throw result.error;
-  if (result.status !== 0)
+  if (result.error || result.status !== 0)
     throw new Error(
-      `Dependency installation failed (${plan.manager}); generated files remain available. Rerun the printed install command.`,
+      `Dependency installation failed (${plan.manager}: ${result.error?.message ?? `exit ${result.status}`}); generated files remain available. Run: ${[plan.manager, ...plan.args].join(' ')}`,
     );
 }
