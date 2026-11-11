@@ -44,13 +44,18 @@ Secret・Trusted Publisher の値は変更していません。
 3. GitHub の **Actions → Release React → Run workflow** を開きます。
    **Use workflow from: main**、**release_mode: verify** を選んで検証します。
 4. 検証成功後、同じ main のバージョンを確認し、**release_mode: token** で実行します。
-   同じコミット、または検証に影響しない変更だけなら、main の Quality や前回の
+   同じコミット、または検証に影響しない変更だけなら、同じ検証入力の PR・main Quality や前回の
    Release で成功した検証を再利用し、配布物の build・pack・配布テストだけを行います。
    すべて再実行するには **full_verification** を選びます。
 5. 全品質チェックと配布テストが成功した後、指定したバージョンが公開されます。
    全検証と配布テストの成功後、テストしたものと同じ tgz を公開します。
 6. 実行ログと npm のパッケージページで、バージョンと provenance を確認します。
    公開済みのバージョンは再利用できません。成功した同一バージョンの公開ジョブを再実行しないでください。
+
+`npm publish` が成功しても、公開時のスキャンにより registry への反映が遅れる場合があります。
+`Your package is being processed` と表示されたら、同一バージョンを再公開せず、
+`npm view @utakata-ui/react@<version> version dist.integrity --prefer-online` で反映を確認します。
+スキャンは通常約5分ですが、15分以上かかる場合もあります（[npmの公式案内](https://github.blog/changelog/2026-07-28-npm-publish-time-malware-scanning-and-dual-use-metadata/)）。
 
 CLI は **Release CLI** で同じ操作を行います。
 CLI は React の npm 公開を必要としません。

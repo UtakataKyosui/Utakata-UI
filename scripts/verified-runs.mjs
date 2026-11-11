@@ -78,7 +78,7 @@ function api(path) {
   return JSON.parse(execFileSync('gh', ['api', path], { encoding: 'utf8' }));
 }
 
-export function collectCandidates(repository, workflow) {
+export function collectCandidates(repository, workflow, includeQuality = true) {
   const runs = (file, filter = '') =>
     api(
       `repos/${repository}/actions/workflows/${file}/runs?status=completed&per_page=20${filter}`,
@@ -88,7 +88,7 @@ export function collectCandidates(repository, workflow) {
   const release = runs(workflow).flatMap(
     (run) => releaseCandidate(run, jobs(run), workflow) ?? [],
   );
-  const quality = runs('quality.yml', '&branch=main')
+  const quality = (includeQuality ? runs('quality.yml', '&branch=main') : [])
     .filter((run) => run.conclusion === 'success')
     .flatMap((run) => qualityCandidate(run, jobs(run)) ?? []);
   return [...release, ...quality].sort(

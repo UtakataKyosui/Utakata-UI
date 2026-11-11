@@ -1,6 +1,12 @@
 import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import {
+  fingerprints,
+  readEvidence,
+  releaseEvidence,
+  versionOnlyPackages,
+} from './ci-evidence.mjs';
 import { changedFiles, selectScope } from './ci-scope.mjs';
 import {
   collectCandidates,
@@ -8,10 +14,10 @@ import {
   maxReuseAgeMs,
 } from './verified-runs.mjs';
 
-export function gateRequired(gate, files) {
+export function gateRequired(gate, files, versionOnly = new Set()) {
   if (!files.length) return false;
   if (gate === 'checks') return true;
-  if (gate === 'browser') return selectScope(files).browser;
+  if (gate === 'browser') return selectScope(files, false, versionOnly).browser;
   throw new Error(`Unknown gate: ${gate}`);
 }
 
@@ -24,6 +30,7 @@ export function selectReuse({
   isAncestor,
   filesSince,
   now,
+  versionOnlySince = () => new Set(),
 }) {
   return Object.fromEntries(
     gates.map((gate) => {
@@ -32,7 +39,14 @@ export function selectReuse({
         if (now - Date.parse(candidate.createdAt) > maxReuseAgeMs) continue;
         if (candidate.sha !== head && !isAncestor(candidate.sha, head))
           continue;
-        if (gateRequired(gate, filesSince(candidate.sha))) continue;
+        if (
+          gateRequired(
+            gate,
+            filesSince(candidate.sha),
+            versionOnlySince(candidate.sha),
+          )
+        )
+          continue;
         return [gate, { decision: 'reuse', ...candidate }];
       }
       return [gate, { decision: 'run' }];
@@ -54,14 +68,29 @@ if (
     decisions = Object.fromEntries(gates.map((g) => [g, { decision: 'run' }]));
   } else {
     try {
-      decisions = selectReuse({
-        head,
+      decisions = releaseEvidence(
         gates,
-        candidates: collectCandidates(process.env.GITHUB_REPOSITORY, workflow),
-        isAncestor,
-        filesSince: changedFiles,
-        now: Date.now(),
-      });
+        fingerprints(),
+        readEvidence(process.env.GITHUB_REPOSITORY),
+      );
+      const remaining = gates.filter((gate) => !decisions[gate]);
+      if (remaining.length)
+        Object.assign(
+          decisions,
+          selectReuse({
+            head,
+            gates: remaining,
+            candidates: collectCandidates(
+              process.env.GITHUB_REPOSITORY,
+              workflow,
+              false,
+            ),
+            isAncestor,
+            filesSince: changedFiles,
+            now: Date.now(),
+            versionOnlySince: versionOnlyPackages,
+          }),
+        );
     } catch (error) {
       // Lookup failures never skip work.
       console.log(`Prior verification lookup failed: ${error.message}`);

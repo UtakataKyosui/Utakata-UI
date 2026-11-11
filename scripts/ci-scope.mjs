@@ -1,72 +1,17 @@
 import { execFileSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import {
+  findWholeProof,
+  fingerprints,
+  readEvidence,
+  selectEvidence,
+  versionOnlyPackages,
+} from './ci-evidence.mjs';
+import { requiredJobs, selectScope } from './ci-policy.mjs';
 import { lookupVerifiedBase } from './verified-runs.mjs';
 
-const flags = [
-  'lint',
-  'types',
-  'tests',
-  'markup',
-  'browser',
-  'docs',
-  'react',
-  'cli',
-  'agents',
-  'fallow',
-];
-
-// Rules are additive: source files can affect several independent gates.
-// Unrecognized paths run everything instead of silently losing coverage.
-const rules = [
-  [
-    /(^|\/)package\.json$|^(pnpm-lock\.yaml|pnpm-workspace\.yaml|tsconfig\.json|biome\.json|vitest\.config\.ts|vite\.config\.ts|\.markuplintrc\.json|\.fallowrc\.json|\.github\/workflows\/(quality|browser|release)\.yml)$|(^|\/)test-setup\.[cm]?[jt]s$|^scripts\/(ci-scope|lint-markup|prior-verification|verified-runs)/,
-    ['full'],
-  ],
-  [
-    /^(AGENTS\.md$|\.agents\/|\.claude\/|\.codex\/|skills\/|scripts\/agent-hooks)/,
-    ['agents'],
-  ],
-  [
-    /^packages\/react\/(?!src\/tests\/)(?!.*\.(md|txt)$)(?!.*\/LICENSE$)/,
-    ['react', 'browser', 'docs', 'fallow'],
-  ],
-  [/^packages\/react\/.*\.[cm]?[jt]sx?$/, ['types', 'tests', 'fallow']],
-  [/^packages\/react\/src\/tests\//, ['tests', 'fallow']],
-  [/^packages\/react\/src\/components\/.*\.tsx$/, ['markup']],
-  [/^packages\/react\/.*(?:\.(md|txt)|\/LICENSE)$/, ['react']],
-  [/^packages\/cli\/|^scripts\/verify-cli-package\.mjs$/, ['cli', 'fallow']],
-  [/^packages\/docs\//, ['docs']],
-  [/^packages\/docs\/.*\.[jt]sx?$/, ['types', 'fallow']],
-  [/^packages\/docs\/.*\.tsx$/, ['markup']],
-  [
-    /^tests\/(browser|screen-reader)\/|^playwright(?:\.(?:cross-browser|screen-reader))?\.config\.ts$|^scripts\/required-browser-checks\.mjs$/,
-    ['browser', 'types', 'fallow'],
-  ],
-  [/^tests\/browser\/.*\.(tsx|html)$/, ['markup']],
-  [/^scripts\/verify-react-package\.mjs$/, ['react', 'fallow']],
-  [/^scripts\/accessibility-lint\.test\.mjs$/, ['markup', 'fallow']],
-  [
-    /\.(md|txt)$|^\.github\/workflows\/(actions\.lock|verify-lockfile\.yml|release\.yml)$|^\.gitignore$/,
-    [],
-  ],
-];
-
-export function selectScope(files, full = false) {
-  const scope = Object.fromEntries(flags.map((flag) => [flag, full]));
-  for (const file of files) {
-    scope.lint = true;
-    const matched = rules.filter(([pattern]) => pattern.test(file));
-    if (!matched.length) return selectScope([], true);
-    const selected = matched.flatMap(([, names]) => names);
-    if (selected.includes('full')) return selectScope([], true);
-    for (const flag of selected) scope[flag] = true;
-  }
-  scope.checks = scope.lint || scope.types || scope.tests || scope.markup;
-  scope.build = scope.react || scope.cli;
-  scope.full = full;
-  return scope;
-}
+export { selectScope } from './ci-policy.mjs';
 
 export function changedFiles(base) {
   return execFileSync(
@@ -102,12 +47,57 @@ if (
     }
     console.log(`Verified main base: ${base || 'none (full gates)'}`);
   }
+  const inputs = fingerprints();
+  let records = [];
+  let baseline;
+  if (event !== 'workflow_dispatch') {
+    try {
+      records = readEvidence(process.env.GITHUB_REPOSITORY);
+      if (base) baseline = findWholeProof(fingerprints(base), records);
+    } catch (error) {
+      console.log(`CI evidence lookup failed; run gates: ${error.message}`);
+      records = [];
+    }
+  }
   const files = base ? changedFiles(base) : [];
-  const scope = selectScope(files, !base);
-  const output = Object.entries({ ...scope, base: scope.full ? '' : base })
+  // An incremental run inherits only a complete, unexpired baseline. The
+  // first run after migration and manual runs deliberately verify everything.
+  const scope = selectScope(
+    files,
+    !baseline,
+    base ? versionOnlyPackages(base) : new Set(),
+  );
+  const reuse =
+    event === 'workflow_dispatch'
+      ? {}
+      : selectEvidence(requiredJobs(scope), inputs, records);
+  const run = Object.fromEntries(
+    Object.entries(requiredJobs(scope)).map(([gate, needed]) => [
+      `run_${gate}`,
+      needed && !reuse[gate],
+    ]),
+  );
+  const output = Object.entries({
+    ...scope,
+    ...run,
+    base: scope.full ? '' : base,
+    baseline_expires: baseline?.expiresAt ?? '',
+    reuse: JSON.stringify(reuse),
+    fingerprints: JSON.stringify(inputs),
+  })
     .map(([key, value]) => `${key}=${value}`)
     .join('\n');
   console.log(output);
   if (process.env.GITHUB_OUTPUT)
     appendFileSync(process.env.GITHUB_OUTPUT, `${output}\n`);
+  if (process.env.GITHUB_STEP_SUMMARY)
+    appendFileSync(
+      process.env.GITHUB_STEP_SUMMARY,
+      `### CI execution plan\n\n${Object.entries(requiredJobs(scope))
+        .map(
+          ([gate, needed]) =>
+            `- ${gate}: ${reuse[gate] ? `reused [run ${reuse[gate].runId}](${reuse[gate].url}), attempt ${reuse[gate].attempt}, identical committed inputs` : needed ? 'run' : 'unaffected by this change'}`,
+        )
+        .join('\n')}\n`,
+    );
 }

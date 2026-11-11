@@ -27,13 +27,57 @@ export function evaluateGates(jobs, event) {
     'browser-accessibility': scope.browser === 'true',
     fallow: event === 'pull_request' && scope.fallow === 'true',
   };
-  const gates = Object.entries(required).map(([job, needed]) => ({
-    job,
-    required: needed,
-    result: jobs[job]?.result ?? 'missing',
-    passed: jobs[job]?.result === (needed ? 'success' : 'skipped'),
-  }));
+  let reuse;
+  let fingerprints;
+  try {
+    ({ reuse, fingerprints } = parseEvidence(scope));
+  } catch {
+    return { passed: false, error: 'Invalid reused evidence.', gates: [] };
+  }
+  const gates = Object.entries(required).map(([job, needed]) =>
+    evaluateGate(job, needed, jobs, reuse, fingerprints),
+  );
+  if (
+    Object.keys(reuse).some(
+      (key) => !['checks', 'unit', 'build', 'docs', 'browser'].includes(key),
+    )
+  )
+    return { passed: false, error: 'Unknown reused gate.', gates };
   return { passed: gates.every((gate) => gate.passed), gates };
+}
+
+function parseEvidence(scope) {
+  const reuse = JSON.parse(scope.reuse ?? '{}');
+  const fingerprints = JSON.parse(scope.fingerprints ?? '{}');
+  for (const value of [reuse, fingerprints]) {
+    if (!value || Array.isArray(value) || typeof value !== 'object')
+      throw new Error('Invalid evidence object.');
+  }
+  return { reuse, fingerprints };
+}
+
+function evaluateGate(job, required, jobs, reuse, fingerprints) {
+  const key = job === 'browser-accessibility' ? 'browser' : job;
+  const proof = reuse[key];
+  const result = jobs[job]?.result ?? 'missing';
+  const passed = proof
+    ? required && result === 'skipped' && validReuse(proof, fingerprints[key])
+    : result === (required ? 'success' : 'skipped');
+  return { job, required, result, reused: proof, passed };
+}
+
+function validReuse(proof, fingerprint) {
+  return (
+    [proof.runId, proof.attempt].every(positiveInteger) &&
+    /^[a-f0-9]{40}$/.test(proof.sha ?? '') &&
+    /^[a-f0-9]{64}$/.test(proof.fingerprint ?? '') &&
+    proof.fingerprint === fingerprint &&
+    Date.parse(proof.expiresAt) > Date.now()
+  );
+}
+
+function positiveInteger(value) {
+  return Number.isSafeInteger(value) && value > 0;
 }
 
 export function gatesPassed(jobs, event) {
@@ -49,8 +93,8 @@ if (
     process.env.EVENT_NAME,
   );
   const lines = report.gates.map(
-    ({ job, required, result, passed }) =>
-      `${job}: ${result}; ${required ? 'required for this change' : 'not required for this change'}${passed ? '' : ' — gate failed'}`,
+    ({ job, required, result, passed, reused }) =>
+      `${job}: ${result}; ${reused ? `reused verified run ${reused.runId}, attempt ${reused.attempt}` : required ? 'required for this change' : 'not required for this change'}${passed ? '' : ' — gate failed'}`,
   );
   if (report.error) lines.unshift(report.error);
   console.log(lines.join('\n'));
