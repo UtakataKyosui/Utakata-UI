@@ -176,6 +176,20 @@ export const qualityRules = {
       criteria: ['1.4.10', '2.1.1', '2.4.3'],
     },
     {
+      id: 'lism.aspect-ratio-frame',
+      requirement:
+        'A Lism frame (`Frame ar`) reserves its ratio before media loads, keeps it when the width changes or content overflows, and the media fills the frame.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Keep `ar` on the `Frame` element, put only the img, video or iframe inside it, and do not override aspect-ratio or overflow with custom CSS.',
+      applicability:
+        'Representative 16/9, container-responsive 1/1 to 16/9 and 4/3 frames with an image whose intrinsic ratio differs, a 320px container and overflowing text, in standard themes.',
+      residual:
+        'Alternative text, captions, transcripts, iframe titles, cropping of essential content and ratio strings accepted by Lism stay consumer responsibilities. Types do not validate ratio strings.',
+      criteria: ['1.4.10'],
+    },
+    {
       id: 'theme.reduced-motion',
       requirement:
         'Reduced motion disables Button transitions and animation while Dialog remains operable.',

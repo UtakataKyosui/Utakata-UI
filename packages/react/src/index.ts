@@ -2,6 +2,7 @@ export {
   Box,
   Container,
   Flex,
+  Frame,
   Grid,
   Heading,
   Stack,

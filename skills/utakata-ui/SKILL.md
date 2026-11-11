@@ -54,6 +54,7 @@ Before writing UI, inspect `packages/react/src/metadata/manifest.ts` or use Blum
 - Use `ButtonGroup` (name required by type: `aria-label` or `aria-labelledby`; `orientation` horizontal | vertical) to visually join related `Button`s. Buttons keep their own variant, size, disabled and type, and each stays a normal Tab stop; there is no toolbar or roving focus. Use `ToggleGroup` for pressed options.
 - Use the exported Lism CSS layout and typography primitives before creating custom layout wrappers.
 - Responsive Lism values use ancestor container queries: place the layout inside `Box isContainer`. Standard CSS enables sm/md/lg at 480/800/1120px; xl requires custom Lism CSS configuration.
+- There is no `AspectRatio` component. Keep a media ratio with `<Frame ar="16/9" w="100%">` around a direct `img`, `video` or `iframe` (`ar` also takes `{ base, md }`; no default ratio). The media fills the frame with `object-fit: cover`, and overflowing content is clipped, so put only media inside. Provide `alt`, `iframe` `title` and video captions/controls yourself and do not crop essential information. Types do not validate ratio strings.
 - Customize appearance with CSS custom properties and classes; avoid runtime CSS generation.
 
 ## Verification
