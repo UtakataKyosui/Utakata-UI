@@ -1,15 +1,37 @@
 # CI execution policy
 
-Quality always starts on PR updates so the `accessibility` aggregate check can
-report a result even for documentation-only changes. It does not use workflow
-path filters that could leave a required check pending. Superseded runs cancel.
-PRs compare the complete merge-base diff, including removed/renamed paths.
-Main pushes compare against the newest main commit whose Quality `push` or
-`workflow_dispatch` run succeeded, provided it is an ancestor created within
-14 days. Each successful main run therefore extends verification inductively;
-an unchanged commit runs no gates. The 14-day bound applies to each link, not
-to the original evidence of a skipped gate. A missing, failed, expired or
-unreadable prior run gives full gates. Manual runs always execute all gates.
+Quality always starts on PR updates and main pushes so the required
+`accessibility` check always reports. Scope selection first runs the dependency-free
+CI regression suite. No required check is hidden behind workflow path filters.
+
+Each gate hashes its committed inputs, including dependency pins, CI policy,
+verification code, file paths/modes and deleted files. The small
+`ci-verification-<attempt>` artifact records the tested tree, run, attempt,
+results and expiration. A later PR update or merge can reuse a successful gate
+with identical inputs; main does not repeat tests just because its commit SHA
+is a merge commit. Releases can reuse complete Quality evidence for the exact
+tested tree and the actual eight-job browser evidence for identical browser
+inputs. Every newly published archive is still built, packed and tested.
+
+Only completed runs from this repository, targeting main, are eligible. Forks,
+untrusted events, forged hashes, unavailable artifacts, incomplete matrices and
+expired evidence cannot provide a pass. Artifact hashes are recomputed against
+GitHub's run head. A PR whose tested merge tree differs from its head is
+conservatively ineligible. A newer failed matching gate invalidates an older
+green result. Lookup errors run the gates; failed or unverified required work
+still blocks the aggregate. The summary links the original run and attempt.
+
+Incremental runs inherit only a complete, unexpired tested baseline. An unknown
+baseline runs all gates. Inherited evidence keeps the earliest original expiry;
+re-exporting does not extend its 14-day lifetime. Manual Quality runs and release
+`full_verification` bypass reuse. Fallow remains a fresh PR diff audit.
+
+A stable version-only edit to the React manifest runs lint, React build/packed
+consumers and Docs/registry generation, without unrelated unit/browser jobs.
+Dependency, export, script, engine or other metadata changes retain full gates.
+Browser input hashes omit only the React distribution version; all remaining
+manifest fields still invalidate browser evidence. No tests are skipped merely
+because a component was not added.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
@@ -62,21 +84,16 @@ Artifacts are uploaded only after the test step runs. Release React calls the
 same browser workflow and cannot publish if either theme fails. Manual main
 release runs default to `release_mode: verify`; explicit `token` or `oidc` modes publish after verification.
 
-Release workflows split into `prior`, `verify` (`pnpm check` and the Docs
-compiler), the React browser gate, and `release`. `scripts/prior-verification.mjs`
-skips a gate only when a completed main `push`/`workflow_dispatch` run passed it
-on an ancestor commit created within 14 days (the browser artifact retention), and
-the diff from that commit to HEAD does not select it: any change reruns
-`pnpm check`; browser checks rerun when `ci-scope.mjs` selects browser. Accepted
-`checks` evidence is a successful main Quality run or a release run's successful
-`verify` job. Accepted browser evidence is a run whose six browser and two screen reader jobs all
-succeeded in that run, so an incremental main run that skipped them never counts
-and the 14-day bound applies to the browser artifacts themselves. Release
-evidence counts even when its publication failed. PR runs are scoped and
-never count. Lookup errors, missing runs and `full_verification: true` run every
-gate. The step summary names the reused run, attempt and commit. `release`
-requires each gate to have passed in this run or to be reused, and always
-rebuilds, packs and tests the exact archive it publishes.
+Release workflows split into version selection, `prior`, optional verification,
+and the final publication job. `scripts/prior-verification.mjs` first checks the
+same immutable input evidence as Quality, including successful same-repository
+PR runs. It falls back conservatively to release ancestor runs with actual
+passing verification jobs when no input proof applies. An aggregate-only Quality
+result cannot replace a missing input artifact. Browser proof requires all six engine /
+theme jobs and both native reader jobs; an incremental main run that skipped
+these jobs cannot masquerade as fresh browser evidence. API, identity, artifact
+or coverage errors rerun verification. Publication always tests the exact tgz it
+publishes; downloaded verification evidence is never used as a build artifact.
 
 The browser fixture is built once per job and served with Vite preview. It has
 no development optimizer that can reload a page during the first test. Unit
