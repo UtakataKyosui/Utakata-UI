@@ -1,6 +1,12 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
@@ -33,16 +39,50 @@ try {
     readFileSync(join(packageDirectory, 'package.json'), 'utf8'),
   );
   assert.equal(metadata.license, 'MIT');
+  // tsc must preserve each client boundary in the archive consumed by Next/RSC.
+  const sources = new URL('../packages/react/src/components/', import.meta.url);
+  for (const file of readdirSync(sources).filter((name) =>
+    name.endsWith('.tsx'),
+  )) {
+    const source = readFileSync(new URL(file, sources), 'utf8');
+    if (/^['"]use client['"];/.test(source.trimStart())) {
+      const output = readFileSync(
+        join(
+          packageDirectory,
+          'dist/components',
+          file.replace(/\.tsx$/, '.js'),
+        ),
+        'utf8',
+      );
+      assert.match(
+        output.trimStart(),
+        /^['"]use client['"];/,
+        `${file}: packed client directive was lost`,
+      );
+    }
+  }
+
   for (const file of ['LICENSE', 'README.md', 'src/styles/styles.css']) {
     assert.ok(readFileSync(join(packageDirectory, file)).length > 0);
   }
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Collapsible, Dialog, Field, Input, InputGroup, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CollapsibleRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const lismButton: ButtonProps = { p: '1rem', w: { base: '100%', md: 'auto' }, children: 'Save' };
+export const lismView = <Card.Root p={{ base: '1rem', md: '2rem' }}><Field.Root g="1rem"><Field.Label>Email</Field.Label><Input w="100%" /></Field.Root><Button {...lismButton} /><Dialog.Root><Dialog.Trigger p="1rem">Open</Dialog.Trigger></Dialog.Root></Card.Root>;
+export const lismTypes: import('@utakata-ui/react').LismStyleProps = { g: '1rem', layout: 'flex' };
+export const upstreamLismType: import('@utakata-ui/react').LismProps = { p: '1rem' };
+export const mergedLismType: import('@utakata-ui/react').WithLismProps<{ required: true }> = { required: true, p: '1rem' };
+// @ts-expect-error Styling cannot bypass the icon-only name requirement.
+export const lismUnnamedIcon = <Button iconOnly p="1rem" />;
+// @ts-expect-error Component size takes precedence over generic styling.
+export const lismInvalidSize = <Button p="1rem" size="xl">Save</Button>;
+// @ts-expect-error Alternative Lism refs are excluded from public component Props.
+export const lismAlternativeRef = <Button forwardedRef={() => {}}>Save</Button>;
 export const verificationStates: readonly string[] = componentManifest.components.Button.verificationStates;
 export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
 export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;
@@ -81,6 +121,50 @@ export const selectMultiple: SelectRootProps<string> = { multiple: true };
 export const selectArrayValue: SelectRootProps<string> = { value: ['a'] };
 // @ts-expect-error Select.Trigger className must be a string in shipped declarations.
 export const selectFunctionClass = <Select.Trigger className={() => 'x'} />;
+const otpSlotLabel = (position: number, length: number) => 'Digit ' + position + ' of ' + length;
+export const otpProps: InputOTPRootProps = { length: 6, name: 'code', getSlotLabel: otpSlotLabel, validationType: 'numeric' };
+export const otp = <Field.Root><Field.Label>Verification code</Field.Label><InputOTP.Root {...otpProps}><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Separator /><InputOTP.Slot /><InputOTP.Slot /><InputOTP.Slot /></InputOTP.Root></Field.Root>;
+// @ts-expect-error InputOTP.Root requires getSlotLabel in shipped declarations.
+export const otpNoSlotLabel: InputOTPRootProps = { length: 6 };
+// @ts-expect-error InputOTP does not provide autoSubmit in shipped declarations.
+export const otpAutoSubmit: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, autoSubmit: true };
+// @ts-expect-error InputOTP.Root aria-label would leave the first slot unnamed in shipped declarations.
+export const otpRootLabel: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, 'aria-label': 'Code' };
+// @ts-expect-error InputOTP.Root className must be a string in shipped declarations.
+export const otpFunctionClass: InputOTPRootProps = { length: 6, getSlotLabel: otpSlotLabel, className: () => 'x' };
+export const comboboxProps: ComboboxRootProps<string> = { defaultValue: 'apple', name: 'fruit', items: ['apple', 'banana'] };
+export const fruit = <Field.Root><Field.Label>Fruit</Field.Label><Combobox.Root {...comboboxProps}><Combobox.InputGroup><Combobox.Input placeholder="Search fruit" /><Combobox.Clear aria-label="Clear" /><Combobox.Trigger aria-label="Show options" /></Combobox.InputGroup><Combobox.Portal><Combobox.Positioner><Combobox.Popup><Combobox.Empty>No fruit found</Combobox.Empty><Combobox.List>{(item: string) => <Combobox.Item key={item} value={item}>{item}<Combobox.ItemIndicator /></Combobox.Item>}</Combobox.List></Combobox.Popup></Combobox.Positioner></Combobox.Portal></Combobox.Root></Field.Root>;
+export const comboboxNamedByContent = <Combobox.Trigger>Show options</Combobox.Trigger>;
+export const comboboxNamedByReference = <Combobox.Clear aria-labelledby="clear-name" />;
+// @ts-expect-error Combobox is single-selection only in shipped declarations.
+export const comboboxMultiple: ComboboxRootProps<string> = { multiple: true };
+// @ts-expect-error A single Combobox does not accept an array value in shipped declarations.
+export const comboboxArrayValue: ComboboxRootProps<string> = { value: ['a'] };
+// @ts-expect-error Inline lists are not provided in shipped declarations.
+export const comboboxInline: ComboboxRootProps<string> = { inline: true };
+// @ts-expect-error An unnamed Combobox.Clear is a type error in shipped declarations.
+export const comboboxUnnamedClear = <Combobox.Clear />;
+// @ts-expect-error An unnamed Combobox.Trigger is a type error in shipped declarations.
+export const comboboxUnnamedTrigger = <Combobox.Trigger />;
+const comboboxEmptyProps = { className: 'clear' };
+// @ts-expect-error Spreads cannot remove the required Clear name in shipped declarations.
+export const comboboxUnnamedSpread = <Combobox.Clear {...comboboxEmptyProps} />;
+// @ts-expect-error Combobox.Input className must be a string in shipped declarations.
+export const comboboxFunctionClass = <Combobox.Input className={() => 'x'} />;
+// @ts-expect-error Combobox.Label is not exported: it would label only the trigger in shipped declarations.
+export const comboboxLabel = <Combobox.Label>Fruit</Combobox.Label>;
+export const commandProps: CommandRootProps<string> = { items: ['home', 'settings'] };
+export const palette = <Command.Root {...commandProps}><Command.Panel><Command.Input aria-label="Search commands" /><Command.Empty>No commands found</Command.Empty><Command.List>{(item: string) => <Command.Item key={item} value={item} onClick={() => {}}>{item}<Command.Shortcut aria-hidden="true">K</Command.Shortcut></Command.Item>}</Command.List></Command.Panel></Command.Root>;
+// @ts-expect-error Command is always inline: open state is not configurable in shipped declarations.
+export const commandOpen: CommandRootProps<string> = { open: false };
+// @ts-expect-error Command is always inline in shipped declarations.
+export const commandInline: CommandRootProps<string> = { inline: false };
+// @ts-expect-error Command is not a form field and has no name in shipped declarations.
+export const commandName: CommandRootProps<string> = { name: 'command' };
+// @ts-expect-error Command.Input className must be a string in shipped declarations.
+export const commandFunctionClass = <Command.Input className={() => 'x'} />;
+// @ts-expect-error Command.Popup is not exported: the list is inline in shipped declarations.
+export const commandPopup = <Command.Popup />;
 type SliderRootProps = ComponentProps<typeof Slider.Root>;
 export const sliderProps: SliderRootProps = { defaultValue: 50, min: 0, max: 100, step: 5, name: 'volume' };
 export const volume = <Slider.Root {...sliderProps}><Slider.Label>Volume</Slider.Label><Slider.Control><Slider.Track><Slider.Indicator /><Slider.Thumb getAriaValueText={(value) => value + ' percent'} /></Slider.Track></Slider.Control></Slider.Root>;
@@ -342,6 +426,37 @@ function AlertDialogWrapper(props: AlertDialogRootProps) { return <AlertDialog.R
 export const wrappedAlertDialog = <AlertDialogWrapper defaultOpen />;
 // @ts-expect-error Wrappers must preserve the modal contract.
 export const wrappedAlertDialogInvalid = <AlertDialogWrapper modal={false} />;
+export const sheetPopup: SheetPopupProps = { side: 'left', className: 'panel' };
+export const sheet = <Sheet.Root><Sheet.Trigger>Open filters</Sheet.Trigger><Sheet.Portal><Sheet.Backdrop /><Sheet.Popup {...sheetPopup}><Sheet.Title>Filters</Sheet.Title><Sheet.Description>Narrow the list.</Sheet.Description><Sheet.Close>Close</Sheet.Close></Sheet.Popup></Sheet.Portal></Sheet.Root>;
+export const sheetDefaultSide = <Sheet.Popup><Sheet.Title>Filters</Sheet.Title></Sheet.Popup>;
+// @ts-expect-error Sides are limited to the four edges in shipped declarations.
+export const sheetInvalidSide: SheetPopupProps = { side: 'center' };
+// @ts-expect-error JSX usage must also use a supported side.
+export const sheetInvalidSideJsx = <Sheet.Popup side="center" />;
+const sheetUnsafeProps = { side: 'center' };
+// @ts-expect-error Spreads cannot pass an unsupported side.
+export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+type SheetRootProps = ComponentProps<typeof Sheet.Root>;
+export const sheetRoot: SheetRootProps = { defaultOpen: true };
+// @ts-expect-error A Sheet is always modal in shipped declarations.
+export const sheetNonModal: SheetRootProps = { modal: false };
+// @ts-expect-error The trap-focus variant is not available in shipped declarations.
+export const sheetTrapFocus: SheetRootProps = { modal: 'trap-focus' };
+// @ts-expect-error JSX usage must also keep the sheet modal.
+export const sheetNonModalJsx = <Sheet.Root modal={false} />;
+const sheetUnsafeRoot = { modal: false };
+// @ts-expect-error Spreads cannot make the sheet non-modal.
+export const sheetSpreadNonModal = <Sheet.Root {...sheetUnsafeRoot} />;
+function SheetRootWrapper(props: SheetRootProps) { return <Sheet.Root {...props} />; }
+export const wrappedSheetRoot = <SheetRootWrapper defaultOpen />;
+// @ts-expect-error Wrappers must preserve the modal contract.
+export const wrappedSheetRootInvalid = <SheetRootWrapper modal={false} />;
+function SheetWrapper(props: SheetPopupProps) { return <Sheet.Popup {...props} />; }
+export const wrappedSheet = <SheetWrapper side="top" />;
+// @ts-expect-error Wrappers must preserve the side contract.
+export const wrappedSheetInvalid = <SheetWrapper side="center" />;
 export const toastTextClose: ToastCloseProps = { children: 'Dismiss' };
 export const toastLabelledClose: ToastCloseProps = { 'aria-label': 'Close notification' };
 export const toastClose = <Toast.Close {...toastTextClose} />;
@@ -579,6 +694,22 @@ import { Button } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 import '@utakata-ui/react/styles.css';
 createRoot(document.getElementById('root')!).render(createElement(Button, null, componentManifest.components.Button.description));
+`,
+  );
+  writeFileSync(
+    join(directory, 'vite.config.mjs'),
+    `
+export default {
+  build: {
+    rolldownOptions: {
+      // This generated app calls createRoot: it has no server/client boundary.
+      onLog(level, warning, defaultHandler) {
+        if (level === 'warn' && warning.code === 'MODULE_LEVEL_DIRECTIVE' && /["']use client["']/.test(warning.message)) return;
+        defaultHandler(level, warning);
+      }
+    }
+  }
+};
 `,
   );
   run(process.execPath, ['node_modules/vite/bin/vite.js', 'build']);

@@ -15,10 +15,13 @@ test('unknown access and absent protection never become release-readiness passes
     ],
     environment: {
       name: 'npm',
-      protection_rules: [
-        { type: 'required_reviewers', reviewers: [{ id: 1 }] },
-      ],
+      protection_rules: [{ type: 'branch_policy' }],
+      deployment_branch_policy: {
+        custom_branch_policies: true,
+        protected_branches: false,
+      },
     },
+    environmentPolicies: [{ name: 'main', type: 'branch' }],
     identity: 'maintainer',
   });
   assert.deepEqual(
@@ -29,6 +32,36 @@ test('unknown access and absent protection never become release-readiness passes
     inspectReadiness({
       protection: { required_status_checks: { contexts: ['unrelated'] } },
     })[0].status,
+    'unverified',
+  );
+});
+
+test('automatic publication readiness requires main-only policies without manual approval', () => {
+  const environment = {
+    name: 'npm',
+    protection_rules: [],
+    deployment_branch_policy: { custom_branch_policies: true },
+  };
+  const inspect = (environmentPolicies, override = environment) =>
+    inspectReadiness({ environment: override, environmentPolicies })[1].status;
+  assert.equal(inspect([{ name: 'main', type: 'branch' }]), 'passed');
+  for (const policies of [
+    undefined,
+    [],
+    [{ name: '*', type: 'branch' }],
+    [
+      { name: 'main', type: 'branch' },
+      { name: 'react-v*', type: 'tag' },
+    ],
+  ])
+    assert.equal(inspect(policies), 'unverified');
+  assert.equal(
+    inspect([{ name: 'main', type: 'branch' }], {
+      ...environment,
+      protection_rules: [
+        { type: 'required_reviewers', reviewers: [{ id: 1 }] },
+      ],
+    }),
     'unverified',
   );
 });

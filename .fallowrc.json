@@ -10,9 +10,15 @@
     "packages/docs/site/theme-tokens.css",
     "packages/docs/examples/**/*.tsx",
     "tests/browser/main.tsx",
-    "scripts/required-browser-checks.mjs"
+    "scripts/required-browser-checks.mjs",
+    "playwright.*.config.ts",
+    "tests/screen-reader/**/*.ts"
   ],
-  "ignoreDependencies": ["@markuplint/jsx-parser", "@markuplint/react-spec"],
+  "ignoreDependencies": [
+    "@markuplint/jsx-parser",
+    "@markuplint/react-spec",
+    "@guidepup/setup"
+  ],
   "ignoreUnresolvedImports": ["../../../site/**"],
   "duplicates": {
     "ignore": ["packages/docs/examples/en/**"]

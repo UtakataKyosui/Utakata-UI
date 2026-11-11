@@ -5,11 +5,13 @@ import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
 import { Dialog } from './Dialog.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type AlertDialogPopupProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseAlertDialog.Popup>,
-  'className'
-> & { className?: string };
+export type AlertDialogPopupProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseAlertDialog.Popup>, 'className'> & {
+    className?: string;
+  }
+>;
 
 const popupDiagnostics = {
   name: 'AlertDialog.Popup',
@@ -20,8 +22,11 @@ const popupDiagnostics = {
  * The alertdialog surface. Place the cancel `AlertDialog.Close` first or pass
  * `initialFocus` so focus starts on the least destructive action.
  */
-const Popup = forwardRef<HTMLDivElement, AlertDialogPopupProps>(
-  function AlertDialogPopup({ className, ...props }, ref) {
+const Popup = withLism(
+  forwardRef<HTMLDivElement, AlertDialogPopupProps>(function AlertDialogPopup(
+    { className, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(popupDiagnostics, ref);
     return (
       <BaseAlertDialog.Popup
@@ -33,18 +38,18 @@ const Popup = forwardRef<HTMLDivElement, AlertDialogPopupProps>(
         )}
       />
     );
-  },
+  }),
 );
 
 // Base UI Alert Dialog reuses the Dialog backdrop, title and description parts,
 // so the styled Dialog parts and their ui-dialog__* classes are shared.
 export const AlertDialog = {
   Root: BaseAlertDialog.Root,
-  Trigger: BaseAlertDialog.Trigger,
+  Trigger: withLism(BaseAlertDialog.Trigger),
   Portal: BaseAlertDialog.Portal,
   Backdrop: Dialog.Backdrop,
   Popup,
   Title: Dialog.Title,
   Description: Dialog.Description,
-  Close: BaseAlertDialog.Close,
+  Close: withLism(BaseAlertDialog.Close),
 };

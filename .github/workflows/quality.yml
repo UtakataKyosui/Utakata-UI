@@ -36,13 +36,22 @@ jobs:
       react: ${{ steps.scope.outputs.react }}
       cli: ${{ steps.scope.outputs.cli }}
       fallow: ${{ steps.scope.outputs.fallow }}
+      full: ${{ steps.scope.outputs.full }}
+      baseline_expires: ${{ steps.scope.outputs.baseline_expires }}
+      reuse: ${{ steps.scope.outputs.reuse }}
+      fingerprints: ${{ steps.scope.outputs.fingerprints }}
+      run_checks: ${{ steps.scope.outputs.run_checks }}
+      run_unit: ${{ steps.scope.outputs.run_unit }}
+      run_build: ${{ steps.scope.outputs.run_build }}
+      run_docs: ${{ steps.scope.outputs.run_docs }}
+      run_browser: ${{ steps.scope.outputs.run_browser }}
     steps:
       - uses: actions/checkout@v4.4.0
         with:
           fetch-depth: 0
           persist-credentials: false
       - name: Test scope, aggregate and evidence gates (no dependency install)
-        run: node --test scripts/ci-scope.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs scripts/prior-verification.test.mjs
+        run: node --test scripts/ci-scope.test.mjs scripts/ci-evidence.test.mjs scripts/ci-gate.test.mjs scripts/required-browser-checks.test.mjs scripts/release-readiness.test.mjs scripts/publish-npm-token.test.mjs scripts/prior-verification.test.mjs scripts/release-version.test.mjs
       - name: Select required gates
         id: scope
         env:
@@ -56,7 +65,7 @@ jobs:
 
   checks:
     needs: scope
-    if: needs.scope.outputs.checks == 'true'
+    if: needs.scope.outputs.run_checks == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -93,7 +102,7 @@ jobs:
 
   unit:
     needs: scope
-    if: needs.scope.outputs.tests == 'true' || needs.scope.outputs.cli == 'true'
+    if: needs.scope.outputs.run_unit == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -126,7 +135,7 @@ jobs:
 
   build:
     needs: scope
-    if: needs.scope.outputs.build == 'true'
+    if: needs.scope.outputs.run_build == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -172,7 +181,7 @@ jobs:
 
   docs:
     needs: scope
-    if: needs.scope.outputs.docs == 'true'
+    if: needs.scope.outputs.run_docs == 'true'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -204,7 +213,7 @@ jobs:
 
   browser-accessibility:
     needs: scope
-    if: needs.scope.outputs.browser == 'true'
+    if: needs.scope.outputs.run_browser == 'true'
     uses: ./.github/workflows/browser.yml
     with:
       cache_mode: ${{ github.event_name == 'workflow_dispatch' && inputs.browser_cache_mode || 'warm' }}
@@ -238,9 +247,24 @@ jobs:
     steps:
       - uses: actions/checkout@v4.4.0
         with:
+          fetch-depth: 0
           persist-credentials: false
       - name: Require all applicable gates
         env:
           RESULTS: ${{ toJSON(needs) }}
           EVENT_NAME: ${{ github.event_name }}
         run: node scripts/ci-gate.mjs
+      - name: Record committed inputs and verification results
+        id: evidence
+        if: always() && needs.scope.result == 'success'
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: node scripts/ci-evidence.mjs
+      - name: Retain immutable verification evidence
+        if: always() && steps.evidence.outcome == 'success'
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ci-verification-${{ github.run_attempt }}
+          path: test-results/ci-verification.json
+          if-no-files-found: error
+          retention-days: 14

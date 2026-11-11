@@ -9,9 +9,12 @@ import { calendarManifest } from './components/Calendar.js';
 import { cardManifest } from './components/Card.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
+import { comboboxManifest } from './components/Combobox.js';
+import { commandManifest } from './components/Command.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
+import { inputOTPManifest } from './components/InputOTP.js';
 import { kbdManifest } from './components/Kbd.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
@@ -20,6 +23,7 @@ import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
+import { sheetManifest } from './components/Sheet.js';
 import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
@@ -37,6 +41,18 @@ import { withVerificationStates } from './verification.js';
 const manifest = {
   version: 1,
   framework: 'Utakata-UI',
+  styling: {
+    propsType: 'LismStyleProps',
+    responsive:
+      'Ancestor container queries; use Box isContainer. Standard sm/md/lg: 480/800/1120px; xl requires custom CSS.',
+    examples: ['p', 'g', 'w', 'fz', 'bgc', 'layout'],
+    applicability:
+      'DOM-producing components and parts; not state roots, providers, portals or collections.',
+    precedence:
+      'Component-specific props and accessibility constraints take precedence over Lism styling props.',
+    responsibility:
+      'Reverify contrast, focus, target sizes, reflow and reduced motion after changing styling.',
+  },
   sharedQualityRules: qualityRules.shared,
   components: {
     Button: {
@@ -146,6 +162,7 @@ const manifest = {
     },
     Kbd: kbdManifest,
     Separator: separatorManifest,
+    Sheet: sheetManifest,
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,
@@ -163,6 +180,9 @@ const manifest = {
     Switch: switchManifest,
     RadioGroup: radioGroupManifest,
     Select: selectManifest,
+    InputOTP: inputOTPManifest,
+    Combobox: comboboxManifest,
+    Command: commandManifest,
     Slider: sliderManifest,
     Collapsible: collapsibleManifest,
     Accordion: accordionManifest,

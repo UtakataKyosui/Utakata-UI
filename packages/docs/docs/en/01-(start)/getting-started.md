@@ -15,10 +15,10 @@ description: Add Utakata-UI to a React application and render your first compone
 ## 1. Add the package [#install]
 
 ```sh
-pnpm add @utakata-ui/react
+pnpm add @utakata-ui/react lism-css
 ```
 
-With npm use `npm install @utakata-ui/react`; with yarn use `yarn add @utakata-ui/react`. Base UI and Lism CSS are installed as dependencies.
+With npm use `npm install @utakata-ui/react lism-css`; with yarn use `yarn add @utakata-ui/react lism-css`. Base UI is installed as a dependency. Add Lism CSS as a direct dependency to import its primitives directly. See [Using Lism CSS](/en/lism) for responsive Props and layout.
 
 ## 2. Load the styles once [#styles]
 

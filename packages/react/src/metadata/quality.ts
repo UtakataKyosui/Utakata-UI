@@ -9,9 +9,12 @@ import { calendarQualityRules } from './components/Calendar.js';
 import { cardQualityRules } from './components/Card.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
+import { comboboxQualityRules } from './components/Combobox.js';
+import { commandQualityRules } from './components/Command.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
+import { inputOTPQualityRules } from './components/InputOTP.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
 import { paginationQualityRules } from './components/Pagination.js';
@@ -20,6 +23,7 @@ import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
+import { sheetQualityRules } from './components/Sheet.js';
 import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
@@ -123,6 +127,7 @@ export const qualityRules = {
   ],
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
+  Sheet: sheetQualityRules,
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,
@@ -140,6 +145,9 @@ export const qualityRules = {
   Switch: switchQualityRules,
   RadioGroup: radioGroupQualityRules,
   Select: selectQualityRules,
+  InputOTP: inputOTPQualityRules,
+  Combobox: comboboxQualityRules,
+  Command: commandQualityRules,
   Slider: sliderQualityRules,
   Collapsible: collapsibleQualityRules,
   Accordion: accordionQualityRules,
@@ -155,6 +163,20 @@ export const qualityRules = {
   ButtonGroup: buttonGroupQualityRules,
   Calendar: calendarQualityRules,
   shared: [
+    {
+      id: 'lism.rendered-props',
+      requirement:
+        'Responsive Lism styling reaches the existing DOM element while actions, modal dismissal and focus return remain operable.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Translate Lism props before rendering, preserve refs and handlers, and load the library stylesheet with the documented layer order.',
+      applicability:
+        'Representative Button, Card, Field and Dialog fixture at 320px and 1280px in standard themes.',
+      residual:
+        'Arbitrary Lism overrides and consumer content require their own contrast, motion and assistive-technology verification.',
+      criteria: ['1.4.10', '2.1.1', '2.4.3'],
+    },
     {
       id: 'theme.reduced-motion',
       requirement:

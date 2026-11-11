@@ -5,13 +5,14 @@ import {
   type JSX,
 } from 'react';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-type PaginationPartProps<Tag extends keyof JSX.IntrinsicElements> = Omit<
-  ComponentPropsWithoutRef<Tag>,
-  'className'
-> & {
-  className?: string;
-};
+type PaginationPartProps<Tag extends keyof JSX.IntrinsicElements> =
+  WithLismProps<
+    Omit<ComponentPropsWithoutRef<Tag>, 'className'> & {
+      className?: string;
+    }
+  >;
 
 // Optional `never` members also reject these names when props arrive through a spread.
 type AnchorProps = Omit<
@@ -24,33 +25,39 @@ type AnchorProps = Omit<
 };
 
 /** Defaults to aria-label="ページ送り"; aria-labelledby replaces it. */
-export type PaginationRootProps = PaginationPartProps<'nav'>;
+export type PaginationRootProps = WithLismProps<PaginationPartProps<'nav'>>;
 
-export type PaginationLinkProps = AnchorProps & {
-  href: string;
-  /** The current page; renders aria-current="page". */
-  active?: boolean;
-};
+export type PaginationLinkProps = WithLismProps<
+  AnchorProps & {
+    href: string;
+    /** The current page; renders aria-current="page". */
+    active?: boolean;
+  }
+>;
 
 /**
  * An enabled Previous/Next needs a URL. When disabled it renders no href, is
  * removed from the Tab order and ignores clicks.
  */
-export type PaginationDirectionProps = AnchorProps &
-  ({ disabled?: false; href: string } | { disabled: true; href?: never });
+export type PaginationDirectionProps = WithLismProps<
+  AnchorProps &
+    ({ disabled?: false; href: string } | { disabled: true; href?: never })
+>;
 
-export type PaginationEllipsisProps = Omit<
-  PaginationPartProps<'span'>,
-  'children' | 'role'
-> & {
-  children?: never;
-  role?: never;
-  /** Text read by assistive technology instead of the visual "…". */
-  label?: string;
-};
+export type PaginationEllipsisProps = WithLismProps<
+  Omit<PaginationPartProps<'span'>, 'children' | 'role'> & {
+    children?: never;
+    role?: never;
+    /** Text read by assistive technology instead of the visual "…". */
+    label?: string;
+  }
+>;
 
-const Root = forwardRef<HTMLElement, PaginationRootProps>(
-  function PaginationRoot({ className, ...props }, ref) {
+const Root = withLism(
+  forwardRef<HTMLElement, PaginationRootProps>(function PaginationRoot(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <nav
         aria-label={props['aria-labelledby'] ? undefined : 'ページ送り'}
@@ -59,25 +66,30 @@ const Root = forwardRef<HTMLElement, PaginationRootProps>(
         className={withClassName('ui-pagination', className)}
       />
     );
-  },
+  }),
 );
 
-const List = forwardRef<HTMLUListElement, PaginationPartProps<'ul'>>(
-  function PaginationList({ className, children, ...props }, ref) {
-    return (
-      <ul
-        {...props}
-        ref={ref}
-        className={withClassName('ui-pagination__list', className)}
-      >
-        {children}
-      </ul>
-    );
-  },
+const List = withLism(
+  forwardRef<HTMLUListElement, PaginationPartProps<'ul'>>(
+    function PaginationList({ className, children, ...props }, ref) {
+      return (
+        <ul
+          {...props}
+          ref={ref}
+          className={withClassName('ui-pagination__list', className)}
+        >
+          {children}
+        </ul>
+      );
+    },
+  ),
 );
 
-const Item = forwardRef<HTMLLIElement, PaginationPartProps<'li'>>(
-  function PaginationItem({ className, ...props }, ref) {
+const Item = withLism(
+  forwardRef<HTMLLIElement, PaginationPartProps<'li'>>(function PaginationItem(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <li
         {...props}
@@ -85,11 +97,14 @@ const Item = forwardRef<HTMLLIElement, PaginationPartProps<'li'>>(
         className={withClassName('ui-pagination__item', className)}
       />
     );
-  },
+  }),
 );
 
-const Link = forwardRef<HTMLAnchorElement, PaginationLinkProps>(
-  function PaginationLink({ className, active = false, ...props }, ref) {
+const Link = withLism(
+  forwardRef<HTMLAnchorElement, PaginationLinkProps>(function PaginationLink(
+    { className, active = false, ...props },
+    ref,
+  ) {
     return (
       <a
         {...props}
@@ -98,7 +113,7 @@ const Link = forwardRef<HTMLAnchorElement, PaginationLinkProps>(
         className={withClassName('ui-pagination__link', className)}
       />
     );
-  },
+  }),
 );
 
 type DirectionLinkProps = PaginationDirectionProps & {
@@ -131,43 +146,49 @@ function DirectionLink({
   );
 }
 
-const Previous = forwardRef<HTMLAnchorElement, PaginationDirectionProps>(
-  function PaginationPrevious({ children = '前のページ', ...props }, ref) {
-    return (
-      <DirectionLink {...props} direction="previous" forwardedRef={ref}>
-        {children}
-      </DirectionLink>
-    );
-  },
+const Previous = withLism(
+  forwardRef<HTMLAnchorElement, PaginationDirectionProps>(
+    function PaginationPrevious({ children = '前のページ', ...props }, ref) {
+      return (
+        <DirectionLink {...props} direction="previous" forwardedRef={ref}>
+          {children}
+        </DirectionLink>
+      );
+    },
+  ),
 );
 
-const Next = forwardRef<HTMLAnchorElement, PaginationDirectionProps>(
-  function PaginationNext({ children = '次のページ', ...props }, ref) {
-    return (
-      <DirectionLink {...props} direction="next" forwardedRef={ref}>
-        {children}
-      </DirectionLink>
-    );
-  },
+const Next = withLism(
+  forwardRef<HTMLAnchorElement, PaginationDirectionProps>(
+    function PaginationNext({ children = '次のページ', ...props }, ref) {
+      return (
+        <DirectionLink {...props} direction="next" forwardedRef={ref}>
+          {children}
+        </DirectionLink>
+      );
+    },
+  ),
 );
 
 /** Marks skipped pages. It is not interactive. */
-const Ellipsis = forwardRef<HTMLSpanElement, PaginationEllipsisProps>(
-  function PaginationEllipsis(
-    { className, label = '省略されたページ', ...props },
-    ref,
-  ) {
-    return (
-      <span
-        {...props}
-        ref={ref}
-        className={withClassName('ui-pagination__ellipsis', className)}
-      >
-        <span aria-hidden="true">…</span>
-        <span className="ui-pagination__hidden-text">{label}</span>
-      </span>
-    );
-  },
+const Ellipsis = withLism(
+  forwardRef<HTMLSpanElement, PaginationEllipsisProps>(
+    function PaginationEllipsis(
+      { className, label = '省略されたページ', ...props },
+      ref,
+    ) {
+      return (
+        <span
+          {...props}
+          ref={ref}
+          className={withClassName('ui-pagination__ellipsis', className)}
+        >
+          <span aria-hidden="true">…</span>
+          <span className="ui-pagination__hidden-text">{label}</span>
+        </span>
+      );
+    },
+  ),
 );
 
 export const Pagination = { Root, List, Item, Link, Previous, Next, Ellipsis };

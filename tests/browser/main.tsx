@@ -13,11 +13,14 @@ import {
   Card,
   Checkbox,
   Collapsible,
+  Combobox,
+  Command,
   Dialog,
   DropdownMenu,
   Field,
   Input,
   InputGroup,
+  InputOTP,
   Kbd,
   KbdGroup,
   NativeSelect,
@@ -27,6 +30,7 @@ import {
   RadioGroup,
   Select,
   Separator,
+  Sheet,
   Skeleton,
   Slider,
   Spinner,
@@ -45,6 +49,7 @@ import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
+import { LismFixture } from './lism-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
@@ -153,6 +158,138 @@ function SelectStates() {
       </form>
       <Button>After select</Button>
       <output aria-label="Select changes">{JSON.stringify(changes)}</output>
+    </section>
+  );
+}
+
+const slotLabel = (position: number, length: number) =>
+  `Digit ${position} of ${length}`;
+
+function InputOTPStates() {
+  const [events, setEvents] = useState<string[]>([]);
+  return (
+    <section aria-label="Input OTP">
+      <Button>Before code</Button>
+      <Field.Root>
+        <Field.Label>Verification code</Field.Label>
+        <InputOTP.Root
+          name="code"
+          length={4}
+          getSlotLabel={slotLabel}
+          onValueComplete={(value) =>
+            setEvents((previous) => [...previous, `complete:${value}`])
+          }
+        >
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+          <InputOTP.Separator />
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+      </Field.Root>
+      <Field.Root invalid>
+        <Field.Label>Backup code</Field.Label>
+        <InputOTP.Root
+          length={2}
+          defaultValue="12"
+          getSlotLabel={slotLabel}
+          validationType="alphanumeric"
+        >
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+        <Field.Error match>
+          The code is not valid. Request a new code.
+        </Field.Error>
+      </Field.Root>
+      <Field.Root disabled>
+        <Field.Label>Disabled code</Field.Label>
+        <InputOTP.Root length={2} getSlotLabel={slotLabel}>
+          <InputOTP.Slot />
+          <InputOTP.Slot />
+        </InputOTP.Root>
+      </Field.Root>
+      <Button>After code</Button>
+      <output aria-label="Input OTP events">{JSON.stringify(events)}</output>
+    </section>
+  );
+}
+
+const comboboxFruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'grape', label: 'Grape' },
+];
+
+function ComboboxStates() {
+  const [changes, setChanges] = useState<string[]>([]);
+  const [submits, setSubmits] = useState(0);
+  return (
+    <section aria-label="Combobox input">
+      <Button>Before combobox</Button>
+      <form
+        aria-label="Combobox form"
+        ref={(form) => {
+          if (!form) return;
+          // Count implicit submissions and keep the fixture page loaded.
+          const count = (event: Event) => {
+            event.preventDefault();
+            setSubmits((previous) => previous + 1);
+          };
+          form.addEventListener('submit', count);
+          return () => form.removeEventListener('submit', count);
+        }}
+      >
+        <Field.Root>
+          <Field.Label>Fruit</Field.Label>
+          <Combobox.Root
+            name="fruit"
+            items={comboboxFruits}
+            onValueChange={(value: (typeof comboboxFruits)[number] | null) =>
+              setChanges((previous) => [
+                ...previous,
+                value ? value.value : 'null',
+              ])
+            }
+          >
+            <Combobox.InputGroup>
+              <Combobox.Input placeholder="Search fruit" />
+              <Combobox.Clear aria-label="Clear fruit" />
+              <Combobox.Trigger aria-label="Show fruit options" />
+            </Combobox.InputGroup>
+            <Combobox.Portal>
+              <Combobox.Positioner>
+                <Combobox.Popup>
+                  <Combobox.Empty>No fruit found</Combobox.Empty>
+                  <Combobox.List>
+                    {(item: (typeof comboboxFruits)[number]) => (
+                      <Combobox.Item
+                        key={item.value}
+                        value={item}
+                        disabled={item.value === 'banana'}
+                      >
+                        {item.label}
+                        <Combobox.ItemIndicator />
+                      </Combobox.Item>
+                    )}
+                  </Combobox.List>
+                </Combobox.Popup>
+              </Combobox.Positioner>
+            </Combobox.Portal>
+          </Combobox.Root>
+          <Field.Description>Choose one fruit.</Field.Description>
+        </Field.Root>
+      </form>
+      <Button>After combobox</Button>
+      <Combobox.Root items={comboboxFruits}>
+        <Combobox.Input
+          aria-label="Standalone fruit"
+          placeholder="Search without a group"
+        />
+      </Combobox.Root>
+      <output aria-label="Combobox changes">{JSON.stringify(changes)}</output>
+      <output aria-label="Combobox submits">{submits}</output>
     </section>
   );
 }
@@ -719,6 +856,103 @@ function MenuStates() {
   );
 }
 
+const commandGroups = [
+  {
+    value: 'Pages',
+    items: [
+      { value: 'home', label: 'Home' },
+      { value: 'settings', label: 'Settings' },
+    ],
+  },
+  {
+    value: 'Actions',
+    items: [
+      { value: 'copy', label: 'Copy link' },
+      { value: 'delete', label: 'Delete project' },
+    ],
+  },
+];
+
+function CommandItems({ run }: { run: (value: string) => void }) {
+  return (
+    <>
+      <Command.Empty>No commands found</Command.Empty>
+      <Command.List>
+        {(group: (typeof commandGroups)[number]) => (
+          <Command.Group key={group.value} items={group.items}>
+            <Command.GroupLabel>{group.value}</Command.GroupLabel>
+            <Command.Collection>
+              {(item: (typeof commandGroups)[number]['items'][number]) => (
+                <Command.Item
+                  key={item.value}
+                  value={item}
+                  disabled={item.value === 'delete'}
+                  onClick={() => run(item.value)}
+                >
+                  {item.label}
+                  {item.value === 'copy' ? (
+                    <Command.Shortcut aria-hidden="true">
+                      Ctrl+L
+                    </Command.Shortcut>
+                  ) : null}
+                </Command.Item>
+              )}
+            </Command.Collection>
+          </Command.Group>
+        )}
+      </Command.List>
+    </>
+  );
+}
+
+function CommandStates() {
+  // An always-visible listbox would be seen by every page-wide listbox query in
+  // the other specs, so the standalone list is only rendered for #command.
+  const standalone = window.location.hash === '#command';
+  const [ran, setRan] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
+  return (
+    <section aria-label="Command states">
+      <Button>Before command</Button>
+      {standalone ? (
+        <Command.Root items={commandGroups}>
+          <Command.Panel>
+            <Command.Input
+              aria-label="Find a command"
+              placeholder="Type a command"
+            />
+            <CommandItems run={(value) => setRan((all) => [...all, value])} />
+          </Command.Panel>
+        </Command.Root>
+      ) : null}
+      <Button>After command</Button>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
+        <Dialog.Trigger render={<Button variant="outline" />}>
+          Open palette
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <Dialog.Backdrop />
+          <Dialog.Popup>
+            <Dialog.Title>Command palette</Dialog.Title>
+            <Command.Root items={commandGroups}>
+              <Command.Panel>
+                <Command.Input aria-label="Search commands" />
+                <CommandItems
+                  run={(value) => {
+                    setRan((all) => [...all, `palette:${value}`]);
+                    setOpen(false);
+                  }}
+                />
+              </Command.Panel>
+            </Command.Root>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
+      <output aria-label="Commands run">{JSON.stringify(ran)}</output>
+    </section>
+  );
+}
+
 function AlertDialogStates() {
   const [deletions, setDeletions] = useState(0);
   const [open, setOpen] = useState(false);
@@ -752,6 +986,40 @@ function AlertDialogStates() {
       </AlertDialog.Root>
       <Button>After alert dialog</Button>
       <output aria-label="Deletions">{deletions}</output>
+    </section>
+  );
+}
+
+const sheetOptions = Array.from({ length: 60 }, (_, index) => index + 1);
+
+function SheetStates() {
+  return (
+    <section aria-label="Sheet states">
+      <Button>Before sheet</Button>
+      {componentManifest.components.Sheet.sides.map((side) => (
+        <Sheet.Root key={side}>
+          <Sheet.Trigger render={<Button variant="outline" />}>
+            Open {side} sheet
+          </Sheet.Trigger>
+          <Sheet.Portal>
+            <Sheet.Backdrop />
+            <Sheet.Popup side={side}>
+              <Sheet.Title>Filters on the {side}</Sheet.Title>
+              <Sheet.Description>Narrow the list of results.</Sheet.Description>
+              <Sheet.Close render={<Button variant="outline" />}>
+                Close {side} sheet
+              </Sheet.Close>
+              {sheetOptions.map((option) => (
+                <p key={option}>
+                  Filter option {option} / 絞り込み条件 {option}
+                </p>
+              ))}
+              <Button>Apply {side} filters</Button>
+            </Sheet.Popup>
+          </Sheet.Portal>
+        </Sheet.Root>
+      ))}
+      <Button>After sheet</Button>
     </section>
   );
 }
@@ -1187,6 +1455,8 @@ function Fixture() {
       <SwitchStates />
       <RadioGroupStates />
       <SelectStates />
+      <InputOTPStates />
+      <ComboboxStates />
       <SliderStates />
       <BadgeStates />
       <SkeletonStates />
@@ -1206,6 +1476,8 @@ function Fixture() {
       <PopoverStates />
       <MenuStates />
       <AlertDialogStates />
+      <CommandStates />
+      <SheetStates />
       <ToastStates />
       <ToggleGroupStates />
       <CalendarStates />
@@ -1258,7 +1530,11 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  paletteLocale ? (
+  new URLSearchParams(location.search).has('lism') ? (
+    <LismFixture />
+  ) : new URLSearchParams(location.search).has('reader') ? (
+    <LayoutFixture variants={false} />
+  ) : paletteLocale ? (
     <PaletteFixture locale={paletteLocale} />
   ) : new URLSearchParams(location.search).has('layout') ? (
     <LayoutFixture />

@@ -5,18 +5,18 @@ import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { InputSize } from '../metadata/components/Input.js';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 /**
  * Base UI Input props. The visual `size` replaces the native `size`
  * attribute; set the width with CSS instead.
  */
-export type InputProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseInput>,
-  'className' | 'size'
-> & {
-  className?: string;
-  size?: InputSize;
-};
+export type InputProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseInput>, 'className' | 'size'> & {
+    className?: string;
+    size?: InputSize;
+  }
+>;
 
 const inputTarget = {
   name: 'Input',
@@ -27,17 +27,19 @@ const inputTarget = {
  * A single-line text input. Inside Field.Root it replaces Field.Control, so
  * the label, description and error attach to this one input.
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { className, size = 'md', type = 'text', ...props },
-  ref,
-) {
-  const accessibilityRef = useAccessibilityRef(inputTarget, ref);
-  return (
-    <BaseInput
-      {...props}
-      type={type}
-      ref={accessibilityRef}
-      className={withClassName(`ui-input ui-input--${size}`, className)}
-    />
-  );
-});
+export const Input = withLism(
+  forwardRef<HTMLInputElement, InputProps>(function Input(
+    { className, size = 'md', type = 'text', ...props },
+    ref,
+  ) {
+    const accessibilityRef = useAccessibilityRef(inputTarget, ref);
+    return (
+      <BaseInput
+        {...props}
+        type={type}
+        ref={accessibilityRef}
+        className={withClassName(`ui-input ui-input--${size}`, className)}
+      />
+    );
+  }),
+);

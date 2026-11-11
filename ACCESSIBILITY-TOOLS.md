@@ -18,10 +18,10 @@ Quality と Release React は共通の `browser.yml` で Chromium light/dark を
 - `pnpm lint`: 既存 Biome の推奨ルール（a11y を含む）。
 - `pnpm lint:markup`: 部品ソース、docs の TSX 例、ブラウザー fixture の静的検査。正常 JSX、代替テキスト欠落、ボタンの不正な入れ子で検出器を検証する。意図的に不正な既存 Vitest fixture は対象にしない。
 - `pnpm test:a11y`: 既存 jsdom / axe と品質ルールの回帰検査。
-- `pnpm test:a11y:browser`: 組み込みテーマ light/dark、全 Button variant/size、名前付き icon button、disabled、ラベル・説明付き Field、開閉する Dialog に加え、Kbd・Separator、表示系（Badge・Skeleton・Spinner・Card・Alert・Avatar）、データ・ナビゲーション（Progress・Table・Breadcrumb・Pagination）、フォーム（Input・Textarea・NativeSelect・Checkbox・Switch・RadioGroup・Select・Slider）、開閉系（Collapsible・Accordion・Tabs・Toggle）、グループ（InputGroup・ToggleGroup・ButtonGroup）、日付選択（Calendar）、オーバーレイ（Tooltip・Popover・DropdownMenu・AlertDialog・Toast）のフィクスチャー。描画後の axe（コントラストを無効化しない）、名前・説明、Tab / Shift+Tab / Enter / Space / Escape / 矢印キー / Home / End / Page Up/Down / F6 の実キー入力、フォーカス復帰、一部の対象サイズと emulate した reduced motion を検証する。名前欠落・低コントラストの既知の不正例でも検出を確認する。
+- `pnpm test:a11y:browser`: 組み込みテーマ light/dark、全 Button variant/size、名前付き icon button、disabled、ラベル・説明付き Field、開閉する Dialog に加え、Kbd・Separator、表示系（Badge・Skeleton・Spinner・Card・Alert・Avatar）、データ・ナビゲーション（Progress・Table・Breadcrumb・Pagination）、フォーム（Input・Textarea・NativeSelect・Checkbox・Switch・RadioGroup・Select・Combobox・InputOTP・Slider）、開閉系（Collapsible・Accordion・Tabs・Toggle）、グループ（InputGroup・ToggleGroup・ButtonGroup）、日付選択（Calendar）、オーバーレイ（Tooltip・Popover・DropdownMenu・AlertDialog・Command・Sheet・Toast）のフィクスチャー。描画後の axe（コントラストを無効化しない）、名前・説明、Tab / Shift+Tab / Enter / Space / Escape / 矢印キー / Home / End / Page Up/Down / F6 の実キー入力、フォーカス復帰、一部の対象サイズと emulate した reduced motion を検証する。名前欠落・低コントラストの既知の不正例でも検出を確認する。
 - 既存の pack 済み公開 `.d.ts` の正/負の利用例検査も継続する。
 
-開発には Node.js 24.16.0 以降の 24.x または 26.3.0 以上を使う（Markuplint の optional Astro parser を含む依存要件）。ブラウザー検査は `pnpm exec playwright install chromium` 後に実行する。CI は Linux の Chromium、ローカル実行はホスト OS の Chromium を使う。HTML レポートの添付情報にブラウザーのバージョン・実行条件、axe JSON に検査器と対象 DOM の結果を残す。CI の成果物名にコミット SHA を含め、結果・失敗時 screenshot/trace を14日保存する。skip・fixme・期待された失敗も必須ゲートでは未検証として失敗にする。
+開発には Node.js 24.16.0 以降の 24.x または 26.3.0 以上を使う（Markuplint の optional Astro parser を含む依存要件）。ブラウザー検査は `pnpm exec playwright install chromium firefox webkit` 後に実行する。CI は Linux の Chromium 全件検査に加え、Firefox/WebKit の基礎検査を各 light/dark で実行する。`pnpm test:a11y:cross-browser` は Button/Field/Dialog の名前・axe・キー操作・フォーカス復帰、ターゲット・コントラスト・320px・文字拡大・文字間隔・reduced-motion と負の対照例を実行する。Chromium 専用の CDP IME、強制配色や全コンポーネントの状態カバレッジは他エンジンへ拡張しない。HTML レポートの添付情報にブラウザーのバージョン・実行条件、axe JSON に検査器と対象 DOM の結果を残す。CI の成果物名にコミット SHA を含め、結果・失敗時 screenshot/trace を14日保存する。skip・fixme・期待された失敗も必須ゲートでは未検証として失敗にする。
 
 fallow には HTML から起動する `tests/browser/main.tsx` をエントリとして登録する。`.markuplintrc.json` から動的ロードする parser/spec の2依存だけを未使用依存検出から除外する。
 
@@ -37,7 +37,11 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 `toast.pause-on-hover-focus`、`toast.close-action-keyboard`、`toast.viewport-layout` は Chromium light/dark の必須 browser ルールです。実際のマウスホバーと F6 によるフォーカスで 800ms の自動消去タイマーが一時停止し、離れる・フォーカスを外すと再開して消えること、F6 でビューポートへ入り Tab でトースト・Undo・Dismiss へ到達できること、Enter で Action が1回だけ実行され、Enter・Space・Escape で閉じることを検証します。幅320×高さ300px の短い画面に複数行のトーストを5つ積んでも、ビューポートが画面内に収まってスクロールでき（上端が画面外に出ない）、各トーストが内容の高さを保つこと、強制配色で Undo と Dismiss のフォーカスに 2px 以上の実線の outline が残ることを検証します。高さ制約とスクロールの除去・ホバーの無視・フォーカス表示の除去の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。読み上げ、通知頻度、実際の200%ズーム、ハイコントラスト、縮小モーションは `toast.platform-manual` に未検証として残ります。
 
+`command.keyboard-execute`、`command.dialog-focus`、`command.visual-forced` は Chromium light/dark の必須 browser ルールです。実際の Tab・文字入力・矢印キー・Enter で、フォーカスが入力欄に残ったまま `aria-activedescendant` のハイライトが移り、無効なコマンドと該当なしの Enter では何も実行されず、ハイライト中のコマンドが 1 回だけ実行されることを検証します。Dialog に置いたパレットは実際の Enter で開いて入力欄にフォーカスが移り、Enter での実行後と Escape の後にフォーカスがトリガーへ戻ることを検証します。見た目は入力欄のフォーカス表示、ハイライト項目の 2px 以上の outline、強制配色での入力欄・ハイライト・枠線、文字のコントラスト 4.5:1、幅 320 CSS px と文字 200% でのはみ出しを検証し、Escape の握りつぶし・Enter の無効化・フォーカス表示の消失の対照例では失敗することを確認します。インラインの入力欄は Base UI が `aria-haspopup` と `aria-controls` を併せて付けるため、axe は存在する参照先でも `aria-valid-attr-value` を未確定（incomplete、`controlsWithinPopup`）にします。この 1 種類だけを、参照先の listbox が存在する場合に限って許容し、許容した項目は `-axe-accepted-needs-review` 成果物に別に残します。`-axe` 成果物には未解決の incomplete だけを入れるため、他の incomplete と violation は共通の証拠ゲートで失敗のままです。実際の IME・スクリーンリーダー・200% ズームは `command.real-ime`・`command.screen-reader`・`command.visual-state` に未検証として残ります。
+
 `alert-dialog.initial-focus-containment`、`alert-dialog.dismissal-focus-return`、`alert-dialog.forced-focus` は Chromium light/dark の必須 browser ルールです。実際の Enter で開くと最も破壊的でない操作（Cancel）にフォーカスが移り、説明が関連付けられていること、Tab と Shift+Tab を繰り返しても背後のページへフォーカスが出ないこと、ポップアップ外のポインター押下では閉じず、Cancel と Escape で閉じてフォーカスがトリガーへ戻ることを検証します。強制配色ではポップアップに境界線が残り、各操作のフォーカスに 2px 以上の実線の outline が残ることを検証します。Tab で背後へ抜けるフォーカストラップの破壊と強制配色のフォーカス消失の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。警告の読み上げ、実際の200%ズーム、ハイコントラストは `alert-dialog.platform-manual` に未検証として残ります。
+
+`sheet.focus-containment`、`sheet.dismissal-focus-return`、`sheet.placement-scroll`、`sheet.reduced-motion`、`sheet.forced-focus` は Chromium light/dark の必須 browser ルールで、上・右・下・左の全ての端を対象にします。実際の Tab と Enter で開くとフォーカスが先頭の Close に移り、説明が関連付けられ、開いた popup の axe に違反と incomplete がないこと、Tab と Shift+Tab を繰り返しても背後のページへフォーカスが出ないことを検証します。Escape・Close・背景のポインター押下のそれぞれで閉じてフォーカスがトリガーへ戻ることも検証します。配置では各端がビューポートの端に付いて寸法が合うこと、長い内容が popup 内でスクロールし（マウスホイールで popup だけが動き背後のページは動かない）、最後の操作が Tab で到達でき popup 内で隠れないこと、幅320px・ルート文字サイズ200%でページに横方向のはみ出しを加えず popup 内にも横スクロールが出ないことを検証します（ブラウザーズームではありません）。縮小モーションでは、設定がないときは transform の遷移が動き、`prefers-reduced-motion: reduce` の emulate では遷移も実行中のアニメーションもなく、全ての端で開閉できることを検証します。強制配色ではポップアップに境界線が残り、各操作のフォーカスに 2px 以上の実線の outline が残ることを検証します。`Sheet.Root` は型で `modal` を受け付けず、常にモーダルです。Tab で背後へ抜けるフォーカストラップの破壊、Escape の握りつぶし、popup のスクロールの除去、端への配置の破壊、縮小モーションの上書きの除去、強制配色のフォーカス消失の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。閉じた状態では見えない各端の配置は `coverage.public-configurations` の閉じた状態の可視性検査から除き、`sheet.placement-scroll` が manifest の全ての端を開いて検証します。読み上げ、実際の200%ズーム、ハイコントラスト、実機でのタッチ操作は `sheet.platform-manual` に未検証として残ります。
 
 `dropdown-menu.keyboard`、`dropdown-menu.activate-dismiss`、`dropdown-menu.forced-highlight` は Chromium light/dark の必須 browser ルールです。実際の Enter/矢印キーで開き、矢印・Home/End・先頭文字でハイライトが移ること、無効な項目にも矢印で到達できるが Enter ではアクションが走らないこと、Enter と Space がそれぞれ1回だけアクションを実行してメニューを閉じフォーカスをトリガーへ戻すこと、Escape と外側クリックで閉じてフォーカスが戻ることを検証します。強制配色ではハイライト中の項目（無効項目を含む）が `Highlight` / `HighlightText` のシステム色対を使い、トリガー（Button を含む）に 2px 以上の実線の outline が残ることを検証します（強制配色では box-shadow が抑制されるため。Button・Field コントロール・Dialog 内要素にも同じ不具合があり、あわせて修正済み）。Escape の握りつぶしと強制配色の上書きの除去の対照例では検証が失敗することを確認します。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。端での衝突配置、実際のハイコントラスト、200%ズーム、読み上げは `dropdown-menu.platform-manual` に未検証として残ります。
 
@@ -75,7 +79,13 @@ fallow には HTML から起動する `tests/browser/main.tsx` をエントリ�
 
 `slider.keyboard` と `slider.pointer` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で、実際の Tab による単一進入、矢印・Page Up/Down・Home/End と小数ステップの範囲内動作、トラック押下による位置移動、サムのドラッグによる連続変更と `onValueCommitted` の解放時1回の通知を検証します。キーとポインター押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話は `slider.screen-reader`、視覚状態・実際のズーム・強制配色は `slider.visual-state` の手動確認に残ります。
 
+`input-otp.keyboard-paste` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で、実際の Tab による最初のスロットへの単一進入、入力によるフォーカス前進、矢印・Home/End・Backspace、`validationType` に合わない文字の拒否、入力完了時の `onValueComplete` と自動送信されないこと、実際のクリップボードからの貼り付けを検証します。キーと `beforeinput` を握りつぶす対照例では検証が失敗することを確認します。ワンタイムコードの自動入力と IME は `input-otp.autofill-ime`、スクリーンリーダーの発話は `input-otp.screen-reader`、実際のブラウザーズーム・文字間隔・物理的な強制配色や実プラットフォームでの描画は `input-otp.zoom-physical` の手動確認に残ります（未検証）。
+
+InputOTP の視覚面は独立した必須 browser ルールに分けています。`input-otp.target-size`（空・入力済み・無効・エラーの全スロットが描画上 24x24 CSS px 以上）、`input-otp.contrast`（有効スロットの文字 4.5:1・枠 3:1、無効は対象外）、`input-otp.focus-visible`（キーボードフォーカス時に 2px 以上の実線アウトライン・背景に対し 3:1・フォーカスシャドウ）、`input-otp.invalid-state`（`aria-invalid`・色だけでなく枠の太さの変化・枠 3:1・関連付けたエラー文）、`input-otp.forced-colors`（Chromium の forced-colors エミュレーションで枠とフォーカスアウトラインが残る）、`input-otp.reflow`（320px 幅でクリップ・横スクロール・24px 未満なしに折り返す）です。それぞれ Chromium light/dark で実行し、寸法・色・アウトラインを壊した既知の不正な描画で検出が失敗することを確認し、`*-evidence` を既存のコミット付き CI 成果物へ添付します。物理的な強制配色・実際のズームは検証済みではなく、手動ルールに残ります。
+
 `select.keyboard-selection`、`select.escape-focus-return`、`select.popup-position-dismiss` は jsdom の合成イベントから独立させた必須 browser ルールです。Chromium light/dark で実際のキーとマウスを使い、ArrowDown での展開、矢印・先頭文字による移動、disabled 項目が選べないこと、Enter での選択とフォーカス復帰、Escape で値を変えず閉じてフォーカスがトリガーへ戻ること、ポップアップがビューポート内かつトリガー近傍に配置されること、外側押下で値を変えず閉じることを検証します。Escape と外側押下を握りつぶす対照例では検証が失敗することを確認します。各ルールの `*-evidence` と `*-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話と長いリストのスクロールは `select.screen-reader`、視覚状態・実際のズーム・強制配色は `select.visual-state` の手動確認に残ります。
+
+`combobox.keyboard-selection`、`combobox.dismiss-focus`、`combobox.visual-forced`、`combobox.ime-browser` は Chromium light/dark の必須 browser ルールです。1つ目は実際の Tab・文字入力・ArrowDown/ArrowUp・Enter で、候補が絞り込まれ、フォーカスが入力欄に残ったままハイライトが `aria-activedescendant` と `data-highlighted` で移り、無効な項目は選択されず、Enter で入力欄にラベルが入り値が送信されること、Trigger と Clear が Tab の停止点にならないことを検証します。2つ目は Escape が値を変えずにポップアップを閉じ、閉じた状態の Escape が入力と値を消去すること、外側押下で値が変わらないこと、ポップアップがビューポート内で入力欄の近くに開くことを検証します。3つ目は入力欄の枠のフォーカスリング、`Combobox.InputGroup` を使わない入力欄が自身の枠線とフォーカス表示を持つこと、強制配色エミュレーションでの 2px 以上の実線の outline（枠・ハイライト中の項目）とポップアップの境界線、選択済み項目のチェック記号、文字 4.5:1、Trigger と Clear の 24×24 CSS px 以上、幅 320px とルート文字サイズ 200% でのはみ出しのなさを検証します。4つ目は DevTools プロトコルで変換を擬似的に再現し、keyCode 229 の Enter が選択肢を選ばず、確定後の Enter が選ぶことを検証します。開いたポップアップ中は Base UI がページの他の部分を `aria-hidden` にするため、axe は閉じた状態で実行します。Escape・外側押下の握りつぶし、変換中の Enter を通常の Enter として再送する処理、フォーカス枠の除去、Trigger と Clear の縮小の対照例では検証が失敗することを確認します。jsdom の `combobox.ime-composition` は合成イベントによる確認で、実際の IME の証拠ではありません。各ルールの evidence と axe の結果を既存のコミット付き CI 成果物へ添付します。実際の日本語 IME は `combobox.real-ime`、スクリーンリーダーの発話は `combobox.screen-reader`、実際の200%ズーム・ハイコントラスト・視覚状態は `combobox.visual-state` に未検証として残ります。
 
 `radio-group.keyboard` は jsdom の合成キーから独立させた必須 browser ルールです。Chromium light/dark で実際の Tab・矢印キーを使い、Tab での単一進入、矢印キーによる移動と選択、disabled 項目の読み飛ばし、グループ離脱後の Shift+Tab による選択項目への復帰、disabled 項目のクリックで値が変わらないことを検証します。矢印キーを握りつぶす不正なハンドラーを挿入した対照例では検証が失敗することを確認します。`radio-group-keyboard-evidence` と `radio-group-axe` を既存のコミット付き CI 成果物へ添付します。スクリーンリーダーの発話、視覚状態、実際のズーム・強制配色は `radio-group.real-keyboard-screen-reader` と `radio-group.visual-state` の手動確認に残ります。
 
@@ -101,7 +111,7 @@ SPA の `tests/browser/index.html` に限り `require-h1` を無効化する。h
 
 開いた Dialog の axe は可視 popup の部分木を対象にする。Base UI が管理する背景とフォーカスガードはこの axe の対象外で、フォーカスが popup 内に留まることをキー入力で別に検査する。全ページの開いた modal に対する axe 合格とは称さない。対象範囲内の `violations` と `incomplete` はどちらも失敗にし、未判定を合格へ読み替えない。
 
-Popover・DropdownMenu・Select・AlertDialog の開いた popup も同様に popup 部分木を対象にし、CSS の表示遷移が終わってから axe を実行する。Toast は `.ui-toast__viewport` ではなく表示中の `.ui-toast` を対象にする。viewport には Base UI のフォーカスガード（`aria-hidden="true"` かつ `tabindex="0"` の span）があり、axe は `aria-hidden-focus` を `incomplete` と報告する。これは合格扱いにせず、フォーカスガードの読み上げ・移動への影響を実ブラウザーとスクリーンリーダーで確認する残課題として未検証のまま残す。
+Popover・DropdownMenu・Select・Combobox・AlertDialog・Sheet の開いた popup も同様に popup 部分木を対象にし、CSS の表示遷移が終わってから axe を実行する。Toast は `.ui-toast__viewport` ではなく表示中の `.ui-toast` を対象にする。viewport には Base UI のフォーカスガード（`aria-hidden="true"` かつ `tabindex="0"` の span）があり、axe は `aria-hidden-focus` を `incomplete` と報告する。これは合格扱いにせず、フォーカスガードの読み上げ・移動への影響を実ブラウザーとスクリーンリーダーで確認する残課題として未検証のまま残す。
 
 フィクスチャーの icon-only Toggle は SVG アイコンを使う。表示文字（例：`B`）を `aria-hidden` にして別名を付ける構成は axe の `label-content-name-mismatch` が判定できず、ラベルと名前の一致（2.5.3）は手動確認の対象になる。
 
@@ -160,3 +170,21 @@ manifestに新部品や列挙値を加えて対応表を更新しないと失敗
 未コミット変更もソース内容へ含め、実行中のソース変更や添付の消失・置換も拒否する。
 手動ルールは担当役割・確認期限・追跡Issue・[実機手順](ACCESSIBILITY-MANUAL.md)を付けて
 未検証として残す。実際の発話、利用者の理解、OS配色、実ズームをエミュレーションで代用しない。
+
+
+## スクリーンリーダー出力のCI
+
+`pnpm test:a11y:screen-reader` は Guidepup で実際のスクリーンリーダーを起動する。
+再利用する browser workflow 内の必須ジョブは macos-15 / VoiceOver / headed WebKit と
+windows-2025 / NVDA / headed Firefox。OS設定は使い捨てrunner内だけで行う。
+開発端末での自動セットアップは行わない。
+
+検査対象は Field のフォーカス時の名前、Dialog をキーで開いたときの文脈、
+Escape後のトリガーへのフォーカス復帰と読み上げ。名前を置き換えた負の対照例も実行する。
+環境バージョンと発話ログを添付し、失敗・skip・timeout・証拠欠落を合格にしない。
+CIのブラウザー証拠再利用には6ブラウザージョブと2スクリーンリーダージョブの成功を要求する。
+
+これはSafariそのもの、iOS、実機タッチ、実ズーム、全コンポーネントの読み上げ、
+通知順、利用者の理解を証明しない。既存manualルールは包括的なためunverifiedのまま残す。
+この構成の追加時点ではGitHub上のGuidepup実行は未検証。初回実行の出力を確認するまで、
+対象の発話要件も検証済みとは表明しない。

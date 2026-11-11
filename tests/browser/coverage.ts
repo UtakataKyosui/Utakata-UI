@@ -49,6 +49,14 @@ export const coverage = {
       semantic: 'coverage.public-configurations',
     },
   },
+  Sheet: {
+    axes: { sides: ['top', 'right', 'bottom', 'left'] },
+    selector: '.ui-sheet__popup',
+    states: {
+      open: 'sheet.focus-containment',
+      closed: 'sheet.dismissal-focus-return',
+    },
+  },
   Badge: {
     axes: { variants: ['solid', 'outline', 'subtle', 'destructive'] },
     selector: '.ui-badge',
@@ -180,6 +188,35 @@ export const coverage = {
     states: {
       open: 'select.keyboard-selection',
       dismissed: 'select.popup-position-dismiss',
+    },
+  },
+  InputOTP: {
+    axes: {},
+    selector: '.ui-input-otp',
+    states: {
+      empty: 'input-otp.keyboard-paste',
+      complete: 'input-otp.keyboard-paste',
+      invalid: 'input-otp.invalid-state',
+      disabled: 'input-otp.target-size',
+    },
+  },
+  Combobox: {
+    axes: {},
+    selector: '.ui-combobox__input',
+    states: {
+      open: 'combobox.keyboard-selection',
+      dismissed: 'combobox.dismiss-focus',
+      composing: 'combobox.ime-browser',
+      focused: 'combobox.visual-forced',
+    },
+  },
+  Command: {
+    axes: {},
+    selector: '.ui-command',
+    states: {
+      open: 'command.keyboard-execute',
+      dismissed: 'command.dialog-focus',
+      focused: 'command.visual-forced',
     },
   },
   Slider: {

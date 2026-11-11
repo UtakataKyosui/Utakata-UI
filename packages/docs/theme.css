@@ -4,6 +4,7 @@
    Blume's chrome; the Utakata component rules sit above them. */
 @import "../../../site/generated/lism.css" layer(base);
 @import "../../../site/generated/utakata-components.css" layer(components);
+@import "../../../site/generated/lism-styling.css" layer(utilities);
 @import "../../../site/theme-tokens.css";
 
 /* Site typography; Blume loads this separately from the example iframes. */

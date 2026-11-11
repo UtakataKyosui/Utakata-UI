@@ -192,6 +192,12 @@ section[aria-label="AlertDialog states"] {
   min-width: 0;
 }
 
+section[aria-label="Sheet states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
 section[aria-label="Toast states"] {
   align-items: flex-start;
   flex-direction: column;
@@ -223,6 +229,17 @@ section[aria-label="InputGroup states"] {
 section[aria-label="InputGroup states"] .ui-field,
 section[aria-label="InputGroup states"] form {
   inline-size: 240px;
+}
+
+section[aria-label="Command states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Command states"] .ui-command {
+  inline-size: 280px;
+  max-inline-size: 100%;
 }
 
 .interaction-states {

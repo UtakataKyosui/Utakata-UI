@@ -73,6 +73,19 @@ export type {
   CollapsibleTriggerProps,
 } from './components/Collapsible.js';
 export { Collapsible } from './components/Collapsible.js';
+export type {
+  ComboboxButtonAccessibilityProps,
+  ComboboxClearProps,
+  ComboboxInputProps,
+  ComboboxRootProps,
+  ComboboxTriggerProps,
+} from './components/Combobox.js';
+export { Combobox } from './components/Combobox.js';
+export type {
+  CommandInputProps,
+  CommandRootProps,
+} from './components/Command.js';
+export { Command } from './components/Command.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
@@ -85,6 +98,12 @@ export type {
   InputGroupTextProps,
 } from './components/InputGroup.js';
 export { InputGroup } from './components/InputGroup.js';
+export type {
+  InputOTPRootProps,
+  InputOTPSeparatorProps,
+  InputOTPSlotProps,
+} from './components/InputOTP.js';
+export { InputOTP } from './components/InputOTP.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
@@ -116,6 +135,8 @@ export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
+export type { SheetPopupProps, SheetRootProps } from './components/Sheet.js';
+export { Sheet } from './components/Sheet.js';
 export type { SkeletonProps } from './components/Skeleton.js';
 export { Skeleton } from './components/Skeleton.js';
 export { Slider } from './components/Slider.js';
@@ -173,6 +194,7 @@ export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
+export type { SheetSide } from './metadata/components/Sheet.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
 export type { SpinnerSize } from './metadata/components/Spinner.js';
 export type { TextareaSize } from './metadata/components/Textarea.js';
@@ -198,3 +220,4 @@ export {
   formatQualityReport,
   qualityRules,
 } from './metadata/quality.js';
+export type { LismProps, LismStyleProps, WithLismProps } from './styling.js';

@@ -48,11 +48,15 @@ async function fixture(run) {
     }),
   );
   const invoke = (...args) =>
-    spawnSync(process.execPath, [bin, ...args], {
-      cwd,
-      encoding: 'utf8',
-      timeout: 10_000,
-    });
+    spawnSync(
+      process.execPath,
+      [bin, ...args, ...(args[0] === 'init' ? ['--no-install'] : [])],
+      {
+        cwd,
+        encoding: 'utf8',
+        timeout: 10_000,
+      },
+    );
   try {
     await run({ root, cwd, registry, item, invoke });
   } finally {

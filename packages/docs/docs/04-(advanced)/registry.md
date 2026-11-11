@@ -41,7 +41,7 @@ npx -y @utakata-ui/cli@0.1.0 add button dialog field
 
 pnpm なら `npx -y @utakata-ui/cli@0.1.0` を `pnpm dlx @utakata-ui/cli@0.1.0` に置き換えられます。CLI のバージョンは公開済みの番号を指定してください。
 
-`init` はプロジェクトルートの `utakata.json` に `schemaVersion: 1`・`registry`・`directory` を保存し、配置先に共有 CSS と LICENSE を用意します。コンポーネントはまだ追加しません。表示された依存インストール用コマンドと CSS の読み込み手順は、後述のとおり利用先で実行してください。既存のエントリーファイルは自動編集しません。
+`init` はプロジェクトルートの `utakata.json` に `schemaVersion: 1`・`registry`・`directory` を保存し、配置先に共有 CSS と LICENSE を用意して、Base UI と Lism CSS を自動インストールします。コンポーネントはまだ追加しません。CSS の import は後述のとおり追加してください。既存のエントリーファイルは自動編集しません。
 
 `init` の `--dir` / `--cwd` は `add` と共通です。以後の `list` / `add` は `--cwd` のルート（省略時は実行ディレクトリ）の設定を参照し、親ディレクトリは探索しません。`--registry` / `--dir` を明示すると保存値より優先し、設定自体は変更しません。ローカル registry はプロジェクトルートからの相対パスで保存します。`init` を使わず、従来どおり毎回 `--registry` を指定する方法も利用できます。
 
@@ -53,7 +53,7 @@ pnpm なら `npx -y @utakata-ui/cli@0.1.0` を `pnpm dlx @utakata-ui/cli@0.1.0` 
 
 ## 依存関係を追加する [#dependencies]
 
-CLI はソースを配置し、必要な依存パッケージのインストール用コマンドを表示します。package manager の実行や `package.json` の変更は行いません。表示されたコマンドを利用先で実行してください。現在の標準構成は次のとおりです。
+`init` は `packageManager` フィールド、lockfile の順に npm・pnpm・yarn・bun を判定し（未指定時は npm）、次の依存を自動追加します。`--package-manager pnpm` で指定できます。依存の lifecycle scripts は実行しません。`--no-install` で自動インストールを省略し、表示されたコマンドを実行できます。`--dry-run` はファイルも依存も変更しません。`add` は追加の依存インストールを行いません。
 
 ```sh
 pnpm add @base-ui/react@^1.9.0 lism-css@^1.1.0
@@ -130,6 +130,6 @@ node scripts/verify-cli-package.mjs /tmp/utakata-ui-cli-0.1.0.tgz
 
 初回も GitHub Actions の `Release CLI` から公開できます。npm の `@utakata-ui` スコープの公開権限を確認し、対象スコープへの公開権限と Bypass 2FA を持つ Granular Access Token を GitHub の `npm` Environment の Secret `NPM_TOKEN` に設定します。
 
-`Release CLI`（`.github/workflows/release-cli.yml`）で main を選び、`release_mode: verify`（既定）で検証後、`token` で実行して承認すると公開します。Trusted Publisher 設定後は `oidc`、または main に含まれるコミットへの `cli-vX.Y.Z` タグ push で公開します。タグと CLI の安定版バージョンは一致する必要があり、同じバージョンを手動とタグの両方で公開しないでください。設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
+通常は `packages/cli/package.json` の安定版 `version` を増やして main に反映すると、`Release CLI`（`.github/workflows/release-cli.yml`）が検証後に OIDC で自動公開します。バージョンが変わらない編集やタグ push では公開しません。手動実行では main を選び、`release_mode: verify`（既定）で検証できます。公開を手動で行う場合は `oidc`、または Environment の Token を使う `token` を選びます。同じバージョンを重複公開しないでください。設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
 
-npm Trusted Publisher は owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-cli.yml`、environment `npm` として設定します。GitHub の Environment にタグ制限がある場合は `cli-v*` を含めてください。実際の npm 公開・設定変更・docs のデプロイは、コード変更や PR の作成では実行されません。
+npm Trusted Publisher は owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-cli.yml`、environment `npm` として設定します。GitHub の `npm` Environment は branch `main` のみ許可し、手動承認を要求しません。PR の作成だけでは npm 公開は実行されず、バージョン更新の main への反映が自動公開の契機になります。

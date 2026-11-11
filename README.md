@@ -29,12 +29,12 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 docs は UI 本体をワークスペース依存として参照し、Blume の HTTP MCP でドキュメントを提供します。UI 本体は docs に依存しません。
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、Blume の MCP は manifest から生成したドキュメントを検索・取得します。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Combobox・InputOTP・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Command・Sheet・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、Blume の MCP は manifest から生成したドキュメントを検索・取得します。
 
 導入は npm パッケージで行います。
 
 ```sh
-pnpm add @utakata-ui/react
+pnpm add @utakata-ui/react lism-css
 ```
 
 ```tsx
@@ -68,6 +68,12 @@ function Example() {
 
 ## 開発
 
+DOM を描画する部品・パーツは Lism の `p`・`g`・`w`・`fz`・`bgc`・`layout` を受け取ります。
+レスポンシブ値は `Box isContainer` の内側で使います。`styles.css` に Lism 全体を含むため、CSS は 1 度だけ import します。
+`LismProps`・`LismStyleProps`・`WithLismProps` も再公開します。状態管理だけの Root・Provider・Portal・Collection はスタイル対象外で、既存の部品 Props と名前の型制約が優先します。
+`@utakata-ui/cli init` でソースを取り込む場合は Base UI と Lism CSS を自動導入します（`--no-install` で省略、`--dry-run` は変更なし）。
+導入例は日英の Docs「Lism CSS を使う」に掲載しています。独自のスタイルについては利用側でもアクセシビリティを再検証してください。
+
 ### docsのUIプレビュー
 
 Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS MEDIAの解説](https://ics.media/entry/240411/)に沿って、長いURLの折り返しと日本語の厳格な禁則処理を適用します。
@@ -82,9 +88,10 @@ Docs本体の文字組みは `packages/docs/theme.css` で設定します。[ICS
 
 `packages/react` を MIT ライセンスで公開します。ルート・docs はこのリリースの対象外です。
 GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動実行の既定 `release_mode: verify` で検証と
-パッケージ作成を行い、`token` / `oidc` を選ぶと検証後に公開します。また、`react-vX.Y.Z` タグへの push で同じ検証の後に npm へ公開します。
-タグのバージョンは `packages/react/package.json` と一致する安定版に限り、コミットは
-`main` に含まれている必要があります。手動実行は main を選択してください（他の ref はスキップします）。
+パッケージ作成を行い、`token` / `oidc` を選ぶと検証後に公開します。
+通常の公開は main への push で、対象パッケージの `package.json` の `version` が増加したときに自動実行します。
+React は `packages/react/package.json`、CLI は `packages/cli/package.json` を唯一のバージョン基準とし、タグは公開トリガーにしません。
+バージョンが変わらない依存・メタデータ変更では公開しません。手動実行は main を選択してください。
 公開するものと同じ tgz を一時的な外部プロジェクトに
 インストールし、型・SSR・CSS・manifest を確認し、Vite の production build も実行します。
 公開前には Quality と共通のブラウザー検証を light/dark 両テーマで実行します。
@@ -95,18 +102,17 @@ GitHub Actions の `Release React`（`.github/workflows/release.yml`）は手動
 [npm 公開の設定手順](.github/NPM-PUBLISHING.md) を参照してください。
 
 1. npm で `@utakata-ui` スコープの所有・公開権限と名前の利用可否を確認します。
-2. GitHub に `npm` Environment を作成し、承認者と検証用の `main`、公開用の `react-v*` タグの制限を設定します。
+2. GitHub の `npm` Environment は branch `main` だけを許可します。自動公開では公開時の手動承認を使わず、main の PR 品質ゲートで変更を検証します。
 3. 初回は Granular Access Token（対象スコープへの公開権限と Bypass 2FA）を発行し、
    `npm` Environment の Secret `NPM_TOKEN` に保存します。
-   Actions の `Release React` を main・`release_mode: verify` で確認後、`token` で実行して承認します。
+   Actions の `Release React` を main・`release_mode: verify` で確認後、`token` で実行します。
 4. npm のパッケージ設定に Trusted Publisher を登録します。
    GitHub owner は `UtakataKyosui`、repository は `Utakata-UI`、workflow filename は
    `release.yml`、environment は `npm` とし、`npm publish` の許可を有効にします。
    新しい設定は有効期限があるため、次の公開の直前に登録してください。
 
-以後はバージョンを更新した変更を main にマージし、`verify` で確認後に `oidc` で公開します。
-または、そのコミットに `react-vX.Y.Z` タグを付けて push します。
-手動公開と同じバージョンのタグでは再公開しません。公開済みのバージョンは再利用できません。
+以後は対象の package.json の `version` を更新し、main にマージすると、検証後に OIDC で自動公開します。
+現在の version をそのまま手動公開することもできますが、公開済みバージョンは再利用できません。
 通常は OIDC を使い、初回用 Token は GitHub Environment Secret で管理します。
 認証情報をリポジトリに保存しません。
 CI は npm 11.5.1 以降を確認し、公開リポジトリでは provenance も付与します。
@@ -138,8 +144,8 @@ shadcn CLI・`components.json` を使用しません。`init` で `utakata.json`
 JSON を生成します。CLI の npm 公開と docs のデプロイの両方が必要です。
 導入・ローカル確認・公開手順は [専用 registry ガイド](packages/docs/docs/04-(advanced)/registry.md) を参照してください。
 `Release CLI`（`.github/workflows/release-cli.yml`）の手動実行は `verify`（既定）で検証のみ、`token` / `oidc` で公開、
-`cli-vX.Y.Z` タグへの push は検証後に公開します。npm Trusted Publisher は
-`release-cli.yml` 用に設定し、Environment のタグ制限にも `cli-v*` を含めてください。
+`packages/cli/package.json` の version 増加が main に入ると検証後に自動公開します。npm Trusted Publisher は
+`release-cli.yml` 用に設定し、Environment は main のみに制限します。
 
 ### Claude Code / Codex
 

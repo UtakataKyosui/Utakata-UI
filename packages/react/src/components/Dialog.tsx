@@ -7,75 +7,83 @@ import {
   forwardRef,
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-type DialogPartProps<T extends ElementType> = ComponentPropsWithoutRef<T> & {
-  className?: string;
-};
+type DialogPartProps<T extends ElementType> = WithLismProps<
+  ComponentPropsWithoutRef<T> & {
+    className?: string;
+  }
+>;
 
 function withClassName(className: string, extraClassName?: string) {
   return [className, extraClassName].filter(Boolean).join(' ');
 }
 
-const Backdrop = forwardRef<
-  HTMLDivElement,
-  DialogPartProps<typeof BaseDialog.Backdrop>
->(function DialogBackdrop({ className, ...props }, ref) {
-  return (
-    <BaseDialog.Backdrop
-      {...props}
-      ref={ref}
-      className={withClassName('ui-dialog__backdrop', className)}
-    />
-  );
-});
+const Backdrop = withLism(
+  forwardRef<HTMLDivElement, DialogPartProps<typeof BaseDialog.Backdrop>>(
+    function DialogBackdrop({ className, ...props }, ref) {
+      return (
+        <BaseDialog.Backdrop
+          {...props}
+          ref={ref}
+          className={withClassName('ui-dialog__backdrop', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Popup = forwardRef<
-  HTMLDivElement,
-  DialogPartProps<typeof BaseDialog.Popup>
->(function DialogPopup({ className, ...props }, ref) {
-  const accessibilityRef = useAccessibilityRef('Dialog.Popup', ref);
-  return (
-    <BaseDialog.Popup
-      {...props}
-      ref={accessibilityRef}
-      className={withClassName('ui-dialog__popup', className)}
-    />
-  );
-});
+const Popup = withLism(
+  forwardRef<HTMLDivElement, DialogPartProps<typeof BaseDialog.Popup>>(
+    function DialogPopup({ className, ...props }, ref) {
+      const accessibilityRef = useAccessibilityRef('Dialog.Popup', ref);
+      return (
+        <BaseDialog.Popup
+          {...props}
+          ref={accessibilityRef}
+          className={withClassName('ui-dialog__popup', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Title = forwardRef<
-  HTMLHeadingElement,
-  DialogPartProps<typeof BaseDialog.Title>
->(function DialogTitle({ className, ...props }, ref) {
-  return (
-    <BaseDialog.Title
-      {...props}
-      ref={ref}
-      className={withClassName('ui-dialog__title', className)}
-    />
-  );
-});
+const Title = withLism(
+  forwardRef<HTMLHeadingElement, DialogPartProps<typeof BaseDialog.Title>>(
+    function DialogTitle({ className, ...props }, ref) {
+      return (
+        <BaseDialog.Title
+          {...props}
+          ref={ref}
+          className={withClassName('ui-dialog__title', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Description = forwardRef<
-  HTMLParagraphElement,
-  DialogPartProps<typeof BaseDialog.Description>
->(function DialogDescription({ className, ...props }, ref) {
-  return (
-    <BaseDialog.Description
-      {...props}
-      ref={ref}
-      className={withClassName('ui-dialog__description', className)}
-    />
-  );
-});
+const Description = withLism(
+  forwardRef<
+    HTMLParagraphElement,
+    DialogPartProps<typeof BaseDialog.Description>
+  >(function DialogDescription({ className, ...props }, ref) {
+    return (
+      <BaseDialog.Description
+        {...props}
+        ref={ref}
+        className={withClassName('ui-dialog__description', className)}
+      />
+    );
+  }),
+);
 
 export const Dialog = {
   Root: BaseDialog.Root,
-  Trigger: BaseDialog.Trigger,
+  Trigger: withLism(BaseDialog.Trigger),
   Portal: BaseDialog.Portal,
   Backdrop,
   Popup,
   Title,
   Description,
-  Close: BaseDialog.Close,
+  Close: withLism(BaseDialog.Close),
 };

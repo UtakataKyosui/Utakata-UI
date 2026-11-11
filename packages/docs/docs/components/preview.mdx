@@ -188,6 +188,21 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="select" />
 
+## InputOTP [#input-otp]
+
+詳しい使い方とAPIは[InputOTP](/components/inputotp)を参照してください。
+
+複数桁のワンタイムコードを入力する例です。貼り付けや自動入力で各桁に振り分け、矢印キー・Home/Endで桁を移動し、Backspaceで削除します。`Field.Label`が最初の桁の名前になり、2桁目以降は`getSlotLabel`で桁の位置を伝えます。コードが揃っても自動送信はしません。
+
+<Component path="inputotp" />
+## Combobox [#combobox]
+
+詳しい使い方とAPIは[Combobox](/components/combobox)を参照してください。
+
+入力して候補を絞り込む単一選択です。フォーカスは常に入力欄に残り、矢印キーでハイライトを移し、Enterで選択、Escapeでポップアップを閉じます（閉じた状態でのEscapeは入力と選択を消去します）。日本語入力の変換を確定するEnterでは選択しません。`Field.Label`などで入力欄に名前を付け、`Combobox.Empty`に候補なしの文言を入れます。`Combobox.Trigger`と`Combobox.Clear`はTabキーの移動先に含まれないポインター用のボタンで、`aria-label`が必須です。複数選択・非同期の候補・自由入力の値は対象外です。固定の候補にはSelect、ネイティブのピッカーにはNativeSelectを使います。
+
+<Component path="combobox" />
+
 ## Slider [#slider]
 
 詳しい使い方とAPIは[Slider](/components/slider)を参照してください。
@@ -259,6 +274,21 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 削除など重要な操作の確認です。開くとキャンセルにフォーカスし、外側をクリックしても閉じません。Escapeキーかキャンセルで閉じ、フォーカスは元のボタンに戻ります。
 
 <Component path="alertdialog" />
+
+## Command [#command]
+
+詳しい使い方とAPIは[Command](/components/command)を参照してください。
+
+検索して実行する、常に表示されるコマンド一覧です。ポップアップも選択値もなく、`Command.Item`の`onClick`で実行します（クリックと、ハイライト中のEnter）。`Dialog`の中に置くとコマンドパレットになり、`onClick`で`Dialog`を閉じるとフォーカスは開いたボタンに戻ります。フォーカスは常に入力欄に残り、矢印キーでハイライトを移します。入力欄には`aria-label`などで名前を付け、`Command.Empty`に該当なしの文言を入れます。Ctrl/Cmd+Kなどでパレットを開くショートカットは利用側の責任で実装し、ショートカットがなくても開ける操作を残してください。値を選んで送信する場合は`Combobox`、検索のない固定の候補には`Select`を使います。
+
+<Component path="command" />
+## Sheet [#sheet]
+
+詳しい使い方とAPIは[Sheet](/components/sheet)を参照してください。
+
+Dialogを基にした、上・右・下・左の端に付くモーダルのパネルです。`side`で端を選びます（既定は`right`）。Tabキーの移動はパネル内にとどまり、Escape・`Sheet.Close`・背景の押下で閉じてフォーカスはTriggerに戻ります。内容が長いときはパネル内でスクロールし、動きを減らす設定ではスライドの遷移を行いません。`Sheet.Title`と見える`Sheet.Close`を必ず用意してください。
+
+<Component path="sheet" />
 
 ## Toast [#toast]
 

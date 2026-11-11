@@ -1,15 +1,43 @@
 # CI execution policy
 
-Quality always starts on PR updates so the `accessibility` aggregate check can
-report a result even for documentation-only changes. It does not use workflow
-path filters that could leave a required check pending. Superseded runs cancel.
-PRs compare the complete merge-base diff, including removed/renamed paths.
-Main pushes compare against the newest main commit whose Quality `push` or
-`workflow_dispatch` run succeeded, provided it is an ancestor created within
-14 days. Each successful main run therefore extends verification inductively;
-an unchanged commit runs no gates. The 14-day bound applies to each link, not
-to the original evidence of a skipped gate. A missing, failed, expired or
-unreadable prior run gives full gates. Manual runs always execute all gates.
+Quality always starts on PR updates and main pushes so the required
+`accessibility` check always reports. Scope selection first runs the dependency-free
+CI regression suite. No required check is hidden behind workflow path filters.
+
+Each gate hashes its committed inputs, including dependency pins, CI policy,
+verification code, file paths/modes and deleted files. The small
+`ci-verification-<attempt>` artifact records the tested tree, run, attempt,
+results and expiration. A later PR update or merge can reuse a successful gate
+with identical inputs; main does not repeat tests just because its commit SHA
+is a merge commit. Releases can reuse complete Quality evidence for the exact
+tested tree and the actual eight-job browser evidence for identical browser
+inputs. Every newly published archive is still built, packed and tested.
+
+Only completed runs from this repository, targeting main, are eligible. Forks,
+untrusted events, forged hashes, unavailable artifacts, incomplete matrices and
+expired evidence cannot provide a pass. Artifact hashes are recomputed against
+GitHub's run head. A PR whose tested merge tree differs from its head is
+conservatively ineligible. A newer failed matching gate invalidates an older
+green result. Lookup errors run the gates; failed or unverified required work
+still blocks the aggregate. The summary links the original run and attempt.
+
+Incremental runs inherit only a complete, unexpired tested baseline. An unknown
+baseline runs all gates. Inherited evidence keeps the earliest original expiry;
+re-exporting does not extend its 14-day lifetime. Manual Quality runs and release
+`full_verification` bypass reuse. Fallow remains a fresh PR diff audit.
+
+To verify reuse on a PR, wait for a passing Quality run with a
+`ci-verification-<attempt>` artifact, then push an edit limited to this CI guide.
+In the next run's **CI execution plan**, confirm that the changed documentation
+is checked and that any reused unit, build, docs, or browser gate links to the
+earlier run and attempt. The aggregate `accessibility` check must still pass.
+
+A stable version-only edit to the React manifest runs lint, React build/packed
+consumers and Docs/registry generation, without unrelated unit/browser jobs.
+Dependency, export, script, engine or other metadata changes retain full gates.
+Browser input hashes omit only the React distribution version; all remaining
+manifest fields still invalidate browser evidence. No tests are skipped merely
+because a component was not added.
 
 `scripts/ci-scope.mjs` selects independent checks/unit/build/docs/browser/fallow jobs:
 
@@ -49,8 +77,7 @@ The separate build job caches npm's download cache
 for the isolated packed consumer test. No dist, node_modules or test results
 are reused as verification evidence. Browser downloads cache the headless shell
 by exact Playwright version, OS and architecture. OS libraries are installed
-on every browser job; the cache does not establish that they exist. Only Chromium
-headless is downloaded. `browser.yml` runs light/dark as two independent matrix
+on every browser job; the cache does not establish that they exist. Each browser job downloads only its selected engine (Chromium uses the headless shell). `browser.yml` runs Chromium, Firefox and WebKit light/dark as six independent matrix
 jobs, with `fail-fast: false` to retain both sets of evidence. Each uses two
 workers and zero retries. Its five-minute suite timeout leaves time for setup
 and evidence upload within the ten-minute job limit. The job records elapsed
@@ -63,21 +90,16 @@ Artifacts are uploaded only after the test step runs. Release React calls the
 same browser workflow and cannot publish if either theme fails. Manual main
 release runs default to `release_mode: verify`; explicit `token` or `oidc` modes publish after verification.
 
-Release workflows split into `prior`, `verify` (`pnpm check` and the Docs
-compiler), the React browser gate, and `release`. `scripts/prior-verification.mjs`
-skips a gate only when a completed main `push`/`workflow_dispatch` run passed it
-on an ancestor commit created within 14 days (the browser artifact retention), and
-the diff from that commit to HEAD does not select it: any change reruns
-`pnpm check`; browser checks rerun when `ci-scope.mjs` selects browser. Accepted
-`checks` evidence is a successful main Quality run or a release run's successful
-`verify` job. Accepted browser evidence is a run whose two browser jobs both
-succeeded in that run, so an incremental main run that skipped them never counts
-and the 14-day bound applies to the browser artifacts themselves. Release
-evidence counts even when its publication failed. PR runs are scoped and
-never count. Lookup errors, missing runs and `full_verification: true` run every
-gate. The step summary names the reused run, attempt and commit. `release`
-requires each gate to have passed in this run or to be reused, and always
-rebuilds, packs and tests the exact archive it publishes.
+Release workflows split into version selection, `prior`, optional verification,
+and the final publication job. `scripts/prior-verification.mjs` first checks the
+same immutable input evidence as Quality, including successful same-repository
+PR runs. It falls back conservatively to release ancestor runs with actual
+passing verification jobs when no input proof applies. An aggregate-only Quality
+result cannot replace a missing input artifact. Browser proof requires all six engine /
+theme jobs and both native reader jobs; an incremental main run that skipped
+these jobs cannot masquerade as fresh browser evidence. API, identity, artifact
+or coverage errors rerun verification. Publication always tests the exact tgz it
+publishes; downloaded verification evidence is never used as a build artifact.
 
 The browser fixture is built once per job and served with Vite preview. It has
 no development optimizer that can reload a page during the first test. Unit
@@ -155,7 +177,7 @@ readiness.
 For account/scope setup, GitHub Environment protection, initial Actions publication,
 per-package Trusted Publisher values, and optional token/Secrets handling, see
 [npm publishing setup](NPM-PUBLISHING.md). Release workflows default to verification. Manual `token` mode uses only the npm
-Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and tag pushes
+Environment secret `NPM_TOKEN` at publication; manual `oidc` mode and version-changing main pushes
 use Trusted Publishing. Initial publication needs no local login.
 
 The reviewable `.github/required-checks.ruleset.json` requires the always
@@ -164,9 +186,10 @@ actors. Applying it changes remote merge policy and requires confirmation under
 AGENTS.md. After explicit user approval on 2026-11-10 JST, ruleset `26865507`
 was applied and read back: active on `refs/heads/main`, strict `accessibility`
 check from GitHub Actions (integration 15368), no bypass actors. This remote
-setting is not applied automatically by a source PR. The `npm` environment should require
-the repository owner's review; scope ownership and the npm publisher binding
-remain external prerequisites. No npm/environment/publisher settings were changed.
+setting is not applied automatically by a source PR. The `npm` environment now
+permits only the main branch and has no manual reviewer gate, following the
+user's explicit approval on 2026-11-11 JST. Scope ownership and the npm publisher
+binding remain external prerequisites; no Secrets or publisher settings changed.
 
 Blume hosts the documentation MCP at `/api/mcp`; it has no separate npm
 package or release workflow. The Docs build verifies generated agent Markdown
@@ -182,7 +205,7 @@ the unit job. The build job also packs and installs it into an isolated
 consumer, then tests package-name execution, catalog listing, dry-run, source
 installation and repeated installs. Docs builds verify the registry's import
 graph and typecheck valid/invalid consumer code installed through the CLI.
-`Release CLI` uses `cli-vX.Y.Z` tags and its own `release-cli.yml` Trusted
+`Release CLI` uses version-changing main pushes for `packages/cli/package.json` and its own `release-cli.yml` Trusted
 Publisher. It does not require a published React package; sources are fetched
 from the separately hosted Utakata UI registry.
 
@@ -244,3 +267,72 @@ These results describe this working tree, not a GitHub run or released version.
   assistive-technology output, OS modes and browser zoom remain unverified.
 
 No repository settings, registry settings, tags or releases were changed.
+
+
+## Browser and assistive-output extension
+
+Chromium retains the complete browser suite. `playwright.cross-browser.config.ts`
+runs the bounded Button/Field/Dialog foundation contract and detector controls on
+Firefox/WebKit, light/dark. This does not extend all Chromium component/IME/
+forced-color coverage to those engines. Each job preserves its own ledger and
+14-day artifacts; missing/skipped/failed required cases fail the reusable gate.
+
+The same reusable workflow runs Guidepup in serial on each disposable macos-15
+(VoiceOver + headed WebKit) and windows-2025 (NVDA + headed Firefox) runner.
+Setup and asset installation use the exact dev dependencies in pnpm-lock.yaml.
+These jobs are required by Quality and React release through the existing
+browser-accessibility aggregate. Prior evidence must include all eight jobs;
+older Chromium-only evidence cannot skip this gate. There is no continue-on-error.
+Output tests retain the actual reader transcript, reader/browser/OS versions,
+commit and source fingerprint. WebKit is not Safari; no iOS or comprehension
+claim follows. The broad residual manual rules remain unverified.
+
+Local extension verification: WebKit light/dark foundation and negative controls
+passed (34 cases). Firefox could not launch its temporary profile on this Mac;
+Firefox behavior and the OS screen reader jobs remain unverified until executed
+in their respective runners. Workflow definitions are not execution evidence.
+
+
+## Non-component PRs and the required aggregate
+
+Docs configuration/assets, prose, agent instructions and CLI-only changes do not
+require browser or screen reader jobs unless another changed path selects them.
+The `accessibility` aggregate is the required **overall quality check**, so a
+formatting/type/build failure still fails it on a non-component PR. Irrelevant
+skipped jobs are accepted; required missing/skipped/failed jobs remain failures.
+Regression tests combine the real scope selector and aggregate for these cases,
+including Docs icon/config changes, and ensure real failures still block merging.
+
+PR #138's run 42849682829 failed Biome formatting in
+`packages/docs/blume.config.ts`; its browser gate was correctly skipped. Format
+that config without changing its values rather than weakening merge protection.
+No remote ruleset or required-check settings are changed by this work.
+
+
+The aggregate logs each job's result and whether the changed paths require it,
+and writes the same explanation to the Actions step summary. A failed Docs lint
+job is therefore reported as `checks: failure; required for this change`; a skipped
+browser/screen-reader workflow on that PR is explicitly `not required`. Scope
+selection failures and missing/invalid outputs remain hard failures.
+
+
+## package.json-driven publication
+
+Release React and Release CLI run automatically on main pushes that touch their
+own package.json. `release-version.mjs` compares the exact push-before manifest
+with the checked-out manifest: only a stable version increase selects release.
+Unchanged versions skip all publication work; a missing comparison base, name
+mismatch or version decrease fails closed. Versions and archive filenames come
+only from package.json; tag events no longer publish. Manual verify/token/oidc
+remain available on main. No package version was bumped as part of this change.
+
+The user approved removing npm Environment's reviewer gate while retaining main
+restriction on 2026-11-11 JST. Remote readback confirms only main is allowed and
+no required reviewer remains; no Secrets or npm publisher settings were changed.
+The readiness preflight checks that new policy rather than requiring a reviewer.
+
+Client-only Vite fixtures and the generated createRoot consumer suppress only
+the known MODULE_LEVEL_DIRECTIVE warning for use client. Other warnings, including
+use server, still use the default logger. Public library files are emitted by
+tsc without bundling; packed consumer verification checks that every source client
+boundary is present in its shipped JS. No directive is removed from the package.

@@ -2,5 +2,5 @@ import { defineMeta } from 'blume';
 
 export default defineMeta({
   title: 'Getting started',
-  pages: ['getting-started', 'theming'],
+  pages: ['getting-started', 'lism', 'theming'],
 });

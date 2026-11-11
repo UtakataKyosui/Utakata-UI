@@ -6,6 +6,12 @@ export const maxReuseAgeMs = 14 * 24 * 60 * 60 * 1000;
 const browserJobs = [
   'browser-accessibility / browser (chromium-light)',
   'browser-accessibility / browser (chromium-dark)',
+  'browser-accessibility / browser (firefox-light)',
+  'browser-accessibility / browser (firefox-dark)',
+  'browser-accessibility / browser (webkit-light)',
+  'browser-accessibility / browser (webkit-dark)',
+  'browser-accessibility / screen-reader (voiceover-webkit)',
+  'browser-accessibility / screen-reader (nvda-firefox)',
 ];
 
 // Main pushes diff against the newest verified ancestor; none means full gates.
@@ -33,7 +39,7 @@ function trustedMainRun(run) {
 }
 
 // Incremental main runs succeed with irrelevant gates skipped. A run verifies
-// the whole tree inductively, but browser evidence exists only where both
+// the whole tree inductively, but browser evidence exists only where all browser and screen reader
 // browser jobs ran, so its age bound applies to that run itself.
 export function qualityCandidate(run, jobs = []) {
   if (!trustedMainRun(run) || run.conclusion !== 'success') return null;
@@ -72,7 +78,7 @@ function api(path) {
   return JSON.parse(execFileSync('gh', ['api', path], { encoding: 'utf8' }));
 }
 
-export function collectCandidates(repository, workflow) {
+export function collectCandidates(repository, workflow, includeQuality = true) {
   const runs = (file, filter = '') =>
     api(
       `repos/${repository}/actions/workflows/${file}/runs?status=completed&per_page=20${filter}`,
@@ -82,7 +88,7 @@ export function collectCandidates(repository, workflow) {
   const release = runs(workflow).flatMap(
     (run) => releaseCandidate(run, jobs(run), workflow) ?? [],
   );
-  const quality = runs('quality.yml', '&branch=main')
+  const quality = (includeQuality ? runs('quality.yml', '&branch=main') : [])
     .filter((run) => run.conclusion === 'success')
     .flatMap((run) => qualityCandidate(run, jobs(run)) ?? []);
   return [...release, ...quality].sort(

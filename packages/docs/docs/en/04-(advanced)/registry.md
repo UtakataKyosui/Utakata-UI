@@ -41,7 +41,7 @@ npx -y @utakata-ui/cli@0.1.0 add button dialog field
 
 With pnpm, you can replace `npx -y @utakata-ui/cli@0.1.0` with `pnpm dlx @utakata-ui/cli@0.1.0`. Specify a published CLI version.
 
-`init` saves `schemaVersion: 1`, `registry` and `directory` in `utakata.json` at the project root and copies shared CSS and LICENSE into the target directory. It does not add components yet. Run the printed dependency installation command and import the CSS as described below. Existing application entry files are not edited automatically.
+`init` saves `schemaVersion: 1`, `registry` and `directory` in `utakata.json`, copies shared CSS and LICENSE, and automatically installs Base UI and Lism CSS. It does not add components yet. Add the CSS import as described below. Existing application entry files are not edited automatically.
 
 `init` supports the same `--dir` / `--cwd` flags as `add`. Subsequent `list` / `add` commands read settings only from the `--cwd` root (the current directory by default); they do not search parent directories. Explicit `--registry` / `--dir` flags override saved values without updating the configuration. Local registry paths are saved relative to the project root. You can also skip `init` and continue passing `--registry` on each command.
 
@@ -53,7 +53,7 @@ Component names are the lowercase names from the [component list](/en/components
 
 ## Add dependencies [#dependencies]
 
-The CLI places the source and prints the command to install the required dependencies. It does not run a package manager or change `package.json`. Run the printed command in your project. The current standard setup is:
+`init` selects npm, pnpm, yarn or bun from the `packageManager` field, then the lockfile, falling back to npm. Select one with `--package-manager pnpm`. It automatically adds the dependencies below without running dependency lifecycle scripts. Use `--no-install` to print the command without running it; `--dry-run` leaves files and dependencies unchanged. `add` does not install additional dependencies.
 
 ```sh
 pnpm add @base-ui/react@^1.9.0 lism-css@^1.1.0
@@ -130,6 +130,6 @@ node scripts/verify-cli-package.mjs /tmp/utakata-ui-cli-0.1.0.tgz
 
 The first release can also be published from the GitHub Actions `Release CLI` workflow. Confirm publish rights for the `@utakata-ui` npm scope, and set a Granular Access Token with publish rights for the scope and Bypass 2FA as the `NPM_TOKEN` secret in the GitHub `npm` environment.
 
-In `Release CLI` (`.github/workflows/release-cli.yml`), select main, verify with `release_mode: verify` (the default), then run with `token` and approve to publish. After configuring a Trusted Publisher, publish with `oidc` or by pushing a `cli-vX.Y.Z` tag to a commit on main. The tag must match the stable CLI version, and do not publish the same version both manually and with a tag. See the [repository publishing guide](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) for details.
+Increase the stable `version` in `packages/cli/package.json` and land it on main. `Release CLI` (`.github/workflows/release-cli.yml`) verifies and automatically publishes that version with OIDC. Edits without a version change and tag pushes do not publish. For a manual check, select main and `release_mode: verify` (the default). Manual publication uses `oidc`, or `token` with the Environment token. Do not publish the same version twice. See the [repository publishing guide](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) for details.
 
-Configure the npm Trusted Publisher with owner `UtakataKyosui`, repository `Utakata-UI`, workflow `release-cli.yml` and environment `npm`. If the GitHub environment has tag restrictions, include `cli-v*`. Actual npm publication, settings changes and docs deployment are never run by code changes or by creating a PR.
+Configure the npm Trusted Publisher with owner `UtakataKyosui`, repository `Utakata-UI`, workflow `release-cli.yml` and environment `npm`. The GitHub `npm` Environment permits only the main branch and requires no manual approval. Creating a PR does not publish; landing a version increase on main triggers automatic publication.

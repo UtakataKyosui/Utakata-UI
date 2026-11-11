@@ -1,3 +1,11 @@
+@layer lism-base,
+  utakata.tokens,
+  utakata.components,
+  lism-block,
+  lism-trait,
+  lism-primitive,
+  lism-custom,
+  lism-utility;
 @import "lism-css/main.css";
 
 @layer utakata.tokens, utakata.components;
@@ -274,6 +282,102 @@
 
   .ui-dialog__description {
     color: var(--ui-color-muted);
+  }
+
+  .ui-command {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  .ui-command__input {
+    background: transparent;
+    border: 0;
+    border-block-end: 1px solid var(--ui-color-border);
+    box-sizing: border-box;
+    color: inherit;
+    font: inherit;
+    inline-size: 100%;
+    min-block-size: 2.75rem;
+    min-inline-size: 0;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .ui-command__input::placeholder {
+    color: var(--ui-color-muted);
+    opacity: 1;
+  }
+
+  /* A transparent outline becomes a visible system color in forced colors. */
+  .ui-command__input:focus-visible {
+    box-shadow: inset var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+  }
+
+  .ui-command__list {
+    box-sizing: border-box;
+    max-block-size: min(20rem, 60vh);
+    outline: 0;
+    overflow-y: auto;
+    padding: 0.25rem;
+  }
+
+  /* The status region stays mounted so announcements work; only pad it when it has text. */
+  .ui-command__empty:not(:empty) {
+    color: var(--ui-color-muted);
+    padding: 1rem 0.5rem;
+    text-align: center;
+  }
+
+  .ui-command__group-label {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.375rem 0.5rem 0.125rem;
+  }
+
+  .ui-command__item {
+    align-items: center;
+    border-radius: calc(var(--ui-radius-control) - 0.125rem);
+    cursor: default;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    min-block-size: 2rem;
+    outline: 0;
+    overflow-wrap: anywhere;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .ui-command__item[data-highlighted] {
+    background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: -2px;
+  }
+
+  .ui-command__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-command__separator {
+    background: var(--ui-color-border);
+    block-size: 1px;
+    margin: 0.25rem -0.25rem;
+  }
+
+  .ui-command__shortcut {
+    color: var(--ui-color-muted);
+    flex: none;
+    font-size: 0.875rem;
   }
 
   .ui-kbd {
@@ -768,7 +872,8 @@
   /* forms-basic */
   .ui-input,
   .ui-textarea,
-  .ui-native-select__control {
+  .ui-native-select__control,
+  .ui-combobox__input {
     background: var(--ui-color-surface);
     border: 1px solid var(--ui-color-border);
     border-radius: var(--ui-radius-control);
@@ -780,7 +885,8 @@
   }
 
   .ui-input::placeholder,
-  .ui-textarea::placeholder {
+  .ui-textarea::placeholder,
+  .ui-combobox__input::placeholder {
     color: var(--ui-color-muted);
     opacity: 1;
   }
@@ -789,6 +895,7 @@
   .ui-input:focus-visible,
   .ui-textarea:focus-visible,
   .ui-native-select__control:focus-visible,
+  .ui-combobox__input:focus-visible,
   .ui-checkbox:focus-visible,
   .ui-switch:focus-visible {
     box-shadow: var(--ui-focus-ring);
@@ -797,13 +904,15 @@
   }
 
   .ui-input:read-only,
-  .ui-textarea:read-only {
+  .ui-textarea:read-only,
+  .ui-combobox__input:read-only {
     border-style: dashed;
   }
 
   .ui-input:disabled,
   .ui-textarea:disabled,
-  .ui-native-select__control:disabled {
+  .ui-native-select__control:disabled,
+  .ui-combobox__input:disabled {
     border-style: solid;
     cursor: not-allowed;
     opacity: 0.55;
@@ -815,6 +924,8 @@
   .ui-textarea[aria-invalid="true"],
   .ui-native-select__control[data-invalid],
   .ui-native-select__control[aria-invalid="true"],
+  .ui-combobox__input[data-invalid],
+  .ui-combobox__input[aria-invalid="true"],
   .ui-checkbox[data-invalid],
   .ui-switch[data-invalid] {
     border-color: var(--ui-color-danger);
@@ -853,6 +964,55 @@
   .ui-input--lg,
   .ui-native-select--lg > .ui-native-select__control {
     min-block-size: 3rem;
+  }
+
+  .ui-input-otp {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .ui-input-otp__slot {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    font: inherit;
+    font-size: 1.25rem;
+    inline-size: 2.5rem;
+    min-block-size: 3rem;
+    padding: 0;
+    text-align: center;
+  }
+
+  .ui-input-otp__slot:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+  }
+
+  .ui-input-otp__slot:read-only {
+    border-style: dashed;
+  }
+
+  .ui-input-otp__slot:disabled {
+    border-style: solid;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-input-otp__slot[data-invalid],
+  .ui-input-otp__slot[aria-invalid="true"] {
+    border-color: var(--ui-color-danger);
+    border-width: 2px;
+  }
+
+  .ui-input-otp__separator {
+    background: var(--ui-color-border);
+    block-size: 1px;
+    inline-size: 0.75rem;
   }
 
   .ui-textarea {
@@ -1141,6 +1301,177 @@
   }
 
   .ui-select__group-label {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.375rem 0.5rem 0.125rem;
+  }
+
+  /* Combobox: a bare input keeps the shared field frame; inside the input group the group draws the frame and the input stays borderless. */
+  .ui-combobox__input-group {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-combobox__input {
+    min-block-size: 2.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .ui-combobox__input-group .ui-combobox__input {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: inherit;
+    flex: 1 1 0%;
+    /* A zero width keeps the intrinsic input width out of the grid track sizing. */
+    inline-size: 0;
+    min-inline-size: 0;
+    outline: none;
+  }
+
+  /* Focus, read-only, disabled and invalid states of the input move to the frame. */
+  .ui-combobox__input-group:has(.ui-combobox__input:focus-visible) {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  .ui-combobox__input-group:has(.ui-combobox__input:read-only) {
+    border-style: dashed;
+  }
+
+  .ui-combobox__input-group:has(.ui-combobox__input:disabled) {
+    border-color: color-mix(in srgb, var(--ui-color-border) 55%, transparent);
+    border-style: solid;
+    cursor: not-allowed;
+  }
+
+  .ui-combobox__input-group:has(
+    .ui-combobox__input[data-invalid],
+    .ui-combobox__input[aria-invalid="true"]
+  ) {
+    border-color: var(--ui-color-danger);
+  }
+
+  .ui-combobox__trigger,
+  .ui-combobox__clear {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: calc(var(--ui-radius-control) - 0.125rem);
+    color: var(--ui-color-muted);
+    cursor: pointer;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font: inherit;
+    justify-content: center;
+    min-block-size: 2rem;
+    min-inline-size: 2rem;
+    padding: 0;
+  }
+
+  @media (hover: hover) {
+    .ui-combobox__trigger:hover,
+    .ui-combobox__clear:hover {
+      color: var(--ui-color-text);
+    }
+  }
+
+  .ui-combobox__trigger:focus-visible,
+  .ui-combobox__clear:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 0;
+  }
+
+  .ui-combobox__trigger:disabled,
+  .ui-combobox__clear:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* Without children, CSS draws the chevron and the clear mark. */
+  .ui-combobox__trigger:empty::before {
+    block-size: 0.5rem;
+    border-block-end: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    content: "";
+    inline-size: 0.5rem;
+    transform: translateY(-25%) rotate(45deg);
+  }
+
+  .ui-combobox__clear:empty::before {
+    content: "×" / "";
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .ui-combobox__positioner {
+    outline: 0;
+    z-index: 50;
+  }
+
+  .ui-combobox__popup {
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    max-block-size: var(--available-height, 20rem);
+    min-inline-size: var(--anchor-width, 10rem);
+    overflow-y: auto;
+    padding: 0.25rem;
+  }
+
+  .ui-combobox__list {
+    outline: 0;
+  }
+
+  /* The status region stays mounted so announcements work; only pad it when it has text. */
+  .ui-combobox__empty:not(:empty) {
+    color: var(--ui-color-muted);
+    padding: 0.5rem;
+  }
+
+  .ui-combobox__item {
+    align-items: center;
+    border-radius: calc(var(--ui-radius-control) - 0.125rem);
+    cursor: default;
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: 1fr 1rem;
+    min-block-size: 2rem;
+    outline: 0;
+    overflow-wrap: anywhere;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .ui-combobox__item[data-highlighted] {
+    background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: -2px;
+  }
+
+  .ui-combobox__item[data-disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  /* Default selection mark when ItemIndicator has no children. */
+  .ui-combobox__item-indicator:empty::before {
+    content: "✓" / "";
+  }
+
+  .ui-combobox__group-label {
     color: var(--ui-color-muted);
     font-size: 0.875rem;
     font-weight: 600;
@@ -2249,6 +2580,79 @@
     max-width: min(90vw, 28rem);
   }
 
+  /*
+   * Sheet reuses the Dialog popup and attaches it to one viewport edge.
+   * --ui-sheet-size is the width of left/right sheets and the maximum height
+   * of top/bottom sheets. Edges are physical: left stays left in RTL.
+   */
+  .ui-sheet__popup {
+    border-radius: 0;
+    bottom: auto;
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    left: auto;
+    max-height: none;
+    max-width: none;
+    overflow: auto;
+    overscroll-behavior: contain;
+    right: auto;
+    top: auto;
+    transform: none;
+    transition: transform 200ms ease;
+    width: auto;
+  }
+
+  .ui-sheet__popup--left,
+  .ui-sheet__popup--right {
+    bottom: 0;
+    max-width: calc(100% - 2rem);
+    top: 0;
+    width: var(--ui-sheet-size, 24rem);
+  }
+
+  .ui-sheet__popup--left {
+    left: 0;
+  }
+
+  .ui-sheet__popup--right {
+    right: 0;
+  }
+
+  .ui-sheet__popup--top,
+  .ui-sheet__popup--bottom {
+    left: 0;
+    max-height: min(var(--ui-sheet-size, 24rem), calc(100dvh - 2rem));
+    right: 0;
+  }
+
+  .ui-sheet__popup--top {
+    top: 0;
+  }
+
+  .ui-sheet__popup--bottom {
+    bottom: 0;
+  }
+
+  .ui-sheet__popup--left[data-starting-style],
+  .ui-sheet__popup--left[data-ending-style] {
+    transform: translateX(-100%);
+  }
+
+  .ui-sheet__popup--right[data-starting-style],
+  .ui-sheet__popup--right[data-ending-style] {
+    transform: translateX(100%);
+  }
+
+  .ui-sheet__popup--top[data-starting-style],
+  .ui-sheet__popup--top[data-ending-style] {
+    transform: translateY(-100%);
+  }
+
+  .ui-sheet__popup--bottom[data-starting-style],
+  .ui-sheet__popup--bottom[data-ending-style] {
+    transform: translateY(100%);
+  }
+
   .ui-toast__viewport {
     display: flex;
     flex-direction: column;
@@ -2337,8 +2741,21 @@
   }
 
   @media (forced-colors: active) {
-    .ui-separator {
+    .ui-separator,
+    .ui-input-otp__separator {
       background: CanvasText;
+    }
+
+    .ui-input-otp__slot {
+      border-color: CanvasText;
+    }
+
+    .ui-input-otp__slot:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ui-input-otp__slot:disabled {
+      border-color: GrayText;
     }
 
     .ui-badge,
@@ -2445,7 +2862,9 @@
       forced-color-adjust: none;
     }
 
-    .ui-select__item[data-highlighted] {
+    .ui-select__item[data-highlighted],
+    .ui-combobox__item[data-highlighted],
+    .ui-command__item[data-highlighted] {
       outline-color: Highlight;
     }
 
@@ -2611,10 +3030,39 @@
       border-color: GrayText;
     }
 
+    .ui-combobox__input-group:has(.ui-combobox__input:focus-visible) {
+      outline: 2px solid Highlight;
+    }
+
+    .ui-combobox__input-group:has(.ui-combobox__input:disabled) {
+      border-color: GrayText;
+    }
+
+    .ui-combobox__trigger:focus-visible,
+    .ui-combobox__clear:focus-visible {
+      outline: 2px solid Highlight;
+    }
+
+    .ui-combobox__popup {
+      border-color: CanvasText;
+    }
+
     .ui-tooltip__popup,
     .ui-popover__popup,
     .ui-dropdown-menu__popup {
       border-color: CanvasText;
+    }
+
+    .ui-command {
+      border-color: CanvasText;
+    }
+
+    .ui-command__input {
+      border-block-end-color: CanvasText;
+    }
+
+    .ui-command__input:focus-visible {
+      outline: 2px solid Highlight;
     }
 
     .ui-tooltip__arrow,
@@ -2697,6 +3145,10 @@
     }
 
     .ui-toast {
+      transition: none;
+    }
+
+    .ui-sheet__popup {
       transition: none;
     }
   }

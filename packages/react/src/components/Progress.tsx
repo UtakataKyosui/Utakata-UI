@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 type ProgressPartProps<T extends ElementType> = Omit<
   ComponentPropsWithoutRef<T>,
@@ -34,26 +35,37 @@ export type ProgressAccessibilityProps =
  * `value: null` is indeterminate. Base UI also treats NaN and other non-finite
  * numbers as indeterminate and clamps finite values to `min`..`max`.
  */
-export type ProgressRootProps = Omit<
-  ProgressPartProps<typeof BaseProgress.Root>,
-  'aria-label' | 'aria-labelledby'
-> &
-  ProgressAccessibilityProps;
-
-export type ProgressTrackProps = ProgressPartProps<typeof BaseProgress.Track>;
-export type ProgressIndicatorProps = ProgressPartProps<
-  typeof BaseProgress.Indicator
+export type ProgressRootProps = WithLismProps<
+  Omit<
+    ProgressPartProps<typeof BaseProgress.Root>,
+    'aria-label' | 'aria-labelledby'
+  > &
+    ProgressAccessibilityProps
 >;
-export type ProgressLabelProps = ProgressPartProps<typeof BaseProgress.Label>;
-export type ProgressValueProps = ProgressPartProps<typeof BaseProgress.Value>;
+
+export type ProgressTrackProps = WithLismProps<
+  ProgressPartProps<typeof BaseProgress.Track>
+>;
+export type ProgressIndicatorProps = WithLismProps<
+  ProgressPartProps<typeof BaseProgress.Indicator>
+>;
+export type ProgressLabelProps = WithLismProps<
+  ProgressPartProps<typeof BaseProgress.Label>
+>;
+export type ProgressValueProps = WithLismProps<
+  ProgressPartProps<typeof BaseProgress.Value>
+>;
 
 const progressTarget = {
   name: 'Progress.Root',
   fix: 'Provide label, aria-label, or a valid aria-labelledby.',
 };
 
-const Label = forwardRef<HTMLSpanElement, ProgressLabelProps>(
-  function ProgressLabel({ className, ...props }, ref) {
+const Label = withLism(
+  forwardRef<HTMLSpanElement, ProgressLabelProps>(function ProgressLabel(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseProgress.Label
         {...props}
@@ -61,11 +73,14 @@ const Label = forwardRef<HTMLSpanElement, ProgressLabelProps>(
         className={withClassName('ui-progress__label', className)}
       />
     );
-  },
+  }),
 );
 
-const Root = forwardRef<HTMLDivElement, ProgressRootProps>(
-  function ProgressRoot({ className, label, children, ...props }, ref) {
+const Root = withLism(
+  forwardRef<HTMLDivElement, ProgressRootProps>(function ProgressRoot(
+    { className, label, children, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(progressTarget, ref);
     return (
       <BaseProgress.Root
@@ -77,11 +92,14 @@ const Root = forwardRef<HTMLDivElement, ProgressRootProps>(
         {children}
       </BaseProgress.Root>
     );
-  },
+  }),
 );
 
-const Track = forwardRef<HTMLDivElement, ProgressTrackProps>(
-  function ProgressTrack({ className, ...props }, ref) {
+const Track = withLism(
+  forwardRef<HTMLDivElement, ProgressTrackProps>(function ProgressTrack(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseProgress.Track
         {...props}
@@ -89,11 +107,14 @@ const Track = forwardRef<HTMLDivElement, ProgressTrackProps>(
         className={withClassName('ui-progress__track', className)}
       />
     );
-  },
+  }),
 );
 
-const Indicator = forwardRef<HTMLDivElement, ProgressIndicatorProps>(
-  function ProgressIndicator({ className, ...props }, ref) {
+const Indicator = withLism(
+  forwardRef<HTMLDivElement, ProgressIndicatorProps>(function ProgressIndicator(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseProgress.Indicator
         {...props}
@@ -101,12 +122,15 @@ const Indicator = forwardRef<HTMLDivElement, ProgressIndicatorProps>(
         className={withClassName('ui-progress__indicator', className)}
       />
     );
-  },
+  }),
 );
 
 /** Visual value text. It is aria-hidden; the progressbar exposes the value. */
-const Value = forwardRef<HTMLSpanElement, ProgressValueProps>(
-  function ProgressValue({ className, ...props }, ref) {
+const Value = withLism(
+  forwardRef<HTMLSpanElement, ProgressValueProps>(function ProgressValue(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseProgress.Value
         {...props}
@@ -114,7 +138,7 @@ const Value = forwardRef<HTMLSpanElement, ProgressValueProps>(
         className={withClassName('ui-progress__value', className)}
       />
     );
-  },
+  }),
 );
 
 export const Progress = { Root, Track, Indicator, Label, Value };

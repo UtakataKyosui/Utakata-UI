@@ -110,6 +110,29 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Sheet focus, dismissal, placement, motion and forced colors and keeps platform checks manual', () => {
+    const rules = componentManifest.components.Sheet?.qualityRules ?? [];
+    for (const id of [
+      'sheet.focus-containment',
+      'sheet.dismissal-focus-return',
+      'sheet.placement-scroll',
+      'sheet.reduced-motion',
+      'sheet.forced-focus',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'sheet.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
     const rules = componentManifest.components.DropdownMenu?.qualityRules ?? [];
     for (const id of [
@@ -430,6 +453,91 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Command interaction and keeps real IME and speech manual', () => {
+    const rules = componentManifest.components.Command?.qualityRules ?? [];
+    for (const id of [
+      'command.keyboard-execute',
+      'command.dialog-focus',
+      'command.visual-forced',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of ['command.real-ime', 'command.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
+  it('requires browser evidence for Combobox interaction and keeps real IME and speech manual', () => {
+    const rules = componentManifest.components.Combobox?.qualityRules ?? [];
+    for (const id of [
+      'combobox.keyboard-selection',
+      'combobox.dismiss-focus',
+      'combobox.ime-browser',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of ['combobox.real-ime', 'combobox.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
+  it('requires browser evidence for InputOTP keyboard, paste and visual properties and keeps autofill, speech and physical zoom manual', () => {
+    const rules = componentManifest.components.InputOTP?.qualityRules ?? [];
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'input-otp.keyboard-paste',
+          verification: 'browser',
+          severity: 'error',
+        }),
+      ]),
+    );
+    for (const id of [
+      'input-otp.target-size',
+      'input-otp.contrast',
+      'input-otp.focus-visible',
+      'input-otp.invalid-state',
+      'input-otp.forced-colors',
+      'input-otp.reflow',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id,
+            verification: 'browser',
+            severity: 'error',
+          }),
+        ]),
+      );
+    for (const id of [
+      'input-otp.autofill-ime',
+      'input-otp.screen-reader',
+      'input-otp.zoom-physical',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for RadioGroup keyboard interaction', () => {
     expect(componentManifest.components.RadioGroup?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -529,6 +637,7 @@ describe('public manifest contract', () => {
       'Dialog',
       'Kbd',
       'Separator',
+      'Sheet',
       'Badge',
       'Skeleton',
       'Spinner',
@@ -546,6 +655,9 @@ describe('public manifest contract', () => {
       'Switch',
       'RadioGroup',
       'Select',
+      'InputOTP',
+      'Combobox',
+      'Command',
       'Slider',
       'Collapsible',
       'Accordion',

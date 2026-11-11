@@ -43,6 +43,7 @@ manualRules.push(
 
 export default defineConfig({
   testDir: './tests/browser',
+  testIgnore: '**/cross-browser.spec.ts',
   forbidOnly: true,
   retries: 0,
   // CI runs themes in independent jobs; retain file isolation and zero retries.
