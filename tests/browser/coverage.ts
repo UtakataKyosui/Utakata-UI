@@ -88,6 +88,14 @@ export const coverage = {
     selector: '.ui-card',
     states: { longContent: 'card.layout-theme' },
   },
+  Empty: {
+    axes: { headingLevels: ['1', '2', '3', '4', '5', '6'] },
+    selector: '.ui-empty',
+    states: {
+      longContent: 'empty.reflow-actions',
+      namedActions: 'empty.reflow-actions',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',

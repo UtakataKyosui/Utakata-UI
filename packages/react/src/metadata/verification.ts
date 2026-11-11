@@ -11,6 +11,7 @@ const verificationStates = {
   Skeleton: ['loading', 'reducedMotion', 'forcedColors'],
   Spinner: ['running', 'reducedMotion'],
   Card: ['longContent'],
+  Empty: ['longContent', 'namedActions'],
   Alert: ['static', 'longContent'],
   Avatar: ['image', 'fallback'],
   Progress: ['determinate', 'indeterminate'],

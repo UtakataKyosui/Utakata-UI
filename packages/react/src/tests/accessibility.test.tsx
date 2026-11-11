@@ -32,6 +32,7 @@ import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
 import { commandChecks } from './quality/Command.checks.js';
 import { dropdownMenuChecks } from './quality/DropdownMenu.checks.js';
+import { emptyChecks } from './quality/Empty.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { inputGroupChecks } from './quality/InputGroup.checks.js';
 import { inputOTPChecks } from './quality/InputOTP.checks.js';
@@ -149,6 +150,7 @@ describe('accessibility regression checks', () => {
       ...skeletonChecks,
       ...spinnerChecks,
       ...cardChecks,
+      ...emptyChecks,
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,

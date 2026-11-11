@@ -584,6 +584,36 @@
     gap: 0.5rem;
   }
 
+  .ui-empty {
+    color: var(--ui-color-text);
+    display: grid;
+    gap: var(--ui-empty-gap, 0.75rem);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding: var(--ui-empty-padding, 1.25rem);
+    text-align: center;
+  }
+
+  .ui-empty__title {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ui-empty__description {
+    color: var(--ui-color-muted);
+    margin: 0;
+  }
+
+  .ui-empty__actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    min-inline-size: 0;
+  }
+
   .ui-alert {
     background: var(--ui-alert-background, var(--ui-color-surface));
     border: 1px solid var(--ui-alert-border, var(--ui-color-border));

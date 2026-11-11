@@ -63,7 +63,7 @@ export const categories = [
   {
     slug: 'display',
     title: { ja: 'データ表示', en: 'Data display' },
-    components: ['Card', 'Table', 'Avatar', 'Kbd', 'Separator'],
+    components: ['Card', 'Empty', 'Table', 'Avatar', 'Kbd', 'Separator'],
   },
 ];
 

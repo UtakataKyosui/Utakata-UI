@@ -46,6 +46,7 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+import { EmptyFixture } from './empty-fixture.js';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
@@ -1429,6 +1430,7 @@ function Fixture() {
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
+      <EmptyFixture />
       <AlertStates />
       <AvatarStates />
       <ProgressStates />

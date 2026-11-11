@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Empty, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -222,6 +222,17 @@ export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile
 export const cardEmptyTitle: CardTitleProps = { level: '2' };
 // @ts-expect-error Card className must be a string in shipped declarations.
 export const cardFunctionClass = <Card.Root className={() => 'x'} />;
+
+type EmptyTitleProps = ComponentProps<typeof Empty.Title>;
+export const empty = <Empty.Root><Empty.Title level="2">No files</Empty.Title><Empty.Description>Upload files to get started.</Empty.Description><Empty.Actions><Button>Upload files</Button></Empty.Actions></Empty.Root>;
+// @ts-expect-error Empty.Title requires children in shipped declarations.
+export const emptyMissingTitle: EmptyTitleProps = { level: '2' };
+// @ts-expect-error Empty.Title restricts the heading level in shipped declarations.
+export const emptyInvalidTitle: EmptyTitleProps = { level: '7', children: 'No files' };
+// @ts-expect-error Empty.Root is static; dynamic announcements belong in a separate status region.
+export const emptyLive = <Empty.Root aria-live="polite" />;
+// @ts-expect-error Empty.Root does not accept a live-region role.
+export const emptyStatus = <Empty.Root role="status" />;
 type AlertRootProps = ComponentProps<typeof Alert.Root>;
 export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
 export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;

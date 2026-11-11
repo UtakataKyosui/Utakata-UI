@@ -41,6 +41,12 @@ section {
   width: 100%;
 }
 
+.fixture-empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: min(100%, calc(100vi - 2rem));
+}
+
 .fixture-badges {
   align-items: flex-start;
   display: flex;

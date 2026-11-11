@@ -11,6 +11,7 @@ import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
+import { emptyManifest } from './components/Empty.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
@@ -166,6 +167,7 @@ const manifest = {
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,
     Card: cardManifest,
+    Empty: emptyManifest,
     Alert: alertManifest,
     Avatar: avatarManifest,
     Progress: progressManifest,
