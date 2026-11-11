@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Carousel, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CarouselLabels, type CarouselProps, type CarouselSlide, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -305,6 +305,22 @@ export const breadcrumbSeparatorSpread = <Breadcrumb.Separator {...breadcrumbVis
 const breadcrumbLinkProps = { children: 'Home' };
 // @ts-expect-error Spreads cannot create a link without a destination.
 export const breadcrumbLinkSpread = <Breadcrumb.Link {...breadcrumbLinkProps} />;
+export const carouselSlides: readonly CarouselSlide[] = [{ id: 'one', content: <p>Slide one</p> }, { id: 'two', content: <p>Slide two</p> }];
+export const carouselLabels: CarouselLabels = { name: 'Featured articles', roleDescription: 'carousel', viewport: 'Articles', previous: 'Previous', next: 'Next', position: (current, total) => current + ' of ' + total };
+export const carouselProps: CarouselProps = { slides: carouselSlides, labels: carouselLabels, dir: 'rtl', p: '1rem' };
+function CarouselWrapper(props: CarouselProps) { return <Carousel {...props} />; }
+export const carousel = <CarouselWrapper {...carouselProps} />;
+// @ts-expect-error A localized label set is required.
+export const carouselMissingLabels = <Carousel slides={carouselSlides} />;
+// @ts-expect-error Every slide needs a stable identifier.
+export const carouselMissingId = <Carousel slides={[{ content: 'Slide' }]} labels={carouselLabels} />;
+// @ts-expect-error Position text needs a formatter.
+export const carouselInvalidPosition = <Carousel slides={carouselSlides} labels={{ ...carouselLabels, position: '1 of 2' }} />;
+const autoplayCarousel = { ...carouselProps, autoplay: true };
+// @ts-expect-error Autoplay stays outside the shipped API through spreads and wrappers.
+export const carouselAutoplay = <CarouselWrapper {...autoplayCarousel} />;
+// @ts-expect-error Labels own the region name, including through spreads.
+export const carouselDuplicateLabel = <Carousel {...{ ...carouselProps, 'aria-label': 'Another name' }} />;
 export const paginationPage: PaginationLinkProps = { href: '?page=2', active: true };
 export const paginationEnabled: PaginationDirectionProps = { href: '?page=2' };
 export const paginationDisabled: PaginationDirectionProps = { disabled: true };
@@ -630,13 +646,20 @@ export const editableKbd = <Kbd contentEditable>K</Kbd>;
     `import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Button } from '@utakata-ui/react';
+import { Button, Carousel } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 assert.ok(componentManifest);
 assert.ok(componentManifest.components.Button.verificationStates.includes('disabled'));
 assert.match(renderToStaticMarkup(createElement(Button, null, 'Save')), /Save/);
 assert.match(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /ui-button--square/);
 assert.doesNotMatch(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /square=/);
+const carousel = renderToStaticMarkup(createElement(Carousel, {
+  slides: [{ id: 'one', content: 'First slide' }, { id: 'two', content: 'Second slide' }],
+  labels: { name: 'Featured articles', roleDescription: 'carousel', viewport: 'Slides', previous: 'Previous', next: 'Next', position: (current, total) => current + ' of ' + total },
+}));
+assert.match(carousel, /aria-label="Featured articles"/);
+assert.match(carousel, /role="status">1 of 2/);
+assert.match(carousel, /aria-hidden="true">Second slide/);
 assert.ok(import.meta.resolve('@utakata-ui/react/styles.css').endsWith('.css'));
 `,
   );

@@ -54,6 +54,12 @@ export type {
   CardTitleProps,
 } from './components/Card.js';
 export { Card } from './components/Card.js';
+export {
+  Carousel,
+  type CarouselLabels,
+  type CarouselProps,
+  type CarouselSlide,
+} from './components/Carousel.js';
 export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,

@@ -627,6 +627,7 @@ describe('public manifest contract', () => {
       'Skeleton',
       'Spinner',
       'Card',
+      'Carousel',
       'Alert',
       'Avatar',
       'Progress',

@@ -88,6 +88,16 @@ export const coverage = {
     selector: '.ui-card',
     states: { longContent: 'card.layout-theme' },
   },
+  Carousel: {
+    axes: {},
+    selector: '.ui-carousel',
+    states: {
+      first: 'carousel.navigation',
+      last: 'carousel.navigation',
+      scroll: 'carousel.navigation',
+      focused: 'carousel.visual',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',

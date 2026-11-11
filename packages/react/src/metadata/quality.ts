@@ -6,6 +6,7 @@ import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { cardQualityRules } from './components/Card.js';
+import { carouselQualityRules } from './components/Carousel.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
@@ -131,6 +132,7 @@ export const qualityRules = {
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,
   Card: cardQualityRules,
+  Carousel: carouselQualityRules,
   Alert: alertQualityRules,
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,

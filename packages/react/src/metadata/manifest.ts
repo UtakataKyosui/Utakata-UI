@@ -6,6 +6,7 @@ import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { buttonGroupManifest } from './components/ButtonGroup.js';
 import { cardManifest } from './components/Card.js';
+import { carouselManifest } from './components/Carousel.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
@@ -166,6 +167,7 @@ const manifest = {
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,
     Card: cardManifest,
+    Carousel: carouselManifest,
     Alert: alertManifest,
     Avatar: avatarManifest,
     Progress: progressManifest,

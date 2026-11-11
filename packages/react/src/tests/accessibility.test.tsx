@@ -27,6 +27,7 @@ import { badgeChecks } from './quality/Badge.checks.js';
 import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
 import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
+import { carouselChecks } from './quality/Carousel.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
@@ -149,6 +150,7 @@ describe('accessibility regression checks', () => {
       ...skeletonChecks,
       ...spinnerChecks,
       ...cardChecks,
+      ...carouselChecks,
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,

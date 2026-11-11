@@ -2981,3 +2981,61 @@
     }
   }
 }
+
+@layer utakata.components {
+  .ui-carousel {
+    min-inline-size: 0;
+  }
+
+  .ui-carousel__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 0.5rem;
+  }
+
+  .ui-carousel__controls .ui-button {
+    min-inline-size: 24px;
+    min-block-size: 24px;
+  }
+
+  .ui-carousel__controls .ui-button[data-disabled] {
+    border-style: dashed;
+    opacity: 1;
+  }
+
+  .ui-carousel__viewport {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: auto;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+  }
+
+  .ui-carousel__viewport:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+  }
+
+  .ui-carousel__slide {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    min-inline-size: 0;
+    padding: var(--ui-carousel-slide-padding, 0.75rem);
+    overflow-wrap: anywhere;
+    scroll-snap-align: center;
+  }
+
+  /* Before hydration, hide inactive slides until the inert attribute is set. */
+  .ui-carousel__slide[aria-hidden="true"]:not([inert]) {
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    .ui-carousel__viewport:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}
