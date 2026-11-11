@@ -355,7 +355,7 @@ async function verifyImeComposition(page: Page) {
   };
   await confirm();
   // Pressing Enter to confirm a conversion must not select an option.
-  await expect(changes).toHaveText('[]');
+  await expect(changes).toHaveText('[]', { timeout });
   await expect(listbox).toBeVisible();
   // Committing the composition filters the list; Enter then selects.
   await cdp.send('Input.insertText', { text: 'ap' });

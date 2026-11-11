@@ -1,11 +1,13 @@
 import { expect, type Page, test } from '@playwright/test';
 
-async function verifyResponsiveProps(page: Page) {
+async function verifyResponsiveProps(page: Page, timeout = 5000) {
   const card = page.getByTestId('lism-card');
   const padding = () =>
     card.evaluate((node) => getComputedStyle(node).paddingTop);
   await page.setViewportSize({ width: 320, height: 800 });
-  await expect.poll(padding).toBe('16px');
+  await expect
+    .poll(padding, { timeout, message: 'base card padding' })
+    .toBe('16px');
   await page.setViewportSize({ width: 1280, height: 800 });
   await expect.poll(padding).toBe('32px');
   // Lism breakpoints are container queries. A narrow ancestor at the same
@@ -66,5 +68,7 @@ test('responsive styling detector rejects an overridden padding contract', async
   await page.addStyleTag({
     content: '[data-testid="lism-card"] { padding: 0 !important; }',
   });
-  await expect(verifyResponsiveProps(page)).rejects.toThrow();
+  await expect(verifyResponsiveProps(page, 1000)).rejects.toThrow(
+    /base card padding/,
+  );
 });
