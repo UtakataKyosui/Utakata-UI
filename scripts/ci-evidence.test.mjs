@@ -424,6 +424,12 @@ test('only stable version-only manifests use the narrow packaging scope; depende
 test('real Git fingerprints authenticate committed files, version-only diffs and names containing tabs', () => {
   const previous = process.cwd();
   const directory = mkdtempSync(join(tmpdir(), 'utakata-proof-git-'));
+  // A pre-commit hook exports the caller's Git index. Both the fixture's Git
+  // commands and the code under test must discover the temporary repository.
+  const gitEnvironment = Object.entries(process.env).filter(([key]) =>
+    key.startsWith('GIT_'),
+  );
+  for (const [key] of gitEnvironment) delete process.env[key];
   const git = (...args) =>
     execFileSync('git', args, {
       cwd: directory,
@@ -499,6 +505,7 @@ test('real Git fingerprints authenticate committed files, version-only diffs and
     assert.notEqual(fingerprints().browser, before.browser);
   } finally {
     process.chdir(previous);
+    for (const [key, value] of gitEnvironment) process.env[key] = value;
     rmSync(directory, { recursive: true, force: true });
   }
 });
