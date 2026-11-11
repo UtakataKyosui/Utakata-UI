@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, HoverCard, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -407,6 +407,22 @@ function TooltipWrapper(props: TooltipPopupProps) { return <Tooltip.Popup {...pr
 export const wrappedTooltip = <TooltipWrapper>Copy</TooltipWrapper>;
 // @ts-expect-error Wrappers must preserve the plain-text contract.
 export const wrappedTooltipInvalid = <TooltipWrapper><a href="/">Help</a></TooltipWrapper>;
+export const hoverCardTrigger: HoverCardTriggerProps = { href: '/docs', children: 'Docs' };
+export const hoverCardRoot: HoverCardRootProps = { defaultOpen: false };
+export const hoverCard = <HoverCard.Root {...hoverCardRoot}><HoverCard.Trigger {...hoverCardTrigger} /><HoverCard.Portal><HoverCard.Positioner><HoverCard.Popup>Preview</HoverCard.Popup><HoverCard.Arrow /></HoverCard.Positioner></HoverCard.Portal></HoverCard.Root>;
+// @ts-expect-error The trigger is a link and needs a destination in shipped declarations.
+export const hoverCardNoHref: HoverCardTriggerProps = { children: 'Docs' };
+// @ts-expect-error JSX usage must also provide href.
+export const hoverCardNoHrefJsx = <HoverCard.Trigger>Docs</HoverCard.Trigger>;
+const hoverCardNoHrefProps = { children: 'Docs' };
+// @ts-expect-error Spreads cannot bypass the required href.
+export const hoverCardSpreadNoHref = <HoverCard.Trigger {...hoverCardNoHrefProps} />;
+// @ts-expect-error className is a string, not a Base UI state function, in shipped declarations.
+export const hoverCardStateClass: HoverCardTriggerProps = { href: '/', className: () => 'x' };
+function HoverCardWrapper(props: HoverCardTriggerProps) { return <HoverCard.Trigger {...props} />; }
+export const wrappedHoverCard = <HoverCardWrapper href="/docs">Docs</HoverCardWrapper>;
+// @ts-expect-error Wrappers must preserve the required href.
+export const wrappedHoverCardInvalid = <HoverCardWrapper>Docs</HoverCardWrapper>;
 type AlertDialogRootProps = ComponentProps<typeof AlertDialog.Root>;
 export const alertDialogRoot: AlertDialogRootProps = { defaultOpen: true };
 export const alertDialogPopup: AlertDialogPopupProps = { className: 'confirm' };

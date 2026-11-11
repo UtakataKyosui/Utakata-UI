@@ -81,6 +81,11 @@ export { Command } from './components/Command.js';
 export { Dialog } from './components/Dialog.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
+export type {
+  HoverCardRootProps,
+  HoverCardTriggerProps,
+} from './components/HoverCard.js';
+export { HoverCard } from './components/HoverCard.js';
 export type { InputProps } from './components/Input.js';
 export { Input } from './components/Input.js';
 export type {

@@ -17,6 +17,7 @@ import {
   Dialog,
   DropdownMenu,
   Field,
+  HoverCard,
   Input,
   InputGroup,
   InputOTP,
@@ -787,6 +788,39 @@ function TooltipStates() {
   );
 }
 
+function HoverCardStates() {
+  return (
+    <section aria-label="HoverCard states">
+      <Button>Before hover card</Button>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#profile" delay={100} closeDelay={300}>
+          Profile
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>
+              Utakata-UI maintainers write accessible components. This card only
+              repeats what the linked profile page already shows.
+            </HoverCard.Popup>
+            <HoverCard.Arrow />
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#second" delay={100}>
+          Second link
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>A second supplementary preview.</HoverCard.Popup>
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <Button>After hover card</Button>
+    </section>
+  );
+}
+
 function PopoverStates() {
   return (
     <section aria-label="Popover states">
@@ -1440,6 +1474,7 @@ function Fixture() {
       <TabsStates />
       <ToggleStates />
       <TooltipStates />
+      <HoverCardStates />
       <PopoverStates />
       <MenuStates />
       <AlertDialogStates />

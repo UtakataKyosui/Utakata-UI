@@ -264,6 +264,15 @@ export const coverage = {
       dismissed: 'tooltip.focus-hover-escape',
     },
   },
+  HoverCard: {
+    axes: {},
+    selector: '.ui-hover-card__trigger',
+    states: {
+      hover: 'hover-card.hoverable',
+      focus: 'hover-card.focus-hover-escape',
+      dismissed: 'hover-card.focus-hover-escape',
+    },
+  },
   Popover: {
     axes: {},
     selector: '.ui-popover__trigger',

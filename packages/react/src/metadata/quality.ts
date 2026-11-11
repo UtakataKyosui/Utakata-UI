@@ -11,6 +11,7 @@ import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
+import { hoverCardQualityRules } from './components/HoverCard.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
@@ -154,6 +155,7 @@ export const qualityRules = {
   Toggle: toggleQualityRules,
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
+  HoverCard: hoverCardQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,

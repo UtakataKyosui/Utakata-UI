@@ -34,6 +34,7 @@ const verificationStates = {
   Toggle: ['pressed', 'unpressed', 'disabled'],
   Tooltip: ['hover', 'focus', 'dismissed'],
   Popover: ['open', 'closed'],
+  HoverCard: ['hover', 'focus', 'dismissed'],
   DropdownMenu: ['open', 'closed'],
   AlertDialog: ['open', 'closed'],
   Toast: ['visible', 'paused', 'dismissed'],

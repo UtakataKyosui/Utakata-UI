@@ -11,6 +11,7 @@ import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
+import { hoverCardManifest } from './components/HoverCard.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
@@ -189,6 +190,7 @@ const manifest = {
     Toggle: toggleManifest,
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
+    HoverCard: hoverCardManifest,
     DropdownMenu: dropdownMenuManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,

@@ -41,6 +41,7 @@ export const categories = [
       'Command',
       'Sheet',
       'Popover',
+      'HoverCard',
       'Tooltip',
       'Toast',
     ],

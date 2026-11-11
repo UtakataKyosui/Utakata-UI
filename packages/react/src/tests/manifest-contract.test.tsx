@@ -177,6 +177,27 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for HoverCard interaction and visuals and keeps platform checks manual', () => {
+    const rules = componentManifest.components.HoverCard?.qualityRules ?? [];
+    for (const id of [
+      'hover-card.focus-hover-escape',
+      'hover-card.hoverable',
+      'hover-card.visual-position',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'hover-card.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Toggle keyboard and visuals and keeps zoom manual', () => {
     const rules = componentManifest.components.Toggle?.qualityRules ?? [];
     for (const id of ['toggle.keyboard', 'toggle.visual-theme'])
@@ -650,6 +671,7 @@ describe('public manifest contract', () => {
       'Toggle',
       'Tooltip',
       'Popover',
+      'HoverCard',
       'DropdownMenu',
       'AlertDialog',
       'Toast',
