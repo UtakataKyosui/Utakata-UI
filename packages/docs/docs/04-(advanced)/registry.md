@@ -130,6 +130,6 @@ node scripts/verify-cli-package.mjs /tmp/utakata-ui-cli-0.1.0.tgz
 
 初回も GitHub Actions の `Release CLI` から公開できます。npm の `@utakata-ui` スコープの公開権限を確認し、対象スコープへの公開権限と Bypass 2FA を持つ Granular Access Token を GitHub の `npm` Environment の Secret `NPM_TOKEN` に設定します。
 
-`Release CLI`（`.github/workflows/release-cli.yml`）で main を選び、`release_mode: verify`（既定）で検証後、`token` で実行して承認すると公開します。Trusted Publisher 設定後は `oidc`、または main に含まれるコミットへの `cli-vX.Y.Z` タグ push で公開します。タグと CLI の安定版バージョンは一致する必要があり、同じバージョンを手動とタグの両方で公開しないでください。設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
+通常は `packages/cli/package.json` の安定版 `version` を増やして main に反映すると、`Release CLI`（`.github/workflows/release-cli.yml`）が検証後に OIDC で自動公開します。バージョンが変わらない編集やタグ push では公開しません。手動実行では main を選び、`release_mode: verify`（既定）で検証できます。公開を手動で行う場合は `oidc`、または Environment の Token を使う `token` を選びます。同じバージョンを重複公開しないでください。設定詳細は [リポジトリの公開手順](https://github.com/UtakataKyosui/Utakata-UI/blob/main/.github/NPM-PUBLISHING.md) を参照してください。
 
-npm Trusted Publisher は owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-cli.yml`、environment `npm` として設定します。GitHub の Environment にタグ制限がある場合は `cli-v*` を含めてください。実際の npm 公開・設定変更・docs のデプロイは、コード変更や PR の作成では実行されません。
+npm Trusted Publisher は owner `UtakataKyosui`、repository `Utakata-UI`、workflow `release-cli.yml`、environment `npm` として設定します。GitHub の `npm` Environment は branch `main` のみ許可し、手動承認を要求しません。PR の作成だけでは npm 公開は実行されず、バージョン更新の main への反映が自動公開の契機になります。

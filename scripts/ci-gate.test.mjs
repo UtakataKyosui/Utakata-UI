@@ -134,7 +134,7 @@ test('Quality and React release share the complete browser and screen reader gat
   }
   assert.match(
     read('release'),
-    /needs: \[prior, browser-accessibility, verify\]/,
+    /needs: \[version, prior, browser-accessibility, verify\]/,
   );
   assert.match(read('quality'), /run: node scripts\/ci-gate\.mjs/);
   for (const browser of ['chromium', 'firefox', 'webkit']) {
@@ -261,4 +261,25 @@ test('screen reader jobs execute on real OS runners and retain output', () => {
   assert.match(workflow, /pnpm exec guidepup install/);
   assert.match(workflow, /run: pnpm test:a11y:screen-reader/);
   assert.match(workflow, /name: screen-reader \(\$\{\{ matrix.reader \}\}\)/);
+});
+
+test('release workflows publish only changed package.json versions on main', () => {
+  for (const [workflowName, target] of [
+    ['release', 'react'],
+    ['release-cli', 'cli'],
+  ]) {
+    const workflow = readFileSync(
+      new URL(`../.github/workflows/${workflowName}.yml`, import.meta.url),
+      'utf8',
+    );
+    assert.ok(workflow.includes(`paths: [packages/${target}/package.json]`));
+    assert.match(workflow, /branches: \[main\]/);
+    assert.doesNotMatch(workflow, /tags:/);
+    assert.ok(
+      workflow.includes(`run: node scripts/release-version.mjs ${target}`),
+    );
+    assert.match(workflow, /if: needs.version.outputs.release == 'true'/);
+    assert.ok(workflow.includes(`utakata-ui-${target}-`));
+    assert.ok(workflow.includes('needs.version.outputs.version'));
+  }
 });
