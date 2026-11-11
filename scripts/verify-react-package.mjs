@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Drawer, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type DrawerPopupProps, type DrawerRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -457,6 +457,36 @@ function SheetWrapper(props: SheetPopupProps) { return <Sheet.Popup {...props} /
 export const wrappedSheet = <SheetWrapper side="top" />;
 // @ts-expect-error Wrappers must preserve the side contract.
 export const wrappedSheetInvalid = <SheetWrapper side="center" />;
+export const drawerRoot: DrawerRootProps = { side: 'left', defaultOpen: true };
+export const drawerPopup: DrawerPopupProps = { className: 'panel' };
+export const drawer = <Drawer.Root side="bottom"><Drawer.Trigger>Open filters</Drawer.Trigger><Drawer.Portal><Drawer.Backdrop /><Drawer.Popup {...drawerPopup}><Drawer.Title>Filters</Drawer.Title><Drawer.Description>Narrow the list.</Drawer.Description><Drawer.Close>Close</Drawer.Close></Drawer.Popup></Drawer.Portal></Drawer.Root>;
+export const drawerDefaultSide = <Drawer.Root><Drawer.Portal><Drawer.Popup><Drawer.Title>Filters</Drawer.Title></Drawer.Popup></Drawer.Portal></Drawer.Root>;
+// @ts-expect-error Sides are limited to the four edges in shipped declarations.
+export const drawerInvalidSide: DrawerRootProps = { side: 'center' };
+// @ts-expect-error JSX usage must also use a supported side.
+export const drawerInvalidSideJsx = <Drawer.Root side="center" />;
+const drawerUnsafeProps = { side: 'center' };
+// @ts-expect-error Spreads cannot pass an unsupported side.
+export const drawerSpreadSide = <Drawer.Root {...drawerUnsafeProps} />;
+// @ts-expect-error A Drawer is always modal in shipped declarations.
+export const drawerNonModal: DrawerRootProps = { modal: false };
+// @ts-expect-error JSX usage must also keep the drawer modal.
+export const drawerNonModalJsx = <Drawer.Root modal={false} />;
+const drawerUnsafeRoot = { modal: false };
+// @ts-expect-error Spreads cannot make the drawer non-modal.
+export const drawerSpreadNonModal = <Drawer.Root {...drawerUnsafeRoot} />;
+// @ts-expect-error The swipe direction follows side in shipped declarations.
+export const drawerSwipeDirection: DrawerRootProps = { swipeDirection: 'left' };
+// @ts-expect-error Snap points are not provided in shipped declarations.
+export const drawerSnapPoints: DrawerRootProps = { snapPoints: [0.5, 1] };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const drawerPopupClass: DrawerPopupProps = { className: () => 'x' };
+function DrawerRootWrapper(props: DrawerRootProps) { return <Drawer.Root {...props} />; }
+export const wrappedDrawerRoot = <DrawerRootWrapper side="top" />;
+// @ts-expect-error Wrappers must preserve the modal contract.
+export const wrappedDrawerRootInvalid = <DrawerRootWrapper modal={false} />;
+// @ts-expect-error Wrappers must preserve the side contract.
+export const wrappedDrawerSideInvalid = <DrawerRootWrapper side="center" />;
 export const toastTextClose: ToastCloseProps = { children: 'Dismiss' };
 export const toastLabelledClose: ToastCloseProps = { 'aria-label': 'Close notification' };
 export const toastClose = <Toast.Close {...toastTextClose} />;

@@ -57,6 +57,14 @@ export const coverage = {
       closed: 'sheet.dismissal-focus-return',
     },
   },
+  Drawer: {
+    axes: { sides: ['top', 'right', 'bottom', 'left'] },
+    selector: '.ui-drawer__popup',
+    states: {
+      open: 'drawer.focus-containment',
+      closed: 'drawer.dismissal-focus-return',
+    },
+  },
   Badge: {
     axes: { variants: ['solid', 'outline', 'subtle', 'destructive'] },
     selector: '.ui-badge',

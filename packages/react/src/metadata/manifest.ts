@@ -10,6 +10,7 @@ import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
+import { drawerManifest } from './components/Drawer.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
@@ -162,6 +163,7 @@ const manifest = {
     Kbd: kbdManifest,
     Separator: separatorManifest,
     Sheet: sheetManifest,
+    Drawer: drawerManifest,
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,

@@ -2495,6 +2495,119 @@
     transform: translateY(100%);
   }
 
+  /*
+   * Drawer is a Base UI Drawer attached to one viewport edge and dismissible by
+   * swiping toward that edge. --ui-drawer-size is the width of left/right
+   * drawers and the maximum height of top/bottom drawers. Edges are physical:
+   * left stays left in RTL. The content region scrolls; the popup does not.
+   */
+  .ui-drawer__viewport {
+    box-sizing: border-box;
+    display: flex;
+    inset: 0;
+    position: fixed;
+  }
+
+  .ui-drawer__viewport[data-side="top"] {
+    align-items: flex-start;
+  }
+
+  .ui-drawer__viewport[data-side="bottom"] {
+    align-items: flex-end;
+  }
+
+  .ui-drawer__viewport[data-side="left"] {
+    justify-content: flex-start;
+  }
+
+  .ui-drawer__viewport[data-side="right"] {
+    justify-content: flex-end;
+  }
+
+  .ui-drawer__popup {
+    border-radius: 0;
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    inset: auto;
+    max-height: none;
+    max-width: none;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    transform: translate3d(
+      var(--drawer-swipe-movement-x, 0px),
+      var(--drawer-swipe-movement-y, 0px),
+      0
+    );
+    transition: transform 300ms ease;
+    width: auto;
+  }
+
+  .ui-drawer__popup[data-swiping] {
+    transition: none;
+    user-select: none;
+  }
+
+  .ui-drawer__content {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 1.5rem;
+  }
+
+  .ui-drawer__popup--left,
+  .ui-drawer__popup--right {
+    block-size: 100%;
+    max-width: calc(100% - 2rem);
+    width: var(--ui-drawer-size, 24rem);
+  }
+
+  .ui-drawer__popup--top,
+  .ui-drawer__popup--bottom {
+    inline-size: 100%;
+    max-height: min(var(--ui-drawer-size, 24rem), calc(100dvh - 2rem));
+  }
+
+  /* Decorative grab handle; swiping is never the only way to close. */
+  .ui-drawer__popup--top::after,
+  .ui-drawer__popup--bottom::before {
+    background: var(--ui-color-border);
+    block-size: 0.25rem;
+    border-radius: 999px;
+    content: "";
+    flex: none;
+    inline-size: 2.5rem;
+    margin: 0.5rem auto;
+  }
+
+  .ui-drawer__popup--top::after {
+    order: 1;
+  }
+
+  .ui-drawer__popup--left[data-starting-style],
+  .ui-drawer__popup--left[data-ending-style] {
+    transform: translateX(-100%);
+  }
+
+  .ui-drawer__popup--right[data-starting-style],
+  .ui-drawer__popup--right[data-ending-style] {
+    transform: translateX(100%);
+  }
+
+  .ui-drawer__popup--top[data-starting-style],
+  .ui-drawer__popup--top[data-ending-style] {
+    transform: translateY(-100%);
+  }
+
+  .ui-drawer__popup--bottom[data-starting-style],
+  .ui-drawer__popup--bottom[data-ending-style] {
+    transform: translateY(100%);
+  }
+
   .ui-toast__viewport {
     display: flex;
     flex-direction: column;
@@ -2977,6 +3090,10 @@
     }
 
     .ui-sheet__popup {
+      transition: none;
+    }
+
+    .ui-drawer__popup {
       transition: none;
     }
   }

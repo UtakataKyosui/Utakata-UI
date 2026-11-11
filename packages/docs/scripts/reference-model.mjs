@@ -40,6 +40,7 @@ export const categories = [
       'AlertDialog',
       'Command',
       'Sheet',
+      'Drawer',
       'Popover',
       'Tooltip',
       'Toast',

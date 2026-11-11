@@ -15,6 +15,7 @@ import {
   Combobox,
   Command,
   Dialog,
+  Drawer,
   DropdownMenu,
   Field,
   Input,
@@ -991,6 +992,44 @@ function AlertDialogStates() {
 
 const sheetOptions = Array.from({ length: 60 }, (_, index) => index + 1);
 
+function DrawerStates() {
+  const [applied, setApplied] = useState(0);
+  return (
+    <section aria-label="Drawer states">
+      <Button>Before drawer</Button>
+      {componentManifest.components.Drawer.sides.map((side) => (
+        <Drawer.Root key={side} side={side}>
+          <Drawer.Trigger render={<Button variant="outline" />}>
+            Open {side} drawer
+          </Drawer.Trigger>
+          <Drawer.Portal>
+            <Drawer.Backdrop />
+            <Drawer.Popup>
+              <Drawer.Title>Filters on the {side}</Drawer.Title>
+              <Drawer.Description>
+                Narrow the list of results.
+              </Drawer.Description>
+              <Drawer.Close render={<Button variant="outline" />}>
+                Close {side} drawer
+              </Drawer.Close>
+              {sheetOptions.map((option) => (
+                <p key={option}>
+                  Filter option {option} / 絞り込み条件 {option}
+                </p>
+              ))}
+              <Button onClick={() => setApplied((count) => count + 1)}>
+                Apply {side} filters
+              </Button>
+            </Drawer.Popup>
+          </Drawer.Portal>
+        </Drawer.Root>
+      ))}
+      <Button>After drawer</Button>
+      <output aria-label="Applied filters">{applied}</output>
+    </section>
+  );
+}
+
 function SheetStates() {
   return (
     <section aria-label="Sheet states">
@@ -1445,6 +1484,7 @@ function Fixture() {
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />
+      <DrawerStates />
       <ToastStates />
       <ToggleGroupStates />
       <ButtonGroupStates />

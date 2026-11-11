@@ -10,6 +10,7 @@ import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
+import { drawerQualityRules } from './components/Drawer.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
@@ -127,6 +128,7 @@ export const qualityRules = {
   Kbd: kbdQualityRules,
   Separator: separatorQualityRules,
   Sheet: sheetQualityRules,
+  Drawer: drawerQualityRules,
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,

@@ -79,6 +79,8 @@ export type {
 } from './components/Command.js';
 export { Command } from './components/Command.js';
 export { Dialog } from './components/Dialog.js';
+export type { DrawerPopupProps, DrawerRootProps } from './components/Drawer.js';
+export { Drawer } from './components/Drawer.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
 export { Field } from './components/Field.js';
 export type { InputProps } from './components/Input.js';
@@ -182,6 +184,7 @@ export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
+export type { DrawerSide } from './metadata/components/Drawer.js';
 export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';

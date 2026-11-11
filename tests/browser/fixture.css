@@ -192,6 +192,12 @@ section[aria-label="Sheet states"] {
   min-width: 0;
 }
 
+section[aria-label="Drawer states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
 section[aria-label="Toast states"] {
   align-items: flex-start;
   flex-direction: column;
