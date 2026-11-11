@@ -2417,6 +2417,76 @@
     margin: 0.25rem 0;
   }
 
+  .ui-menubar {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.5rem;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    padding: 0.25rem;
+  }
+
+  .ui-menubar[aria-orientation="vertical"] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ui-menubar__trigger {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    color: inherit;
+    cursor: default;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    min-block-size: 2rem;
+    min-inline-size: 2rem;
+    padding: 0.25rem 0.75rem;
+    user-select: none;
+  }
+
+  .ui-menubar__trigger:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-menubar__trigger[data-popup-open],
+  .ui-menubar__trigger[data-highlighted] {
+    background: var(--ui-color-primary);
+    color: var(--ui-color-on-primary);
+  }
+
+  .ui-menubar__trigger[data-disabled] {
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-menubar__submenu-trigger {
+    justify-content: space-between;
+  }
+
+  .ui-menubar__submenu-trigger::after {
+    content: "\203a" / "";
+    margin-inline-start: 1rem;
+  }
+
+  .ui-menubar__submenu-trigger:dir(rtl)::after {
+    content: "\2039" / "";
+  }
+
+  .ui-menubar__submenu-trigger[data-popup-open] {
+    background: var(--ui-color-primary);
+    color: var(--ui-color-on-primary);
+  }
+
   /* overlays-modal */
   .ui-alert-dialog__popup {
     max-width: min(90vw, 28rem);
@@ -2710,6 +2780,7 @@
     .ui-field__control:focus-visible,
     .ui-dialog__popup :focus-visible,
     .ui-dropdown-menu__trigger:focus-visible,
+    .ui-menubar__trigger:focus-visible,
     .ui-table-container:focus-visible,
     .ui-tooltip__trigger:focus-visible,
     .ui-popover__trigger:focus-visible,
@@ -2898,6 +2969,13 @@
       display: none;
     }
 
+    .ui-menubar {
+      border-color: CanvasText;
+    }
+
+    .ui-menubar__trigger[data-popup-open],
+    .ui-menubar__trigger[data-highlighted],
+    .ui-menubar__submenu-trigger[data-popup-open],
     .ui-dropdown-menu__item[data-highlighted],
     .ui-dropdown-menu__item[data-disabled][data-highlighted] {
       background: Highlight;
@@ -2905,7 +2983,8 @@
       forced-color-adjust: none;
     }
 
-    .ui-dropdown-menu__item[data-disabled] {
+    .ui-dropdown-menu__item[data-disabled],
+    .ui-menubar__trigger[data-disabled] {
       color: GrayText;
     }
 

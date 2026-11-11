@@ -280,6 +280,14 @@ export const coverage = {
       closed: 'dropdown-menu.activate-dismiss',
     },
   },
+  Menubar: {
+    axes: { orientations: ['horizontal', 'vertical'] },
+    selector: '.ui-menubar',
+    states: {
+      open: 'menubar.keyboard',
+      closed: 'menubar.activate-dismiss',
+    },
+  },
   AlertDialog: {
     axes: {},
     selector: '.ui-alert-dialog__trigger',

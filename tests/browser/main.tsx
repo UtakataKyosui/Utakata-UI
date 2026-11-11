@@ -15,6 +15,7 @@ import {
   Combobox,
   Command,
   Dialog,
+  DirectionProvider,
   DropdownMenu,
   Field,
   Input,
@@ -22,6 +23,7 @@ import {
   InputOTP,
   Kbd,
   KbdGroup,
+  Menubar,
   NativeSelect,
   Pagination,
   Popover,
@@ -855,6 +857,120 @@ function MenuStates() {
   );
 }
 
+function MenubarFixture({ rtl = false }: { rtl?: boolean }) {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  const label = rtl ? 'Menubar rtl states' : 'Menubar states';
+  return (
+    <section aria-label={label} dir={rtl ? 'rtl' : 'ltr'}>
+      <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>
+        <Button>Before menubar</Button>
+        <Menubar.Root aria-label="Application">
+          <Menubar.Menu>
+            <Menubar.Trigger>File</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Group>
+                    <Menubar.GroupLabel>Document</Menubar.GroupLabel>
+                    <Menubar.Item onClick={record('New')}>New</Menubar.Item>
+                  </Menubar.Group>
+                  <Menubar.Separator />
+                  <Menubar.Item disabled onClick={record('Print')}>
+                    Print
+                  </Menubar.Item>
+                  <Menubar.SubmenuRoot>
+                    <Menubar.SubmenuTrigger>Export</Menubar.SubmenuTrigger>
+                    <Menubar.Portal>
+                      <Menubar.Positioner>
+                        <Menubar.Popup>
+                          <Menubar.Item onClick={record('Email')}>
+                            Email
+                          </Menubar.Item>
+                          <Menubar.Item onClick={record('Link')}>
+                            Link
+                          </Menubar.Item>
+                        </Menubar.Popup>
+                      </Menubar.Positioner>
+                    </Menubar.Portal>
+                  </Menubar.SubmenuRoot>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Format</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item onClick={record('Undo')}>Undo</Menubar.Item>
+                  <Menubar.Item onClick={record('Redo')}>Redo</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu disabled>
+            <Menubar.Trigger>View</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item>Zoom</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Help</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item onClick={record('About')}>About</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+        </Menubar.Root>
+        <Button>After menubar</Button>
+        <output aria-label="Menubar actions">{JSON.stringify(actions)}</output>
+      </DirectionProvider>
+    </section>
+  );
+}
+
+function MenubarStates() {
+  return (
+    <>
+      <MenubarFixture />
+      <MenubarFixture rtl />
+      <section aria-label="Menubar vertical states">
+        <Menubar.Root aria-label="Sidebar" orientation="vertical">
+          <Menubar.Menu>
+            <Menubar.Trigger>Project</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4} side="inline-end">
+                <Menubar.Popup>
+                  <Menubar.Item>Open</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Account</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4} side="inline-end">
+                <Menubar.Popup>
+                  <Menubar.Item>Sign out</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+        </Menubar.Root>
+      </section>
+    </>
+  );
+}
+
 const commandGroups = [
   {
     value: 'Pages',
@@ -1442,6 +1558,7 @@ function Fixture() {
       <TooltipStates />
       <PopoverStates />
       <MenuStates />
+      <MenubarStates />
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />

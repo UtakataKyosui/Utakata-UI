@@ -98,6 +98,8 @@ export type {
 export { InputOTP } from './components/InputOTP.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
+export type { MenubarRootProps } from './components/Menubar.js';
+export { DirectionProvider, Menubar } from './components/Menubar.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
 export { NativeSelect } from './components/NativeSelect.js';
 export type {

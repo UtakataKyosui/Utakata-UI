@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, DirectionProvider, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, Menubar, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type MenubarRootProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -438,6 +438,26 @@ const sheetUnsafeProps = { side: 'center' };
 export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
 // @ts-expect-error className must be a string, not a state function, in shipped declarations.
 export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+export const menubarNamed: MenubarRootProps = { 'aria-label': 'Application' };
+export const menubarLabelled: MenubarRootProps = { 'aria-labelledby': 'app-heading', orientation: 'vertical' };
+export const menubar = <DirectionProvider direction="rtl"><Menubar.Root {...menubarNamed}><Menubar.Menu><Menubar.Trigger>File</Menubar.Trigger><Menubar.Portal><Menubar.Positioner sideOffset={4}><Menubar.Popup><Menubar.Item>New</Menubar.Item><Menubar.Separator /><Menubar.SubmenuRoot><Menubar.SubmenuTrigger>Share</Menubar.SubmenuTrigger><Menubar.Portal><Menubar.Positioner><Menubar.Popup><Menubar.Item>Email</Menubar.Item></Menubar.Popup></Menubar.Positioner></Menubar.Portal></Menubar.SubmenuRoot></Menubar.Popup></Menubar.Positioner></Menubar.Portal></Menubar.Menu></Menubar.Root></DirectionProvider>;
+// @ts-expect-error The menubar needs aria-label or aria-labelledby in shipped declarations.
+export const menubarUnnamed: MenubarRootProps = {};
+// @ts-expect-error JSX usage must also name the menubar.
+export const menubarUnnamedJsx = <Menubar.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const menubarBothNames: MenubarRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+// @ts-expect-error Orientation is limited to horizontal and vertical in shipped declarations.
+export const menubarOrientation: MenubarRootProps = { 'aria-label': 'a', orientation: 'diagonal' };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const menubarClass: MenubarRootProps = { 'aria-label': 'a', className: () => 'x' };
+const menubarUnnamedProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the required menubar name.
+export const menubarSpreadUnnamed = <Menubar.Root {...menubarUnnamedProps} />;
+function MenubarWrapper(props: MenubarRootProps) { return <Menubar.Root {...props} />; }
+export const wrappedMenubar = <MenubarWrapper aria-label="Application" />;
+// @ts-expect-error Wrappers must preserve the required menubar name.
+export const wrappedMenubarInvalid = <MenubarWrapper />;
 type SheetRootProps = ComponentProps<typeof Sheet.Root>;
 export const sheetRoot: SheetRootProps = { defaultOpen: true };
 // @ts-expect-error A Sheet is always modal in shipped declarations.

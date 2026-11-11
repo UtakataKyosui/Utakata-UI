@@ -15,6 +15,7 @@ import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
 import { kbdManifest } from './components/Kbd.js';
+import { menubarManifest } from './components/Menubar.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
 import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
@@ -190,6 +191,7 @@ const manifest = {
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
     DropdownMenu: dropdownMenuManifest,
+    Menubar: menubarManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
     InputGroup: inputGroupManifest,

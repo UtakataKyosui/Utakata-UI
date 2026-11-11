@@ -139,6 +139,27 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Menubar keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
+    const rules = componentManifest.components.Menubar?.qualityRules ?? [];
+    for (const id of [
+      'menubar.keyboard',
+      'menubar.activate-dismiss',
+      'menubar.forced-highlight',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'menubar.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Popover dismissal and forced-colors focus and keeps platform checks manual', () => {
     const rules = componentManifest.components.Popover?.qualityRules ?? [];
     for (const id of ['popover.open-dismiss-focus', 'popover.forced-focus'])
@@ -651,6 +672,7 @@ describe('public manifest contract', () => {
       'Tooltip',
       'Popover',
       'DropdownMenu',
+      'Menubar',
       'AlertDialog',
       'Toast',
       'InputGroup',

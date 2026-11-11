@@ -267,6 +267,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="dropdownmenu" />
 
+## Menubar [#menubar]
+
+詳しい使い方とAPIは[Menubar](/components/menubar)を参照してください。
+
+アプリケーションのファイル・編集のような複数のメニューを横に並べたバーです。`Menubar.Root`には`aria-label`か`aria-labelledby`で名前を付けます。Tabキーの停止位置はバーに1か所で、左右の矢印キー（`orientation="vertical"`では上下）でメニューを移動し、Homeで最初、Endで最後に移ります。下矢印でメニューを開き、メニューが開いている間も左右の矢印キーで隣のメニューに移ります。サブメニューは`Menubar.SubmenuRoot`で入れ子にし、右矢印で開いて左矢印かEscapeで閉じます。右から左に書く言語では`DirectionProvider`の`direction="rtl"`で囲むと左右の矢印キーが入れ替わります。無効な項目は矢印キーで到達できますが実行されません。ページ移動のナビゲーションには使わず、メニューが1つなら`DropdownMenu`を使います。
+
+<Component path="menubar" />
+
 ## AlertDialog [#alertdialog]
 
 詳しい使い方とAPIは[AlertDialog](/components/alertdialog)を参照してください。

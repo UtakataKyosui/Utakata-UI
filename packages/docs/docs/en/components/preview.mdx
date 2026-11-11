@@ -267,6 +267,14 @@ A list of button actions. Move between items with the arrow keys, Home/End and t
 
 <Component path="en/dropdownmenu" />
 
+## Menubar [#menubar]
+
+See [Menubar](/en/components/menubar) for detailed usage and the API.
+
+A bar of several menus, such as File and Edit in an application. Name `Menubar.Root` with `aria-label` or `aria-labelledby`. The bar is a single Tab stop; move between menus with Left/Right (Up/Down for `orientation="vertical"`), and jump with Home and End. Down opens a menu, and while a menu is open Left/Right moves to the neighbouring menu. Nest a menu with `Menubar.SubmenuRoot`: Right opens it, and Left or Escape closes it. For right-to-left content wrap the bar in `DirectionProvider` with `direction="rtl"`, which swaps the horizontal arrow keys. Disabled items are reachable with the arrow keys but do not run. Do not use it for page navigation, and use `DropdownMenu` when there is only one menu.
+
+<Component path="en/menubar" />
+
 ## AlertDialog [#alertdialog]
 
 See [AlertDialog](/en/components/alertdialog) for detailed usage and the API.
