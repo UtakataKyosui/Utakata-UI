@@ -20,6 +20,7 @@ import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
+import { scrollAreaManifest } from './components/ScrollArea.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
 import { sheetManifest } from './components/Sheet.js';
@@ -160,6 +161,7 @@ const manifest = {
         'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and an optional useful Description. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
     Kbd: kbdManifest,
+    ScrollArea: scrollAreaManifest,
     Separator: separatorManifest,
     Sheet: sheetManifest,
     Badge: badgeManifest,

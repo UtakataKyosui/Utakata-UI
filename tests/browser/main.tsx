@@ -50,6 +50,7 @@ import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
+import { ScrollAreaFixture } from './scroll-area-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
   if (!form) return;
@@ -1496,7 +1497,9 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  new URLSearchParams(location.search).has('lism') ? (
+  new URLSearchParams(location.search).has('scroll-area') ? (
+    <ScrollAreaFixture />
+  ) : new URLSearchParams(location.search).has('lism') ? (
     <LismFixture />
   ) : new URLSearchParams(location.search).has('reader') ? (
     <LayoutFixture variants={false} />

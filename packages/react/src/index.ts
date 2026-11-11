@@ -123,6 +123,8 @@ export type {
   RadioGroupRootProps,
 } from './components/RadioGroup.js';
 export { RadioGroup } from './components/RadioGroup.js';
+export type { ScrollAreaProps } from './components/ScrollArea.js';
+export { ScrollArea } from './components/ScrollArea.js';
 export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';

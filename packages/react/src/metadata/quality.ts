@@ -20,6 +20,7 @@ import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { scrollAreaQualityRules } from './components/ScrollArea.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { sheetQualityRules } from './components/Sheet.js';
@@ -125,6 +126,7 @@ export const qualityRules = {
     },
   ],
   Kbd: kbdQualityRules,
+  ScrollArea: scrollAreaQualityRules,
   Separator: separatorQualityRules,
   Sheet: sheetQualityRules,
   Badge: badgeQualityRules,

@@ -249,3 +249,9 @@ section[aria-label="Command states"] .ui-command {
 .interaction-states .ui-slider {
   min-inline-size: 12rem;
 }
+
+section[aria-label="Scroll Area states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}

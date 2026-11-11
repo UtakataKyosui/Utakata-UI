@@ -15,6 +15,7 @@ const verificationStates = {
   Avatar: ['image', 'fallback'],
   Progress: ['determinate', 'indeterminate'],
   Table: ['overflow'],
+  ScrollArea: ['overflow'],
   Breadcrumb: ['current', 'wrapping'],
   Pagination: ['disabled', 'current'],
   Input: ['enabled', 'disabled', 'readOnly', 'invalid'],

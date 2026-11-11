@@ -720,10 +720,22 @@
     }
   }
 
+  .ui-scroll-area {
+    border-radius: var(--ui-radius-control);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    overflow: auto;
+  }
+
   .ui-table-container {
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
     overflow-x: auto;
+  }
+
+  .ui-scroll-area:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: -2px;
   }
 
   .ui-table-container:focus-visible,
@@ -2710,6 +2722,7 @@
     .ui-field__control:focus-visible,
     .ui-dialog__popup :focus-visible,
     .ui-dropdown-menu__trigger:focus-visible,
+    .ui-scroll-area:focus-visible,
     .ui-table-container:focus-visible,
     .ui-tooltip__trigger:focus-visible,
     .ui-popover__trigger:focus-visible,

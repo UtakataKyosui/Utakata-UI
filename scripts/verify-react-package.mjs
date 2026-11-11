@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, ScrollArea, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -272,6 +272,20 @@ function ProgressWrapper(props: ProgressRootProps) { return <Progress.Root {...p
 export const wrappedProgress = <ProgressWrapper value={5} label="Upload" />;
 // @ts-expect-error Wrappers must preserve the required name.
 export const wrappedProgressInvalid = <ProgressWrapper value={5} />;
+export const scrollRegion: ScrollAreaProps = { 'aria-label': 'Updates' };
+export const scrollArea = <ScrollArea {...scrollRegion}>Content</ScrollArea>;
+export const referencedScrollArea = <ScrollArea aria-labelledby="updates">Content</ScrollArea>;
+// @ts-expect-error ScrollArea requires a name in shipped declarations.
+export const unnamedScrollArea = <ScrollArea />;
+// @ts-expect-error A ScrollArea must have a single naming source.
+export const doublyNamedScrollArea = <ScrollArea aria-label="Updates" aria-labelledby="updates" />;
+const scrollAreaRoleProps = { 'aria-label': 'Updates', role: 'none' };
+// @ts-expect-error A spread cannot override native region semantics.
+export const scrollAreaRoleOverride = <ScrollArea {...scrollAreaRoleProps} />;
+const scrollAreaFocusProps = { 'aria-label': 'Updates', tabIndex: -1 };
+// @ts-expect-error A spread cannot remove the ScrollArea from the Tab order.
+export const scrollAreaFocusOverride = <ScrollArea {...scrollAreaFocusProps} />;
+
 export const labelledTable: TableContainerProps = { 'aria-label': 'Team members' };
 export const referencedTable: TableContainerProps = { 'aria-labelledby': 'team-caption' };
 export const table = <Table.Container {...labelledTable}><Table.Root><Table.Caption id="team-caption">Team</Table.Caption><Table.Header><Table.Row><Table.Head scope="col">Name</Table.Head></Table.Row></Table.Header></Table.Root></Table.Container>;

@@ -106,6 +106,11 @@ export const coverage = {
       indeterminate: 'progress.visual-motion',
     },
   },
+  ScrollArea: {
+    axes: {},
+    selector: '.ui-scroll-area',
+    states: { overflow: 'scroll-area.native-scroll' },
+  },
   Table: {
     axes: {},
     selector: '.ui-table',

@@ -621,6 +621,7 @@ describe('public manifest contract', () => {
       'Field',
       'Dialog',
       'Kbd',
+      'ScrollArea',
       'Separator',
       'Sheet',
       'Badge',
