@@ -80,6 +80,20 @@ test('docs and unit fixtures only run their relevant gates', () => {
   }
 });
 
+test('screen reader fixtures and engine configs select browser checks without unrelated package gates', () => {
+  for (const file of [
+    'tests/screen-reader/output.spec.ts',
+    'playwright.screen-reader.config.ts',
+    'playwright.cross-browser.config.ts',
+  ]) {
+    const scope = selectScope([file]);
+    assert.equal(scope.browser, true, file);
+    assert.equal(scope.types, true, file);
+    assert.equal(scope.build, false, file);
+    assert.equal(scope.tests, false, file);
+  }
+});
+
 test('dependencies, shared configuration, unknown code and unverified bases use full gates', () => {
   for (const file of [
     'pnpm-lock.yaml',

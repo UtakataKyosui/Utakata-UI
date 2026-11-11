@@ -1495,7 +1495,9 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  paletteLocale ? (
+  new URLSearchParams(location.search).has('reader') ? (
+    <LayoutFixture variants={false} />
+  ) : paletteLocale ? (
     <PaletteFixture locale={paletteLocale} />
   ) : new URLSearchParams(location.search).has('layout') ? (
     <LayoutFixture />

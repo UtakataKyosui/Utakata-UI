@@ -21,7 +21,7 @@ Quality と Release React は共通の `browser.yml` で Chromium light/dark を
 - `pnpm test:a11y:browser`: 組み込みテーマ light/dark、全 Button variant/size、名前付き icon button、disabled、ラベル・説明付き Field、開閉する Dialog に加え、Kbd・Separator、表示系（Badge・Skeleton・Spinner・Card・Alert・Avatar）、データ・ナビゲーション（Progress・Table・Breadcrumb・Pagination）、フォーム（Input・Textarea・NativeSelect・Checkbox・Switch・RadioGroup・Select・Combobox・InputOTP・Slider）、開閉系（Collapsible・Accordion・Tabs・Toggle）、グループ（InputGroup・ToggleGroup・ButtonGroup）、オーバーレイ（Tooltip・Popover・DropdownMenu・AlertDialog・Command・Sheet・Toast）のフィクスチャー。描画後の axe（コントラストを無効化しない）、名前・説明、Tab / Shift+Tab / Enter / Space / Escape / 矢印キー / Home / End / Page Up/Down / F6 の実キー入力、フォーカス復帰、一部の対象サイズと emulate した reduced motion を検証する。名前欠落・低コントラストの既知の不正例でも検出を確認する。
 - 既存の pack 済み公開 `.d.ts` の正/負の利用例検査も継続する。
 
-開発には Node.js 24.16.0 以降の 24.x または 26.3.0 以上を使う（Markuplint の optional Astro parser を含む依存要件）。ブラウザー検査は `pnpm exec playwright install chromium` 後に実行する。CI は Linux の Chromium、ローカル実行はホスト OS の Chromium を使う。HTML レポートの添付情報にブラウザーのバージョン・実行条件、axe JSON に検査器と対象 DOM の結果を残す。CI の成果物名にコミット SHA を含め、結果・失敗時 screenshot/trace を14日保存する。skip・fixme・期待された失敗も必須ゲートでは未検証として失敗にする。
+開発には Node.js 24.16.0 以降の 24.x または 26.3.0 以上を使う（Markuplint の optional Astro parser を含む依存要件）。ブラウザー検査は `pnpm exec playwright install chromium firefox webkit` 後に実行する。CI は Linux の Chromium 全件検査に加え、Firefox/WebKit の基礎検査を各 light/dark で実行する。`pnpm test:a11y:cross-browser` は Button/Field/Dialog の名前・axe・キー操作・フォーカス復帰、ターゲット・コントラスト・320px・文字拡大・文字間隔・reduced-motion と負の対照例を実行する。Chromium 専用の CDP IME、強制配色や全コンポーネントの状態カバレッジは他エンジンへ拡張しない。HTML レポートの添付情報にブラウザーのバージョン・実行条件、axe JSON に検査器と対象 DOM の結果を残す。CI の成果物名にコミット SHA を含め、結果・失敗時 screenshot/trace を14日保存する。skip・fixme・期待された失敗も必須ゲートでは未検証として失敗にする。
 
 fallow には HTML から起動する `tests/browser/main.tsx` をエントリとして登録する。`.markuplintrc.json` から動的ロードする parser/spec の2依存だけを未使用依存検出から除外する。
 
@@ -168,3 +168,21 @@ manifestに新部品や列挙値を加えて対応表を更新しないと失敗
 未コミット変更もソース内容へ含め、実行中のソース変更や添付の消失・置換も拒否する。
 手動ルールは担当役割・確認期限・追跡Issue・[実機手順](ACCESSIBILITY-MANUAL.md)を付けて
 未検証として残す。実際の発話、利用者の理解、OS配色、実ズームをエミュレーションで代用しない。
+
+
+## スクリーンリーダー出力のCI
+
+`pnpm test:a11y:screen-reader` は Guidepup で実際のスクリーンリーダーを起動する。
+再利用する browser workflow 内の必須ジョブは macos-15 / VoiceOver / headed WebKit と
+windows-2025 / NVDA / headed Firefox。OS設定は使い捨てrunner内だけで行う。
+開発端末での自動セットアップは行わない。
+
+検査対象は Field のフォーカス時の名前、Dialog をキーで開いたときの文脈、
+Escape後のトリガーへのフォーカス復帰と読み上げ。名前を置き換えた負の対照例も実行する。
+環境バージョンと発話ログを添付し、失敗・skip・timeout・証拠欠落を合格にしない。
+CIのブラウザー証拠再利用には6ブラウザージョブと2スクリーンリーダージョブの成功を要求する。
+
+これはSafariそのもの、iOS、実機タッチ、実ズーム、全コンポーネントの読み上げ、
+通知順、利用者の理解を証明しない。既存manualルールは包括的なためunverifiedのまま残す。
+この構成の追加時点ではGitHub上のGuidepup実行は未検証。初回実行の出力を確認するまで、
+対象の発話要件も検証済みとは表明しない。

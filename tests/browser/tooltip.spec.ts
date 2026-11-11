@@ -44,6 +44,9 @@ async function verifyFocusHoverEscape(page: Page) {
   await page.keyboard.press('Tab');
   await page.keyboard.press('Tab');
   await expect(after).toBeFocused({ timeout });
+  // Tab crossed the second trigger. Its closed popup can remain mounted for
+  // the exit transition; finish that lifecycle before opening Save by hover.
+  await expect(popup).toHaveCount(0, { timeout });
   // Real pointer hover opens it too, and leaving closes it.
   await page.mouse.move(0, 0);
   await save.hover();

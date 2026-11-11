@@ -16,10 +16,41 @@ permissions:
   contents: read
 jobs:
   browser:
+    name: browser (${{ matrix.project }})
     strategy:
       fail-fast: false
       matrix:
-        project: [chromium-light, chromium-dark]
+        include:
+          - {
+              project: chromium-light,
+              browser: chromium,
+              config: playwright.config.ts,
+            }
+          - {
+              project: chromium-dark,
+              browser: chromium,
+              config: playwright.config.ts,
+            }
+          - {
+              project: firefox-light,
+              browser: firefox,
+              config: playwright.cross-browser.config.ts,
+            }
+          - {
+              project: firefox-dark,
+              browser: firefox,
+              config: playwright.cross-browser.config.ts,
+            }
+          - {
+              project: webkit-light,
+              browser: webkit,
+              config: playwright.cross-browser.config.ts,
+            }
+          - {
+              project: webkit-dark,
+              browser: webkit,
+              config: playwright.cross-browser.config.ts,
+            }
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -52,23 +83,23 @@ jobs:
       - name: Select exact browser cache version
         id: playwright
         run: echo "version=$(node -p 'require("@playwright/test/package.json").version')" >> "$GITHUB_OUTPUT"
-      - name: Cache Chromium headless shell
+      - name: Cache selected browser
         if: inputs.cache_mode != 'cold'
         id: browsers
         uses: actions/cache@v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-ubuntu24-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-headless
+          key: playwright-ubuntu24-${{ runner.arch }}-${{ steps.playwright.outputs.version }}-${{ matrix.browser }}-v2
       - name: Install OS dependencies (not cached)
-        run: pnpm exec playwright install-deps chromium
-      - name: Download Chromium headless shell
+        run: pnpm exec playwright install-deps ${{ matrix.browser }}
+      - name: Download selected browser
         if: steps.browsers.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install --only-shell chromium
+        run: pnpm exec playwright install --only-shell ${{ matrix.browser }}
       - name: Rendered accessibility and keyboard behavior
         id: browser-tests
         env:
           CI_BROWSER_PROJECT: ${{ matrix.project }}
-        run: pnpm test:a11y:browser --project=${{ matrix.project }}
+        run: pnpm test:a11y:browser --config=${{ matrix.config }} --project=${{ matrix.project }}
       - name: Upload browser evidence
         if: always() && (steps.browser-tests.outcome == 'success' || steps.browser-tests.outcome == 'failure')
         uses: actions/upload-artifact@v4.6.2
@@ -89,3 +120,43 @@ jobs:
           elapsed=$(( $(date +%s) - STARTED ))
           echo "### $PROJECT browser job ($CACHE_MODE cache): ${elapsed}s / 420s budget (10 minute job limit)" >> "$GITHUB_STEP_SUMMARY"
           test "$elapsed" -le 420
+
+  screen-reader:
+    name: screen-reader (${{ matrix.reader }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-15, browser: webkit, reader: voiceover-webkit }
+          - { os: windows-2025, browser: firefox, reader: nvda-firefox }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    env:
+      CI: "true"
+      DEBUG: guidepup:*
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.3.0
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "24.16.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install ${{ matrix.browser }}
+      # These commands configure only the disposable runner, never a developer Mac.
+      - run: pnpm exec guidepup setup --ci
+      - run: pnpm exec guidepup install
+      - name: Verify real screen reader output
+        run: pnpm test:a11y:screen-reader
+      - name: Upload screen reader evidence including failures
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: screen-reader-${{ github.sha }}-${{ matrix.reader }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: error
+          retention-days: 14

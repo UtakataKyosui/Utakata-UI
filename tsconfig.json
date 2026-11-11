@@ -25,6 +25,9 @@
     "packages/docs/blume.config.ts",
     "vitest.config.ts",
     "playwright.config.ts",
+    "playwright.cross-browser.config.ts",
+    "playwright.screen-reader.config.ts",
+    "tests/screen-reader/**/*.ts",
     "tests/browser/**/*.ts",
     "tests/browser/**/*.tsx",
     "vite.config.ts"
