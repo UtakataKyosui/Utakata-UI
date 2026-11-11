@@ -130,6 +130,14 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="pagination" />
 
+## Sidebar [#sidebar]
+
+詳しい使い方とAPIは[Sidebar](/components/sidebar)を参照してください。
+
+名前を付けたナビゲーションのランドマークとして、現在地へのリンクを並べるサイドバーです。広い画面では`Sidebar.Trigger`（`aria-expanded`と`aria-controls`を持つボタン）で折りたたみ・展開でき、折りたたむとリンクはTabキーの移動先と支援技術から外れます。狭い画面（既定は768px未満）ではSheetに切り替わり、左から開くモーダルで、見える閉じるボタン・Escape・背景の押下で閉じてフォーカスはTriggerに戻ります。画面幅が変わってフォーカスのある要素が消えるときも、フォーカスはTriggerに移ります。現在のページのリンクには`current`を付け、太字と線でも示します。保存した開閉状態、リンク先、ルーティング、mainランドマーク、スキップリンクは利用側の責任です。アイコンだけの縮小表示や幅の変更、キーボードショートカットは提供しません。
+
+<Component path="sidebar" />
+
 ## Input [#input]
 
 詳しい使い方とAPIは[Input](/components/input)を参照してください。

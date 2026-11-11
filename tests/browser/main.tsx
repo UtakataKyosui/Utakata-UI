@@ -30,6 +30,7 @@ import {
   Select,
   Separator,
   Sheet,
+  Sidebar,
   Skeleton,
   Slider,
   Spinner,
@@ -1023,6 +1024,66 @@ function SheetStates() {
   );
 }
 
+function SidebarStates() {
+  return (
+    <section aria-label="Sidebar states">
+      <Button>Before sidebar</Button>
+      <Sidebar.Provider>
+        <Sidebar.Root aria-label="Fixture navigation" closeLabel="Close menu">
+          <Sidebar.Header>Utakata fixture</Sidebar.Header>
+          <Sidebar.Content>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Project</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-overview" current>
+                    Overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-settings">
+                    Settings
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-long">
+                    Internationalization_and_localization_configuration_overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-japanese">
+                    アクセシビリティと多言語対応の設定をまとめて確認するページ
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Account</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-profile">
+                    Profile
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+          </Sidebar.Content>
+          <Sidebar.Footer>Version 1.0</Sidebar.Footer>
+        </Sidebar.Root>
+        <div className="fixture-sidebar-inset">
+          <Sidebar.Trigger iconOnly aria-label="Toggle navigation">
+            <svg aria-hidden="true" width="16" height="16">
+              <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" />
+            </svg>
+          </Sidebar.Trigger>
+          <p>Page content next to the sidebar.</p>
+        </div>
+      </Sidebar.Provider>
+      <Button>After sidebar</Button>
+    </section>
+  );
+}
+
 function ToastList() {
   const manager = useToastManager();
   return manager.toasts.map((toast) => (
@@ -1445,6 +1506,7 @@ function Fixture() {
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />
+      <SidebarStates />
       <ToastStates />
       <ToggleGroupStates />
       <ButtonGroupStates />

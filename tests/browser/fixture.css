@@ -192,6 +192,23 @@ section[aria-label="Sheet states"] {
   min-width: 0;
 }
 
+section[aria-label="Sidebar states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Sidebar states"] .ui-sidebar-provider {
+  inline-size: 100%;
+  min-block-size: 16rem;
+}
+
+.fixture-sidebar-inset {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  padding: 0.5rem 1rem;
+}
+
 section[aria-label="Toast states"] {
   align-items: flex-start;
   flex-direction: column;

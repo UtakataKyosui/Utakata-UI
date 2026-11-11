@@ -633,6 +633,7 @@ describe('public manifest contract', () => {
       'Table',
       'Breadcrumb',
       'Pagination',
+      'Sidebar',
       'Input',
       'Textarea',
       'NativeSelect',

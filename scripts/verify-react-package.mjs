@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -438,6 +438,30 @@ const sheetUnsafeProps = { side: 'center' };
 export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
 // @ts-expect-error className must be a string, not a state function, in shipped declarations.
 export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+export const sidebarNamed: SidebarRootProps = { 'aria-label': 'Main' };
+export const sidebarLabelled: SidebarRootProps = { 'aria-labelledby': 'site-name', closeLabel: 'Close' };
+export const sidebarTrigger: SidebarTriggerProps = { iconOnly: true, 'aria-label': 'Menu' };
+export const sidebarLink: SidebarMenuButtonProps = { href: '/', current: true };
+export const sidebar = <Sidebar.Provider defaultOpen mobileBreakpoint={640}><Sidebar.Trigger {...sidebarTrigger}>Menu</Sidebar.Trigger><Sidebar.Root {...sidebarNamed}><Sidebar.Content><Sidebar.Group><Sidebar.GroupLabel>Project</Sidebar.GroupLabel><Sidebar.Menu><Sidebar.MenuItem><Sidebar.MenuButton {...sidebarLink}>Overview</Sidebar.MenuButton></Sidebar.MenuItem></Sidebar.Menu></Sidebar.Group></Sidebar.Content></Sidebar.Root></Sidebar.Provider>;
+// @ts-expect-error The sidebar landmark needs aria-label or aria-labelledby in shipped declarations.
+export const sidebarUnnamed: SidebarRootProps = {};
+// @ts-expect-error JSX usage must also name the sidebar.
+export const sidebarUnnamedJsx = <Sidebar.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const sidebarBothNames: SidebarRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+const sidebarUnnamedProps = { closeLabel: 'Close' };
+// @ts-expect-error Spreads cannot bypass the required sidebar name.
+export const sidebarSpreadUnnamed = <Sidebar.Root {...sidebarUnnamedProps} />;
+// @ts-expect-error An icon-only trigger needs a name source in shipped declarations.
+export const sidebarIconTrigger = <Sidebar.Trigger iconOnly />;
+// @ts-expect-error A menu link needs href or render in shipped declarations.
+export const sidebarNoDestination: SidebarMenuButtonProps = { current: true };
+// @ts-expect-error aria-current is set through current in shipped declarations.
+export const sidebarManualCurrent: SidebarMenuButtonProps = { href: '/', 'aria-current': 'page' };
+function SidebarWrapper(props: SidebarRootProps) { return <Sidebar.Root {...props} />; }
+export const wrappedSidebar = <SidebarWrapper aria-label="Main" />;
+// @ts-expect-error Wrappers must preserve the required sidebar name.
+export const wrappedSidebarInvalid = <SidebarWrapper />;
 type SheetRootProps = ComponentProps<typeof Sheet.Root>;
 export const sheetRoot: SheetRootProps = { defaultOpen: true };
 // @ts-expect-error A Sheet is always modal in shipped declarations.

@@ -23,6 +23,7 @@ import { radioGroupQualityRules } from './components/RadioGroup.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { sheetQualityRules } from './components/Sheet.js';
+import { sidebarQualityRules } from './components/Sidebar.js';
 import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
@@ -137,6 +138,7 @@ export const qualityRules = {
   Table: tableQualityRules,
   Breadcrumb: breadcrumbQualityRules,
   Pagination: paginationQualityRules,
+  Sidebar: sidebarQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,

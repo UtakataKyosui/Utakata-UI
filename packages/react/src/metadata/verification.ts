@@ -7,6 +7,7 @@ const verificationStates = {
   Kbd: ['static'],
   Separator: ['decorative', 'semantic'],
   Sheet: ['open', 'closed'],
+  Sidebar: ['expanded', 'collapsed'],
   Badge: ['short', 'long', 'icon'],
   Skeleton: ['loading', 'reducedMotion', 'forcedColors'],
   Spinner: ['running', 'reducedMotion'],

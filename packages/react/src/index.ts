@@ -129,6 +129,17 @@ export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 export type { SheetPopupProps, SheetRootProps } from './components/Sheet.js';
 export { Sheet } from './components/Sheet.js';
+export type {
+  SidebarMenuButtonProps,
+  SidebarProviderProps,
+  SidebarRootProps,
+  SidebarTriggerProps,
+} from './components/Sidebar.js';
+export {
+  Sidebar,
+  sidebarMobileBreakpoint,
+  useSidebar,
+} from './components/Sidebar.js';
 export type { SkeletonProps } from './components/Skeleton.js';
 export { Skeleton } from './components/Skeleton.js';
 export { Slider } from './components/Slider.js';

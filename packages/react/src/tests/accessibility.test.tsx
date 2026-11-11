@@ -44,6 +44,7 @@ import { radioGroupChecks } from './quality/RadioGroup.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
 import { sheetChecks } from './quality/Sheet.checks.js';
+import { sidebarChecks } from './quality/Sidebar.checks.js';
 import { skeletonChecks } from './quality/Skeleton.checks.js';
 import { sliderChecks } from './quality/Slider.checks.js';
 import { spinnerChecks } from './quality/Spinner.checks.js';
@@ -155,6 +156,7 @@ describe('accessibility regression checks', () => {
       ...tableChecks,
       ...breadcrumbChecks,
       ...paginationChecks,
+      ...sidebarChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,

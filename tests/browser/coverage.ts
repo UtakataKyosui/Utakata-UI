@@ -127,6 +127,14 @@ export const coverage = {
       current: 'pagination.target-reflow',
     },
   },
+  Sidebar: {
+    axes: {},
+    selector: '.ui-sidebar',
+    states: {
+      expanded: 'sidebar.keyboard',
+      collapsed: 'sidebar.responsive-focus',
+    },
+  },
   Input: {
     axes: { sizes: ['sm', 'md', 'lg'] },
     selector: '.ui-input',

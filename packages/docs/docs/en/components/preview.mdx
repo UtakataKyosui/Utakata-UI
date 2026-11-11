@@ -130,6 +130,14 @@ Moves between pages with ordinary links. The current page is marked with `active
 
 <Component path="en/pagination" />
 
+## Sidebar [#sidebar]
+
+See [Sidebar](/en/components/sidebar) for detailed usage and the API.
+
+A navigation sidebar exposed as a named landmark with links to destinations. On wide viewports `Sidebar.Trigger` (a button with `aria-expanded` and `aria-controls`) collapses and expands it, and collapsed links leave the Tab order and assistive technology. On narrow viewports (below 768px by default) it becomes a Sheet that opens from the left as a modal; a visible close button, Escape and a press on the backdrop close it and return focus to the trigger. When a viewport change removes the focused element, focus moves to the trigger. Mark the link to the current page with `current`; it is also shown with bold text and a bar. Persisted open state, link destinations, routing, the main landmark and a skip link are your responsibility. An icon-only rail, resizing and a keyboard shortcut are not provided.
+
+<Component path="en/sidebar" />
+
 ## Input [#input]
 
 See [Input](/en/components/input) for detailed usage and the API.

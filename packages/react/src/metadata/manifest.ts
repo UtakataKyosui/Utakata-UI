@@ -23,6 +23,7 @@ import { radioGroupManifest } from './components/RadioGroup.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
 import { sheetManifest } from './components/Sheet.js';
+import { sidebarManifest } from './components/Sidebar.js';
 import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
@@ -172,6 +173,7 @@ const manifest = {
     Table: tableManifest,
     Breadcrumb: breadcrumbManifest,
     Pagination: paginationManifest,
+    Sidebar: sidebarManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
