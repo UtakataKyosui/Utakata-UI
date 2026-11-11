@@ -5,24 +5,34 @@ import { avatarQualityRules } from './components/Avatar.js';
 import { badgeQualityRules } from './components/Badge.js';
 import { breadcrumbQualityRules } from './components/Breadcrumb.js';
 import { buttonGroupQualityRules } from './components/ButtonGroup.js';
+import { calendarQualityRules } from './components/Calendar.js';
 import { cardQualityRules } from './components/Card.js';
+import { carouselQualityRules } from './components/Carousel.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
 import { commandQualityRules } from './components/Command.js';
+import { contextMenuQualityRules } from './components/ContextMenu.js';
+import { drawerQualityRules } from './components/Drawer.js';
+import { datePickerQualityRules } from './components/DatePicker.js';
 import { dropdownMenuQualityRules } from './components/DropdownMenu.js';
+import { hoverCardQualityRules } from './components/HoverCard.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
 import { kbdQualityRules } from './components/Kbd.js';
+import { menubarQualityRules } from './components/Menubar.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
+import { navigationMenuQualityRules } from './components/NavigationMenu.js';
 import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { scrollAreaQualityRules } from './components/ScrollArea.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { sheetQualityRules } from './components/Sheet.js';
+import { sidebarQualityRules } from './components/Sidebar.js';
 import { skeletonQualityRules } from './components/Skeleton.js';
 import { sliderQualityRules } from './components/Slider.js';
 import { spinnerQualityRules } from './components/Spinner.js';
@@ -125,18 +135,22 @@ export const qualityRules = {
     },
   ],
   Kbd: kbdQualityRules,
+  ScrollArea: scrollAreaQualityRules,
   Separator: separatorQualityRules,
   Sheet: sheetQualityRules,
+  Drawer: drawerQualityRules,
   Badge: badgeQualityRules,
   Skeleton: skeletonQualityRules,
   Spinner: spinnerQualityRules,
   Card: cardQualityRules,
+  Carousel: carouselQualityRules,
   Alert: alertQualityRules,
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
   Table: tableQualityRules,
   Breadcrumb: breadcrumbQualityRules,
   Pagination: paginationQualityRules,
+  Sidebar: sidebarQualityRules,
   Input: inputQualityRules,
   Textarea: textareaQualityRules,
   NativeSelect: nativeSelectQualityRules,
@@ -154,12 +168,18 @@ export const qualityRules = {
   Toggle: toggleQualityRules,
   Tooltip: tooltipQualityRules,
   Popover: popoverQualityRules,
+  HoverCard: hoverCardQualityRules,
   DropdownMenu: dropdownMenuQualityRules,
+  ContextMenu: contextMenuQualityRules,
+  Menubar: menubarQualityRules,
+  NavigationMenu: navigationMenuQualityRules,
   AlertDialog: alertDialogQualityRules,
   Toast: toastQualityRules,
   InputGroup: inputGroupQualityRules,
   ToggleGroup: toggleGroupQualityRules,
   ButtonGroup: buttonGroupQualityRules,
+  Calendar: calendarQualityRules,
+  DatePicker: datePickerQualityRules,
   shared: [
     {
       id: 'lism.rendered-props',
@@ -174,6 +194,20 @@ export const qualityRules = {
       residual:
         'Arbitrary Lism overrides and consumer content require their own contrast, motion and assistive-technology verification.',
       criteria: ['1.4.10', '2.1.1', '2.4.3'],
+    },
+    {
+      id: 'lism.aspect-ratio-frame',
+      requirement:
+        'A Lism frame (`Frame ar`) reserves its ratio before media loads, keeps it when the width changes or content overflows, and the media fills the frame.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Keep `ar` on the `Frame` element, put only the img, video or iframe inside it, and do not override aspect-ratio or overflow with custom CSS.',
+      applicability:
+        'Representative 16/9, container-responsive 1/1 to 16/9 and 4/3 frames with an image whose intrinsic ratio differs, a 320px container and overflowing text, in standard themes.',
+      residual:
+        'Alternative text, captions, transcripts, iframe titles, cropping of essential content and ratio strings accepted by Lism stay consumer responsibilities. Types do not validate ratio strings.',
+      criteria: ['1.4.10'],
     },
     {
       id: 'theme.reduced-motion',

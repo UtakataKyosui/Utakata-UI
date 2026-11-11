@@ -9,20 +9,29 @@ import {
   Breadcrumb,
   Button,
   ButtonGroup,
+  Calendar,
+  type CalendarDate,
   Card,
   Checkbox,
   Collapsible,
   Combobox,
   Command,
+  ContextMenu,
+  DatePicker,
   Dialog,
+  DirectionProvider,
+  Drawer,
   DropdownMenu,
   Field,
+  HoverCard,
   Input,
   InputGroup,
   InputOTP,
   Kbd,
   KbdGroup,
+  Menubar,
   NativeSelect,
+  NavigationMenu,
   Pagination,
   Popover,
   Progress,
@@ -30,6 +39,7 @@ import {
   Select,
   Separator,
   Sheet,
+  Sidebar,
   Skeleton,
   Slider,
   Spinner,
@@ -46,10 +56,13 @@ import {
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
+import { EmptyFixture } from './empty-fixture.js';
+import { CarouselFixture } from './carousel-fixture.js';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
+import { ScrollAreaFixture } from './scroll-area-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
   if (!form) return;
@@ -787,6 +800,39 @@ function TooltipStates() {
   );
 }
 
+function HoverCardStates() {
+  return (
+    <section aria-label="HoverCard states">
+      <Button>Before hover card</Button>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#profile" delay={100} closeDelay={300}>
+          Profile
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>
+              Utakata-UI maintainers write accessible components. This card only
+              repeats what the linked profile page already shows.
+            </HoverCard.Popup>
+            <HoverCard.Arrow />
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#second" delay={100}>
+          Second link
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>A second supplementary preview.</HoverCard.Popup>
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <Button>After hover card</Button>
+    </section>
+  );
+}
+
 function PopoverStates() {
   return (
     <section aria-label="Popover states">
@@ -811,6 +857,48 @@ function PopoverStates() {
         </Popover.Portal>
       </Popover.Root>
       <Button>After popover</Button>
+    </section>
+  );
+}
+
+function ContextMenuStates() {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  return (
+    <section aria-label="Context menu states">
+      <Button>Before context menu</Button>
+      <ContextMenu.Root>
+        <ContextMenu.Trigger>
+          <Button variant="outline">File area</Button>
+        </ContextMenu.Trigger>
+        <ContextMenu.Portal>
+          <ContextMenu.Positioner>
+            <ContextMenu.Popup aria-label="File actions">
+              <ContextMenu.Group>
+                <ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel>
+                <ContextMenu.Item onClick={record('Edit')}>
+                  Edit
+                </ContextMenu.Item>
+                <ContextMenu.Item onClick={record('Duplicate')}>
+                  Duplicate
+                </ContextMenu.Item>
+              </ContextMenu.Group>
+              <ContextMenu.Separator />
+              <ContextMenu.Item disabled onClick={record('Delete')}>
+                Delete
+              </ContextMenu.Item>
+              <ContextMenu.Item onClick={record('Share')}>
+                Share
+              </ContextMenu.Item>
+            </ContextMenu.Popup>
+          </ContextMenu.Positioner>
+        </ContextMenu.Portal>
+      </ContextMenu.Root>
+      <Button>After context menu</Button>
+      <output aria-label="Context menu actions">
+        {JSON.stringify(actions)}
+      </output>
     </section>
   );
 }
@@ -852,6 +940,243 @@ function MenuStates() {
       <Button>After menu</Button>
       <output aria-label="Menu actions">{JSON.stringify(actions)}</output>
     </section>
+  );
+}
+
+function MenubarFixture({ rtl = false }: { rtl?: boolean }) {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  const label = rtl ? 'Menubar rtl states' : 'Menubar states';
+  return (
+    <section aria-label={label} dir={rtl ? 'rtl' : 'ltr'}>
+      <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>
+        <Button>Before menubar</Button>
+        <Menubar.Root aria-label="Application">
+          <Menubar.Menu>
+            <Menubar.Trigger>File</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Group>
+                    <Menubar.GroupLabel>Document</Menubar.GroupLabel>
+                    <Menubar.Item onClick={record('New')}>New</Menubar.Item>
+                  </Menubar.Group>
+                  <Menubar.Separator />
+                  <Menubar.Item disabled onClick={record('Print')}>
+                    Print
+                  </Menubar.Item>
+                  <Menubar.SubmenuRoot>
+                    <Menubar.SubmenuTrigger>Export</Menubar.SubmenuTrigger>
+                    <Menubar.Portal>
+                      <Menubar.Positioner>
+                        <Menubar.Popup>
+                          <Menubar.Item onClick={record('Email')}>
+                            Email
+                          </Menubar.Item>
+                          <Menubar.Item onClick={record('Link')}>
+                            Link
+                          </Menubar.Item>
+                        </Menubar.Popup>
+                      </Menubar.Positioner>
+                    </Menubar.Portal>
+                  </Menubar.SubmenuRoot>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Format</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item onClick={record('Undo')}>Undo</Menubar.Item>
+                  <Menubar.Item onClick={record('Redo')}>Redo</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu disabled>
+            <Menubar.Trigger>View</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item>Zoom</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Help</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Item onClick={record('About')}>About</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+        </Menubar.Root>
+        <Button>After menubar</Button>
+        <output aria-label="Menubar actions">{JSON.stringify(actions)}</output>
+      </DirectionProvider>
+    </section>
+  );
+}
+
+function MenubarStates() {
+  return (
+    <>
+      <MenubarFixture />
+      <MenubarFixture rtl />
+      <section aria-label="Menubar vertical states">
+        <Menubar.Root aria-label="Sidebar" orientation="vertical">
+          <Menubar.Menu>
+            <Menubar.Trigger>Project</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4} side="inline-end">
+                <Menubar.Popup>
+                  <Menubar.Item>Open</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <Menubar.Menu>
+            <Menubar.Trigger>Account</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4} side="inline-end">
+                <Menubar.Popup>
+                  <Menubar.Item>Sign out</Menubar.Item>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+        </Menubar.Root>
+      </section>
+    </>
+  );
+}
+
+function NavigationMenuFixture({ rtl = false }: { rtl?: boolean }) {
+  const [followed, setFollowed] = useState<string[]>([]);
+  const follow = (name: string) => () =>
+    setFollowed((previous) => [...previous, name]);
+  const suffix = rtl ? ' rtl' : '';
+  const panel = (label: string, links: [string, string][]) => (
+    <NavigationMenu.Content>
+      <ul aria-label={label} className="fixture-nav-links">
+        {links.map(([name, href]) => (
+          <li key={name}>
+            <NavigationMenu.Link href={href} onClick={follow(name)}>
+              {name}
+            </NavigationMenu.Link>
+          </li>
+        ))}
+      </ul>
+    </NavigationMenu.Content>
+  );
+  return (
+    <section
+      aria-label={`Navigation menu states${suffix}`}
+      dir={rtl ? 'rtl' : 'ltr'}
+    >
+      <Button>Before navigation</Button>
+      <NavigationMenu.Root aria-label={`Primary${suffix}`}>
+        <NavigationMenu.List>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-home"
+              active
+              onClick={follow('Home')}
+            >
+              Home
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="products">
+            <NavigationMenu.Trigger>
+              Products
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Products', [
+              ['UI kit', '#nav-ui'],
+              ['Icons', '#nav-icons'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="company">
+            <NavigationMenu.Trigger>
+              Company
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Company', [
+              ['About', '#nav-about'],
+              ['Careers', '#nav-careers'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Trigger disabled>
+              Legacy
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-pricing"
+              onClick={follow('Pricing')}
+            >
+              Pricing
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+        </NavigationMenu.List>
+        <NavigationMenu.Portal>
+          <NavigationMenu.Positioner sideOffset={4}>
+            <NavigationMenu.Popup>
+              <NavigationMenu.Viewport />
+            </NavigationMenu.Popup>
+          </NavigationMenu.Positioner>
+        </NavigationMenu.Portal>
+      </NavigationMenu.Root>
+      <Button>After navigation</Button>
+      <output aria-label="Navigation followed">
+        {JSON.stringify(followed)}
+      </output>
+    </section>
+  );
+}
+
+function NavigationMenuStates() {
+  return (
+    <>
+      <NavigationMenuFixture />
+      <NavigationMenuFixture rtl />
+      <section aria-label="Navigation menu vertical states">
+        <NavigationMenu.Root aria-label="Sidebar" orientation="vertical">
+          <NavigationMenu.List>
+            <NavigationMenu.Item value="docs">
+              <NavigationMenu.Trigger>
+                Docs
+                <NavigationMenu.Icon />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content>
+                <ul aria-label="Docs">
+                  <li>
+                    <NavigationMenu.Link href="#nav-guide">
+                      Guide
+                    </NavigationMenu.Link>
+                  </li>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner sideOffset={4} side="inline-end">
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu.Root>
+      </section>
+    </>
   );
 }
 
@@ -991,6 +1316,44 @@ function AlertDialogStates() {
 
 const sheetOptions = Array.from({ length: 60 }, (_, index) => index + 1);
 
+function DrawerStates() {
+  const [applied, setApplied] = useState(0);
+  return (
+    <section aria-label="Drawer states">
+      <Button>Before drawer</Button>
+      {componentManifest.components.Drawer.sides.map((side) => (
+        <Drawer.Root key={side} side={side}>
+          <Drawer.Trigger render={<Button variant="outline" />}>
+            Open {side} drawer
+          </Drawer.Trigger>
+          <Drawer.Portal>
+            <Drawer.Backdrop />
+            <Drawer.Popup>
+              <Drawer.Title>Filters on the {side}</Drawer.Title>
+              <Drawer.Description>
+                Narrow the list of results.
+              </Drawer.Description>
+              <Drawer.Close render={<Button variant="outline" />}>
+                Close {side} drawer
+              </Drawer.Close>
+              {sheetOptions.map((option) => (
+                <p key={option}>
+                  Filter option {option} / 絞り込み条件 {option}
+                </p>
+              ))}
+              <Button onClick={() => setApplied((count) => count + 1)}>
+                Apply {side} filters
+              </Button>
+            </Drawer.Popup>
+          </Drawer.Portal>
+        </Drawer.Root>
+      ))}
+      <Button>After drawer</Button>
+      <output aria-label="Applied filters">{applied}</output>
+    </section>
+  );
+}
+
 function SheetStates() {
   return (
     <section aria-label="Sheet states">
@@ -1019,6 +1382,66 @@ function SheetStates() {
         </Sheet.Root>
       ))}
       <Button>After sheet</Button>
+    </section>
+  );
+}
+
+function SidebarStates() {
+  return (
+    <section aria-label="Sidebar states">
+      <Button>Before sidebar</Button>
+      <Sidebar.Provider>
+        <Sidebar.Root aria-label="Fixture navigation" closeLabel="Close menu">
+          <Sidebar.Header>Utakata fixture</Sidebar.Header>
+          <Sidebar.Content>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Project</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-overview" current>
+                    Overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-settings">
+                    Settings
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-long">
+                    Internationalization_and_localization_configuration_overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-japanese">
+                    アクセシビリティと多言語対応の設定をまとめて確認するページ
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Account</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-profile">
+                    Profile
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+          </Sidebar.Content>
+          <Sidebar.Footer>Version 1.0</Sidebar.Footer>
+        </Sidebar.Root>
+        <div className="fixture-sidebar-inset">
+          <Sidebar.Trigger iconOnly aria-label="Toggle navigation">
+            <svg aria-hidden="true" width="16" height="16">
+              <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" />
+            </svg>
+          </Sidebar.Trigger>
+          <p>Page content next to the sidebar.</p>
+        </div>
+      </Sidebar.Provider>
+      <Button>After sidebar</Button>
     </section>
   );
 }
@@ -1095,6 +1518,88 @@ function ToastStates() {
           </Toast.Viewport>
         </Toast.Portal>
       </Toast.Provider>
+    </section>
+  );
+}
+
+function DatePickerStates() {
+  const [date, setDate] = useState<CalendarDate | null>('2026-11-10');
+  const [submissions, setSubmissions] = useState(0);
+  return (
+    <section aria-label="Date Picker states">
+      <form
+        aria-label="Booking date form"
+        ref={(form) => {
+          if (!form) return;
+          const count = (event: Event) => {
+            event.preventDefault();
+            setSubmissions((previous) => previous + 1);
+          };
+          form.addEventListener('submit', count);
+          return () => form.removeEventListener('submit', count);
+        }}
+      >
+        <DatePicker
+          label="Booking date"
+          name="bookingDate"
+          locale="en-US"
+          today="2026-11-10"
+          minDate="2026-11-05"
+          defaultValue="2026-11-10"
+          value={date}
+          onValueChange={setDate}
+          labels={{
+            openCalendar: 'Open booking calendar',
+            calendarTitle: 'Choose booking date',
+            formatHint: 'Use YYYY-MM-DD.',
+            invalidDate: 'Enter a valid ISO date.',
+            unavailableDate: 'This date is unavailable.',
+          }}
+          calendarLabels={{
+            previousMonth: 'Previous month',
+            nextMonth: 'Next month',
+            selected: 'Selected',
+          }}
+        />
+        <DatePicker label="Closed date" disabled />
+        <Button type="submit">Submit booking</Button>
+        <Button type="reset" variant="outline">
+          Reset booking
+        </Button>
+        <output aria-label="Booking submissions">{submissions}</output>
+      </form>
+    </section>
+  );
+}
+
+function CalendarStates() {
+  const [value, setValue] = useState<unknown>(null);
+  const [single, setSingle] = useState('');
+  return (
+    <section aria-label="Calendar states">
+      <Button>Before calendar</Button>
+      <Calendar
+        aria-label="Booking dates"
+        mode="range"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        defaultValue={{ from: '2026-11-12', to: '2026-11-14' }}
+        minDate="2026-10-01"
+        isDateDisabled={(date) => date === '2026-11-18'}
+        onValueChange={setValue}
+      />
+      <Calendar
+        aria-label="Appointment date"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        weekStartsOn={1}
+        onValueChange={setSingle}
+      />
+      <Button>After calendar</Button>
+      <output aria-label="Calendar value">{JSON.stringify(value)}</output>
+      <output aria-label="Single value">{single}</output>
     </section>
   );
 }
@@ -1429,24 +1934,34 @@ function Fixture() {
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
+      <EmptyFixture />
       <AlertStates />
       <AvatarStates />
       <ProgressStates />
       <TableStates />
       <BreadcrumbStates />
       <PaginationStates />
+      <CarouselFixture />
       <CollapsibleStates />
       <AccordionStates />
       <TabsStates />
       <ToggleStates />
       <TooltipStates />
+      <HoverCardStates />
       <PopoverStates />
       <MenuStates />
+      <ContextMenuStates />
+      <MenubarStates />
+      <NavigationMenuStates />
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />
+      <SidebarStates />
+      <DrawerStates />
       <ToastStates />
       <ToggleGroupStates />
+      <CalendarStates />
+      <DatePickerStates />
       <ButtonGroupStates />
       <InputGroupStates />
       <section aria-label="Additional public configurations">
@@ -1496,7 +2011,9 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing fixture root');
 const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
-  new URLSearchParams(location.search).has('lism') ? (
+  new URLSearchParams(location.search).has('scroll-area') ? (
+    <ScrollAreaFixture />
+  ) : new URLSearchParams(location.search).has('lism') ? (
     <LismFixture />
   ) : new URLSearchParams(location.search).has('reader') ? (
     <LayoutFixture variants={false} />

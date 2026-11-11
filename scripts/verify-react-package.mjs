@@ -68,12 +68,15 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Card, Collapsible, Combobox, Command, Dialog, Field, Input, InputGroup, InputOTP, Kbd, KbdGroup, NativeSelect, Pagination, Progress, RadioGroup, Select, Separator, Sheet, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type NativeSelectProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type SelectRootProps, type SheetPopupProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Carousel, Collapsible, Combobox, Command, ContextMenu, DatePicker, Dialog, DirectionProvider, Drawer, Empty, Field, Frame, HoverCard, Input, InputGroup, InputOTP, Kbd, KbdGroup, Menubar, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CarouselLabels, type CarouselProps, type CarouselSlide, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type DatePickerProps, type DrawerPopupProps, type DrawerRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type MenubarRootProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
 export const lismButton: ButtonProps = { p: '1rem', w: { base: '100%', md: 'auto' }, children: 'Save' };
 export const lismView = <Card.Root p={{ base: '1rem', md: '2rem' }}><Field.Root g="1rem"><Field.Label>Email</Field.Label><Input w="100%" /></Field.Root><Button {...lismButton} /><Dialog.Root><Dialog.Trigger p="1rem">Open</Dialog.Trigger></Dialog.Root></Card.Root>;
+export const aspectFrame = <Frame ar={{ base: '1/1', md: '16/9' }} w="100%"><img alt="Chart" src="chart.png" /></Frame>;
+// @ts-expect-error Lism's alternative ref is not part of the shipped Box composition contract.
+export const aspectFrameBadRef = <Skeleton forwardedRef={() => {}} ar="16/9" />;
 export const lismTypes: import('@utakata-ui/react').LismStyleProps = { g: '1rem', layout: 'flex' };
 export const upstreamLismType: import('@utakata-ui/react').LismProps = { p: '1rem' };
 export const mergedLismType: import('@utakata-ui/react').WithLismProps<{ required: true }> = { required: true, p: '1rem' };
@@ -222,6 +225,17 @@ export const cardInvalidLevel: CardTitleProps = { level: '7', children: 'Profile
 export const cardEmptyTitle: CardTitleProps = { level: '2' };
 // @ts-expect-error Card className must be a string in shipped declarations.
 export const cardFunctionClass = <Card.Root className={() => 'x'} />;
+
+type EmptyTitleProps = ComponentProps<typeof Empty.Title>;
+export const empty = <Empty.Root><Empty.Title level="2">No files</Empty.Title><Empty.Description>Upload files to get started.</Empty.Description><Empty.Actions><Button>Upload files</Button></Empty.Actions></Empty.Root>;
+// @ts-expect-error Empty.Title requires children in shipped declarations.
+export const emptyMissingTitle: EmptyTitleProps = { level: '2' };
+// @ts-expect-error Empty.Title restricts the heading level in shipped declarations.
+export const emptyInvalidTitle: EmptyTitleProps = { level: '7', children: 'No files' };
+// @ts-expect-error Empty.Root is static; dynamic announcements belong in a separate status region.
+export const emptyLive = <Empty.Root aria-live="polite" />;
+// @ts-expect-error Empty.Root does not accept a live-region role.
+export const emptyStatus = <Empty.Root role="status" />;
 type AlertRootProps = ComponentProps<typeof Alert.Root>;
 export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
 export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;
@@ -272,6 +286,20 @@ function ProgressWrapper(props: ProgressRootProps) { return <Progress.Root {...p
 export const wrappedProgress = <ProgressWrapper value={5} label="Upload" />;
 // @ts-expect-error Wrappers must preserve the required name.
 export const wrappedProgressInvalid = <ProgressWrapper value={5} />;
+export const scrollRegion: ScrollAreaProps = { 'aria-label': 'Updates' };
+export const scrollArea = <ScrollArea {...scrollRegion}>Content</ScrollArea>;
+export const referencedScrollArea = <ScrollArea aria-labelledby="updates">Content</ScrollArea>;
+// @ts-expect-error ScrollArea requires a name in shipped declarations.
+export const unnamedScrollArea = <ScrollArea />;
+// @ts-expect-error A ScrollArea must have a single naming source.
+export const doublyNamedScrollArea = <ScrollArea aria-label="Updates" aria-labelledby="updates" />;
+const scrollAreaRoleProps = { 'aria-label': 'Updates', role: 'none' };
+// @ts-expect-error A spread cannot override native region semantics.
+export const scrollAreaRoleOverride = <ScrollArea {...scrollAreaRoleProps} />;
+const scrollAreaFocusProps = { 'aria-label': 'Updates', tabIndex: -1 };
+// @ts-expect-error A spread cannot remove the ScrollArea from the Tab order.
+export const scrollAreaFocusOverride = <ScrollArea {...scrollAreaFocusProps} />;
+
 export const labelledTable: TableContainerProps = { 'aria-label': 'Team members' };
 export const referencedTable: TableContainerProps = { 'aria-labelledby': 'team-caption' };
 export const table = <Table.Container {...labelledTable}><Table.Root><Table.Caption id="team-caption">Team</Table.Caption><Table.Header><Table.Row><Table.Head scope="col">Name</Table.Head></Table.Row></Table.Header></Table.Root></Table.Container>;
@@ -305,6 +333,22 @@ export const breadcrumbSeparatorSpread = <Breadcrumb.Separator {...breadcrumbVis
 const breadcrumbLinkProps = { children: 'Home' };
 // @ts-expect-error Spreads cannot create a link without a destination.
 export const breadcrumbLinkSpread = <Breadcrumb.Link {...breadcrumbLinkProps} />;
+export const carouselSlides: readonly CarouselSlide[] = [{ id: 'one', content: <p>Slide one</p> }, { id: 'two', content: <p>Slide two</p> }];
+export const carouselLabels: CarouselLabels = { name: 'Featured articles', roleDescription: 'carousel', viewport: 'Articles', previous: 'Previous', next: 'Next', position: (current, total) => current + ' of ' + total };
+export const carouselProps: CarouselProps = { slides: carouselSlides, labels: carouselLabels, dir: 'rtl', p: '1rem' };
+function CarouselWrapper(props: CarouselProps) { return <Carousel {...props} />; }
+export const carousel = <CarouselWrapper {...carouselProps} />;
+// @ts-expect-error A localized label set is required.
+export const carouselMissingLabels = <Carousel slides={carouselSlides} />;
+// @ts-expect-error Every slide needs a stable identifier.
+export const carouselMissingId = <Carousel slides={[{ content: 'Slide' }]} labels={carouselLabels} />;
+// @ts-expect-error Position text needs a formatter.
+export const carouselInvalidPosition = <Carousel slides={carouselSlides} labels={{ ...carouselLabels, position: '1 of 2' }} />;
+const autoplayCarousel = { ...carouselProps, autoplay: true };
+// @ts-expect-error Autoplay stays outside the shipped API through spreads and wrappers.
+export const carouselAutoplay = <CarouselWrapper {...autoplayCarousel} />;
+// @ts-expect-error Labels own the region name, including through spreads.
+export const carouselDuplicateLabel = <Carousel {...{ ...carouselProps, 'aria-label': 'Another name' }} />;
 export const paginationPage: PaginationLinkProps = { href: '?page=2', active: true };
 export const paginationEnabled: PaginationDirectionProps = { href: '?page=2' };
 export const paginationDisabled: PaginationDirectionProps = { disabled: true };
@@ -407,6 +451,38 @@ function TooltipWrapper(props: TooltipPopupProps) { return <Tooltip.Popup {...pr
 export const wrappedTooltip = <TooltipWrapper>Copy</TooltipWrapper>;
 // @ts-expect-error Wrappers must preserve the plain-text contract.
 export const wrappedTooltipInvalid = <TooltipWrapper><a href="/">Help</a></TooltipWrapper>;
+export const contextMenuPopup: ContextMenuPopupProps = { 'aria-label': 'File actions' };
+export const contextMenu = <ContextMenu.Root><ContextMenu.Trigger><Button>File</Button></ContextMenu.Trigger><ContextMenu.Portal><ContextMenu.Positioner><ContextMenu.Popup {...contextMenuPopup}><ContextMenu.Group><ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel><ContextMenu.Item disabled>Delete</ContextMenu.Item></ContextMenu.Group><ContextMenu.Separator /></ContextMenu.Popup></ContextMenu.Positioner></ContextMenu.Portal></ContextMenu.Root>;
+export const contextMenuLabelled: ContextMenuPopupProps = { 'aria-labelledby': 'file-heading' };
+// @ts-expect-error The menu needs aria-label or aria-labelledby in shipped declarations.
+export const contextMenuUnnamed: ContextMenuPopupProps = {};
+// @ts-expect-error JSX usage must also name the menu.
+export const contextMenuUnnamedJsx = <ContextMenu.Popup />;
+const contextMenuUnnamedProps = { className: 'menu' };
+// @ts-expect-error Spreads cannot bypass the required name.
+export const contextMenuSpreadUnnamed = <ContextMenu.Popup {...contextMenuUnnamedProps} />;
+function ContextMenuWrapper(props: ContextMenuPopupProps) { return <ContextMenu.Popup {...props} />; }
+export const wrappedContextMenu = <ContextMenuWrapper aria-label="File actions" />;
+// @ts-expect-error Wrappers must preserve the required name contract.
+export const wrappedContextMenuInvalid = <ContextMenuWrapper />;
+// @ts-expect-error className is a string, not a Base UI state function, in shipped declarations.
+export const contextMenuStateClass: ContextMenuPopupProps = { 'aria-label': 'x', className: () => 'x' };
+export const hoverCardTrigger: HoverCardTriggerProps = { href: '/docs', children: 'Docs' };
+export const hoverCardRoot: HoverCardRootProps = { defaultOpen: false };
+export const hoverCard = <HoverCard.Root {...hoverCardRoot}><HoverCard.Trigger {...hoverCardTrigger} /><HoverCard.Portal><HoverCard.Positioner><HoverCard.Popup>Preview</HoverCard.Popup><HoverCard.Arrow /></HoverCard.Positioner></HoverCard.Portal></HoverCard.Root>;
+// @ts-expect-error The trigger is a link and needs a destination in shipped declarations.
+export const hoverCardNoHref: HoverCardTriggerProps = { children: 'Docs' };
+// @ts-expect-error JSX usage must also provide href.
+export const hoverCardNoHrefJsx = <HoverCard.Trigger>Docs</HoverCard.Trigger>;
+const hoverCardNoHrefProps = { children: 'Docs' };
+// @ts-expect-error Spreads cannot bypass the required href.
+export const hoverCardSpreadNoHref = <HoverCard.Trigger {...hoverCardNoHrefProps} />;
+// @ts-expect-error className is a string, not a Base UI state function, in shipped declarations.
+export const hoverCardStateClass: HoverCardTriggerProps = { href: '/', className: () => 'x' };
+function HoverCardWrapper(props: HoverCardTriggerProps) { return <HoverCard.Trigger {...props} />; }
+export const wrappedHoverCard = <HoverCardWrapper href="/docs">Docs</HoverCardWrapper>;
+// @ts-expect-error Wrappers must preserve the required href.
+export const wrappedHoverCardInvalid = <HoverCardWrapper>Docs</HoverCardWrapper>;
 type AlertDialogRootProps = ComponentProps<typeof AlertDialog.Root>;
 export const alertDialogRoot: AlertDialogRootProps = { defaultOpen: true };
 export const alertDialogPopup: AlertDialogPopupProps = { className: 'confirm' };
@@ -438,6 +514,75 @@ const sheetUnsafeProps = { side: 'center' };
 export const sheetSpreadSide = <Sheet.Popup {...sheetUnsafeProps} />;
 // @ts-expect-error className must be a string, not a state function, in shipped declarations.
 export const sheetPopupClass: SheetPopupProps = { className: () => 'x' };
+export const menubarNamed: MenubarRootProps = { 'aria-label': 'Application' };
+export const menubarLabelled: MenubarRootProps = { 'aria-labelledby': 'app-heading', orientation: 'vertical' };
+export const menubar = <DirectionProvider direction="rtl"><Menubar.Root {...menubarNamed}><Menubar.Menu><Menubar.Trigger>File</Menubar.Trigger><Menubar.Portal><Menubar.Positioner sideOffset={4}><Menubar.Popup><Menubar.Item>New</Menubar.Item><Menubar.Separator /><Menubar.SubmenuRoot><Menubar.SubmenuTrigger>Share</Menubar.SubmenuTrigger><Menubar.Portal><Menubar.Positioner><Menubar.Popup><Menubar.Item>Email</Menubar.Item></Menubar.Popup></Menubar.Positioner></Menubar.Portal></Menubar.SubmenuRoot></Menubar.Popup></Menubar.Positioner></Menubar.Portal></Menubar.Menu></Menubar.Root></DirectionProvider>;
+// @ts-expect-error The menubar needs aria-label or aria-labelledby in shipped declarations.
+export const menubarUnnamed: MenubarRootProps = {};
+// @ts-expect-error JSX usage must also name the menubar.
+export const menubarUnnamedJsx = <Menubar.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const menubarBothNames: MenubarRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+// @ts-expect-error Orientation is limited to horizontal and vertical in shipped declarations.
+export const menubarOrientation: MenubarRootProps = { 'aria-label': 'a', orientation: 'diagonal' };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const menubarClass: MenubarRootProps = { 'aria-label': 'a', className: () => 'x' };
+const menubarUnnamedProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the required menubar name.
+export const menubarSpreadUnnamed = <Menubar.Root {...menubarUnnamedProps} />;
+function MenubarWrapper(props: MenubarRootProps) { return <Menubar.Root {...props} />; }
+export const wrappedMenubar = <MenubarWrapper aria-label="Application" />;
+// @ts-expect-error Wrappers must preserve the required menubar name.
+export const wrappedMenubarInvalid = <MenubarWrapper />;
+export const navigationMenuNamed: NavigationMenuRootProps = { 'aria-label': 'Main' };
+export const navigationMenuLabelled: NavigationMenuRootProps = { 'aria-labelledby': 'site-heading', orientation: 'vertical' };
+export const navigationMenuLink: NavigationMenuLinkProps = { href: '/a', active: true };
+export const navigationMenu = <NavigationMenu.Root {...navigationMenuNamed}><NavigationMenu.List><NavigationMenu.Item><NavigationMenu.Link href="/" active>Home</NavigationMenu.Link></NavigationMenu.Item><NavigationMenu.Item value="more"><NavigationMenu.Trigger>More<NavigationMenu.Icon /></NavigationMenu.Trigger><NavigationMenu.Content><NavigationMenu.Link {...navigationMenuLink}>A</NavigationMenu.Link></NavigationMenu.Content></NavigationMenu.Item></NavigationMenu.List><NavigationMenu.Portal><NavigationMenu.Positioner sideOffset={8}><NavigationMenu.Popup><NavigationMenu.Viewport /></NavigationMenu.Popup></NavigationMenu.Positioner></NavigationMenu.Portal></NavigationMenu.Root>;
+// @ts-expect-error The navigation needs aria-label or aria-labelledby in shipped declarations.
+export const navigationMenuUnnamed: NavigationMenuRootProps = {};
+// @ts-expect-error JSX usage must also name the navigation.
+export const navigationMenuUnnamedJsx = <NavigationMenu.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const navigationMenuBothNames: NavigationMenuRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+// @ts-expect-error Orientation is limited to horizontal and vertical in shipped declarations.
+export const navigationMenuOrientation: NavigationMenuRootProps = { 'aria-label': 'a', orientation: 'diagonal' };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const navigationMenuClass: NavigationMenuRootProps = { 'aria-label': 'a', className: () => 'x' };
+const navigationMenuUnnamedProps = { orientation: 'vertical' as const };
+// @ts-expect-error Spreads cannot bypass the required navigation name.
+export const navigationMenuSpreadUnnamed = <NavigationMenu.Root {...navigationMenuUnnamedProps} />;
+// @ts-expect-error A link needs href or render in shipped declarations.
+export const navigationMenuLinkNoDestination: NavigationMenuLinkProps = {};
+// @ts-expect-error Mark the current page with active, not aria-current.
+export const navigationMenuLinkCurrent: NavigationMenuLinkProps = { href: '/a', 'aria-current': 'page' };
+function NavigationMenuWrapper(props: NavigationMenuRootProps) { return <NavigationMenu.Root {...props} />; }
+export const wrappedNavigationMenu = <NavigationMenuWrapper aria-label="Main" />;
+// @ts-expect-error Wrappers must preserve the required navigation name.
+export const wrappedNavigationMenuInvalid = <NavigationMenuWrapper />;
+export const sidebarNamed: SidebarRootProps = { 'aria-label': 'Main' };
+export const sidebarLabelled: SidebarRootProps = { 'aria-labelledby': 'site-name', closeLabel: 'Close' };
+export const sidebarTrigger: SidebarTriggerProps = { iconOnly: true, 'aria-label': 'Menu' };
+export const sidebarLink: SidebarMenuButtonProps = { href: '/', current: true };
+export const sidebar = <Sidebar.Provider defaultOpen mobileBreakpoint={640}><Sidebar.Trigger {...sidebarTrigger}>Menu</Sidebar.Trigger><Sidebar.Root {...sidebarNamed}><Sidebar.Content><Sidebar.Group><Sidebar.GroupLabel>Project</Sidebar.GroupLabel><Sidebar.Menu><Sidebar.MenuItem><Sidebar.MenuButton {...sidebarLink}>Overview</Sidebar.MenuButton></Sidebar.MenuItem></Sidebar.Menu></Sidebar.Group></Sidebar.Content></Sidebar.Root></Sidebar.Provider>;
+// @ts-expect-error The sidebar landmark needs aria-label or aria-labelledby in shipped declarations.
+export const sidebarUnnamed: SidebarRootProps = {};
+// @ts-expect-error JSX usage must also name the sidebar.
+export const sidebarUnnamedJsx = <Sidebar.Root />;
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const sidebarBothNames: SidebarRootProps = { 'aria-label': 'a', 'aria-labelledby': 'b' };
+const sidebarUnnamedProps = { closeLabel: 'Close' };
+// @ts-expect-error Spreads cannot bypass the required sidebar name.
+export const sidebarSpreadUnnamed = <Sidebar.Root {...sidebarUnnamedProps} />;
+// @ts-expect-error An icon-only trigger needs a name source in shipped declarations.
+export const sidebarIconTrigger = <Sidebar.Trigger iconOnly />;
+// @ts-expect-error A menu link needs href or render in shipped declarations.
+export const sidebarNoDestination: SidebarMenuButtonProps = { current: true };
+// @ts-expect-error aria-current is set through current in shipped declarations.
+export const sidebarManualCurrent: SidebarMenuButtonProps = { href: '/', 'aria-current': 'page' };
+function SidebarWrapper(props: SidebarRootProps) { return <Sidebar.Root {...props} />; }
+export const wrappedSidebar = <SidebarWrapper aria-label="Main" />;
+// @ts-expect-error Wrappers must preserve the required sidebar name.
+export const wrappedSidebarInvalid = <SidebarWrapper />;
 type SheetRootProps = ComponentProps<typeof Sheet.Root>;
 export const sheetRoot: SheetRootProps = { defaultOpen: true };
 // @ts-expect-error A Sheet is always modal in shipped declarations.
@@ -457,6 +602,36 @@ function SheetWrapper(props: SheetPopupProps) { return <Sheet.Popup {...props} /
 export const wrappedSheet = <SheetWrapper side="top" />;
 // @ts-expect-error Wrappers must preserve the side contract.
 export const wrappedSheetInvalid = <SheetWrapper side="center" />;
+export const drawerRoot: DrawerRootProps = { side: 'left', defaultOpen: true };
+export const drawerPopup: DrawerPopupProps = { className: 'panel' };
+export const drawer = <Drawer.Root side="bottom"><Drawer.Trigger>Open filters</Drawer.Trigger><Drawer.Portal><Drawer.Backdrop /><Drawer.Popup {...drawerPopup}><Drawer.Title>Filters</Drawer.Title><Drawer.Description>Narrow the list.</Drawer.Description><Drawer.Close>Close</Drawer.Close></Drawer.Popup></Drawer.Portal></Drawer.Root>;
+export const drawerDefaultSide = <Drawer.Root><Drawer.Portal><Drawer.Popup><Drawer.Title>Filters</Drawer.Title></Drawer.Popup></Drawer.Portal></Drawer.Root>;
+// @ts-expect-error Sides are limited to the four edges in shipped declarations.
+export const drawerInvalidSide: DrawerRootProps = { side: 'center' };
+// @ts-expect-error JSX usage must also use a supported side.
+export const drawerInvalidSideJsx = <Drawer.Root side="center" />;
+const drawerUnsafeProps = { side: 'center' };
+// @ts-expect-error Spreads cannot pass an unsupported side.
+export const drawerSpreadSide = <Drawer.Root {...drawerUnsafeProps} />;
+// @ts-expect-error A Drawer is always modal in shipped declarations.
+export const drawerNonModal: DrawerRootProps = { modal: false };
+// @ts-expect-error JSX usage must also keep the drawer modal.
+export const drawerNonModalJsx = <Drawer.Root modal={false} />;
+const drawerUnsafeRoot = { modal: false };
+// @ts-expect-error Spreads cannot make the drawer non-modal.
+export const drawerSpreadNonModal = <Drawer.Root {...drawerUnsafeRoot} />;
+// @ts-expect-error The swipe direction follows side in shipped declarations.
+export const drawerSwipeDirection: DrawerRootProps = { swipeDirection: 'left' };
+// @ts-expect-error Snap points are not provided in shipped declarations.
+export const drawerSnapPoints: DrawerRootProps = { snapPoints: [0.5, 1] };
+// @ts-expect-error className must be a string, not a state function, in shipped declarations.
+export const drawerPopupClass: DrawerPopupProps = { className: () => 'x' };
+function DrawerRootWrapper(props: DrawerRootProps) { return <Drawer.Root {...props} />; }
+export const wrappedDrawerRoot = <DrawerRootWrapper side="top" />;
+// @ts-expect-error Wrappers must preserve the modal contract.
+export const wrappedDrawerRootInvalid = <DrawerRootWrapper modal={false} />;
+// @ts-expect-error Wrappers must preserve the side contract.
+export const wrappedDrawerSideInvalid = <DrawerRootWrapper side="center" />;
 export const toastTextClose: ToastCloseProps = { children: 'Dismiss' };
 export const toastLabelledClose: ToastCloseProps = { 'aria-label': 'Close notification' };
 export const toastClose = <Toast.Close {...toastTextClose} />;
@@ -521,6 +696,52 @@ function ButtonGroupWrapper(props: ButtonGroupProps) { return <ButtonGroup {...p
 export const wrappedButtonGroup = <ButtonGroupWrapper aria-label="History" />;
 // @ts-expect-error Wrappers must preserve the required group name.
 export const wrappedButtonGroupInvalid = <ButtonGroupWrapper />;
+export const datePickerProps: DatePickerProps = { label: 'Booking date', value: '2026-11-10', name: 'date' };
+export const datePicker = <DatePicker {...datePickerProps} />;
+// @ts-expect-error DatePicker requires a visible label.
+export const datePickerWithoutLabel = <DatePicker name="date" />;
+// @ts-expect-error DatePicker accepts a single ISO date and not a range.
+export const datePickerWithRange = <DatePicker label="Date" value={{ from: '2026-11-10' }} />;
+// @ts-expect-error DatePicker accepts ISO date strings and not Date objects.
+export const datePickerWithDate = <DatePicker label="Date" value={new Date()} />;
+export const calendarDay: CalendarDate = '2026-11-10';
+export const calendarRange: CalendarRange = { from: '2026-11-10', to: '2026-11-12' };
+export const calendarSingleProps: CalendarProps = { 'aria-label': 'Booking date', value: calendarDay, weekStartsOn: 1, minDate: '2026-11-03', isDateDisabled: (date) => date.endsWith('-23') };
+export const calendarRangeProps: CalendarProps = { 'aria-labelledby': 'stay', mode: 'range', value: calendarRange, onValueChange: (range) => range.from };
+export const calendarMonthProps: CalendarProps = { 'aria-label': 'Month', month: '2026-11', onMonthChange: (month) => month.slice(0, 4) };
+export const calendar = <Calendar {...calendarSingleProps} />;
+// @ts-expect-error Calendar must be named by aria-label or aria-labelledby in shipped declarations.
+export const calendarUnnamed: CalendarProps = { value: '2026-11-10' };
+// @ts-expect-error aria-label and aria-labelledby are mutually exclusive in shipped declarations.
+export const calendarBothNames: CalendarProps = { 'aria-label': 'x', 'aria-labelledby': 'y' };
+// @ts-expect-error Dates are ISO strings, not Date objects, in shipped declarations.
+export const calendarDateObject: CalendarProps = { 'aria-label': 'x', value: new Date() };
+// @ts-expect-error Dates need the year-month-day shape in shipped declarations.
+export const calendarWordDate: CalendarDate = 'tomorrow';
+export const calendarRangeAsString: CalendarProps = {
+  'aria-label': 'x',
+  mode: 'range',
+  // @ts-expect-error Range mode requires a { from, to } object in shipped declarations.
+  value: '2026-11-10',
+};
+export const calendarSingleAsRange: CalendarProps = {
+  'aria-label': 'x',
+  // @ts-expect-error Single mode requires a date string in shipped declarations.
+  value: { from: '2026-11-10' },
+};
+// @ts-expect-error weekStartsOn is limited to 0 through 6 in shipped declarations.
+export const calendarBadWeek: CalendarProps = { 'aria-label': 'x', weekStartsOn: 7 };
+// @ts-expect-error Month values use the YYYY-MM shape in shipped declarations.
+export const calendarBadMonth: CalendarProps = { 'aria-label': 'x', month: 'November' };
+// @ts-expect-error JSX usage must also name the calendar.
+export const calendarUnnamedJsx = <Calendar />;
+const calendarUnnamedSpread = { weekStartsOn: 1 as const };
+// @ts-expect-error Spreads cannot bypass the required calendar name.
+export const calendarSpreadUnnamed = <Calendar {...calendarUnnamedSpread} />;
+function CalendarWrapper(props: CalendarProps) { return <Calendar {...props} />; }
+export const wrappedCalendar = <CalendarWrapper aria-label="Booking date" />;
+// @ts-expect-error Wrappers must preserve the required calendar name.
+export const wrappedCalendarInvalid = <CalendarWrapper />;
 export const inputGroupAddon: InputGroupAddonProps = { align: 'block-end' };
 export const inputGroupIconButton: InputGroupButtonProps = { iconOnly: true, 'aria-label': 'Clear' };
 export const inputGroup = <Field.Root><Field.Label>Search</Field.Label><InputGroup.Root><Input type="search" /><InputGroup.Addon {...inputGroupAddon}><InputGroup.Button {...inputGroupIconButton} /></InputGroup.Addon></InputGroup.Root></Field.Root>;
@@ -630,13 +851,20 @@ export const editableKbd = <Kbd contentEditable>K</Kbd>;
     `import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Button } from '@utakata-ui/react';
+import { Button, Carousel } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 assert.ok(componentManifest);
 assert.ok(componentManifest.components.Button.verificationStates.includes('disabled'));
 assert.match(renderToStaticMarkup(createElement(Button, null, 'Save')), /Save/);
 assert.match(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /ui-button--square/);
 assert.doesNotMatch(renderToStaticMarkup(createElement(Button, { iconOnly: true, square: true, 'aria-label': 'Add' }, '+')), /square=/);
+const carousel = renderToStaticMarkup(createElement(Carousel, {
+  slides: [{ id: 'one', content: 'First slide' }, { id: 'two', content: 'Second slide' }],
+  labels: { name: 'Featured articles', roleDescription: 'carousel', viewport: 'Slides', previous: 'Previous', next: 'Next', position: (current, total) => current + ' of ' + total },
+}));
+assert.match(carousel, /aria-label="Featured articles"/);
+assert.match(carousel, /role="status">1 of 2/);
+assert.match(carousel, /aria-hidden="true">Second slide/);
 assert.ok(import.meta.resolve('@utakata-ui/react/styles.css').endsWith('.css'));
 `,
   );

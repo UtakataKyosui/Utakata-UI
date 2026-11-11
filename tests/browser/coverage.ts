@@ -57,6 +57,14 @@ export const coverage = {
       closed: 'sheet.dismissal-focus-return',
     },
   },
+  Drawer: {
+    axes: { sides: ['top', 'right', 'bottom', 'left'] },
+    selector: '.ui-drawer__popup',
+    states: {
+      open: 'drawer.focus-containment',
+      closed: 'drawer.dismissal-focus-return',
+    },
+  },
   Badge: {
     axes: { variants: ['solid', 'outline', 'subtle', 'destructive'] },
     selector: '.ui-badge',
@@ -88,6 +96,24 @@ export const coverage = {
     selector: '.ui-card',
     states: { longContent: 'card.layout-theme' },
   },
+  Empty: {
+    axes: { headingLevels: ['1', '2', '3', '4', '5', '6'] },
+    selector: '.ui-empty',
+    states: {
+      longContent: 'empty.reflow-actions',
+      namedActions: 'empty.reflow-actions',
+    },
+  },
+  Carousel: {
+    axes: {},
+    selector: '.ui-carousel',
+    states: {
+      first: 'carousel.navigation',
+      last: 'carousel.navigation',
+      scroll: 'carousel.navigation',
+      focused: 'carousel.visual',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',
@@ -105,6 +131,11 @@ export const coverage = {
       determinate: 'progress.visual-motion',
       indeterminate: 'progress.visual-motion',
     },
+  },
+  ScrollArea: {
+    axes: {},
+    selector: '.ui-scroll-area',
+    states: { overflow: 'scroll-area.native-scroll' },
   },
   Table: {
     axes: {},
@@ -125,6 +156,14 @@ export const coverage = {
     states: {
       disabled: 'pagination.disabled-direction',
       current: 'pagination.target-reflow',
+    },
+  },
+  Sidebar: {
+    axes: {},
+    selector: '.ui-sidebar',
+    states: {
+      expanded: 'sidebar.keyboard',
+      collapsed: 'sidebar.responsive-focus',
     },
   },
   Input: {
@@ -264,6 +303,15 @@ export const coverage = {
       dismissed: 'tooltip.focus-hover-escape',
     },
   },
+  HoverCard: {
+    axes: {},
+    selector: '.ui-hover-card__trigger',
+    states: {
+      hover: 'hover-card.hoverable',
+      focus: 'hover-card.focus-hover-escape',
+      dismissed: 'hover-card.focus-hover-escape',
+    },
+  },
   Popover: {
     axes: {},
     selector: '.ui-popover__trigger',
@@ -278,6 +326,31 @@ export const coverage = {
     states: {
       open: 'dropdown-menu.keyboard',
       closed: 'dropdown-menu.activate-dismiss',
+    },
+  },
+  ContextMenu: {
+    axes: {},
+    selector: '.ui-context-menu__trigger',
+    states: {
+      open: 'context-menu.keyboard',
+      closed: 'context-menu.activate-dismiss',
+    },
+  },
+  Menubar: {
+    axes: { orientations: ['horizontal', 'vertical'] },
+    selector: '.ui-menubar',
+    states: {
+      open: 'menubar.keyboard',
+      closed: 'menubar.activate-dismiss',
+    },
+  },
+  NavigationMenu: {
+    axes: {},
+    selector: '.ui-navigation-menu',
+    states: {
+      open: 'navigation-menu.keyboard',
+      closed: 'navigation-menu.pointer',
+      current: 'navigation-menu.forced-colors',
     },
   },
   AlertDialog: {
@@ -315,6 +388,27 @@ export const coverage = {
       single: 'toggle-group.keyboard',
       multiple: 'toggle-group.keyboard',
       disabled: 'toggle-group.keyboard',
+    },
+  },
+  DatePicker: {
+    axes: {},
+    selector: '.ui-date-picker',
+    states: {
+      empty: 'date-picker.keyboard',
+      selected: 'date-picker.keyboard',
+      invalid: 'date-picker.keyboard',
+      disabled: 'date-picker.keyboard',
+      open: 'date-picker.visual-states',
+    },
+  },
+  Calendar: {
+    axes: {},
+    selector: '.ui-calendar',
+    states: {
+      single: 'calendar.keyboard',
+      range: 'calendar.visual-states',
+      disabled: 'calendar.keyboard',
+      today: 'calendar.visual-states',
     },
   },
   ButtonGroup: {

@@ -41,6 +41,12 @@ section {
   width: 100%;
 }
 
+.fixture-empty {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  inline-size: min(100%, calc(100vi - 2rem));
+}
+
 .fixture-badges {
   align-items: flex-start;
   display: flex;
@@ -51,6 +57,12 @@ section {
 
 section[aria-label="Badge states"] {
   flex-direction: column;
+  min-width: 0;
+}
+
+/* Other sections can widen the shared grid track at 200% text size; bound this one by the viewport minus main's padding. */
+section[aria-label="Calendar states"] {
+  max-width: calc(100vw - 2rem);
   min-width: 0;
 }
 
@@ -192,6 +204,29 @@ section[aria-label="Sheet states"] {
   min-width: 0;
 }
 
+section[aria-label="Sidebar states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Sidebar states"] .ui-sidebar-provider {
+  inline-size: 100%;
+  min-block-size: 16rem;
+}
+
+.fixture-sidebar-inset {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  padding: 0.5rem 1rem;
+}
+
+section[aria-label="Drawer states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
 section[aria-label="Toast states"] {
   align-items: flex-start;
   flex-direction: column;
@@ -248,4 +283,10 @@ section[aria-label="Command states"] .ui-command {
 .interaction-states .ui-radio-group,
 .interaction-states .ui-slider {
   min-inline-size: 12rem;
+}
+
+section[aria-label="Scroll Area states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
 }

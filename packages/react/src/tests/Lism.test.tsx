@@ -7,10 +7,12 @@ import {
   Card,
   Dialog,
   Field,
+  Frame,
   Input,
   Popover,
   Textarea,
 } from '../index.js';
+import { audit } from './audit.js';
 
 afterEach(cleanup);
 
@@ -102,4 +104,39 @@ it('supports static, form and factory-produced parts without leaking styling pro
   const trigger = screen.getByRole('button', { name: 'Details' });
   expect(trigger).toHaveClass('-p');
   expect(trigger).not.toHaveAttribute('p');
+});
+
+it('composes aspect ratio frames from the Lism Frame without a wrapper component', async () => {
+  const { container } = render(
+    <figure>
+      <Frame ar="16/9" w={{ base: '100%', md: '20rem' }} data-testid="frame">
+        <img alt="Quarterly revenue chart" src="chart.png" />
+      </Frame>
+      <figcaption>Revenue</figcaption>
+      <Frame ar={{ base: '1/1', md: '4/3' }} data-testid="small">
+        <video title="Demo" controls>
+          <track kind="captions" src="demo.vtt" srcLang="en" label="English" />
+        </video>
+      </Frame>
+    </figure>,
+  );
+  const frame = screen.getByTestId('frame');
+  expect(frame).toHaveClass('l--frame', '-ar:16/9', '-w:100%', '-w_md');
+  expect(frame.style.getPropertyValue('--w_md')).toBe('20rem');
+  expect(frame).not.toHaveAttribute('ar');
+  // The image remains the direct, named child; no extra DOM is introduced.
+  expect(frame.children).toHaveLength(1);
+  expect(
+    screen.getByRole('img', { name: 'Quarterly revenue chart' }).parentElement,
+  ).toBe(frame);
+  const responsive = screen.getByTestId('small');
+  expect(responsive).toHaveClass('l--frame', '-ar:1/1', '-ar_md');
+  expect(responsive.style.getPropertyValue('--ar_md')).toBe('4/3');
+  expect((await audit(container)).violations).toEqual([]);
+});
+
+it('does not compute a ratio for invalid strings, which only CSS can reject', () => {
+  render(<Frame ar="wide" data-testid="bad" />);
+  // Lism's `ar` is typed as unknown: the string is forwarded to CSS as-is.
+  expect(screen.getByTestId('bad').style.getPropertyValue('--ar')).toBe('wide');
 });
