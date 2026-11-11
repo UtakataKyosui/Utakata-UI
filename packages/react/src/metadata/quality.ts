@@ -162,6 +162,20 @@ export const qualityRules = {
   ButtonGroup: buttonGroupQualityRules,
   shared: [
     {
+      id: 'lism.rendered-props',
+      requirement:
+        'Responsive Lism styling reaches the existing DOM element while actions, modal dismissal and focus return remain operable.',
+      verification: 'browser',
+      severity: 'error',
+      remediation:
+        'Translate Lism props before rendering, preserve refs and handlers, and load the library stylesheet with the documented layer order.',
+      applicability:
+        'Representative Button, Card, Field and Dialog fixture at 320px and 1280px in standard themes.',
+      residual:
+        'Arbitrary Lism overrides and consumer content require their own contrast, motion and assistive-technology verification.',
+      criteria: ['1.4.10', '2.1.1', '2.4.3'],
+    },
+    {
       id: 'theme.reduced-motion',
       requirement:
         'Reduced motion disables Button transitions and animation while Dialog remains operable.',

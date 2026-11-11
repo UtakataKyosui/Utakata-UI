@@ -145,6 +145,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install ${{ matrix.browser }}
+      - name: Verify init package manager invocation on the runner OS
+        run: node --test packages/cli/tests/dependencies.test.mjs
       # These commands configure only the disposable runner, never a developer Mac.
       - run: pnpm exec guidepup setup --ci
       - run: pnpm exec guidepup install

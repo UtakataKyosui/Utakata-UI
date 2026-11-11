@@ -9,10 +9,13 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-type CommandPartProps<T extends ElementType> = ComponentPropsWithoutRef<T> & {
-  className?: string;
-};
+type CommandPartProps<T extends ElementType> = WithLismProps<
+  ComponentPropsWithoutRef<T> & {
+    className?: string;
+  }
+>;
 
 /**
  * A searchable list of commands that is always visible: the list is rendered
@@ -32,7 +35,9 @@ export type CommandRootProps<Item> = Omit<
 >;
 
 /** Input needs a name from a label element, aria-label or aria-labelledby. */
-export type CommandInputProps = CommandPartProps<typeof BaseAutocomplete.Input>;
+export type CommandInputProps = WithLismProps<
+  CommandPartProps<typeof BaseAutocomplete.Input>
+>;
 
 const inputTarget = {
   name: 'Command.Input',
@@ -49,20 +54,25 @@ function Root<Item>(props: CommandRootProps<Item>) {
 }
 
 /** Visual surface for the input and list; use it as the child of Dialog.Popup or on its own. */
-const Panel = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  function CommandPanel({ className, ...props }, ref) {
-    return (
-      <div
-        {...props}
-        ref={ref}
-        className={withClassName('ui-command', className)}
-      />
-    );
-  },
+const Panel = withLism(
+  forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+    function CommandPanel({ className, ...props }, ref) {
+      return (
+        <div
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command', className)}
+        />
+      );
+    },
+  ),
 );
 
-const Input = forwardRef<HTMLInputElement, CommandInputProps>(
-  function CommandInput({ className, ...props }, ref) {
+const Input = withLism(
+  forwardRef<HTMLInputElement, CommandInputProps>(function CommandInput(
+    { className, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(inputTarget, ref);
     return (
       <BaseAutocomplete.Input
@@ -71,99 +81,109 @@ const Input = forwardRef<HTMLInputElement, CommandInputProps>(
         className={withClassName('ui-command__input', className)}
       />
     );
-  },
+  }),
 );
 
-const List = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.List>
->(function CommandList({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.List
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__list', className)}
-    />
-  );
-});
+const List = withLism(
+  forwardRef<HTMLDivElement, CommandPartProps<typeof BaseAutocomplete.List>>(
+    function CommandList({ className, ...props }, ref) {
+      return (
+        <BaseAutocomplete.List
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command__list', className)}
+        />
+      );
+    },
+  ),
+);
 
 /** Always mounted live region; it shows its children only while no item matches. */
-const Empty = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.Empty>
->(function CommandEmpty({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.Empty
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__empty', className)}
-    />
-  );
-});
+const Empty = withLism(
+  forwardRef<HTMLDivElement, CommandPartProps<typeof BaseAutocomplete.Empty>>(
+    function CommandEmpty({ className, ...props }, ref) {
+      return (
+        <BaseAutocomplete.Empty
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command__empty', className)}
+        />
+      );
+    },
+  ),
+);
 
-const Group = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.Group>
->(function CommandGroup({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.Group
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__group', className)}
-    />
-  );
-});
+const Group = withLism(
+  forwardRef<HTMLDivElement, CommandPartProps<typeof BaseAutocomplete.Group>>(
+    function CommandGroup({ className, ...props }, ref) {
+      return (
+        <BaseAutocomplete.Group
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command__group', className)}
+        />
+      );
+    },
+  ),
+);
 
-const GroupLabel = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.GroupLabel>
->(function CommandGroupLabel({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.GroupLabel
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__group-label', className)}
-    />
-  );
-});
-
-const Item = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.Item>
->(function CommandItem({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.Item
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__item', className)}
-    />
-  );
-});
-
-const Separator = forwardRef<
-  HTMLDivElement,
-  CommandPartProps<typeof BaseAutocomplete.Separator>
->(function CommandSeparator({ className, ...props }, ref) {
-  return (
-    <BaseAutocomplete.Separator
-      {...props}
-      ref={ref}
-      className={withClassName('ui-command__separator', className)}
-    />
-  );
-});
-
-/** Decorative hint such as a key combination; the command must not depend on it. */
-const Shortcut = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
-  function CommandShortcut({ className, ...props }, ref) {
+const GroupLabel = withLism(
+  forwardRef<
+    HTMLDivElement,
+    CommandPartProps<typeof BaseAutocomplete.GroupLabel>
+  >(function CommandGroupLabel({ className, ...props }, ref) {
     return (
-      <span
+      <BaseAutocomplete.GroupLabel
         {...props}
         ref={ref}
-        className={withClassName('ui-command__shortcut', className)}
+        className={withClassName('ui-command__group-label', className)}
       />
     );
-  },
+  }),
+);
+
+const Item = withLism(
+  forwardRef<HTMLDivElement, CommandPartProps<typeof BaseAutocomplete.Item>>(
+    function CommandItem({ className, ...props }, ref) {
+      return (
+        <BaseAutocomplete.Item
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command__item', className)}
+        />
+      );
+    },
+  ),
+);
+
+const Separator = withLism(
+  forwardRef<
+    HTMLDivElement,
+    CommandPartProps<typeof BaseAutocomplete.Separator>
+  >(function CommandSeparator({ className, ...props }, ref) {
+    return (
+      <BaseAutocomplete.Separator
+        {...props}
+        ref={ref}
+        className={withClassName('ui-command__separator', className)}
+      />
+    );
+  }),
+);
+
+/** Decorative hint such as a key combination; the command must not depend on it. */
+const Shortcut = withLism(
+  forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(
+    function CommandShortcut({ className, ...props }, ref) {
+      return (
+        <span
+          {...props}
+          ref={ref}
+          className={withClassName('ui-command__shortcut', className)}
+        />
+      );
+    },
+  ),
 );
 
 export const Command = {

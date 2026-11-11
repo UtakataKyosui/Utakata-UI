@@ -5,17 +5,28 @@ import { forwardRef } from 'react';
 import type { AccordionHeadingLevel } from '../metadata/components/Accordion.js';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 type PartProps<P> = Omit<P, 'className' | 'ref'> & { className?: string };
 
-export type AccordionRootProps = PartProps<BaseAccordion.Root.Props>;
-export type AccordionItemProps = PartProps<BaseAccordion.Item.Props>;
-export type AccordionHeaderProps = PartProps<BaseAccordion.Header.Props> & {
-  /** Heading level matching the surrounding document outline. */
-  level?: AccordionHeadingLevel;
-};
-export type AccordionTriggerProps = PartProps<BaseAccordion.Trigger.Props>;
-export type AccordionPanelProps = PartProps<BaseAccordion.Panel.Props>;
+export type AccordionRootProps = WithLismProps<
+  PartProps<BaseAccordion.Root.Props>
+>;
+export type AccordionItemProps = WithLismProps<
+  PartProps<BaseAccordion.Item.Props>
+>;
+export type AccordionHeaderProps = WithLismProps<
+  PartProps<BaseAccordion.Header.Props> & {
+    /** Heading level matching the surrounding document outline. */
+    level?: AccordionHeadingLevel;
+  }
+>;
+export type AccordionTriggerProps = WithLismProps<
+  PartProps<BaseAccordion.Trigger.Props>
+>;
+export type AccordionPanelProps = WithLismProps<
+  PartProps<BaseAccordion.Panel.Props>
+>;
 
 const triggerTarget = {
   name: 'Accordion.Trigger',
@@ -23,8 +34,11 @@ const triggerTarget = {
   nameFromContent: true,
 };
 
-const Root = forwardRef<HTMLDivElement, AccordionRootProps>(
-  function AccordionRoot({ className, ...props }, ref) {
+const Root = withLism(
+  forwardRef<HTMLDivElement, AccordionRootProps>(function AccordionRoot(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseAccordion.Root
         {...props}
@@ -32,11 +46,14 @@ const Root = forwardRef<HTMLDivElement, AccordionRootProps>(
         className={withClassName('ui-accordion', className)}
       />
     );
-  },
+  }),
 );
 
-const Item = forwardRef<HTMLDivElement, AccordionItemProps>(
-  function AccordionItem({ className, ...props }, ref) {
+const Item = withLism(
+  forwardRef<HTMLDivElement, AccordionItemProps>(function AccordionItem(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseAccordion.Item
         {...props}
@@ -44,11 +61,14 @@ const Item = forwardRef<HTMLDivElement, AccordionItemProps>(
         className={withClassName('ui-accordion__item', className)}
       />
     );
-  },
+  }),
 );
 
-const Header = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(
-  function AccordionHeader({ className, level = 3, render, ...props }, ref) {
+const Header = withLism(
+  forwardRef<HTMLHeadingElement, AccordionHeaderProps>(function AccordionHeader(
+    { className, level = 3, render, ...props },
+    ref,
+  ) {
     const Heading = `h${level}` as const;
     return (
       <BaseAccordion.Header
@@ -58,25 +78,30 @@ const Header = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(
         className={withClassName('ui-accordion__header', className)}
       />
     );
-  },
+  }),
 );
 
-const Trigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
-  function AccordionTrigger({ className, ...props }, ref) {
-    const accessibilityRef = useAccessibilityRef(triggerTarget, ref);
-    return (
-      <BaseAccordion.Trigger
-        {...props}
-        ref={accessibilityRef}
-        className={withClassName('ui-accordion__trigger', className)}
-      />
-    );
-  },
+const Trigger = withLism(
+  forwardRef<HTMLButtonElement, AccordionTriggerProps>(
+    function AccordionTrigger({ className, ...props }, ref) {
+      const accessibilityRef = useAccessibilityRef(triggerTarget, ref);
+      return (
+        <BaseAccordion.Trigger
+          {...props}
+          ref={accessibilityRef}
+          className={withClassName('ui-accordion__trigger', className)}
+        />
+      );
+    },
+  ),
 );
 
 /** Closed panels are unmounted unless keepMounted, which hides them instead. */
-const Panel = forwardRef<HTMLDivElement, AccordionPanelProps>(
-  function AccordionPanel({ className, ...props }, ref) {
+const Panel = withLism(
+  forwardRef<HTMLDivElement, AccordionPanelProps>(function AccordionPanel(
+    { className, ...props },
+    ref,
+  ) {
     return (
       <BaseAccordion.Panel
         {...props}
@@ -84,7 +109,7 @@ const Panel = forwardRef<HTMLDivElement, AccordionPanelProps>(
         className={withClassName('ui-accordion__panel', className)}
       />
     );
-  },
+  }),
 );
 
 export const Accordion = { Root, Item, Header, Trigger, Panel };

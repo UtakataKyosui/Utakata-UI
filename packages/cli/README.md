@@ -18,7 +18,7 @@ npx -y @utakata-ui/cli@0.1.0 add button
 
 example.com は例示用です。実際の配信 URL に置き換えてください。
 
-`init` はプロジェクトルートに `utakata.json`（`schemaVersion: 1`、`registry`、`directory`）を作り、配置先へ共有 CSS と LICENSE をコピーします。コンポーネントは `add` で追加します。表示された依存インストール用コマンドを実行し、グローバルエントリーから CSS を1度だけ読み込んでください。既存のアプリや `package.json`、エントリーファイルは変更しません。
+`init` はプロジェクトルートに `utakata.json`（`schemaVersion: 1`、`registry`、`directory`）を作り、共有 CSS と LICENSE をコピーして、Base UI と Lism CSS を自動インストールします。`packageManager` フィールド、lockfile の順に npm・pnpm・yarn・bun を判定し、未指定時は npm を使います。アプリの `package.json` が必要です。コンポーネントは `add` で追加します。グローバルエントリーから CSS を1度だけ読み込んでください。エントリーファイルは自動編集しません。
 
 `init` は再実行できます。同じファイルは変更せず、異なる設定・CSS は `--overwrite` を指定した場合だけ上書きします。`--dry-run` では設定もCSSも書き込みません。ローカル registry のパスはプロジェクトルートからの相対パスで保存します。設定は `--cwd` のルート（省略時は実行ディレクトリ）のみを参照し、親ディレクトリは探索しません。
 
@@ -28,6 +28,8 @@ example.com は例示用です。実際の配信 URL に置き換えてくださ
 - `--cwd`: 利用先プロジェクトのルート。コピー先はその下に限定します。
 - `--dry-run`: 書き込みを行わず、予定を表示。
 - `--overwrite`: 内容が異なる既存ファイルの上書きを明示的に許可。
+- `init --no-install`: 依存を変更せず、インストール用コマンドを表示。
+- `init --package-manager pnpm`: 依存を導入する package manager を指定。
 - `init --palette '<JSON>'`: 任意の配色を保存し、配置先に `theme.css` を生成。
 
 ```sh
@@ -38,7 +40,7 @@ npx -y @utakata-ui/cli@0.1.0 init --registry https://example.com/registry/v1 --p
 
 パレット指定時は、`styles/styles.css` を読み込む代わりに配置先の `theme.css` をグローバルエントリーから1度だけ読み込みます。このファイルは内部で標準CSSを読み込み、OSの明暗設定ごとに色を上書きします。パレットは `utakata.json` に保存され、再初期化やコンポーネント追加でも維持します。変更するときは `init --palette '<JSON>' --overwrite` を使います。ドキュメントのテーマ画面から、選んだ配色を含むコマンドをコピーできます。
 
-CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一ファイルは変更せず、競合や不正な registry は書き込み前に拒否します。依存パッケージのインストール用コマンドを表示するので、利用先で実行してください。CLI 自体は package manager やスクリプトを実行しません。
+CLI は共有 CSS・型・補助コード・LICENSE も配置します。同一ファイルは変更せず、競合や不正な registry は書き込み前に拒否します。`init` は依存パッケージの lifecycle scripts を無効にします（Yarn は設定値、それ以外は `--ignore-scripts`）。Yarn のワークスペース自体のスクリプトは Yarn の動作に従います。`--no-install` を使った場合は表示されたコマンドを実行してください。`--dry-run` ではファイルも依存も変更しません。`add` は package manager を実行しません。
 
 パレットなしの場合はグローバルエントリーから配置先の `styles/styles.css` を読み込みます。React・React DOM・TypeScript と CSS import を解決するバンドラーは利用先で用意してください。Tailwind CSS や `components.json` は不要です。
 

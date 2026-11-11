@@ -8,14 +8,14 @@ import {
 } from 'react';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 /** Base UI part props with the Utakata-UI string-only className convention. */
-export type FloatingPartProps<T extends ElementType> = Omit<
-  ComponentPropsWithoutRef<T>,
-  'className'
-> & {
-  className?: string;
-};
+export type FloatingPartProps<T extends ElementType> = WithLismProps<
+  Omit<ComponentPropsWithoutRef<T>, 'className'> & {
+    className?: string;
+  }
+>;
 
 type FloatingPart<T extends ElementType> = ForwardRefExoticComponent<
   FloatingPartProps<T> & RefAttributes<HTMLElement>
@@ -40,7 +40,7 @@ export function classedPart<T extends ElementType>(
       }),
   );
   Component.displayName = displayName;
-  return Component as FloatingPart<T>;
+  return withLism(Component as FloatingPart<T>);
 }
 
 /** Like classedPart, and also runs development accessible-name diagnostics. */
@@ -58,5 +58,5 @@ export function namedPart<T extends ElementType>(
       }),
   );
   Component.displayName = target.name;
-  return Component as FloatingPart<T>;
+  return withLism(Component as FloatingPart<T>);
 }

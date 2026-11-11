@@ -4,7 +4,7 @@ Base UI と Lism CSS を基盤にした React コンポーネントライブラ�
 React / React DOM 18.3.1 以降を必要とします。
 
 ```sh
-pnpm add @utakata-ui/react
+pnpm add @utakata-ui/react lism-css
 ```
 
 ```tsx
@@ -12,11 +12,19 @@ import { Button } from '@utakata-ui/react';
 import '@utakata-ui/react/styles.css';
 
 export function Example() {
-  return <Button variant="solid">保存</Button>;
+  return (
+    <Button variant="solid" w={{ base: '100%', md: 'auto' }}>
+      保存
+    </Button>
+  );
 }
 ```
 
 CSS の `@import` を解決できる Vite 等のバンドラーを使用してください。
+`styles.css` は Lism CSS 全体を含みます。アプリのエントリーで 1 度だけ import してください。
+DOM を描画する部品・パーツは `p`・`g`・`w`・`fz`・`bgc`・`layout` などの Lism Props とレスポンシブ値を受け取ります。
+既存の variant・size・ARIA・必須名の制約を維持します。状態管理だけの Root・Provider・Portal・Collection は対象外です。
+`LismProps`・`LismStyleProps`・`WithLismProps` を型として再公開します。独自のスタイルは利用側でもアクセシビリティを再検証してください。
 TypeScript は `moduleResolution: "Bundler"` を使用してください。
 依存する Lism CSS の型定義は NodeNext の拡張子要件に対応していません。
 公開仕様は `@utakata-ui/react/manifest` から参照できます。

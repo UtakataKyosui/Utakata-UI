@@ -6,15 +6,15 @@ import type { SheetSide } from '../metadata/components/Sheet.js';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
 import { Dialog } from './Dialog.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type SheetPopupProps = Omit<
-  ComponentPropsWithoutRef<typeof BaseDialog.Popup>,
-  'className'
-> & {
-  className?: string;
-  /** Viewport edge the panel is attached to. Defaults to `right`. */
-  side?: SheetSide;
-};
+export type SheetPopupProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<typeof BaseDialog.Popup>, 'className'> & {
+    className?: string;
+    /** Viewport edge the panel is attached to. Defaults to `right`. */
+    side?: SheetSide;
+  }
+>;
 
 export type SheetRootProps<Payload = unknown> = Omit<
   BaseDialog.Root.Props<Payload>,
@@ -38,23 +38,25 @@ function Root<Payload = unknown>(props: SheetRootProps<Payload>) {
  * The sheet surface, attached to one viewport edge. It is a Dialog popup, so
  * name it with `Sheet.Title` and include a `Sheet.Close`.
  */
-const Popup = forwardRef<HTMLDivElement, SheetPopupProps>(function SheetPopup(
-  { className, side = 'right', ...props },
-  ref,
-) {
-  const accessibilityRef = useAccessibilityRef(popupDiagnostics, ref);
-  return (
-    <BaseDialog.Popup
-      {...props}
-      ref={accessibilityRef}
-      data-side={side}
-      className={withClassName(
-        `ui-dialog__popup ui-sheet__popup ui-sheet__popup--${side}`,
-        className,
-      )}
-    />
-  );
-});
+const Popup = withLism(
+  forwardRef<HTMLDivElement, SheetPopupProps>(function SheetPopup(
+    { className, side = 'right', ...props },
+    ref,
+  ) {
+    const accessibilityRef = useAccessibilityRef(popupDiagnostics, ref);
+    return (
+      <BaseDialog.Popup
+        {...props}
+        ref={accessibilityRef}
+        data-side={side}
+        className={withClassName(
+          `ui-dialog__popup ui-sheet__popup ui-sheet__popup--${side}`,
+          className,
+        )}
+      />
+    );
+  }),
+);
 
 // A Sheet is a Dialog attached to an edge. Trigger, Portal and Close are the
 // Base UI Dialog parts, Root is the Dialog root without the `modal` option, and
@@ -62,11 +64,11 @@ const Popup = forwardRef<HTMLDivElement, SheetPopupProps>(function SheetPopup(
 // ui-dialog__* classes and the Dialog behavior are shared.
 export const Sheet = {
   Root,
-  Trigger: BaseDialog.Trigger,
+  Trigger: withLism(BaseDialog.Trigger),
   Portal: BaseDialog.Portal,
   Backdrop: Dialog.Backdrop,
   Popup,
   Title: Dialog.Title,
   Description: Dialog.Description,
-  Close: BaseDialog.Close,
+  Close: withLism(BaseDialog.Close),
 };

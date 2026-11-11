@@ -1,3 +1,11 @@
+@layer lism-base,
+  utakata.tokens,
+  utakata.components,
+  lism-block,
+  lism-trait,
+  lism-primitive,
+  lism-custom,
+  lism-utility;
 @import "lism-css/main.css";
 
 @layer utakata.tokens, utakata.components;

@@ -5,14 +5,14 @@ import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { TextareaSize } from '../metadata/components/Textarea.js';
 import { useAccessibilityRef } from './accessibility.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type TextareaProps = Omit<
-  ComponentPropsWithoutRef<'textarea'>,
-  'className'
-> & {
-  className?: string;
-  size?: TextareaSize;
-};
+export type TextareaProps = WithLismProps<
+  Omit<ComponentPropsWithoutRef<'textarea'>, 'className'> & {
+    className?: string;
+    size?: TextareaSize;
+  }
+>;
 
 type FieldControlProps = ComponentPropsWithoutRef<typeof BaseField.Control>;
 
@@ -30,8 +30,11 @@ const textareaTarget = {
  * A multi-line text input. It renders Base UI Field.Control as a native
  * textarea so Field labelling, descriptions and validation apply to it.
  */
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  function Textarea({ className, size = 'md', rows = 3, ...props }, ref) {
+export const Textarea = withLism(
+  forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
+    { className, size = 'md', rows = 3, ...props },
+    ref,
+  ) {
     const accessibilityRef = useAccessibilityRef(textareaTarget, ref);
     return (
       <BaseField.Control
@@ -42,5 +45,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         className={withClassName(`ui-textarea ui-textarea--${size}`, className)}
       />
     );
-  },
+  }),
+  ['rows', 'cols'],
 );

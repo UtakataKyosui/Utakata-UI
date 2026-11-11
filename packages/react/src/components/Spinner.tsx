@@ -1,6 +1,7 @@
 import { type ComponentPropsWithoutRef, forwardRef } from 'react';
 import type { SpinnerSize } from '../metadata/components/Spinner.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
 export type SpinnerAccessibilityProps =
   | {
@@ -14,30 +15,34 @@ export type SpinnerAccessibilityProps =
       label?: never;
     };
 
-export type SpinnerProps = Omit<
-  ComponentPropsWithoutRef<'span'>,
-  | 'className'
-  | 'children'
-  | 'role'
-  | 'aria-hidden'
-  | 'aria-label'
-  | 'aria-labelledby'
-> & {
-  className?: string;
-  size?: SpinnerSize;
-  // Declared as never (not only omitted): TypeScript skips excess-property
-  // checks for hyphenated JSX attributes, so omission alone would allow them.
-  /** The name comes from label; use decorative to hide the Spinner. */
-  'aria-hidden'?: never;
-  /** The name comes from label. */
-  'aria-label'?: never;
-  /** The name comes from label. */
-  'aria-labelledby'?: never;
-} & SpinnerAccessibilityProps;
+export type SpinnerProps = WithLismProps<
+  Omit<
+    ComponentPropsWithoutRef<'span'>,
+    | 'className'
+    | 'children'
+    | 'role'
+    | 'aria-hidden'
+    | 'aria-label'
+    | 'aria-labelledby'
+  > & {
+    className?: string;
+    size?: SpinnerSize;
+    role?: never;
+    children?: never;
+    // Declared as never (not only omitted): TypeScript skips excess-property
+    // checks for hyphenated JSX attributes, so omission alone would allow them.
+    /** The name comes from label; use decorative to hide the Spinner. */
+    'aria-hidden'?: never;
+    /** The name comes from label. */
+    'aria-label'?: never;
+    /** The name comes from label. */
+    'aria-labelledby'?: never;
+  } & SpinnerAccessibilityProps
+>;
 
 /** An indeterminate loading indicator with a visually hidden status label. */
-export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
-  function Spinner(
+export const Spinner = withLism(
+  forwardRef<HTMLSpanElement, SpinnerProps>(function Spinner(
     {
       className,
       size = 'md',
@@ -61,5 +66,5 @@ export const Spinner = forwardRef<HTMLSpanElement, SpinnerProps>(
         <span className="ui-spinner__label">{label}</span>
       </span>
     );
-  },
+  }),
 );

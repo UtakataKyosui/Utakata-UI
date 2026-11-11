@@ -40,6 +40,18 @@ import { withVerificationStates } from './verification.js';
 const manifest = {
   version: 1,
   framework: 'Utakata-UI',
+  styling: {
+    propsType: 'LismStyleProps',
+    responsive:
+      'Ancestor container queries; use Box isContainer. Standard sm/md/lg: 480/800/1120px; xl requires custom CSS.',
+    examples: ['p', 'g', 'w', 'fz', 'bgc', 'layout'],
+    applicability:
+      'DOM-producing components and parts; not state roots, providers, portals or collections.',
+    precedence:
+      'Component-specific props and accessibility constraints take precedence over Lism styling props.',
+    responsibility:
+      'Reverify contrast, focus, target sizes, reflow and reduced motion after changing styling.',
+  },
   sharedQualityRules: qualityRules.shared,
   components: {
     Button: {

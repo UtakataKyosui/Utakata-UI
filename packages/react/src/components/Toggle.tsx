@@ -9,12 +9,15 @@ import type {
 import { useAccessibilityRef } from './accessibility.js';
 import type { ButtonAccessibilityProps } from './Button.js';
 import { withClassName } from './classNames.js';
+import { type WithLismProps, withLism } from './lism.js';
 
-export type ToggleProps = Omit<BaseToggle.Props, 'className' | 'ref'> & {
-  className?: string;
-  size?: ToggleSize;
-  variant?: ToggleVariant;
-} & ButtonAccessibilityProps;
+export type ToggleProps = WithLismProps<
+  Omit<BaseToggle.Props, 'className' | 'ref'> & {
+    className?: string;
+    size?: ToggleSize;
+    variant?: ToggleVariant;
+  } & ButtonAccessibilityProps
+>;
 
 const toggleTarget = {
   name: 'Toggle',
@@ -23,8 +26,8 @@ const toggleTarget = {
 };
 
 /** A pressed/unpressed button. Keep the label constant; aria-pressed conveys state. */
-export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
-  function Toggle(
+export const Toggle = withLism(
+  forwardRef<HTMLButtonElement, ToggleProps>(function Toggle(
     {
       className,
       size = 'md',
@@ -45,5 +48,5 @@ export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
         )}
       />
     );
-  },
+  }),
 );

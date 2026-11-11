@@ -212,3 +212,4 @@ export {
   formatQualityReport,
   qualityRules,
 } from './metadata/quality.js';
+export type { LismProps, LismStyleProps, WithLismProps } from './styling.js';

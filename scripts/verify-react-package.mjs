@@ -72,6 +72,17 @@ import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, Butto
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
+export const lismButton: ButtonProps = { p: '1rem', w: { base: '100%', md: 'auto' }, children: 'Save' };
+export const lismView = <Card.Root p={{ base: '1rem', md: '2rem' }}><Field.Root g="1rem"><Field.Label>Email</Field.Label><Input w="100%" /></Field.Root><Button {...lismButton} /><Dialog.Root><Dialog.Trigger p="1rem">Open</Dialog.Trigger></Dialog.Root></Card.Root>;
+export const lismTypes: import('@utakata-ui/react').LismStyleProps = { g: '1rem', layout: 'flex' };
+export const upstreamLismType: import('@utakata-ui/react').LismProps = { p: '1rem' };
+export const mergedLismType: import('@utakata-ui/react').WithLismProps<{ required: true }> = { required: true, p: '1rem' };
+// @ts-expect-error Styling cannot bypass the icon-only name requirement.
+export const lismUnnamedIcon = <Button iconOnly p="1rem" />;
+// @ts-expect-error Component size takes precedence over generic styling.
+export const lismInvalidSize = <Button p="1rem" size="xl">Save</Button>;
+// @ts-expect-error Alternative Lism refs are excluded from public component Props.
+export const lismAlternativeRef = <Button forwardedRef={() => {}}>Save</Button>;
 export const verificationStates: readonly string[] = componentManifest.components.Button.verificationStates;
 export const nativeSelectProps: NativeSelectProps = { size: 'lg', required: true, defaultValue: 'jp', className: 'country' };
 export const country = <NativeSelect {...nativeSelectProps} aria-label="Country"><option value="jp">Japan</option></NativeSelect>;

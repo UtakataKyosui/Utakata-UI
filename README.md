@@ -34,7 +34,7 @@ docs は UI 本体をワークスペース依存として参照し、Blume の H
 導入は npm パッケージで行います。
 
 ```sh
-pnpm add @utakata-ui/react
+pnpm add @utakata-ui/react lism-css
 ```
 
 ```tsx
@@ -67,6 +67,12 @@ function Example() {
 ```
 
 ## 開発
+
+DOM を描画する部品・パーツは Lism の `p`・`g`・`w`・`fz`・`bgc`・`layout` を受け取ります。
+レスポンシブ値は `Box isContainer` の内側で使います。`styles.css` に Lism 全体を含むため、CSS は 1 度だけ import します。
+`LismProps`・`LismStyleProps`・`WithLismProps` も再公開します。状態管理だけの Root・Provider・Portal・Collection はスタイル対象外で、既存の部品 Props と名前の型制約が優先します。
+`@utakata-ui/cli init` でソースを取り込む場合は Base UI と Lism CSS を自動導入します（`--no-install` で省略、`--dry-run` は変更なし）。
+導入例は日英の Docs「Lism CSS を使う」に掲載しています。独自のスタイルについては利用側でもアクセシビリティを再検証してください。
 
 ### docsのUIプレビュー
 
