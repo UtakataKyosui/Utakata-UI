@@ -4,6 +4,7 @@ const verificationStates = {
   Button: ['enabled', 'keyboard', 'disabled'],
   Field: ['labelled', 'focus'],
   Dialog: ['open', 'closed'],
+  Item: ['static', 'link', 'button', 'longContent'],
   Kbd: ['static'],
   Separator: ['decorative', 'semantic'],
   Sheet: ['open', 'closed'],
@@ -15,6 +16,7 @@ const verificationStates = {
   Card: ['longContent'],
   Empty: ['longContent', 'namedActions'],
   Carousel: ['first', 'last', 'scroll', 'focused'],
+  Chart: ['closed', 'open', 'reducedMotion'],
   Alert: ['static', 'longContent'],
   Avatar: ['image', 'fallback'],
   Progress: ['determinate', 'indeterminate'],
@@ -51,6 +53,7 @@ const verificationStates = {
   ButtonGroup: ['disabled', 'wrapping'],
   Calendar: ['single', 'range', 'disabled', 'today'],
   DatePicker: ['empty', 'selected', 'invalid', 'disabled', 'open'],
+  Resizable: ['horizontal', 'vertical', 'rtl', 'constrained'],
 } as const;
 
 export function withVerificationStates<

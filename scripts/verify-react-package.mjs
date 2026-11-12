@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Carousel, Collapsible, Combobox, Command, ContextMenu, DatePicker, Dialog, DirectionProvider, Drawer, Empty, Field, Frame, HoverCard, Input, InputGroup, InputOTP, Kbd, KbdGroup, Menubar, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CarouselLabels, type CarouselProps, type CarouselSlide, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type DatePickerProps, type DrawerPopupProps, type DrawerRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type MenubarRootProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Carousel, Chart, Collapsible, Combobox, Command, ContextMenu, DatePicker, Dialog, DirectionProvider, Drawer, Empty, Field, Frame, HoverCard, Input, InputGroup, InputOTP, Item, Kbd, KbdGroup, Menubar, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, Resizable, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CarouselLabels, type CarouselProps, type CarouselSlide, type ChartLegendItemProps, type ChartMarkerProps, type ChartPlotProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type DatePickerProps, type DrawerPopupProps, type DrawerRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type ItemButtonProps, type ItemIconProps, type ItemLinkProps, type ItemRootProps, type MenubarRootProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ResizableGroupProps, type ResizableHandleProps, type ResizablePanelProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -236,6 +236,27 @@ export const emptyInvalidTitle: EmptyTitleProps = { level: '7', children: 'No fi
 export const emptyLive = <Empty.Root aria-live="polite" />;
 // @ts-expect-error Empty.Root does not accept a live-region role.
 export const emptyStatus = <Empty.Root role="status" />;
+export const itemLinkProps: ItemLinkProps = { href: '/report', children: 'Report' };
+export const itemRouterLink: ItemLinkProps = { render: <a href="/docs">Docs</a>, children: 'Docs' };
+export const itemButtonProps: ItemButtonProps = { children: 'Open' };
+export const item = <Item.Group aria-label="Files"><Item.Root><Item.Icon><svg aria-hidden="true" /></Item.Icon><Item.Body><Item.Link {...itemLinkProps} /><Item.Description>Detail</Item.Description></Item.Body><Item.Meta>Today</Item.Meta><Item.Actions><Button iconOnly aria-label="Delete report">x</Button></Item.Actions></Item.Root><Item.Root><Item.Body><Item.Button {...itemButtonProps} /></Item.Body></Item.Root></Item.Group>;
+// @ts-expect-error An Item link needs href or a render element in shipped declarations.
+export const itemNoDestination: ItemLinkProps = { children: 'Report' };
+// @ts-expect-error An Item link needs children as its accessible name in shipped declarations.
+export const itemLinkNoName: ItemLinkProps = { href: '/' };
+// @ts-expect-error An Item button is always type="button" in shipped declarations.
+export const itemSubmit: ItemButtonProps = { children: 'Go', type: 'submit' };
+// @ts-expect-error An Item button cannot navigate with href in shipped declarations.
+export const itemButtonHref: ItemButtonProps = { children: 'Go', href: '/' };
+// @ts-expect-error The Item row itself cannot be clickable in shipped declarations.
+export const itemRootClick: ItemRootProps = { onClick: () => {} };
+// @ts-expect-error The Item row itself cannot be a tab stop in shipped declarations.
+export const itemRootTabIndex: ItemRootProps = { tabIndex: 0 };
+// @ts-expect-error The Item icon is decorative and cannot be exposed in shipped declarations.
+export const itemIconVisible: ItemIconProps = { 'aria-hidden': false };
+const itemFocusableProps = { tabIndex: 0 as const };
+// @ts-expect-error Spreads cannot make the Item row focusable in shipped declarations.
+export const itemRootSpread = <Item.Root {...itemFocusableProps} />;
 type AlertRootProps = ComponentProps<typeof Alert.Root>;
 export const alertProps: AlertRootProps = { variant: 'destructive', role: 'alert' };
 export const alert = <Alert.Root {...alertProps}><Alert.Title>Could not save</Alert.Title><Alert.Description>Try again.</Alert.Description></Alert.Root>;
@@ -315,6 +336,29 @@ export const tableRoleSpread = <Table.Container {...tableRoleProps} />;
 const tableFocusProps = { 'aria-label': 'x', tabIndex: -1 };
 // @ts-expect-error Spreads cannot remove the container from the tab order.
 export const tableFocusSpread = <Table.Container {...tableFocusProps} />;
+export const chartPlot: ChartPlotProps = { 'aria-label': 'Monthly visits line chart' };
+export const chartLegendItem: ChartLegendItemProps = { series: '2', children: 'Signups' };
+export const chartMarker: ChartMarkerProps = { series: '3', x: 4, y: 5 };
+export const chart = <Chart.Root><Chart.Caption>Visits</Chart.Caption><Chart.Description>Visits rose.</Chart.Description><Chart.Plot {...chartPlot}><svg viewBox="0 0 10 10"><Chart.Marker {...chartMarker} /></svg></Chart.Plot><Chart.Legend><Chart.LegendItem {...chartLegendItem} /></Chart.Legend><Chart.Data summary="Show data table"><Table.Container aria-label="Visits data"><Table.Root><Table.Caption>Visits</Table.Caption></Table.Root></Table.Container></Chart.Data></Chart.Root>;
+// @ts-expect-error Chart.Plot requires a name in shipped declarations.
+export const unnamedChartPlot: ChartPlotProps = {};
+// @ts-expect-error Chart.Plot role is fixed in shipped declarations.
+export const chartPlotRole: ChartPlotProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Chart.Plot cannot become a tab stop in shipped declarations.
+export const chartPlotFocus: ChartPlotProps = { 'aria-label': 'x', tabIndex: 0 };
+const chartPlotSpreadProps = { 'aria-label': 'x', role: 'none' };
+// @ts-expect-error Spreads cannot override the Chart.Plot image role.
+export const chartPlotSpread = <Chart.Plot {...chartPlotSpreadProps} />;
+// @ts-expect-error A legend item needs a series so a marker shape identifies it.
+export const chartLegendNoSeries: ChartLegendItemProps = { children: 'Signups' };
+// @ts-expect-error A legend item needs visible text.
+export const chartLegendNoText: ChartLegendItemProps = { series: '1' };
+// @ts-expect-error Only series 1 to 6 are defined.
+export const chartLegendBadSeries: ChartLegendItemProps = { series: '7', children: 'x' };
+// @ts-expect-error A marker needs a series.
+export const chartMarkerNoSeries: ChartMarkerProps = {};
+// @ts-expect-error The data disclosure needs visible summary text.
+export const chartDataNoSummary = <Chart.Data><Table.Container aria-label="x" /></Chart.Data>;
 export const hrefLink: BreadcrumbLinkProps = { href: '/' };
 export const routerLink: BreadcrumbLinkProps = { render: <a href="/docs">Docs</a> };
 export const breadcrumb = <Breadcrumb.Root><Breadcrumb.List><Breadcrumb.Item><Breadcrumb.Link {...hrefLink}>Home</Breadcrumb.Link></Breadcrumb.Item><Breadcrumb.Separator /><Breadcrumb.Item><Breadcrumb.Page>Docs</Breadcrumb.Page></Breadcrumb.Item></Breadcrumb.List></Breadcrumb.Root>;
@@ -742,6 +786,28 @@ function CalendarWrapper(props: CalendarProps) { return <Calendar {...props} />;
 export const wrappedCalendar = <CalendarWrapper aria-label="Booking date" />;
 // @ts-expect-error Wrappers must preserve the required calendar name.
 export const wrappedCalendarInvalid = <CalendarWrapper />;
+export const resizableHandleNamed: ResizableHandleProps = { 'aria-label': 'Resize navigation' };
+export const resizableHandleReferenced: ResizableHandleProps = { 'aria-labelledby': 'nav-title' };
+export const resizablePanelProps: ResizablePanelProps = { panelId: 'nav', defaultSize: 30, minSize: 20, maxSize: 50 };
+export const resizableGroupProps: ResizableGroupProps = { orientation: 'vertical', keyboardStep: 10, onLayoutChange: (layout: Record<string, number>) => void layout };
+export const resizable = <Resizable.Group {...resizableGroupProps}><Resizable.Panel {...resizablePanelProps}>Navigation</Resizable.Panel><Resizable.Handle {...resizableHandleNamed} /><Resizable.Panel panelId="main">Main</Resizable.Panel></Resizable.Group>;
+// @ts-expect-error Resizable.Handle needs a name in shipped declarations.
+export const resizableHandleUnnamed: ResizableHandleProps = {};
+// @ts-expect-error Resizable.Handle accepts one name source in shipped declarations.
+export const resizableHandleBothNames: ResizableHandleProps = { 'aria-label': 'x', 'aria-labelledby': 'y' };
+// @ts-expect-error Resizable.Handle keeps role="separator" in shipped declarations.
+export const resizableHandleRole: ResizableHandleProps = { 'aria-label': 'x', role: 'presentation' };
+// @ts-expect-error aria-valuenow is derived from the panels in shipped declarations.
+export const resizableHandleValue: ResizableHandleProps = { 'aria-label': 'x', 'aria-valuenow': 10 };
+// @ts-expect-error Resizable.Panel requires a panelId in shipped declarations.
+export const resizablePanelNoId: ResizablePanelProps = {};
+// @ts-expect-error Resizable.Group orientation is limited to the manifest in shipped declarations.
+export const resizableDiagonal: ResizableGroupProps = { orientation: 'diagonal' };
+// @ts-expect-error JSX usage must name the Handle.
+export const resizableHandleUnnamedJsx = <Resizable.Handle />;
+const resizableHandleUnnamedProps = { className: 'x' };
+// @ts-expect-error A props spread must still name the Handle.
+export const resizableHandleSpreadUnnamed = <Resizable.Handle {...resizableHandleUnnamedProps} />;
 export const inputGroupAddon: InputGroupAddonProps = { align: 'block-end' };
 export const inputGroupIconButton: InputGroupButtonProps = { iconOnly: true, 'aria-label': 'Clear' };
 export const inputGroup = <Field.Root><Field.Label>Search</Field.Label><InputGroup.Root><Input type="search" /><InputGroup.Addon {...inputGroupAddon}><InputGroup.Button {...inputGroupIconButton} /></InputGroup.Addon></InputGroup.Root></Field.Root>;

@@ -12,6 +12,7 @@ import {
   Calendar,
   type CalendarDate,
   Card,
+  Chart,
   Checkbox,
   Collapsible,
   Combobox,
@@ -27,6 +28,7 @@ import {
   Input,
   InputGroup,
   InputOTP,
+  Item,
   Kbd,
   KbdGroup,
   Menubar,
@@ -36,6 +38,7 @@ import {
   Popover,
   Progress,
   RadioGroup,
+  Resizable,
   Select,
   Separator,
   Sheet,
@@ -355,6 +358,71 @@ function SliderStates() {
 const badgeLongText =
   'Awaiting approval from the regional administration team before publication';
 
+function ResizableStates() {
+  const [layouts, setLayouts] = useState<Record<string, number>[]>([]);
+  return (
+    <section aria-label="Resizable states">
+      <Button>Before resizable</Button>
+      <Resizable.Group
+        data-case="horizontal"
+        className="fixture-resizable"
+        onLayoutChange={(layout) =>
+          setLayouts((previous) => [...previous, layout])
+        }
+      >
+        <Resizable.Panel
+          panelId="nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize navigation" />
+        <Resizable.Panel panelId="main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group
+        data-case="vertical"
+        orientation="vertical"
+        className="fixture-resizable fixture-resizable--tall"
+      >
+        <Resizable.Panel
+          panelId="top"
+          defaultSize={40}
+          minSize={20}
+          maxSize={60}
+        >
+          Top
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize top panel" />
+        <Resizable.Panel panelId="bottom" defaultSize={60} minSize={20}>
+          Bottom
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group data-case="rtl" dir="rtl" className="fixture-resizable">
+        <Resizable.Panel
+          panelId="rtl-nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize RTL navigation" />
+        <Resizable.Panel panelId="rtl-main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Button>After resizable</Button>
+      <output aria-label="Resizable layout changes">
+        {JSON.stringify(layouts)}
+      </output>
+    </section>
+  );
+}
+
 function BadgeStates() {
   return (
     <section aria-label="Badge states">
@@ -396,6 +464,96 @@ function SpinnerStates() {
       {componentManifest.components.Spinner.sizes.map((size) => (
         <Spinner key={size} size={size} label={`Loading ${size}`} />
       ))}
+    </section>
+  );
+}
+
+const itemLongText =
+  'Quarterly_report_with_a_very_long_unbroken_identifier_that_must_wrap and a long sentence.';
+
+function ItemStates() {
+  const [primary, setPrimary] = useState(0);
+  const [edit, setEdit] = useState(0);
+  const [remove, setRemove] = useState(0);
+  return (
+    <section aria-label="Item states">
+      <Button>Before item</Button>
+      <Item.Group aria-label="Item examples">
+        <Item.Root data-case="link">
+          <Item.Icon>
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
+              <path d="M3 1h7l3 3v11H3z" fill="currentColor" />
+            </svg>
+          </Item.Icon>
+          <Item.Body>
+            <Item.Link href="#report" onClick={(e) => e.preventDefault()}>
+              {itemLongText}
+            </Item.Link>
+            <Item.Description>{itemLongText}</Item.Description>
+          </Item.Body>
+          <Item.Meta>{itemLongText}</Item.Meta>
+          <Item.Actions>
+            <Button
+              iconOnly
+              square
+              aria-label="Edit report"
+              onClick={() => setEdit((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+            <Button
+              iconOnly
+              square
+              aria-label="Delete report"
+              onClick={() => setRemove((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+          </Item.Actions>
+        </Item.Root>
+        <Item.Root data-case="button">
+          <Item.Body>
+            <Item.Button onClick={() => setPrimary((n) => n + 1)}>
+              Open details
+            </Item.Button>
+            <Item.Description>Opens a details panel</Item.Description>
+          </Item.Body>
+          <Item.Meta>Draft</Item.Meta>
+        </Item.Root>
+        <Item.Root data-case="static">
+          <Item.Body>
+            <Item.Title>Static row</Item.Title>
+            <Item.Description>No operation</Item.Description>
+          </Item.Body>
+          <Item.Meta>Read only</Item.Meta>
+        </Item.Root>
+      </Item.Group>
+      <Button>After item</Button>
+      <p data-testid="item-counts">
+        primary {primary} edit {edit} delete {remove}
+      </p>
     </section>
   );
 }
@@ -542,6 +700,77 @@ function TableStates() {
         </Table.Root>
       </Table.Container>
       <Button>After table</Button>
+    </section>
+  );
+}
+
+const chartSeries = componentManifest.components.Chart.series;
+
+function ChartStates() {
+  return (
+    <section aria-label="Chart states">
+      <Button>Before chart</Button>
+      <Chart.Root data-case="visits">
+        <Chart.Caption>Monthly visits</Chart.Caption>
+        <Chart.Description>
+          Visits rose from 120 in April to 180 in May.
+        </Chart.Description>
+        <Chart.Plot aria-label="Line chart of monthly visits by channel">
+          <svg viewBox="0 0 120 50" aria-hidden="true">
+            {chartSeries.map((series, index) => (
+              <g key={series}>
+                <polyline
+                  points={`0,${45 - index * 6} 120,${35 - index * 6}`}
+                  fill="none"
+                  stroke={`var(--ui-chart-series-${series})`}
+                  strokeDasharray={`var(--ui-chart-dash-${series})`}
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx={60}
+                  cy={36 - index * 6}
+                  r={3}
+                  fill={`var(--ui-chart-series-${series})`}
+                />
+              </g>
+            ))}
+          </svg>
+        </Chart.Plot>
+        <Chart.Legend>
+          {chartSeries.map((series) => (
+            <Chart.LegendItem key={series} series={series}>
+              Channel {series} with a long series name that must wrap
+            </Chart.LegendItem>
+          ))}
+        </Chart.Legend>
+        <Chart.Data summary="Show data table">
+          <Table.Container aria-label="Monthly visits by channel">
+            <Table.Root>
+              <Table.Caption>Monthly visits by channel</Table.Caption>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head scope="col">Month</Table.Head>
+                  <Table.Head scope="col">Channel 1</Table.Head>
+                  <Table.Head scope="col">Channel 2</Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Head scope="row">April</Table.Head>
+                  <Table.Cell>120</Table.Cell>
+                  <Table.Cell>80</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Head scope="row">May</Table.Head>
+                  <Table.Cell>180</Table.Cell>
+                  <Table.Cell>95</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table.Root>
+          </Table.Container>
+        </Chart.Data>
+      </Chart.Root>
+      <Button>After chart</Button>
     </section>
   );
 }
@@ -1896,15 +2125,18 @@ function Fixture() {
       <InputOTPStates />
       <ComboboxStates />
       <SliderStates />
+      <ResizableStates />
       <BadgeStates />
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
       <EmptyFixture />
+      <ItemStates />
       <AlertStates />
       <AvatarStates />
       <ProgressStates />
       <TableStates />
+      <ChartStates />
       <BreadcrumbStates />
       <PaginationStates />
       <CarouselFixture />

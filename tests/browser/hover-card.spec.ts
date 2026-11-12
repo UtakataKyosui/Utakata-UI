@@ -205,6 +205,9 @@ test('[hover-card.visual-position] contrast, narrow viewport and forced colors',
   await runRule(page, browser, 'hover-card.visual-position', async () => {
     await verifyVisuals(page);
     await page.keyboard.press('Escape');
+    // The closed popup stays mounted for its exit transition; sampling it as the
+    // newly opened card would measure a node that is about to unmount.
+    await expect(hoverCard(page).popup).toHaveCount(0, { timeout });
     await verifyForced(page);
   });
 });

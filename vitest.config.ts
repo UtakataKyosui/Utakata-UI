@@ -7,6 +7,11 @@ export default defineConfig({
         './packages/react/src/metadata/manifest.ts',
         import.meta.url,
       ).pathname,
+      // Docs examples import the public entry; test them against source.
+      '@utakata-ui/react': new URL(
+        './packages/react/src/index.ts',
+        import.meta.url,
+      ).pathname,
     },
   },
   test: {

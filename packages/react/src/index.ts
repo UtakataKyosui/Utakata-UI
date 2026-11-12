@@ -70,6 +70,17 @@ export {
   type CarouselSlide,
 } from './components/Carousel.js';
 export type {
+  ChartCaptionProps,
+  ChartDataProps,
+  ChartDescriptionProps,
+  ChartLegendItemProps,
+  ChartLegendProps,
+  ChartMarkerProps,
+  ChartPlotProps,
+  ChartRootProps,
+} from './components/Chart.js';
+export { Chart } from './components/Chart.js';
+export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,
 } from './components/Checkbox.js';
@@ -132,6 +143,19 @@ export type {
   InputOTPSlotProps,
 } from './components/InputOTP.js';
 export { InputOTP } from './components/InputOTP.js';
+export type {
+  ItemActionsProps,
+  ItemBodyProps,
+  ItemButtonProps,
+  ItemDescriptionProps,
+  ItemGroupProps,
+  ItemIconProps,
+  ItemLinkProps,
+  ItemMetaProps,
+  ItemRootProps,
+  ItemTitleProps,
+} from './components/Item.js';
+export { Item } from './components/Item.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { MenubarRootProps } from './components/Menubar.js';
@@ -166,6 +190,12 @@ export type {
   RadioGroupRootProps,
 } from './components/RadioGroup.js';
 export { RadioGroup } from './components/RadioGroup.js';
+export type {
+  ResizableGroupProps,
+  ResizableHandleProps,
+  ResizablePanelProps,
+} from './components/Resizable.js';
+export { Resizable } from './components/Resizable.js';
 export type { ScrollAreaProps } from './components/ScrollArea.js';
 export { ScrollArea } from './components/ScrollArea.js';
 export type { SelectRootProps } from './components/Select.js';
@@ -238,12 +268,14 @@ export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
+export type { ChartSeries } from './metadata/components/Chart.js';
 export type { DrawerSide } from './metadata/components/Drawer.js';
 export type { EmptyTitleLevel } from './metadata/components/Empty.js';
 export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
+export type { ResizableOrientation } from './metadata/components/Resizable.js';
 export type { SheetSide } from './metadata/components/Sheet.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
 export type { SpinnerSize } from './metadata/components/Spinner.js';

@@ -88,6 +88,16 @@ section[aria-label="Card states"] .ui-card {
   inline-size: 240px;
 }
 
+section[aria-label="Item states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Item states"] .ui-item-group {
+  inline-size: 288px;
+}
+
 section[aria-label="Alert states"] {
   align-items: flex-start;
   flex-direction: column;
@@ -116,6 +126,17 @@ section[aria-label="Table states"] {
 
 section[aria-label="Table states"] .ui-table-container {
   inline-size: 240px;
+}
+
+section[aria-label="Chart states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Chart states"] .ui-chart {
+  inline-size: 100%;
+  max-inline-size: min(28rem, 100%);
 }
 
 section[aria-label="Breadcrumb states"] {
@@ -253,6 +274,20 @@ section[aria-label="ButtonGroup states"] {
 
 .fixture-button-group-wrap {
   inline-size: 240px;
+}
+
+section[aria-label="Resizable states"] {
+  align-items: stretch;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fixture-resizable {
+  block-size: 6rem;
+}
+
+.fixture-resizable--tall {
+  block-size: 14rem;
 }
 
 section[aria-label="InputGroup states"] {

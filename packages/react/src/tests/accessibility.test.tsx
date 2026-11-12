@@ -29,6 +29,7 @@ import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
 import { calendarChecks } from './quality/Calendar.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { carouselChecks } from './quality/Carousel.checks.js';
+import { chartChecks } from './quality/Chart.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
@@ -42,6 +43,7 @@ import { hoverCardChecks } from './quality/HoverCard.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { inputGroupChecks } from './quality/InputGroup.checks.js';
 import { inputOTPChecks } from './quality/InputOTP.checks.js';
+import { itemChecks } from './quality/Item.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
 import { menubarChecks } from './quality/Menubar.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
@@ -50,6 +52,7 @@ import { paginationChecks } from './quality/Pagination.checks.js';
 import { popoverChecks } from './quality/Popover.checks.js';
 import { progressChecks } from './quality/Progress.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
+import { resizableChecks } from './quality/Resizable.checks.js';
 import { scrollAreaChecks } from './quality/ScrollArea.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
@@ -153,6 +156,7 @@ describe('accessibility regression checks', () => {
         );
         await waitFor(() => expect(trigger).toHaveFocus());
       },
+      ...itemChecks,
       ...kbdChecks,
       ...separatorChecks,
       ...sheetChecks,
@@ -163,6 +167,7 @@ describe('accessibility regression checks', () => {
       ...cardChecks,
       ...emptyChecks,
       ...carouselChecks,
+      ...chartChecks,
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,
@@ -200,6 +205,7 @@ describe('accessibility regression checks', () => {
       ...buttonGroupChecks,
       ...calendarChecks,
       ...datePickerChecks,
+      ...resizableChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

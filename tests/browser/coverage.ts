@@ -114,6 +114,16 @@ export const coverage = {
       focused: 'carousel.visual',
     },
   },
+  Item: {
+    axes: {},
+    selector: '.ui-item',
+    states: {
+      static: 'item.layout-focus',
+      link: 'item.layout-focus',
+      button: 'item.layout-focus',
+      longContent: 'item.layout-focus',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',
@@ -141,6 +151,15 @@ export const coverage = {
     axes: {},
     selector: '.ui-table',
     states: { overflow: 'table.reflow-focus' },
+  },
+  Chart: {
+    axes: { series: ['1', '2', '3', '4', '5', '6'] },
+    selector: '.ui-chart__marker',
+    states: {
+      closed: 'chart.keyboard-theme-motion',
+      open: 'chart.keyboard-theme-motion',
+      reducedMotion: 'chart.keyboard-theme-motion',
+    },
   },
   Breadcrumb: {
     axes: {},
@@ -409,6 +428,16 @@ export const coverage = {
       range: 'calendar.visual-states',
       disabled: 'calendar.keyboard',
       today: 'calendar.visual-states',
+    },
+  },
+  Resizable: {
+    axes: { orientations: ['horizontal', 'vertical'] },
+    selector: '.ui-resizable',
+    states: {
+      horizontal: 'resizable.keyboard-pointer-browser',
+      vertical: 'resizable.keyboard-pointer-browser',
+      rtl: 'resizable.keyboard-pointer-browser',
+      constrained: 'resizable.keyboard-pointer-browser',
     },
   },
   ButtonGroup: {

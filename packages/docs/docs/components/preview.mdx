@@ -88,6 +88,14 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="empty" />
 
+## Item [#item]
+
+詳しい使い方とAPIは[Item](/components/item)を参照してください。
+
+アイコン・本文・補助情報・操作を並べる行です。何も付けない行は操作できず、`Item.Link`（移動）または`Item.Button`（操作）を本文に置くと、1つのネイティブ要素が行全体に広がります。削除などの別の操作は`Item.Actions`に兄弟として置き、リンクやボタンの内側には入れません。Tab順はDOM順です。
+
+<Component path="item" />
+
 ## Alert [#alert]
 
 詳しい使い方とAPIは[Alert](/components/alert)を参照してください。
@@ -119,6 +127,14 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 キャプション・行/列見出し・数値の右寄せ・セル内のリンクとボタンを含む表です。幅が足りないときは`Table.Container`だけが横スクロールし、フォーカスして矢印キーでスクロールできます。
 
 <Component path="table" />
+
+## Chart [#chart]
+
+詳しい使い方とAPIは[Chart](/components/chart)を参照してください。採用判断は[Chartの採用判断](/advanced/chart-adoption)にまとめています。
+
+描画ライブラリに依存しないグラフのシェルです。`figure`・キャプション・説明文、マーカー形状で系列を区別する凡例、データ表の代替（`Chart.Data`）を備えます。描画は`Chart.Plot`の中に利用側が置きます。
+
+<Component path="chart" />
 
 ## Breadcrumb [#breadcrumb]
 
@@ -399,3 +415,11 @@ Dialogを基にした、上・右・下・左の端に付くモーダルのパ�
 日付を `YYYY-MM-DD` 形式で入力するか、カレンダーから1日を選びます。選べない日や実在しない日はエラーになり、入力内容は修正できるように残ります。Escape でカレンダーを閉じるとボタンにフォーカスが戻ります。フォームのリセットで初期値に戻せます。
 
 <Component path="datepicker" />
+
+## Resizable [#resizable]
+
+詳しい使い方とAPIは[Resizable](/components/resizable)を参照してください。
+
+隣り合う2つのパネルの境界をキーボードとポインターで動かします。ハンドルはフォーカスできる`separator`で、名前（`aria-label`か`aria-labelledby`）は型で必須です。`aria-valuenow`は直前のパネルの割合（%）で、矢印キー・Home・Endで`minSize`と`maxSize`の範囲内に変更できます。右から左へ書く言語（`dir="rtl"`）では矢印キーの向きが反転します。狭い画面では`orientation="vertical"`に切り替えるなど、レイアウトを調整してください。
+
+<Component path="resizable" />

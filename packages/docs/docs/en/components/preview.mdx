@@ -88,6 +88,14 @@ A Card containing a form and a Card whose heading level is changed with `level`.
 
 <Component path="en/empty" />
 
+## Item [#item]
+
+See [Item](/en/components/item) for detailed usage and the API.
+
+A row that lays out an icon, body, supplementary meta and actions. A plain row is not operable; put `Item.Link` (navigation) or `Item.Button` (action) in the body and one native element stretches over the whole row. Other operations such as delete go in `Item.Actions` as siblings, never inside the link or button. Tab order is DOM order.
+
+<Component path="en/item" />
+
 ## Alert [#alert]
 
 See [Alert](/en/components/alert) for detailed usage and the API.
@@ -119,6 +127,14 @@ See [Table](/en/components/table) for detailed usage and the API.
 A table with a caption, row and column headers, right-aligned numbers and links and buttons in cells. When space is short only `Table.Container` scrolls horizontally, and you can focus it and scroll with the arrow keys.
 
 <Component path="en/table" />
+
+## Chart [#chart]
+
+See [Chart](/en/components/chart) for detailed usage and the API. The adoption decision is in [Chart adoption decision](/en/advanced/chart-adoption).
+
+A renderer-independent chart shell with a `figure`, caption and description, a legend that tells series apart by marker shape, and a data table alternative (`Chart.Data`). You place the renderer inside `Chart.Plot`.
+
+<Component path="en/chart" />
 
 ## Breadcrumb [#breadcrumb]
 
@@ -399,3 +415,11 @@ See [DatePicker](/en/components/datepicker) for usage and API details.
 Type a date in `YYYY-MM-DD` format or select one day in the calendar. Unavailable and impossible dates show an error and keep the text available for correction. Escape closes the calendar and returns focus to its trigger. Resetting the form restores the initial date.
 
 <Component path="en/datepicker" />
+
+## Resizable [#resizable]
+
+See [Resizable](/en/components/resizable) for detailed usage and the API.
+
+Moves the boundary between two neighbouring panels with the keyboard or a pointer. The handle is a focusable `separator` and its name (`aria-label` or `aria-labelledby`) is required by the types. `aria-valuenow` is the percent size of the panel before it, and the arrow keys, Home and End change it within `minSize` and `maxSize`. In right-to-left writing (`dir="rtl"`) the arrow keys are mirrored. On narrow screens, switch to `orientation="vertical"` or otherwise adapt the layout.
+
+<Component path="en/resizable" />

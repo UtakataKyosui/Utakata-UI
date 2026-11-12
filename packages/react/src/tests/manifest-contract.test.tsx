@@ -51,6 +51,24 @@ describe('public manifest contract', () => {
         ]),
       );
   });
+  it('requires browser evidence for Resizable keyboard, pointer and layout and keeps screen reader and zoom manual', () => {
+    const rules = componentManifest.components.Resizable?.qualityRules ?? [];
+    for (const id of [
+      'resizable.keyboard-pointer-browser',
+      'resizable.visual-layout',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['resizable.screen-reader', 'resizable.zoom-touch-theme'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
     const rules = componentManifest.components.ToggleGroup?.qualityRules ?? [];
     for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
@@ -443,6 +461,21 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Item layout and focus and keeps zoom manual', () => {
+    expect(componentManifest.components.Item?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'item.layout-focus',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'item.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Card layout and keeps zoom manual', () => {
     expect(componentManifest.components.Card?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -453,6 +486,21 @@ describe('public manifest contract', () => {
         }),
         expect.objectContaining({
           id: 'card.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Chart keyboard, theme and motion and keeps zoom manual', () => {
+    expect(componentManifest.components.Chart?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'chart.keyboard-theme-motion',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'chart.zoom-assistive',
           verification: 'manual',
         }),
       ]),
@@ -724,6 +772,7 @@ describe('public manifest contract', () => {
       'Button',
       'Field',
       'Dialog',
+      'Item',
       'Kbd',
       'ScrollArea',
       'Separator',
@@ -739,6 +788,7 @@ describe('public manifest contract', () => {
       'Avatar',
       'Progress',
       'Table',
+      'Chart',
       'Breadcrumb',
       'Pagination',
       'NavigationMenu',
@@ -771,6 +821,7 @@ describe('public manifest contract', () => {
       'ButtonGroup',
       'Calendar',
       'DatePicker',
+      'Resizable',
     ]);
   });
 

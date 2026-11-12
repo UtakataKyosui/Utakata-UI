@@ -8,6 +8,7 @@ import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { calendarQualityRules } from './components/Calendar.js';
 import { cardQualityRules } from './components/Card.js';
 import { carouselQualityRules } from './components/Carousel.js';
+import { chartQualityRules } from './components/Chart.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
@@ -20,6 +21,7 @@ import { hoverCardQualityRules } from './components/HoverCard.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
+import { itemQualityRules } from './components/Item.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { menubarQualityRules } from './components/Menubar.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
@@ -28,6 +30,7 @@ import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { resizableQualityRules } from './components/Resizable.js';
 import { scrollAreaQualityRules } from './components/ScrollArea.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
@@ -134,6 +137,7 @@ export const qualityRules = {
         'Record browser, assistive technology and findings before release.',
     },
   ],
+  Item: itemQualityRules,
   Kbd: kbdQualityRules,
   ScrollArea: scrollAreaQualityRules,
   Separator: separatorQualityRules,
@@ -148,6 +152,7 @@ export const qualityRules = {
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
   Table: tableQualityRules,
+  Chart: chartQualityRules,
   Breadcrumb: breadcrumbQualityRules,
   Pagination: paginationQualityRules,
   Sidebar: sidebarQualityRules,
@@ -180,6 +185,7 @@ export const qualityRules = {
   ButtonGroup: buttonGroupQualityRules,
   Calendar: calendarQualityRules,
   DatePicker: datePickerQualityRules,
+  Resizable: resizableQualityRules,
   shared: [
     {
       id: 'lism.rendered-props',
