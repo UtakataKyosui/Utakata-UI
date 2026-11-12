@@ -905,6 +905,74 @@
     overflow: auto;
   }
 
+  @supports (animation-timeline: scroll(self block)) {
+    .ui-scroll-area {
+      --ui-scroll-area-shadow: color-mix(
+        in srgb,
+        var(--ui-color-text) 32%,
+        transparent
+      );
+      --ui-scroll-area-inline-start: 5px;
+      --ui-scroll-area-inline-end: -5px;
+      animation:
+        ui-scroll-area-block-shadow 1s linear,
+        ui-scroll-area-inline-shadow 1s linear;
+      animation-composition: add;
+      animation-timeline: scroll(self block), scroll(self inline);
+    }
+
+    .ui-scroll-area:dir(rtl) {
+      --ui-scroll-area-inline-start: -5px;
+      --ui-scroll-area-inline-end: 5px;
+    }
+
+    @keyframes ui-scroll-area-block-shadow {
+      0% {
+        box-shadow:
+          inset 0 0 0 -3px transparent,
+          inset 0 -5px 8px -3px var(--ui-scroll-area-shadow);
+      }
+      1%,
+      99% {
+        box-shadow:
+          inset 0 5px 8px -3px var(--ui-scroll-area-shadow),
+          inset 0 -5px 8px -3px var(--ui-scroll-area-shadow);
+      }
+      100% {
+        box-shadow:
+          inset 0 5px 8px -3px var(--ui-scroll-area-shadow),
+          inset 0 0 0 -3px transparent;
+      }
+    }
+
+    @keyframes ui-scroll-area-inline-shadow {
+      0% {
+        box-shadow:
+          inset 0 0 0 -3px transparent,
+          inset var(--ui-scroll-area-inline-end) 0 8px -3px
+          var(--ui-scroll-area-shadow);
+      }
+      1%,
+      99% {
+        box-shadow:
+          inset var(--ui-scroll-area-inline-start) 0 8px -3px
+          var(--ui-scroll-area-shadow),
+          inset var(--ui-scroll-area-inline-end) 0 8px -3px
+          var(--ui-scroll-area-shadow);
+      }
+      100% {
+        box-shadow:
+          inset var(--ui-scroll-area-inline-start) 0 8px -3px
+          var(--ui-scroll-area-shadow),
+          inset 0 0 0 -3px transparent;
+      }
+    }
+  }
+
+  .ui-scroll-area[data-scrollbar="hidden"] {
+    scrollbar-width: none;
+  }
+
   .ui-table-container {
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
@@ -2615,6 +2683,39 @@
     position: absolute;
   }
 
+  .ui-resizable__handle::after {
+    background: var(--ui-color-muted);
+    block-size: 0.375rem;
+    border-radius: 999px;
+    content: "";
+    inline-size: 1.5rem;
+    inset: 0;
+    margin: auto;
+    cursor: grab;
+    position: absolute;
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle::after {
+    block-size: 1.5rem;
+    inline-size: 0.375rem;
+  }
+
+  .ui-resizable > .ui-resizable__handle[data-dragging],
+  .ui-resizable__handle[data-dragging]::after {
+    cursor: grabbing;
+  }
+
+  .ui-resizable__handle:focus-visible::after,
+  .ui-resizable__handle[data-dragging]::after {
+    background: var(--ui-color-primary);
+  }
+
+  @media (hover: hover) {
+    .ui-resizable__handle:hover::after {
+      background: var(--ui-color-primary);
+    }
+  }
+
   .ui-resizable--horizontal > .ui-resizable__handle {
     cursor: col-resize;
     inline-size: var(--ui-resizable-handle-size);
@@ -3670,8 +3771,10 @@
       border-color: GrayText;
     }
 
-    .ui-resizable__handle::before {
+    .ui-resizable__handle::before,
+    .ui-resizable__handle::after {
       background: CanvasText;
+      forced-color-adjust: none;
     }
 
     .ui-resizable__handle:focus-visible {
@@ -3679,8 +3782,16 @@
     }
 
     .ui-resizable__handle:focus-visible::before,
-    .ui-resizable__handle[data-dragging]::before {
+    .ui-resizable__handle[data-dragging]::before,
+    .ui-resizable__handle:focus-visible::after,
+    .ui-resizable__handle[data-dragging]::after {
       background: Highlight;
+    }
+
+    @media (hover: hover) {
+      .ui-resizable__handle:hover::after {
+        background: Highlight;
+      }
     }
 
     .ui-badge,
