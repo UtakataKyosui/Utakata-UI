@@ -1,4 +1,5 @@
 ---
+
 title: Using a chart renderer
 description: Render a chart and provide a caption, legend, and data table.
 ---
