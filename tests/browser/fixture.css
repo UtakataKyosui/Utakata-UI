@@ -47,6 +47,11 @@ section {
   inline-size: min(100%, calc(100vi - 2rem));
 }
 
+.fixture-carousel {
+  /* The page grid grows to its widest fixture; keep the carousel in the viewport. */
+  inline-size: min(100%, calc(100vi - 2rem));
+}
+
 .fixture-badges {
   align-items: flex-start;
   display: flex;
