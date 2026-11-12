@@ -113,3 +113,21 @@ export async function withMockImage(run: () => void | Promise<void>) {
     window.Image = original;
   }
 }
+
+/** Focus via keyboard modality so Base UI treats it as focus-visible. */
+export async function keyboardFocus(element: HTMLElement) {
+  fireEvent.keyDown(document.body, { key: 'Tab' });
+  act(() => element.focus());
+  await settle(0);
+}
+
+/** The open "Document" menu: its group, the disabled Delete item and a separator. */
+export function expectDocumentMenu(itemCount: number) {
+  expect(screen.getByRole('group', { name: 'Document' })).toBeInTheDocument();
+  expect(screen.getAllByRole('menuitem')).toHaveLength(itemCount);
+  expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveAttribute(
+    'aria-disabled',
+    'true',
+  );
+  expect(screen.getByRole('separator')).toBeInTheDocument();
+}
