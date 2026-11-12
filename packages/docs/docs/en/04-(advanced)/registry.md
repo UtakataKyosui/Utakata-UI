@@ -13,7 +13,7 @@ The CLI copies component source, types, accessibility diagnostics and shared CSS
 | Item                                                      | npm package                     | Source copied with the CLI                                              |
 | --------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------- |
 | Updates and fixes                                         | Applied by updating the package | Not applied. You manage the differences                                 |
-| Type constraints and development diagnostics              | Verified in CI on the package   | As of the time you copied them. Verify yourself after editing           |
+| Type constraints and development diagnostics              | Included in the package         | As of the time you copied them. Verify yourself after editing           |
 | Import path                                               | `@utakata-ui/react`             | Your target path (for example `@/components/utakata/components/Button`) |
 | Examples in the component reference, MCP and agent guides | Usable as is                    | Replace import paths with your target path                              |
 

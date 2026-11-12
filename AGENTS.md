@@ -16,6 +16,10 @@ When changing public components, update `index.ts`, `manifest.ts`, relevant
 quality rules, tests and documentation together. TypeScript source imports use
 `.js` extensions. Do not edit generated `dist`, `.blume` or generated component pages.
 
+## Public documentation
+
+Write public pages for people building applications with Utakata-UI. Include setup, API behavior, examples, accessibility guidance, and limitations that affect their applications. Keep maintainer decisions, Issue tracking, CI details, and test evidence in GitHub or repository maintenance documents.
+
 ## Accessibility requirements
 
 Read [ACCESSIBILITY.md](ACCESSIBILITY.md) for component, theme, example and

@@ -17,19 +17,11 @@ The foundation of any interface is that people can receive the information they 
 - **Build accessibility into component design.** Utakata UI emphasizes meaningful HTML, keyboard operation, focus management and associating names and descriptions.
 - **Keep accessibility while you design.** Components with shared behavior and a styling system let you build well-designed interfaces.
 
-### Responsibilities of the maintainers [#responsibilities]
-
-To keep delivering this concept, the Utakata UI maintainers are responsible for building and maintaining a system that keeps the implementation correct.
-
-Component quality is verified by combining type constraints on public Props, development diagnostics, and static and real-browser checks in CI. The maintainers also provide types and diagnostics that support your implementation, so missing information and incorrect usage are found early.
-
 ## Built for Agent Coding [#agent-coding]
 
 The intended workflow is that you describe the screen, design and interactions you want to an agent, and the agent selects, composes and implements components according to the public Utakata UI specification.
 
 Utakata UI packages Base UI behavior and Lism CSS styling as Utakata UI components so agents can build interfaces from a shared design. Through the [component reference](/en/components) and [MCP](/en/mcp), agents can look up the public API, supported Props, composition and accessibility notes.
-
-Keeping the components consistent with their public API and usage guidance, so agents can find what they need, is also the maintainers' responsibility.
 
 ## Documentation [#documentation]
 

@@ -130,7 +130,7 @@ A table with a caption, row and column headers, right-aligned numbers and links 
 
 ## Chart [#chart]
 
-See [Chart](/en/components/chart) for detailed usage and the API. The adoption decision is in [Chart adoption decision](/en/advanced/chart-adoption).
+See [Chart](/en/components/chart) for detailed usage and the API. See [Using a chart renderer](/en/advanced/chart-adoption) for guidance on supplying the plot and data table.
 
 A renderer-independent chart shell with a `figure`, caption and description, a legend that tells series apart by marker shape, and a data table alternative (`Chart.Data`). You place the renderer inside `Chart.Plot`.
 
@@ -364,7 +364,7 @@ A modal panel attached to the top, right, bottom or left edge, built on Dialog. 
 
 See [Drawer](/en/components/drawer) for detailed usage and the API.
 
-A touch-friendly modal panel attached to the top, right, bottom or left edge, built on Base UI Drawer. `side` on `Drawer.Root` selects the edge (default `bottom`). Swiping toward the edge closes it, but a swipe must never be the only way to close: `Drawer.Close`, Escape and a press on the backdrop also close it and return focus to the trigger. Long content scrolls inside the content region, and the slide transition is removed when reduced motion is requested. Do not run an irreversible action on pointer or touch start; run it from a `Button` click and use `AlertDialog` when confirmation is needed. Use `Sheet` for an edge panel without gestures and `Dialog` for a centered modal. Always provide a `Drawer.Title` and a visible `Drawer.Close`. Snap points, non-modal drawers and `swipeDirection` are not provided. Touch scrolling and swiping on physical devices and screen reader output are unverified.
+A touch-friendly modal panel attached to the top, right, bottom or left edge, built on Base UI Drawer. `side` on `Drawer.Root` selects the edge (default `bottom`). Swiping toward the edge closes it, but a swipe must never be the only way to close: `Drawer.Close`, Escape and a press on the backdrop also close it and return focus to the trigger. Long content scrolls inside the content region, and the slide transition is removed when reduced motion is requested. Do not run an irreversible action on pointer or touch start; run it from a `Button` click and use `AlertDialog` when confirmation is needed. Use `Sheet` for an edge panel without gestures and `Dialog` for a centered modal. Always provide a `Drawer.Title` and a visible `Drawer.Close`. Snap points, non-modal drawers and `swipeDirection` are not provided.
 
 <Component path="en/drawer" />
 

@@ -1,30 +1,14 @@
 ---
 title: Label, Typography and Direction
-description: Why Label, Typography and RTL are not separate components, and how to compose them
+description: Add form labels, structure headings, and configure right-to-left layouts and keyboard navigation
 ---
 
-The areas that shadcn/ui covers with Label, Typography and RTL support are handled with existing components and web standards instead of new public components. This page records the adoption decision, the reasons and the consumer responsibilities. Tracking issue: [#121](https://github.com/UtakataKyosui/Utakata-UI/issues/121).
-
-## Decisions [#decisions]
-
-| Area | Decision | Use |
-| --- | --- | --- |
-| Label | Composition example (no separate API) | `Field.Label`; a wrapping `<label>` for checkbox-like controls |
-| Typography | Composition example (no separate API) | Lism `Heading` / `Text`; `level` on `Card.Title` / `Accordion.Header` |
-| Direction | Composition example and out of scope | HTML `dir` and logical CSS. Arrow-key mirroring is Base UI's `DirectionProvider` (not re-exported) |
-
-Shared reasons for not adding components:
-
-- APIs with the same responsibility already exist. A separate `Label` or `Typography` would create a second entry point for name sources and heading levels and spread what types and diagnostics can guard.
-- Every public API must be maintained across the manifest, quality rules, tests and bilingual docs. Existing parts already cover these cases, so no speculative addition is made.
-- No new production dependency is added.
+Use the examples below to label form controls, structure headings, and configure right-to-left content.
 
 ## Label [#label]
 
-**Decision: composition example. Use `Field.Label`.**
-
 - Combine `Field.Label` with `Field.Control` (or `Input` / `Textarea`) inside `Field.Root`. The visible text is the accessible name, so no extra `aria-label` is needed.
-- The label is tied to the control with `for`, so activating it moves focus (the association is tested in Vitest; real-browser behavior is unverified). `Field.Description` and `Field.Error` are associated with the control.
+- The label is tied to the control with `for`, so activating it moves focus. `Field.Description` and `Field.Error` are associated with the control.
 - Name `Checkbox` and `Switch` with `Field.Label` in `Field.Root` or a wrapping `<label>`. Do not put `RadioGroup` inside a Field; point `aria-labelledby` at visible text.
 - A placeholder is not a label.
 
@@ -33,8 +17,6 @@ Shared reasons for not adding components:
 **Consumer responsibilities:** label wording that conveys what to enter, no duplicated labels, and consistent dynamically built IDs. Development diagnostics warn about common missing names and broken references but do not judge wording.
 
 ## Typography [#typography]
-
-**Decision: composition example. Use Lism `Heading` / `Text`.**
 
 - Choose `Heading level="1"` to `"6"` from the document outline. `Card.Title` (default level 3) and `Accordion.Header` (default level 3) also take `level`. Never choose a level for its visual size.
 - Use `Text` for body copy. Style Props such as `fz` adjust appearance and do not change heading semantics.
@@ -46,31 +28,33 @@ Shared reasons for not adding components:
 
 ## Direction [#direction]
 
-**Decision: composition example and out of scope.** Set direction with HTML `dir` and logical CSS; no dedicated component is added.
-
 - On a right-to-left region, set `dir="rtl"` and `lang` on that subtree. The library CSS mainly uses logical properties (`margin-inline-*`, `padding-inline-*`, `inset-inline-*`, `text-align: start`), so forms and Card follow the direction.
 - Use logical properties in your own CSS instead of `left` / `right`.
 
 <Component path="en/direction" />
 
-**Arrow keys:** Base UI composite components such as Tabs and ToggleGroup do not mirror their arrow keys from the `dir` attribute alone. To reverse Left/Right in right-to-left, add `@base-ui/react` as a direct application dependency and wrap the subtree in `DirectionProvider`. Utakata-UI does not re-export `DirectionProvider`. Use the same version range as this library (`^1.9.0`).
+For composite controls such as Tabs and ToggleGroup, wrap the RTL region in `DirectionProvider` from `@utakata-ui/react` so Left and Right follow the reading direction.
 
 ```tsx
-import { DirectionProvider } from '@base-ui/react/direction-provider';
-import { Tabs } from '@utakata-ui/react';
+import { DirectionProvider, Tabs } from '@utakata-ui/react';
 
 <div dir="rtl" lang="ar">
   <DirectionProvider direction="rtl">
-    <Tabs.Root defaultValue="a">…</Tabs.Root>
+    <Tabs.Root defaultValue="overview">
+      <Tabs.List aria-label="معلومات">
+        <Tabs.Tab value="overview">نظرة عامة</Tabs.Tab>
+        <Tabs.Tab value="details">التفاصيل</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="overview">ملخص</Tabs.Panel>
+      <Tabs.Panel value="details">معلومات إضافية</Tabs.Panel>
+    </Tabs.Root>
   </DirectionProvider>
 </div>;
 ```
 
-Always keep `dir` and `direction` equal. This is verified in jsdom with Vitest for Tabs: `dir` alone does not mirror the keys, while `DirectionProvider` does.
+Keep the HTML `dir` and the provider’s `direction` set to the same value.
 
-**Out of scope and limits:**
+**Layout considerations**
 
 - `Sheet.Popup` `side` uses physical edges (`left` stays left in RTL). Choose the side yourself to follow the direction.
-- The indeterminate `Progress` animation and Tooltip arrow details are unverified in RTL.
 - Bidirectional text ordering (Arabic mixed with digits or Latin) and deciding which icons to mirror are consumer responsibilities.
-- Real-browser RTL rendering, screen readers and physical devices are unverified.
