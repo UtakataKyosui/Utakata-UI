@@ -3,11 +3,14 @@ import { useId } from 'react';
 
 export default function ScrollAreaExample() {
   const headingId = useId();
+  const hintId = useId();
 
   return (
     <>
       <h3 id={headingId}>Release notes</h3>
+      <p id={hintId}>Scroll within this area to see more updates.</p>
       <ScrollArea
+        aria-describedby={hintId}
         aria-labelledby={headingId}
         p="20"
         style={{ maxBlockSize: '9rem' }}

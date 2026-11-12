@@ -3,11 +3,14 @@ import { useId } from 'react';
 
 export default function ScrollAreaExample() {
   const headingId = useId();
+  const hintId = useId();
 
   return (
     <>
       <h3 id={headingId}>更新履歴</h3>
+      <p id={hintId}>領域内をスクロールすると、続きの更新履歴を読めます。</p>
       <ScrollArea
+        aria-describedby={hintId}
         aria-labelledby={headingId}
         p="20"
         style={{ maxBlockSize: '9rem' }}

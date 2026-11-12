@@ -11,7 +11,7 @@ export default function ResizableExample() {
       <Resizable.Handle aria-label="ナビゲーションの幅" />
       <Resizable.Panel panelId="main" defaultSize={70} minSize={30}>
         <p style={{ margin: '0.75rem' }}>
-          本文。ハンドルにフォーカスして矢印キー、Home、Endで幅を変えられます。
+          境界線の中央にあるグリップをドラッグして幅を変えられます。キーボードではグリップにフォーカスし、矢印キー、Home、Endを使います。
         </p>
       </Resizable.Panel>
     </Resizable.Group>

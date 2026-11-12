@@ -899,6 +899,52 @@
   }
 
   .ui-scroll-area {
+    --ui-scroll-area-surface: var(--ui-color-surface);
+    --ui-scroll-area-shadow: color-mix(
+      in srgb,
+      var(--ui-color-text) 28%,
+      transparent
+    );
+    /* Local covers hide each edge shadow when the content reaches that edge. */
+    background-color: var(--ui-scroll-area-surface);
+    background-image:
+      linear-gradient(var(--ui-scroll-area-surface) 40%, transparent),
+      linear-gradient(transparent, var(--ui-scroll-area-surface) 60%),
+      linear-gradient(to right, var(--ui-scroll-area-surface) 40%, transparent),
+      linear-gradient(to left, var(--ui-scroll-area-surface) 40%, transparent),
+      radial-gradient(
+        farthest-side at top,
+        var(--ui-scroll-area-shadow),
+        transparent
+      ),
+      radial-gradient(
+        farthest-side at bottom,
+        var(--ui-scroll-area-shadow),
+        transparent
+      ),
+      radial-gradient(
+        farthest-side at left,
+        var(--ui-scroll-area-shadow),
+        transparent
+      ),
+      radial-gradient(
+        farthest-side at right,
+        var(--ui-scroll-area-shadow),
+        transparent
+      );
+    background-attachment:
+      local, local, local, local, scroll, scroll, scroll, scroll;
+    background-position: top, bottom, left, right, top, bottom, left, right;
+    background-repeat: no-repeat;
+    background-size:
+      100% 1.5rem,
+      100% 1.5rem,
+      1.5rem 100%,
+      1.5rem 100%,
+      100% 0.5rem,
+      100% 0.5rem,
+      0.5rem 100%,
+      0.5rem 100%;
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
     min-inline-size: 0;
@@ -2615,6 +2661,29 @@
     position: absolute;
   }
 
+  .ui-resizable__handle::after {
+    background: var(--ui-color-muted);
+    block-size: 0.375rem;
+    border-radius: 999px;
+    content: "";
+    inline-size: 1.5rem;
+    inset: 0;
+    margin: auto;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle::after {
+    block-size: 1.5rem;
+    inline-size: 0.375rem;
+  }
+
+  .ui-resizable__handle:hover::after,
+  .ui-resizable__handle:focus-visible::after,
+  .ui-resizable__handle[data-dragging]::after {
+    background: var(--ui-color-primary);
+  }
+
   .ui-resizable--horizontal > .ui-resizable__handle {
     cursor: col-resize;
     inline-size: var(--ui-resizable-handle-size);
@@ -3670,8 +3739,10 @@
       border-color: GrayText;
     }
 
-    .ui-resizable__handle::before {
+    .ui-resizable__handle::before,
+    .ui-resizable__handle::after {
       background: CanvasText;
+      forced-color-adjust: none;
     }
 
     .ui-resizable__handle:focus-visible {
@@ -3679,7 +3750,10 @@
     }
 
     .ui-resizable__handle:focus-visible::before,
-    .ui-resizable__handle[data-dragging]::before {
+    .ui-resizable__handle[data-dragging]::before,
+    .ui-resizable__handle:hover::after,
+    .ui-resizable__handle:focus-visible::after,
+    .ui-resizable__handle[data-dragging]::after {
       background: Highlight;
     }
 
