@@ -40,6 +40,7 @@ const verificationStates = {
   InputGroup: ['invalid', 'disabled', 'readOnly'],
   ToggleGroup: ['single', 'multiple', 'disabled'],
   ButtonGroup: ['disabled', 'wrapping'],
+  Resizable: ['horizontal', 'vertical', 'rtl', 'constrained'],
 } as const;
 
 export function withVerificationStates<

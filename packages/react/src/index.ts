@@ -123,6 +123,12 @@ export type {
   RadioGroupRootProps,
 } from './components/RadioGroup.js';
 export { RadioGroup } from './components/RadioGroup.js';
+export type {
+  ResizableGroupProps,
+  ResizableHandleProps,
+  ResizablePanelProps,
+} from './components/Resizable.js';
+export { Resizable } from './components/Resizable.js';
 export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
@@ -186,6 +192,7 @@ export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
+export type { ResizableOrientation } from './metadata/components/Resizable.js';
 export type { SheetSide } from './metadata/components/Sheet.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
 export type { SpinnerSize } from './metadata/components/Spinner.js';

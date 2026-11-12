@@ -20,6 +20,7 @@ import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
+import { resizableManifest } from './components/Resizable.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
 import { sheetManifest } from './components/Sheet.js';
@@ -195,6 +196,7 @@ const manifest = {
     InputGroup: inputGroupManifest,
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
+    Resizable: resizableManifest,
   },
 } as const;
 

@@ -27,6 +27,7 @@ import {
   Popover,
   Progress,
   RadioGroup,
+  Resizable,
   Select,
   Separator,
   Sheet,
@@ -340,6 +341,71 @@ function SliderStates() {
 
 const badgeLongText =
   'Awaiting approval from the regional administration team before publication';
+
+function ResizableStates() {
+  const [layouts, setLayouts] = useState<Record<string, number>[]>([]);
+  return (
+    <section aria-label="Resizable states">
+      <Button>Before resizable</Button>
+      <Resizable.Group
+        data-case="horizontal"
+        className="fixture-resizable"
+        onLayoutChange={(layout) =>
+          setLayouts((previous) => [...previous, layout])
+        }
+      >
+        <Resizable.Panel
+          panelId="nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize navigation" />
+        <Resizable.Panel panelId="main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group
+        data-case="vertical"
+        orientation="vertical"
+        className="fixture-resizable fixture-resizable--tall"
+      >
+        <Resizable.Panel
+          panelId="top"
+          defaultSize={40}
+          minSize={20}
+          maxSize={60}
+        >
+          Top
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize top panel" />
+        <Resizable.Panel panelId="bottom" defaultSize={60} minSize={20}>
+          Bottom
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group data-case="rtl" dir="rtl" className="fixture-resizable">
+        <Resizable.Panel
+          panelId="rtl-nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize RTL navigation" />
+        <Resizable.Panel panelId="rtl-main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Button>After resizable</Button>
+      <output aria-label="Resizable layout changes">
+        {JSON.stringify(layouts)}
+      </output>
+    </section>
+  );
+}
 
 function BadgeStates() {
   return (
@@ -1425,6 +1491,7 @@ function Fixture() {
       <InputOTPStates />
       <ComboboxStates />
       <SliderStates />
+      <ResizableStates />
       <BadgeStates />
       <SkeletonStates />
       <SpinnerStates />

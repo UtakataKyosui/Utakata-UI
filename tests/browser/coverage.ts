@@ -317,6 +317,16 @@ export const coverage = {
       disabled: 'toggle-group.keyboard',
     },
   },
+  Resizable: {
+    axes: { orientations: ['horizontal', 'vertical'] },
+    selector: '.ui-resizable',
+    states: {
+      horizontal: 'resizable.keyboard-pointer-browser',
+      vertical: 'resizable.keyboard-pointer-browser',
+      rtl: 'resizable.keyboard-pointer-browser',
+      constrained: 'resizable.keyboard-pointer-browser',
+    },
+  },
   ButtonGroup: {
     axes: { orientations: ['horizontal', 'vertical'] },
     selector: '.ui-button-group',

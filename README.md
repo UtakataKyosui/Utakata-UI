@@ -29,7 +29,7 @@ Lism CSS と Base UI を基盤にした、React・TypeScript 向けの AI-Native
 
 docs は UI 本体をワークスペース依存として参照し、Blume の HTTP MCP でドキュメントを提供します。UI 本体は docs に依存しません。
 
-`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Combobox・InputOTP・Slider・Tabs・ToggleGroup・ButtonGroup・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Command・Sheet・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、Blume の MCP は manifest から生成したドキュメントを検索・取得します。
+`@utakata-ui/react` は Base UI のアクセシブルな振る舞いと、Lism CSS の Foundation プリミティブを組み合わせます。Button・Field・Dialog を起点に、表示・フォーム・ナビゲーション・開閉・オーバーレイ系のコンポーネント（Kbd・Separator・Badge・Card・Alert・Input・Checkbox・Select・Combobox・InputOTP・Slider・Tabs・ToggleGroup・ButtonGroup・Resizable・InputGroup・Tooltip・Popover・DropdownMenu・AlertDialog・Command・Sheet・Toast など）を提供し、公開仕様は `componentManifest` と `packages/react/src/metadata/manifest.ts` にまとめています。`skills/utakata-ui/SKILL.md` は AI エージェント向けの実装ガイド、Blume の MCP は manifest から生成したドキュメントを検索・取得します。
 
 導入は npm パッケージで行います。
 

@@ -20,6 +20,7 @@ import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { resizableQualityRules } from './components/Resizable.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
 import { sheetQualityRules } from './components/Sheet.js';
@@ -160,6 +161,7 @@ export const qualityRules = {
   InputGroup: inputGroupQualityRules,
   ToggleGroup: toggleGroupQualityRules,
   ButtonGroup: buttonGroupQualityRules,
+  Resizable: resizableQualityRules,
   shared: [
     {
       id: 'lism.rendered-props',

@@ -321,3 +321,11 @@ See [ButtonGroup](/en/components/buttongroup) for detailed usage and the API.
 Joins the borders and corner radii of related `Button` elements. Each button is still reached one at a time with Tab, and variant, size, disabled state and type stay as set on each button. The group name (`aria-label` or `aria-labelledby`) is required by the types.
 
 <Component path="en/buttongroup" />
+
+## Resizable [#resizable]
+
+See [Resizable](/en/components/resizable) for detailed usage and the API.
+
+Moves the boundary between two neighbouring panels with the keyboard or a pointer. The handle is a focusable `separator` and its name (`aria-label` or `aria-labelledby`) is required by the types. `aria-valuenow` is the percent size of the panel before it, and the arrow keys, Home and End change it within `minSize` and `maxSize`. In right-to-left writing (`dir="rtl"`) the arrow keys are mirrored. On narrow screens, switch to `orientation="vertical"` or otherwise adapt the layout.
+
+<Component path="en/resizable" />

@@ -36,6 +36,24 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Resizable keyboard, pointer and layout and keeps screen reader and zoom manual', () => {
+    const rules = componentManifest.components.Resizable?.qualityRules ?? [];
+    for (const id of [
+      'resizable.keyboard-pointer-browser',
+      'resizable.visual-layout',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['resizable.screen-reader', 'resizable.zoom-touch-theme'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
     const rules = componentManifest.components.ToggleGroup?.qualityRules ?? [];
     for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
@@ -656,6 +674,7 @@ describe('public manifest contract', () => {
       'InputGroup',
       'ToggleGroup',
       'ButtonGroup',
+      'Resizable',
     ]);
   });
 
