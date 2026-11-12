@@ -154,15 +154,15 @@ test('[carousel.visual] contrast, targets, reflow, forced colors and reduced mot
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto('/');
+  await page.goto('/?carousel');
   const { root, viewport, next, previous } = carousel(page);
-  await root.scrollIntoViewIfNeeded();
   await page.evaluate(() => {
     document.documentElement.style.fontSize = '200%';
   });
-  // Enlarging the text reflows the page; bring the carousel back into view so
-  // axe does not treat off-screen slides as partially obscured.
+  // Enlarging the text reflows the page; verify the visible slide before axe.
   await root.scrollIntoViewIfNeeded();
+  const activeText = root.getByText('Life on the shore');
+  await expect(activeText).toBeInViewport({ ratio: 1 });
   const controlLayout = await root
     .locator('.ui-carousel__controls')
     .evaluate((node) => ({
