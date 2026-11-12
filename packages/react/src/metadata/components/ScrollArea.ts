@@ -34,11 +34,12 @@ export const scrollAreaManifest = {
   qualityRules: scrollAreaQualityRules,
   description: 'A named region with native horizontal and vertical scrolling.',
   props: {
+    scrollbar: { type: "'auto' | 'hidden'", default: 'auto' },
     'aria-label': { type: 'string', default: null },
     'aria-labelledby': { type: 'string', default: null },
   },
   composition:
-    'Give the region an accessible name and constrain its block size for vertical overflow. Content can overflow on either axis. Browser and operating system settings control scrollbar visibility.',
+    'Give the region an accessible name and constrain its block size for vertical overflow. With scrollbar="auto", the browser and operating system control scrollbar visibility. Use scrollbar="hidden" to hide the bar while keeping native scrolling on both axes.',
   avoid: [
     'Use Table.Container for a data table; wrapping it in ScrollArea creates nested scroll regions.',
     'Use document scrolling for primary page content. Custom scrollbars, virtualization, and scroll snapping are outside this API.',

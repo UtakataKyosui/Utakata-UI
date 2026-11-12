@@ -17,3 +17,13 @@ it('uses a direct label when a visible heading is unavailable', () => {
     'Previous entries',
   );
 });
+
+it('defaults to native scrollbar visibility and can hide it on request', () => {
+  const { rerender } = render(<ScrollArea aria-label="History" />);
+  const region = screen.getByRole('region', { name: 'History' });
+  expect(region).toHaveAttribute('data-scrollbar', 'auto');
+
+  rerender(<ScrollArea aria-label="History" scrollbar="hidden" />);
+  expect(region).toHaveAttribute('data-scrollbar', 'hidden');
+  expect(region).toHaveAttribute('tabindex', '0');
+});

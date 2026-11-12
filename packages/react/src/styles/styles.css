@@ -951,6 +951,10 @@
     overflow: auto;
   }
 
+  .ui-scroll-area[data-scrollbar="hidden"] {
+    scrollbar-width: none;
+  }
+
   .ui-table-container {
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
@@ -2669,13 +2673,18 @@
     inline-size: 1.5rem;
     inset: 0;
     margin: auto;
-    pointer-events: none;
+    cursor: grab;
     position: absolute;
   }
 
   .ui-resizable--horizontal > .ui-resizable__handle::after {
     block-size: 1.5rem;
     inline-size: 0.375rem;
+  }
+
+  .ui-resizable > .ui-resizable__handle[data-dragging],
+  .ui-resizable__handle[data-dragging]::after {
+    cursor: grabbing;
   }
 
   .ui-resizable__handle:hover::after,
