@@ -1,0 +1,76 @@
+---
+title: Label・Typography・Direction
+description: ラベル、見出し・本文、文字方向（RTL）を独立した部品にしない判断と、組み合わせ方
+---
+
+shadcn/ui の Label・Typography、および RTL 対応に当たる範囲は、新しい公開部品を追加せず、既存の部品とブラウザー標準で扱います。ここでは採用判断、理由、利用側の責任を記録します。追跡 Issue は [#121](https://github.com/UtakataKyosui/Utakata-UI/issues/121) です。
+
+## 判断の一覧 [#decisions]
+
+| 領域 | 判断 | 使うもの |
+| --- | --- | --- |
+| Label | 合成例（独立 API は追加しない） | `Field.Label`、チェックボックス等は `<label>` |
+| Typography | 合成例（独立 API は追加しない） | Lism の `Heading` / `Text`、`Card.Title` / `Accordion.Header` の `level` |
+| Direction | 合成例と対象外 | HTML の `dir` と論理 CSS。矢印キーの反転は Base UI の `DirectionProvider`（再公開しない） |
+
+追加しない共通の理由は次のとおりです。
+
+- 同じ責務を持つ API が既にあります。独立した `Label` や `Typography` を足すと、名前の取得元や見出し階層の入口が 2 つになり、型と診断で誤用を防ぐ範囲が分散します。
+- 公開 API を増やすと、manifest、品質ルール、テスト、日英の文書を保守し続ける必要があります。使う場面が既存部品で満たせるため、投機的な追加は行いません。
+- 新しい本番依存は追加しません。
+
+## Label [#label]
+
+**判断：合成例。`Field.Label` を使います。**
+
+- 入力欄は `Field.Root` の中で `Field.Label` と `Field.Control`（または `Input`、`Textarea`）を組み合わせます。見えるテキストがそのままアクセシブル名になるため、`aria-label` を重ねる必要はありません。
+- ラベルは `for` で入力欄に関連付けられ、押すとフォーカスが移ります（関連付けは Vitest、実ブラウザーでの動作は未検証）。説明とエラーは `Field.Description` / `Field.Error` で入力欄に関連付けられます。
+- `Checkbox` と `Switch` は `Field.Root` 内の `Field.Label`、または囲む `<label>` で名前を付けます。`RadioGroup` は Field の内側に置かず、`aria-labelledby` で見えるテキストを指します。
+- プレースホルダーはラベルの代わりになりません。
+
+<Component path="labels" />
+
+**利用側の責任：** ラベルの文言が入力内容を伝えること、重複するラベルを作らないこと、動的に組み立てた ID の整合です。開発時の診断は一般的な名前の欠落と参照切れを警告しますが、文言の適切さは検証しません。
+
+## Typography [#typography]
+
+**判断：合成例。Lism の `Heading` / `Text` を使います。**
+
+- 見出しは `Heading level="1"`〜`"6"` で文書の階層に合わせます。`Card.Title`（既定 level 3）と `Accordion.Header`（既定 level 3）も `level` で階層に合わせます。見た目の大きさのために level を選ばないでください。
+- 本文は `Text` を使います。`fz` などのスタイル Props は見た目の調整用で、見出しの意味は変わりません。
+- `h1` の数、`section` と見出しの関連付け、ページタイトルはページを組み立てる利用側が担います。部品は階層を自動で決めません。
+
+<Component path="typography" />
+
+**利用側の責任：** 見出しの飛び（例：h2 の次が h4）を作らないこと、拡大・文字間隔の変更でも読めること、独自のフォントやサイズ指定時のコントラストとリフローの再検証です。
+
+## Direction [#direction]
+
+**判断：合成例と対象外。** 向きの指定は HTML の `dir` と論理 CSS で行い、専用の部品は追加しません。
+
+- 右から左の領域には、その範囲の要素に `dir="rtl"` と `lang` を指定します。ライブラリの CSS は主に余白と配置に論理プロパティ（`margin-inline-*`、`padding-inline-*`、`inset-inline-*`、`text-align: start`）を使うため、フォームや Card は向きに追従します。
+- 独自 CSS でも `left` / `right` ではなく論理プロパティを使ってください。
+
+<Component path="direction" />
+
+**矢印キー：** Tabs、ToggleGroup など Base UI の複合部品は、`dir` 属性だけでは矢印キーの向きを反転しません。右から左で左右の矢印キーを逆にするには、アプリが `@base-ui/react` を直接の依存に追加し、`DirectionProvider` で包みます。Utakata-UI は `DirectionProvider` を再公開しません。`@base-ui/react` は本ライブラリと同じバージョン範囲（`^1.9.0`）を使ってください。
+
+```tsx
+import { DirectionProvider } from '@base-ui/react/direction-provider';
+import { Tabs } from '@utakata-ui/react';
+
+<div dir="rtl" lang="ar">
+  <DirectionProvider direction="rtl">
+    <Tabs.Root defaultValue="a">…</Tabs.Root>
+  </DirectionProvider>
+</div>;
+```
+
+`dir` と `direction` は必ず同じ値にしてください。この対応は jsdom の Vitest（Tabs で、`dir` のみでは反転せず、`DirectionProvider` では反転すること）で確認しています。
+
+**対象外・制約：**
+
+- `Sheet.Popup` の `side` は物理的な辺（`left` は RTL でも左）です。向きに追従させる場合は、利用側で `side` を選び分けます。
+- 不確定 `Progress` のアニメーションと、Tooltip の矢印の細部は RTL で未確認です。
+- 双方向テキスト（Arabic と数字や英語の混在）の表示順、ミラーリングする必要があるアイコンの判断は利用側が担います。
+- 実ブラウザーでの RTL 表示、スクリーンリーダー、実機での操作は未検証です。
