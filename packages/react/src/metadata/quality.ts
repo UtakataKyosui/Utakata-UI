@@ -8,6 +8,7 @@ import { buttonGroupQualityRules } from './components/ButtonGroup.js';
 import { calendarQualityRules } from './components/Calendar.js';
 import { cardQualityRules } from './components/Card.js';
 import { carouselQualityRules } from './components/Carousel.js';
+import { chartQualityRules } from './components/Chart.js';
 import { checkboxQualityRules } from './components/Checkbox.js';
 import { collapsibleQualityRules } from './components/Collapsible.js';
 import { comboboxQualityRules } from './components/Combobox.js';
@@ -150,6 +151,7 @@ export const qualityRules = {
   Avatar: avatarQualityRules,
   Progress: progressQualityRules,
   Table: tableQualityRules,
+  Chart: chartQualityRules,
   Breadcrumb: breadcrumbQualityRules,
   Pagination: paginationQualityRules,
   Sidebar: sidebarQualityRules,

@@ -16,6 +16,7 @@ const verificationStates = {
   Card: ['longContent'],
   Empty: ['longContent', 'namedActions'],
   Carousel: ['first', 'last', 'scroll', 'focused'],
+  Chart: ['closed', 'open', 'reducedMotion'],
   Alert: ['static', 'longContent'],
   Avatar: ['image', 'fallback'],
   Progress: ['determinate', 'indeterminate'],

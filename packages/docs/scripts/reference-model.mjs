@@ -79,6 +79,7 @@ export const categories = [
       'Item',
       'Empty',
       'Table',
+      'Chart',
       'ScrollArea',
       'Avatar',
       'Kbd',

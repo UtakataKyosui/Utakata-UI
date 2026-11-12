@@ -21,6 +21,19 @@
     --ui-color-border: #8993a5;
     --ui-color-danger: #b42318;
     --ui-color-on-danger: #fff;
+    --ui-chart-series-1: #2357c6;
+    --ui-chart-series-2: #b54708;
+    --ui-chart-series-3: #067647;
+    --ui-chart-series-4: #7e22ce;
+    --ui-chart-series-5: #c11574;
+    --ui-chart-series-6: #596579;
+    --ui-chart-dash-1: none;
+    --ui-chart-dash-2: 8 4;
+    --ui-chart-dash-3: 2 3;
+    --ui-chart-dash-4: 10 3 2 3;
+    --ui-chart-dash-5: 1 4;
+    --ui-chart-dash-6: 14 4;
+    --ui-chart-duration: 200ms;
     --ui-radius-control: 0.375rem;
     --ui-shadow-popup: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
     --ui-focus-ring: 0 0 0 3px
@@ -37,6 +50,12 @@
       --ui-color-border: #748099;
       --ui-color-danger: #ffb4ab;
       --ui-color-on-danger: #3a0a06;
+      --ui-chart-series-1: #9bb9ff;
+      --ui-chart-series-2: #fdb022;
+      --ui-chart-series-3: #6ce9a6;
+      --ui-chart-series-4: #d6bbfb;
+      --ui-chart-series-5: #fda29b;
+      --ui-chart-series-6: #c1cad8;
     }
   }
 }
@@ -941,6 +960,103 @@
 
   .ui-table [data-align="end"] {
     text-align: end;
+  }
+
+  .ui-chart {
+    color: var(--ui-color-text);
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-chart__caption {
+    font-weight: 600;
+  }
+
+  .ui-chart__description {
+    color: var(--ui-color-muted);
+    margin: 0;
+  }
+
+  .ui-chart__plot {
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-chart__plot > svg {
+    block-size: auto;
+    max-inline-size: 100%;
+  }
+
+  .ui-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ui-chart__legend-item {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
+    min-inline-size: 0;
+  }
+
+  .ui-chart__marker {
+    color: var(--ui-chart-marker-color, currentColor);
+    fill: currentColor;
+    flex: none;
+    stroke: currentColor;
+    stroke-width: 0;
+  }
+
+  .ui-chart__marker--1 {
+    --ui-chart-marker-color: var(--ui-chart-series-1);
+  }
+
+  .ui-chart__marker--2 {
+    --ui-chart-marker-color: var(--ui-chart-series-2);
+  }
+
+  .ui-chart__marker--3 {
+    --ui-chart-marker-color: var(--ui-chart-series-3);
+  }
+
+  .ui-chart__marker--4 {
+    --ui-chart-marker-color: var(--ui-chart-series-4);
+  }
+
+  .ui-chart__marker--5 {
+    --ui-chart-marker-color: var(--ui-chart-series-5);
+  }
+
+  .ui-chart__marker--6 {
+    --ui-chart-marker-color: var(--ui-chart-series-6);
+  }
+
+  .ui-chart__data {
+    min-inline-size: 0;
+  }
+
+  .ui-chart__data-summary {
+    cursor: pointer;
+    font-weight: 600;
+    min-block-size: 1.5rem;
+    padding-block: 0.25rem;
+  }
+
+  .ui-chart__data-summary:focus-visible {
+    border-radius: var(--ui-radius-control);
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-chart__data-content {
+    padding-block-start: 0.5rem;
   }
 
   .ui-breadcrumb__list,
@@ -3443,6 +3559,14 @@
   }
 
   @media (forced-colors: active) {
+    .ui-chart__marker {
+      color: CanvasText;
+    }
+
+    .ui-chart__data-summary:focus-visible {
+      outline: 2px solid Highlight;
+    }
+
     .ui-separator,
     .ui-input-otp__separator {
       background: CanvasText;
@@ -3850,6 +3974,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .ui-chart {
+      --ui-chart-duration: 0s;
+    }
+
     .ui-button {
       transition: none;
     }

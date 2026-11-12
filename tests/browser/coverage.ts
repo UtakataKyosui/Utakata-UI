@@ -152,6 +152,15 @@ export const coverage = {
     selector: '.ui-table',
     states: { overflow: 'table.reflow-focus' },
   },
+  Chart: {
+    axes: { series: ['1', '2', '3', '4', '5', '6'] },
+    selector: '.ui-chart__marker',
+    states: {
+      closed: 'chart.keyboard-theme-motion',
+      open: 'chart.keyboard-theme-motion',
+      reducedMotion: 'chart.keyboard-theme-motion',
+    },
+  },
   Breadcrumb: {
     axes: {},
     selector: '.ui-breadcrumb',

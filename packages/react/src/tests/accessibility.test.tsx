@@ -29,6 +29,7 @@ import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
 import { calendarChecks } from './quality/Calendar.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { carouselChecks } from './quality/Carousel.checks.js';
+import { chartChecks } from './quality/Chart.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
@@ -165,6 +166,7 @@ describe('accessibility regression checks', () => {
       ...cardChecks,
       ...emptyChecks,
       ...carouselChecks,
+      ...chartChecks,
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,

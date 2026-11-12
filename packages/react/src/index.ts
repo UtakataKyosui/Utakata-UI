@@ -70,6 +70,17 @@ export {
   type CarouselSlide,
 } from './components/Carousel.js';
 export type {
+  ChartCaptionProps,
+  ChartDataProps,
+  ChartDescriptionProps,
+  ChartLegendItemProps,
+  ChartLegendProps,
+  ChartMarkerProps,
+  ChartPlotProps,
+  ChartRootProps,
+} from './components/Chart.js';
+export { Chart } from './components/Chart.js';
+export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,
 } from './components/Checkbox.js';
@@ -251,6 +262,7 @@ export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
+export type { ChartSeries } from './metadata/components/Chart.js';
 export type { DrawerSide } from './metadata/components/Drawer.js';
 export type { EmptyTitleLevel } from './metadata/components/Empty.js';
 export type { InputSize } from './metadata/components/Input.js';

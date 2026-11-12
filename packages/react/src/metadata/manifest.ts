@@ -8,6 +8,7 @@ import { buttonGroupManifest } from './components/ButtonGroup.js';
 import { calendarManifest } from './components/Calendar.js';
 import { cardManifest } from './components/Card.js';
 import { carouselManifest } from './components/Carousel.js';
+import { chartManifest } from './components/Chart.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
@@ -187,6 +188,7 @@ const manifest = {
     Avatar: avatarManifest,
     Progress: progressManifest,
     Table: tableManifest,
+    Chart: chartManifest,
     Breadcrumb: breadcrumbManifest,
     Pagination: paginationManifest,
     NavigationMenu: navigationMenuManifest,

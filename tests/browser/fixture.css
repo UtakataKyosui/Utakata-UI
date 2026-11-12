@@ -128,6 +128,17 @@ section[aria-label="Table states"] .ui-table-container {
   inline-size: 240px;
 }
 
+section[aria-label="Chart states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Chart states"] .ui-chart {
+  inline-size: 100%;
+  max-inline-size: min(28rem, 100%);
+}
+
 section[aria-label="Breadcrumb states"] {
   align-items: flex-start;
   flex-direction: column;
