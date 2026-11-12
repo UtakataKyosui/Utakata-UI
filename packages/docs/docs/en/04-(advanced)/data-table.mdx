@@ -79,9 +79,3 @@ Only the current page changes: `aria-current="page"` and the displayed range upd
 - Handling a focused `Previous` or `Next` that becomes disabled (for example on the last page). Focus is lost when that happens, so move it to a nearby enabled link when needed.
 - Translating labels, column names and state names, and writing a `Table.Caption` that fits the table's purpose.
 - Checking the rendered result for contrast, zoom, forced colors and reduced motion.
-
-## Verification and what is unverified [#verification]
-
-- Automated jsdom tests cover empty results, the selected count, `aria-sort`, the state after a page change, and that rows are rendered as received. axe runs in the default, sorted and empty states.
-- Real-browser keyboard operation, screen reader output, theme contrast, zoom, forced colors and reduced motion are unverified by this guide on its own.
-- Types statically prevent problems such as an icon-only button without a name. They cannot verify the text of an `aria-label` or that `aria-sort` is applied correctly in your composition; check the actual DOM.
