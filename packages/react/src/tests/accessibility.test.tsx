@@ -52,6 +52,7 @@ import { paginationChecks } from './quality/Pagination.checks.js';
 import { popoverChecks } from './quality/Popover.checks.js';
 import { progressChecks } from './quality/Progress.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
+import { resizableChecks } from './quality/Resizable.checks.js';
 import { scrollAreaChecks } from './quality/ScrollArea.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
@@ -204,6 +205,7 @@ describe('accessibility regression checks', () => {
       ...buttonGroupChecks,
       ...calendarChecks,
       ...datePickerChecks,
+      ...resizableChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

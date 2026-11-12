@@ -31,6 +31,7 @@ import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
+import { resizableManifest } from './components/Resizable.js';
 import { scrollAreaManifest } from './components/ScrollArea.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
@@ -221,6 +222,7 @@ const manifest = {
     ButtonGroup: buttonGroupManifest,
     Calendar: calendarManifest,
     DatePicker: datePickerManifest,
+    Resizable: resizableManifest,
   },
 } as const;
 

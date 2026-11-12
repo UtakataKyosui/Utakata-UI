@@ -68,7 +68,7 @@ try {
   writeFileSync(
     join(directory, 'consumer.tsx'),
     `import type { ComponentProps } from 'react';
-import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Carousel, Chart, Collapsible, Combobox, Command, ContextMenu, DatePicker, Dialog, DirectionProvider, Drawer, Empty, Field, Frame, HoverCard, Input, InputGroup, InputOTP, Item, Kbd, KbdGroup, Menubar, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CarouselLabels, type CarouselProps, type CarouselSlide, type ChartLegendItemProps, type ChartMarkerProps, type ChartPlotProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type DatePickerProps, type DrawerPopupProps, type DrawerRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type ItemButtonProps, type ItemIconProps, type ItemLinkProps, type ItemRootProps, type MenubarRootProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
+import { Accordion, Alert, AlertDialog, Avatar, Badge, Breadcrumb, Button, ButtonGroup, Calendar, Card, Carousel, Chart, Collapsible, Combobox, Command, ContextMenu, DatePicker, Dialog, DirectionProvider, Drawer, Empty, Field, Frame, HoverCard, Input, InputGroup, InputOTP, Item, Kbd, KbdGroup, Menubar, NativeSelect, NavigationMenu, Pagination, Progress, RadioGroup, Resizable, ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Spinner, Table, Tabs, Textarea, Toast, Toggle, ToggleGroup, Tooltip, type AccordionHeaderProps, type AlertDialogPopupProps, type BadgeProps, type BreadcrumbLinkProps, type BreadcrumbPageProps, type ButtonGroupProps, type ButtonProps, type CalendarDate, type CalendarProps, type CalendarRange, type CarouselLabels, type CarouselProps, type CarouselSlide, type ChartLegendItemProps, type ChartMarkerProps, type ChartPlotProps, type CollapsibleRootProps, type ComboboxRootProps, type CommandRootProps, type ContextMenuPopupProps, type DatePickerProps, type DrawerPopupProps, type DrawerRootProps, type HoverCardRootProps, type HoverCardTriggerProps, type InputGroupAddonProps, type InputGroupButtonProps, type InputOTPRootProps, type InputProps, type ItemButtonProps, type ItemIconProps, type ItemLinkProps, type ItemRootProps, type MenubarRootProps, type NativeSelectProps, type NavigationMenuLinkProps, type NavigationMenuRootProps, type PaginationDirectionProps, type PaginationLinkProps, type ProgressRootProps, type RadioGroupRootProps, type ResizableGroupProps, type ResizableHandleProps, type ResizablePanelProps, type ScrollAreaProps, type SelectRootProps, type SheetPopupProps, type SidebarMenuButtonProps, type SidebarRootProps, type SidebarTriggerProps, type SkeletonProps, type SpinnerProps, type TableContainerProps, type TabsRootProps, type TextareaProps, type ToastCloseProps, type ToggleGroupItemProps, type ToggleGroupRootProps, type ToggleProps, type TooltipPopupProps, type TooltipRootProps } from '@utakata-ui/react';
 import { componentManifest } from '@utakata-ui/react/manifest';
 export const view = <><Button>Save</Button><Field.Root><Field.Label>Email</Field.Label><Field.Control /></Field.Root><Dialog.Root><Dialog.Trigger>Open</Dialog.Trigger></Dialog.Root></>;
 export const manifest = componentManifest;
@@ -786,6 +786,28 @@ function CalendarWrapper(props: CalendarProps) { return <Calendar {...props} />;
 export const wrappedCalendar = <CalendarWrapper aria-label="Booking date" />;
 // @ts-expect-error Wrappers must preserve the required calendar name.
 export const wrappedCalendarInvalid = <CalendarWrapper />;
+export const resizableHandleNamed: ResizableHandleProps = { 'aria-label': 'Resize navigation' };
+export const resizableHandleReferenced: ResizableHandleProps = { 'aria-labelledby': 'nav-title' };
+export const resizablePanelProps: ResizablePanelProps = { panelId: 'nav', defaultSize: 30, minSize: 20, maxSize: 50 };
+export const resizableGroupProps: ResizableGroupProps = { orientation: 'vertical', keyboardStep: 10, onLayoutChange: (layout: Record<string, number>) => void layout };
+export const resizable = <Resizable.Group {...resizableGroupProps}><Resizable.Panel {...resizablePanelProps}>Navigation</Resizable.Panel><Resizable.Handle {...resizableHandleNamed} /><Resizable.Panel panelId="main">Main</Resizable.Panel></Resizable.Group>;
+// @ts-expect-error Resizable.Handle needs a name in shipped declarations.
+export const resizableHandleUnnamed: ResizableHandleProps = {};
+// @ts-expect-error Resizable.Handle accepts one name source in shipped declarations.
+export const resizableHandleBothNames: ResizableHandleProps = { 'aria-label': 'x', 'aria-labelledby': 'y' };
+// @ts-expect-error Resizable.Handle keeps role="separator" in shipped declarations.
+export const resizableHandleRole: ResizableHandleProps = { 'aria-label': 'x', role: 'presentation' };
+// @ts-expect-error aria-valuenow is derived from the panels in shipped declarations.
+export const resizableHandleValue: ResizableHandleProps = { 'aria-label': 'x', 'aria-valuenow': 10 };
+// @ts-expect-error Resizable.Panel requires a panelId in shipped declarations.
+export const resizablePanelNoId: ResizablePanelProps = {};
+// @ts-expect-error Resizable.Group orientation is limited to the manifest in shipped declarations.
+export const resizableDiagonal: ResizableGroupProps = { orientation: 'diagonal' };
+// @ts-expect-error JSX usage must name the Handle.
+export const resizableHandleUnnamedJsx = <Resizable.Handle />;
+const resizableHandleUnnamedProps = { className: 'x' };
+// @ts-expect-error A props spread must still name the Handle.
+export const resizableHandleSpreadUnnamed = <Resizable.Handle {...resizableHandleUnnamedProps} />;
 export const inputGroupAddon: InputGroupAddonProps = { align: 'block-end' };
 export const inputGroupIconButton: InputGroupButtonProps = { iconOnly: true, 'aria-label': 'Clear' };
 export const inputGroup = <Field.Root><Field.Label>Search</Field.Label><InputGroup.Root><Input type="search" /><InputGroup.Addon {...inputGroupAddon}><InputGroup.Button {...inputGroupIconButton} /></InputGroup.Addon></InputGroup.Root></Field.Root>;

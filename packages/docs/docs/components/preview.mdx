@@ -415,3 +415,11 @@ Dialogを基にした、上・右・下・左の端に付くモーダルのパ�
 日付を `YYYY-MM-DD` 形式で入力するか、カレンダーから1日を選びます。選べない日や実在しない日はエラーになり、入力内容は修正できるように残ります。Escape でカレンダーを閉じるとボタンにフォーカスが戻ります。フォームのリセットで初期値に戻せます。
 
 <Component path="datepicker" />
+
+## Resizable [#resizable]
+
+詳しい使い方とAPIは[Resizable](/components/resizable)を参照してください。
+
+隣り合う2つのパネルの境界をキーボードとポインターで動かします。ハンドルはフォーカスできる`separator`で、名前（`aria-label`か`aria-labelledby`）は型で必須です。`aria-valuenow`は直前のパネルの割合（%）で、矢印キー・Home・Endで`minSize`と`maxSize`の範囲内に変更できます。右から左へ書く言語（`dir="rtl"`）では矢印キーの向きが反転します。狭い画面では`orientation="vertical"`に切り替えるなど、レイアウトを調整してください。
+
+<Component path="resizable" />

@@ -2576,6 +2576,92 @@
     white-space: nowrap;
   }
 
+  /* Resizable: panels share the group by percent; the handle keeps a 24px target but occupies only its line in layout */
+  .ui-resizable {
+    box-sizing: border-box;
+    display: flex;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    min-block-size: 0;
+    min-inline-size: 0;
+  }
+
+  .ui-resizable--vertical {
+    flex-direction: column;
+  }
+
+  .ui-resizable__panel {
+    box-sizing: border-box;
+    flex: var(--ui-resizable-panel-size, 1) 1 0%;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow: auto;
+  }
+
+  .ui-resizable__handle {
+    --ui-resizable-handle-size: 1.5rem;
+    --ui-resizable-handle-line: 1px;
+    box-sizing: border-box;
+    flex: none;
+    position: relative;
+    touch-action: none;
+    user-select: none;
+    z-index: 1;
+  }
+
+  .ui-resizable__handle::before {
+    background: var(--ui-color-border);
+    content: "";
+    position: absolute;
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle {
+    cursor: col-resize;
+    inline-size: var(--ui-resizable-handle-size);
+    margin-inline: calc(
+      (var(--ui-resizable-handle-line) - var(--ui-resizable-handle-size)) /
+      2
+    );
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle::before {
+    inset-block: 0;
+    inset-inline-start: calc(
+      (var(--ui-resizable-handle-size) - var(--ui-resizable-handle-line)) /
+      2
+    );
+    inline-size: var(--ui-resizable-handle-line);
+  }
+
+  .ui-resizable--vertical > .ui-resizable__handle {
+    block-size: var(--ui-resizable-handle-size);
+    cursor: row-resize;
+    margin-block: calc(
+      (var(--ui-resizable-handle-line) - var(--ui-resizable-handle-size)) /
+      2
+    );
+  }
+
+  .ui-resizable--vertical > .ui-resizable__handle::before {
+    block-size: var(--ui-resizable-handle-line);
+    inline-size: 100%;
+    inset-block-start: calc(
+      (var(--ui-resizable-handle-size) - var(--ui-resizable-handle-line)) /
+      2
+    );
+  }
+
+  .ui-resizable__handle:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 0;
+  }
+
+  .ui-resizable__handle:focus-visible::before,
+  .ui-resizable__handle[data-dragging]::before {
+    background: var(--ui-color-primary);
+  }
+
   /* Button group: joins borders and end radii; buttons keep every other style */
   .ui-button-group {
     display: inline-flex;
@@ -3582,6 +3668,19 @@
 
     .ui-input-otp__slot:disabled {
       border-color: GrayText;
+    }
+
+    .ui-resizable__handle::before {
+      background: CanvasText;
+    }
+
+    .ui-resizable__handle:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ui-resizable__handle:focus-visible::before,
+    .ui-resizable__handle[data-dragging]::before {
+      background: Highlight;
     }
 
     .ui-badge,

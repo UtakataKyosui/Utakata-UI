@@ -53,6 +53,7 @@ const verificationStates = {
   ButtonGroup: ['disabled', 'wrapping'],
   Calendar: ['single', 'range', 'disabled', 'today'],
   DatePicker: ['empty', 'selected', 'invalid', 'disabled', 'open'],
+  Resizable: ['horizontal', 'vertical', 'rtl', 'constrained'],
 } as const;
 
 export function withVerificationStates<

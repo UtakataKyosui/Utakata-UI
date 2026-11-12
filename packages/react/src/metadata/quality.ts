@@ -30,6 +30,7 @@ import { paginationQualityRules } from './components/Pagination.js';
 import { popoverQualityRules } from './components/Popover.js';
 import { progressQualityRules } from './components/Progress.js';
 import { radioGroupQualityRules } from './components/RadioGroup.js';
+import { resizableQualityRules } from './components/Resizable.js';
 import { scrollAreaQualityRules } from './components/ScrollArea.js';
 import { selectQualityRules } from './components/Select.js';
 import { separatorQualityRules } from './components/Separator.js';
@@ -184,6 +185,7 @@ export const qualityRules = {
   ButtonGroup: buttonGroupQualityRules,
   Calendar: calendarQualityRules,
   DatePicker: datePickerQualityRules,
+  Resizable: resizableQualityRules,
   shared: [
     {
       id: 'lism.rendered-props',

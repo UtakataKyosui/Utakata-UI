@@ -85,6 +85,7 @@ export const categories = [
       'Kbd',
       'Separator',
       'Calendar',
+      'Resizable',
     ],
   },
 ];
