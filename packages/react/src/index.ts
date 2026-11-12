@@ -132,6 +132,19 @@ export type {
   InputOTPSlotProps,
 } from './components/InputOTP.js';
 export { InputOTP } from './components/InputOTP.js';
+export type {
+  ItemActionsProps,
+  ItemBodyProps,
+  ItemButtonProps,
+  ItemDescriptionProps,
+  ItemGroupProps,
+  ItemIconProps,
+  ItemLinkProps,
+  ItemMetaProps,
+  ItemRootProps,
+  ItemTitleProps,
+} from './components/Item.js';
+export { Item } from './components/Item.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
 export type { MenubarRootProps } from './components/Menubar.js';

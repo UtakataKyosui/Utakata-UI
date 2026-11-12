@@ -88,6 +88,16 @@ section[aria-label="Card states"] .ui-card {
   inline-size: 240px;
 }
 
+section[aria-label="Item states"] {
+  align-items: flex-start;
+  flex-direction: column;
+  min-width: 0;
+}
+
+section[aria-label="Item states"] .ui-item-group {
+  inline-size: 288px;
+}
+
 section[aria-label="Alert states"] {
   align-items: flex-start;
   flex-direction: column;

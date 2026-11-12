@@ -20,6 +20,7 @@ import { hoverCardQualityRules } from './components/HoverCard.js';
 import { inputQualityRules } from './components/Input.js';
 import { inputGroupQualityRules } from './components/InputGroup.js';
 import { inputOTPQualityRules } from './components/InputOTP.js';
+import { itemQualityRules } from './components/Item.js';
 import { kbdQualityRules } from './components/Kbd.js';
 import { menubarQualityRules } from './components/Menubar.js';
 import { nativeSelectQualityRules } from './components/NativeSelect.js';
@@ -134,6 +135,7 @@ export const qualityRules = {
         'Record browser, assistive technology and findings before release.',
     },
   ],
+  Item: itemQualityRules,
   Kbd: kbdQualityRules,
   ScrollArea: scrollAreaQualityRules,
   Separator: separatorQualityRules,

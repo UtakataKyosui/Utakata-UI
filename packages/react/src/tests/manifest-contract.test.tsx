@@ -443,6 +443,21 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Item layout and focus and keeps zoom manual', () => {
+    expect(componentManifest.components.Item?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'item.layout-focus',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'item.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Card layout and keeps zoom manual', () => {
     expect(componentManifest.components.Card?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -724,6 +739,7 @@ describe('public manifest contract', () => {
       'Button',
       'Field',
       'Dialog',
+      'Item',
       'Kbd',
       'ScrollArea',
       'Separator',

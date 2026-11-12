@@ -76,6 +76,7 @@ export const categories = [
     title: { ja: 'データ表示', en: 'Data display' },
     components: [
       'Card',
+      'Item',
       'Empty',
       'Table',
       'ScrollArea',

@@ -4,6 +4,7 @@ const verificationStates = {
   Button: ['enabled', 'keyboard', 'disabled'],
   Field: ['labelled', 'focus'],
   Dialog: ['open', 'closed'],
+  Item: ['static', 'link', 'button', 'longContent'],
   Kbd: ['static'],
   Separator: ['decorative', 'semantic'],
   Sheet: ['open', 'closed'],

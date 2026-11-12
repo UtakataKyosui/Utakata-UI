@@ -114,6 +114,16 @@ export const coverage = {
       focused: 'carousel.visual',
     },
   },
+  Item: {
+    axes: {},
+    selector: '.ui-item',
+    states: {
+      static: 'item.layout-focus',
+      link: 'item.layout-focus',
+      button: 'item.layout-focus',
+      longContent: 'item.layout-focus',
+    },
+  },
   Alert: {
     axes: { variants: ['default', 'destructive'] },
     selector: '.ui-alert',

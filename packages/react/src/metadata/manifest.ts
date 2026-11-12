@@ -21,6 +21,7 @@ import { hoverCardManifest } from './components/HoverCard.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
+import { itemManifest } from './components/Item.js';
 import { kbdManifest } from './components/Kbd.js';
 import { menubarManifest } from './components/Menubar.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
@@ -170,6 +171,7 @@ const manifest = {
       accessibility:
         'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and an optional useful Description. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
+    Item: itemManifest,
     Kbd: kbdManifest,
     ScrollArea: scrollAreaManifest,
     Separator: separatorManifest,
