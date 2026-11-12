@@ -14,13 +14,15 @@ body {
   line-break: strict;
 }
 
-/* Keep Blume's header controls on the site palette above the Lism reset. */
+/* Keep Blume's flat controls transparent above the Lism reset. */
 [data-blume-header]
   :is(
     [data-blume-nav-toggle],
     [data-blume-search-open],
     [data-blume-theme-toggle]
-  ) {
+  ),
+[data-blume-page-actions]
+  > :is([data-blume-scroll-top], [data-blume-copy-page]) {
   background-color: transparent;
   border-color: transparent;
 }
