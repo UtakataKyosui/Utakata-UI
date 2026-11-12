@@ -25,7 +25,11 @@ function parts(page: Page) {
     // Not by role: the open modal hides the page behind it from the tree.
     trigger: root.locator('button[aria-label="Toggle navigation"]'),
     nav: page.getByRole('navigation', { name: 'Fixture navigation' }),
-    link: (name: string) => page.getByRole('link', { name, exact: true }),
+    // Scoped to the sidebar: other fixtures on the page also have links.
+    link: (name: string) =>
+      page
+        .getByRole('link', { name, exact: true })
+        .and(page.locator('.ui-sidebar__menu-button')),
     dialog: page.getByRole('dialog', { name: 'Fixture navigation' }),
     close: page.getByRole('button', { name: 'Close menu' }),
   };

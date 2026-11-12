@@ -58,7 +58,13 @@ export const categories = [
   {
     slug: 'navigation',
     title: { ja: 'ナビゲーション', en: 'Navigation' },
-    components: ['Breadcrumb', 'Pagination', 'NavigationMenu', 'Sidebar', 'Carousel'],
+    components: [
+      'Breadcrumb',
+      'Pagination',
+      'NavigationMenu',
+      'Sidebar',
+      'Carousel',
+    ],
   },
   {
     slug: 'feedback',
@@ -68,7 +74,16 @@ export const categories = [
   {
     slug: 'display',
     title: { ja: 'データ表示', en: 'Data display' },
-    components: ['Card', 'Empty', 'Table', 'ScrollArea', 'Avatar', 'Kbd', 'Separator', 'Calendar'],
+    components: [
+      'Card',
+      'Empty',
+      'Table',
+      'ScrollArea',
+      'Avatar',
+      'Kbd',
+      'Separator',
+      'Calendar',
+    ],
   },
 ];
 

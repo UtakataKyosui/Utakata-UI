@@ -75,6 +75,31 @@ function scrollToSlide(viewport: HTMLDivElement, index: number) {
   });
 }
 
+function hasModifier(event: KeyboardEvent) {
+  return event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+}
+
+/** The slide a navigation key moves to, or null for keys the carousel ignores. */
+function keyDestination(
+  key: string,
+  rtl: boolean,
+  index: number,
+  count: number,
+) {
+  switch (key) {
+    case 'ArrowRight':
+      return index + (rtl ? -1 : 1);
+    case 'ArrowLeft':
+      return index + (rtl ? 1 : -1);
+    case 'Home':
+      return 0;
+    case 'End':
+      return count - 1;
+    default:
+      return null;
+  }
+}
+
 export const Carousel = withLism(
   forwardRef<HTMLElement, CarouselProps>(function Carousel(
     { className, labels, slides, ...props },
@@ -130,32 +155,15 @@ export const Carousel = withLism(
 
       const onKeyDown = (event: KeyboardEvent) => {
         // Interactive slide content owns its keys.
-        if (
-          event.target !== viewport ||
-          event.altKey ||
-          event.ctrlKey ||
-          event.metaKey ||
-          event.shiftKey
-        ) {
-          return;
-        }
-        const rtl = getComputedStyle(viewport).direction === 'rtl';
-        switch (event.key) {
-          case 'ArrowRight':
-            move(viewport, index + (rtl ? -1 : 1));
-            break;
-          case 'ArrowLeft':
-            move(viewport, index + (rtl ? 1 : -1));
-            break;
-          case 'Home':
-            move(viewport, 0);
-            break;
-          case 'End':
-            move(viewport, slides.length - 1);
-            break;
-          default:
-            return;
-        }
+        if (event.target !== viewport || hasModifier(event)) return;
+        const destination = keyDestination(
+          event.key,
+          getComputedStyle(viewport).direction === 'rtl',
+          index,
+          slides.length,
+        );
+        if (destination === null) return;
+        move(viewport, destination);
         event.preventDefault();
       };
 

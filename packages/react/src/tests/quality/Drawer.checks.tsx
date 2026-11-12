@@ -1,11 +1,3 @@
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
-import { expect } from 'vitest';
 import { Button } from '../../components/Button.js';
 import { Drawer } from '../../components/Drawer.js';
 import {
@@ -13,7 +5,19 @@ import {
   drawerManifest,
 } from '../../metadata/components/Drawer.js';
 import type { QualityCheck } from '../../metadata/quality.js';
-import { audit } from '../audit.js';
+import { sideDialogChecks } from '../side-dialog-checks.js';
+
+function FilterContent() {
+  return (
+    <>
+      <Drawer.Title>Filters</Drawer.Title>
+      <Drawer.Description>Narrow the list of results.</Drawer.Description>
+      <Drawer.Close render={<Button variant="outline" />}>
+        Close filters
+      </Drawer.Close>
+    </>
+  );
+}
 
 function FilterDrawer({ side }: { side: DrawerSide | undefined }) {
   return (
@@ -24,11 +28,7 @@ function FilterDrawer({ side }: { side: DrawerSide | undefined }) {
         <Drawer.Portal>
           <Drawer.Backdrop />
           <Drawer.Popup>
-            <Drawer.Title>Filters</Drawer.Title>
-            <Drawer.Description>Narrow the list of results.</Drawer.Description>
-            <Drawer.Close render={<Button variant="outline" />}>
-              Close filters
-            </Drawer.Close>
+            <FilterContent />
           </Drawer.Popup>
         </Drawer.Portal>
       </Drawer.Root>
@@ -36,52 +36,13 @@ function FilterDrawer({ side }: { side: DrawerSide | undefined }) {
   );
 }
 
-async function openDrawer(side?: DrawerSide) {
-  render(<FilterDrawer side={side} />);
-  const trigger = screen.getByRole('button', { name: 'Open filters' });
-  trigger.focus();
-  fireEvent.click(trigger);
-  const dialog = await screen.findByRole('dialog', { name: 'Filters' });
-  await waitFor(() =>
-    expect(dialog).toContainElement(document.activeElement as HTMLElement),
-  );
-  return { trigger, dialog };
-}
-
-async function expectClosedWithFocusOn(trigger: HTMLElement) {
-  await waitFor(() =>
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
-  );
-  await waitFor(() => expect(trigger).toHaveFocus());
-}
-
-export const drawerChecks: Record<string, QualityCheck> = {
-  'drawer.semantics': async () => {
-    for (const side of [undefined, ...drawerManifest.sides]) {
-      const { dialog } = await openDrawer(side);
-      const expected = side ?? drawerManifest.props.side.default;
-      expect(dialog).toHaveAccessibleDescription('Narrow the list of results.');
-      expect(dialog).toHaveAttribute('data-side', expected);
-      expect(dialog).toHaveClass(
-        'ui-drawer__popup',
-        `ui-drawer__popup--${expected}`,
-      );
-      expect((await audit(document.body)).violations).toEqual([]);
-      cleanup();
-    }
-  },
-  'drawer.no-drag-dismissal': async () => {
-    for (const side of drawerManifest.sides) {
-      const escaped = await openDrawer(side);
-      fireEvent.keyDown(document.activeElement ?? document.body, {
-        key: 'Escape',
-      });
-      await expectClosedWithFocusOn(escaped.trigger);
-      cleanup();
-      const closed = await openDrawer(side);
-      fireEvent.click(screen.getByRole('button', { name: 'Close filters' }));
-      await expectClosedWithFocusOn(closed.trigger);
-      cleanup();
-    }
-  },
-};
+export const drawerChecks: Record<string, QualityCheck> = sideDialogChecks({
+  prefix: 'drawer',
+  dismissalId: 'no-drag-dismissal',
+  popupClass: 'ui-drawer__popup',
+  sides: drawerManifest.sides,
+  defaultSide: drawerManifest.props.side.default,
+  renderDialog: (side) => (
+    <FilterDrawer side={side as DrawerSide | undefined} />
+  ),
+});

@@ -3,6 +3,7 @@ import { expect } from 'vitest';
 import { Menubar } from '../../components/Menubar.js';
 import type { QualityCheck } from '../../metadata/quality.js';
 import { audit } from '../audit.js';
+import { MenubarMenu } from '../MenubarMenu.js';
 
 export function renderMenubar(onNew: () => void = () => {}) {
   render(
@@ -34,26 +35,12 @@ export function renderMenubar(onNew: () => void = () => {}) {
             </Menubar.Positioner>
           </Menubar.Portal>
         </Menubar.Menu>
-        <Menubar.Menu>
-          <Menubar.Trigger>Edit</Menubar.Trigger>
-          <Menubar.Portal>
-            <Menubar.Positioner sideOffset={4}>
-              <Menubar.Popup>
-                <Menubar.Item>Undo</Menubar.Item>
-              </Menubar.Popup>
-            </Menubar.Positioner>
-          </Menubar.Portal>
-        </Menubar.Menu>
-        <Menubar.Menu disabled>
-          <Menubar.Trigger>View</Menubar.Trigger>
-          <Menubar.Portal>
-            <Menubar.Positioner>
-              <Menubar.Popup>
-                <Menubar.Item>Zoom</Menubar.Item>
-              </Menubar.Popup>
-            </Menubar.Positioner>
-          </Menubar.Portal>
-        </Menubar.Menu>
+        <MenubarMenu label="Edit">
+          <Menubar.Item>Undo</Menubar.Item>
+        </MenubarMenu>
+        <MenubarMenu label="View" disabled>
+          <Menubar.Item>Zoom</Menubar.Item>
+        </MenubarMenu>
       </Menubar.Root>
     </>,
   );

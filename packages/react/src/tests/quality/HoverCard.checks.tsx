@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { expect } from 'vitest';
 import { HoverCard } from '../../components/HoverCard.js';
 import type { QualityCheck } from '../../metadata/quality.js';
@@ -26,12 +26,7 @@ export function renderHoverCard(
   return screen.getByRole('link', { name: 'Utakata-UI' });
 }
 
-/** Focus via keyboard modality so Base UI treats it as focus-visible. */
-export async function keyboardFocus(element: HTMLElement) {
-  fireEvent.keyDown(document.body, { key: 'Tab' });
-  act(() => element.focus());
-  await settle(0);
-}
+export { keyboardFocus } from '../quality-helpers.js';
 
 export const hoverCardChecks: Record<string, QualityCheck> = {
   'hover-card.trigger-link': async () => {

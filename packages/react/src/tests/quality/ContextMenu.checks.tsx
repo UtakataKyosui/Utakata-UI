@@ -4,6 +4,17 @@ import { Button } from '../../components/Button.js';
 import { ContextMenu } from '../../components/ContextMenu.js';
 import type { QualityCheck } from '../../metadata/quality.js';
 import { audit } from '../audit.js';
+import { expectDocumentMenu } from '../quality-helpers.js';
+
+function DocumentGroup({ onEdit }: { onEdit: () => void }) {
+  return (
+    <ContextMenu.Group>
+      <ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel>
+      <ContextMenu.Item onClick={onEdit}>Edit</ContextMenu.Item>
+      <ContextMenu.Item>Duplicate</ContextMenu.Item>
+    </ContextMenu.Group>
+  );
+}
 
 export function renderContextMenu(
   onEdit: () => void = () => {},
@@ -17,11 +28,7 @@ export function renderContextMenu(
       <ContextMenu.Portal>
         <ContextMenu.Positioner>
           <ContextMenu.Popup aria-label="File actions">
-            <ContextMenu.Group>
-              <ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel>
-              <ContextMenu.Item onClick={onEdit}>Edit</ContextMenu.Item>
-              <ContextMenu.Item>Duplicate</ContextMenu.Item>
-            </ContextMenu.Group>
+            <DocumentGroup onEdit={onEdit} />
             <ContextMenu.Separator />
             <ContextMenu.Item disabled onClick={onDelete}>
               Delete
@@ -44,13 +51,7 @@ export const contextMenuChecks: Record<string, QualityCheck> = {
     const target = renderContextMenu();
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     const menu = await openContextMenu(target);
-    expect(screen.getByRole('group', { name: 'Document' })).toBeInTheDocument();
-    expect(screen.getAllByRole('menuitem')).toHaveLength(3);
-    expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
-    expect(screen.getByRole('separator')).toBeInTheDocument();
+    expectDocumentMenu(3);
     expect((await audit(menu)).violations).toEqual([]);
   },
 };

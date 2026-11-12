@@ -54,10 +54,11 @@ import {
   useToastManager,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
+import { MenubarMenu } from '../../packages/react/src/tests/MenubarMenu.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
-import { EmptyFixture } from './empty-fixture.js';
 import { CarouselFixture } from './carousel-fixture.js';
+import { EmptyFixture } from './empty-fixture.js';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
@@ -985,37 +986,16 @@ function MenubarFixture({ rtl = false }: { rtl?: boolean }) {
               </Menubar.Positioner>
             </Menubar.Portal>
           </Menubar.Menu>
-          <Menubar.Menu>
-            <Menubar.Trigger>Format</Menubar.Trigger>
-            <Menubar.Portal>
-              <Menubar.Positioner sideOffset={4}>
-                <Menubar.Popup>
-                  <Menubar.Item onClick={record('Undo')}>Undo</Menubar.Item>
-                  <Menubar.Item onClick={record('Redo')}>Redo</Menubar.Item>
-                </Menubar.Popup>
-              </Menubar.Positioner>
-            </Menubar.Portal>
-          </Menubar.Menu>
-          <Menubar.Menu disabled>
-            <Menubar.Trigger>View</Menubar.Trigger>
-            <Menubar.Portal>
-              <Menubar.Positioner sideOffset={4}>
-                <Menubar.Popup>
-                  <Menubar.Item>Zoom</Menubar.Item>
-                </Menubar.Popup>
-              </Menubar.Positioner>
-            </Menubar.Portal>
-          </Menubar.Menu>
-          <Menubar.Menu>
-            <Menubar.Trigger>Help</Menubar.Trigger>
-            <Menubar.Portal>
-              <Menubar.Positioner sideOffset={4}>
-                <Menubar.Popup>
-                  <Menubar.Item onClick={record('About')}>About</Menubar.Item>
-                </Menubar.Popup>
-              </Menubar.Positioner>
-            </Menubar.Portal>
-          </Menubar.Menu>
+          <MenubarMenu label="Format">
+            <Menubar.Item onClick={record('Undo')}>Undo</Menubar.Item>
+            <Menubar.Item onClick={record('Redo')}>Redo</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="View" disabled>
+            <Menubar.Item>Zoom</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="Help">
+            <Menubar.Item onClick={record('About')}>About</Menubar.Item>
+          </MenubarMenu>
         </Menubar.Root>
         <Button>After menubar</Button>
         <output aria-label="Menubar actions">{JSON.stringify(actions)}</output>
@@ -1031,26 +1011,12 @@ function MenubarStates() {
       <MenubarFixture rtl />
       <section aria-label="Menubar vertical states">
         <Menubar.Root aria-label="Sidebar" orientation="vertical">
-          <Menubar.Menu>
-            <Menubar.Trigger>Project</Menubar.Trigger>
-            <Menubar.Portal>
-              <Menubar.Positioner sideOffset={4} side="inline-end">
-                <Menubar.Popup>
-                  <Menubar.Item>Open</Menubar.Item>
-                </Menubar.Popup>
-              </Menubar.Positioner>
-            </Menubar.Portal>
-          </Menubar.Menu>
-          <Menubar.Menu>
-            <Menubar.Trigger>Account</Menubar.Trigger>
-            <Menubar.Portal>
-              <Menubar.Positioner sideOffset={4} side="inline-end">
-                <Menubar.Popup>
-                  <Menubar.Item>Sign out</Menubar.Item>
-                </Menubar.Popup>
-              </Menubar.Positioner>
-            </Menubar.Portal>
-          </Menubar.Menu>
+          <MenubarMenu label="Project" side="inline-end">
+            <Menubar.Item>Open</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="Account" side="inline-end">
+            <Menubar.Item>Sign out</Menubar.Item>
+          </MenubarMenu>
         </Menubar.Root>
       </section>
     </>

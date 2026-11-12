@@ -160,6 +160,9 @@ test('[carousel.visual] contrast, targets, reflow, forced colors and reduced mot
   await page.evaluate(() => {
     document.documentElement.style.fontSize = '200%';
   });
+  // Enlarging the text reflows the page; bring the carousel back into view so
+  // axe does not treat off-screen slides as partially obscured.
+  await root.scrollIntoViewIfNeeded();
   const controlLayout = await root
     .locator('.ui-carousel__controls')
     .evaluate((node) => ({
