@@ -48,7 +48,9 @@ export default defineConfig({
   retries: 0,
   // CI runs themes in independent jobs; retain file isolation and zero retries.
   ...(process.env.CI ? { workers: 2 } : {}),
-  globalTimeout: process.env.CI ? 300_000 : 420_000,
+  // 283 Chromium tests ran 4.1-5.0+ minutes on GitHub-hosted runners, so the
+  // earlier 300 s limit left tests unrun. 360 s still fits the 420 s job budget.
+  globalTimeout: process.env.CI ? 360_000 : 420_000,
   reporter: [
     ['list'],
     ['html', { open: 'never' }],

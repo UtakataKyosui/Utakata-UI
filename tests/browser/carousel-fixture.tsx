@@ -39,3 +39,11 @@ export function CarouselFixture() {
     </div>
   );
 }
+
+export function CarouselPage() {
+  return (
+    <main className="layout-contract">
+      <CarouselFixture />
+    </main>
+  );
+}
