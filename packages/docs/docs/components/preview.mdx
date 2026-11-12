@@ -82,6 +82,20 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="card" />
 
+## Empty [#empty]
+
+[Empty](/components/empty) はデータがない理由と、利用者が取れる操作を表示します。検索結果などの動的な通知が必要な場合は、別途ステータス領域を使います。
+
+<Component path="empty" />
+
+## Item [#item]
+
+詳しい使い方とAPIは[Item](/components/item)を参照してください。
+
+アイコン・本文・補助情報・操作を並べる行です。何も付けない行は操作できず、`Item.Link`（移動）または`Item.Button`（操作）を本文に置くと、1つのネイティブ要素が行全体に広がります。削除などの別の操作は`Item.Actions`に兄弟として置き、リンクやボタンの内側には入れません。Tab順はDOM順です。
+
+<Component path="item" />
+
 ## Alert [#alert]
 
 詳しい使い方とAPIは[Alert](/components/alert)を参照してください。
@@ -114,6 +128,14 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 
 <Component path="table" />
 
+## Chart [#chart]
+
+詳しい使い方とAPIは[Chart](/components/chart)を参照してください。採用判断は[Chartの採用判断](/advanced/chart-adoption)にまとめています。
+
+描画ライブラリに依存しないグラフのシェルです。`figure`・キャプション・説明文、マーカー形状で系列を区別する凡例、データ表の代替（`Chart.Data`）を備えます。描画は`Chart.Plot`の中に利用側が置きます。
+
+<Component path="chart" />
+
 ## Breadcrumb [#breadcrumb]
 
 詳しい使い方とAPIは[Breadcrumb](/components/breadcrumb)を参照してください。
@@ -129,6 +151,22 @@ APIの詳細は[コンポーネント仕様](/components)を参照してくだ�
 通常のリンクでページを移動します。現在のページは`active`で示し、先頭では「前のページ」が無効になりTabキーの移動先から外れます。
 
 <Component path="pagination" />
+
+## NavigationMenu [#navigationmenu]
+
+詳しい使い方とAPIは[NavigationMenu](/components/navigationmenu)を参照してください。
+
+リンクと、さらにリンクを並べた開閉パネルを持つサイトのナビゲーションです。`NavigationMenu.Root`には`aria-label`か`aria-labelledby`で名前を付けます。Tabキーで各リンクとトリガーを順に移動し、Enter・Space・クリック・タップ・ホバーでパネルが開きます。下矢印でも開き、左右の矢印キーでトリガーを移動し、Escapeで閉じてトリガーにフォーカスが戻ります。ポインターをトリガーからパネルへ動かしても開いたままです。現在のページのリンクには`active`を付けます。パネルのリンクを押してもパネルは開いたままなので、単一ページのルーティングでは`closeOnClick`を付けてください。アプリケーションのコマンドにはDropdownMenuかMenubarを使います。
+
+<Component path="navigationmenu" />
+
+## Sidebar [#sidebar]
+
+詳しい使い方とAPIは[Sidebar](/components/sidebar)を参照してください。
+
+名前を付けたナビゲーションのランドマークとして、現在地へのリンクを並べるサイドバーです。広い画面では`Sidebar.Trigger`（`aria-expanded`と`aria-controls`を持つボタン）で折りたたみ・展開でき、折りたたむとリンクはTabキーの移動先と支援技術から外れます。狭い画面（既定は768px未満）ではSheetに切り替わり、左から開くモーダルで、見える閉じるボタン・Escape・背景の押下で閉じてフォーカスはTriggerに戻ります。画面幅が変わってフォーカスのある要素が消えるときも、フォーカスはTriggerに移ります。現在のページのリンクには`current`を付け、太字と線でも示します。保存した開閉状態、リンク先、ルーティング、mainランドマーク、スキップリンクは利用側の責任です。アイコンだけの縮小表示や幅の変更、キーボードショートカットは提供しません。
+
+<Component path="sidebar" />
 
 ## Carousel [#carousel]
 
@@ -267,6 +305,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 
 <Component path="popover" />
 
+## HoverCard [#hovercard]
+
+詳しい使い方とAPIは[HoverCard](/components/hovercard)を参照してください。
+
+リンクの補足プレビューを、ポインターのホバーとTriggerのキーボードフォーカスで表示します。Escapeで閉じ、ポインターをPopup上へ移しても消えません。Triggerはリンクなのでhrefとリンクテキストが必要です。タッチやスクリーンリーダーではカードが使えない・読み上げられないため、必須情報をカードだけに置かず、リンク先や画面上にも提示してください。Popupにはフォーカスできないため、操作要素はPopoverへ置きます。
+
+<Component path="hovercard" />
+
 ## DropdownMenu [#dropdownmenu]
 
 詳しい使い方とAPIは[DropdownMenu](/components/dropdownmenu)を参照してください。
@@ -274,6 +320,22 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 ボタン操作の一覧です。矢印キー・Home/End・文字入力で項目を移動し、Enterで実行すると閉じてTriggerへフォーカスが戻ります。無効な項目は矢印キーで到達できますが実行されません。ページ移動のナビゲーションには使わず、リンクの一覧を使ってください。
 
 <Component path="dropdownmenu" />
+
+## ContextMenu [#contextmenu]
+
+詳しい使い方とAPIは[ContextMenu](/components/contextmenu)を参照してください。
+
+右クリック、長押し、領域内の要素にフォーカスした状態でのContextMenuキー / Shift+F10で開く操作メニューです。矢印キー・Home/End・文字入力・Escape・フォーカス復帰はDropdownMenuと同じBase UIの挙動で、Item・Group・Separatorは共有します。Popupには`aria-label`か`aria-labelledby`が必要です。タッチやキーボードで気づけない操作があるため、同じ操作を見えるボタン（DropdownMenuなど）でも必ず提供してください。
+
+<Component path="contextmenu" />
+
+## Menubar [#menubar]
+
+詳しい使い方とAPIは[Menubar](/components/menubar)を参照してください。
+
+アプリケーションのファイル・編集のような複数のメニューを横に並べたバーです。`Menubar.Root`には`aria-label`か`aria-labelledby`で名前を付けます。Tabキーの停止位置はバーに1か所で、左右の矢印キー（`orientation="vertical"`では上下）でメニューを移動し、Homeで最初、Endで最後に移ります。下矢印でメニューを開き、メニューが開いている間も左右の矢印キーで隣のメニューに移ります。サブメニューは`Menubar.SubmenuRoot`で入れ子にし、右矢印で開いて左矢印かEscapeで閉じます。右から左に書く言語では`DirectionProvider`の`direction="rtl"`で囲むと左右の矢印キーが入れ替わります。無効な項目は矢印キーで到達できますが実行されません。ページ移動のナビゲーションには使わず、メニューが1つなら`DropdownMenu`を使います。
+
+<Component path="menubar" />
 
 ## AlertDialog [#alertdialog]
 
@@ -297,6 +359,14 @@ Triggerに紐づく非モーダルのポップアップです。`Popover.Title`�
 Dialogを基にした、上・右・下・左の端に付くモーダルのパネルです。`side`で端を選びます（既定は`right`）。Tabキーの移動はパネル内にとどまり、Escape・`Sheet.Close`・背景の押下で閉じてフォーカスはTriggerに戻ります。内容が長いときはパネル内でスクロールし、動きを減らす設定ではスライドの遷移を行いません。`Sheet.Title`と見える`Sheet.Close`を必ず用意してください。
 
 <Component path="sheet" />
+
+## Drawer [#drawer]
+
+詳しい使い方とAPIは[Drawer](/components/drawer)を参照してください。
+
+タッチ操作を考慮した、上・右・下・左の端に付くモーダルのパネルです。Base UIのDrawerを基にし、`Drawer.Root`の`side`で端を選びます（既定は`bottom`）。端に向けたスワイプでも閉じますが、スワイプを唯一の閉じ方にしないでください。`Drawer.Close`・Escape・背景の押下でも閉じてフォーカスはTriggerに戻ります。内容が長いときは内容領域の中でスクロールし、動きを減らす設定ではスライドの遷移を行いません。不可逆な操作は押下開始（ポインター・タッチの開始）で実行せず、`Button`のクリックで実行し、確認が要るときは`AlertDialog`を使います。ジェスチャーのない端のパネルには`Sheet`、中央のモーダルには`Dialog`を使います。`Drawer.Title`と見える`Drawer.Close`を必ず用意してください。スナップポイント・非モーダル・`swipeDirection`の指定は提供していません。実機でのタッチによるスクロールとスワイプ、スクリーンリーダーの読み上げは未検証です。
+
+<Component path="drawer" />
 
 ## Toast [#toast]
 
@@ -329,3 +399,27 @@ Dialogを基にした、上・右・下・左の端に付くモーダルのパ�
 関連する`Button`の境界と角丸をつなげて表示します。各ボタンは通常どおりTabキーで1つずつ移動し、variant・size・無効状態・typeはボタン側の指定のままです。グループ名（`aria-label`か`aria-labelledby`）は型で必須です。
 
 <Component path="buttongroup" />
+
+## Calendar [#calendar]
+
+詳しい使い方とAPIは[Calendar](/components/calendar)を参照してください。
+
+1日または日付範囲を選ぶ月カレンダーです。日付は`"YYYY-MM-DD"`の文字列で、タイムゾーンや日付ライブラリには依存しません。Tabキーで日付へ1回だけ入り、矢印キー・Home・End・PageUp/PageDown（Shiftで年単位）で移動し、EnterまたはSpaceで選択します。選択不可の日（`minDate`・`maxDate`・`isDateDisabled`）にはフォーカスできますが選択できません。名前（`aria-label`か`aria-labelledby`）は型で必須です。
+
+<Component path="calendar" />
+
+## DatePicker [#datepicker]
+
+詳しい使い方とAPIは[DatePicker](/components/datepicker)を参照してください。
+
+日付を `YYYY-MM-DD` 形式で入力するか、カレンダーから1日を選びます。選べない日や実在しない日はエラーになり、入力内容は修正できるように残ります。Escape でカレンダーを閉じるとボタンにフォーカスが戻ります。フォームのリセットで初期値に戻せます。
+
+<Component path="datepicker" />
+
+## Resizable [#resizable]
+
+詳しい使い方とAPIは[Resizable](/components/resizable)を参照してください。
+
+隣り合う2つのパネルの境界をキーボードとポインターで動かします。ハンドルはフォーカスできる`separator`で、名前（`aria-label`か`aria-labelledby`）は型で必須です。`aria-valuenow`は直前のパネルの割合（%）で、矢印キー・Home・Endで`minSize`と`maxSize`の範囲内に変更できます。右から左へ書く言語（`dir="rtl"`）では矢印キーの向きが反転します。狭い画面では`orientation="vertical"`に切り替えるなど、レイアウトを調整してください。
+
+<Component path="resizable" />

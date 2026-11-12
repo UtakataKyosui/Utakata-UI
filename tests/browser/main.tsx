@@ -9,27 +9,40 @@ import {
   Breadcrumb,
   Button,
   ButtonGroup,
+  Calendar,
+  type CalendarDate,
   Card,
+  Chart,
   Checkbox,
   Collapsible,
   Combobox,
   Command,
+  ContextMenu,
+  DatePicker,
   Dialog,
+  DirectionProvider,
+  Drawer,
   DropdownMenu,
   Field,
+  HoverCard,
   Input,
   InputGroup,
   InputOTP,
+  Item,
   Kbd,
   KbdGroup,
+  Menubar,
   NativeSelect,
+  NavigationMenu,
   Pagination,
   Popover,
   Progress,
   RadioGroup,
+  Resizable,
   Select,
   Separator,
   Sheet,
+  Sidebar,
   Skeleton,
   Slider,
   Spinner,
@@ -44,13 +57,16 @@ import {
   useToastManager,
 } from '../../packages/react/src/index.js';
 import { componentManifest } from '../../packages/react/src/metadata/manifest.js';
+import { MenubarMenu } from '../../packages/react/src/tests/MenubarMenu.js';
 import '../../packages/react/src/styles/styles.css';
 import './fixture.css';
 import { CarouselFixture, CarouselPage } from './carousel-fixture.js';
+import { EmptyFixture } from './empty-fixture.js';
 import { InteractionFixture } from './interaction-fixture.js';
 import { LayoutFixture } from './layout-fixture.js';
 import { LismFixture } from './lism-fixture.js';
 import { PaletteFixture } from './palette-fixture.js';
+import { ScrollAreaFixture } from './scroll-area-fixture.js';
 
 function cancelResetRef(form: HTMLFormElement | null) {
   if (!form) return;
@@ -342,6 +358,71 @@ function SliderStates() {
 const badgeLongText =
   'Awaiting approval from the regional administration team before publication';
 
+function ResizableStates() {
+  const [layouts, setLayouts] = useState<Record<string, number>[]>([]);
+  return (
+    <section aria-label="Resizable states">
+      <Button>Before resizable</Button>
+      <Resizable.Group
+        data-case="horizontal"
+        className="fixture-resizable"
+        onLayoutChange={(layout) =>
+          setLayouts((previous) => [...previous, layout])
+        }
+      >
+        <Resizable.Panel
+          panelId="nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize navigation" />
+        <Resizable.Panel panelId="main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group
+        data-case="vertical"
+        orientation="vertical"
+        className="fixture-resizable fixture-resizable--tall"
+      >
+        <Resizable.Panel
+          panelId="top"
+          defaultSize={40}
+          minSize={20}
+          maxSize={60}
+        >
+          Top
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize top panel" />
+        <Resizable.Panel panelId="bottom" defaultSize={60} minSize={20}>
+          Bottom
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Resizable.Group data-case="rtl" dir="rtl" className="fixture-resizable">
+        <Resizable.Panel
+          panelId="rtl-nav"
+          defaultSize={30}
+          minSize={20}
+          maxSize={50}
+        >
+          Navigation
+        </Resizable.Panel>
+        <Resizable.Handle aria-label="Resize RTL navigation" />
+        <Resizable.Panel panelId="rtl-main" defaultSize={70} minSize={30}>
+          Main content
+        </Resizable.Panel>
+      </Resizable.Group>
+      <Button>After resizable</Button>
+      <output aria-label="Resizable layout changes">
+        {JSON.stringify(layouts)}
+      </output>
+    </section>
+  );
+}
+
 function BadgeStates() {
   return (
     <section aria-label="Badge states">
@@ -383,6 +464,96 @@ function SpinnerStates() {
       {componentManifest.components.Spinner.sizes.map((size) => (
         <Spinner key={size} size={size} label={`Loading ${size}`} />
       ))}
+    </section>
+  );
+}
+
+const itemLongText =
+  'Quarterly_report_with_a_very_long_unbroken_identifier_that_must_wrap and a long sentence.';
+
+function ItemStates() {
+  const [primary, setPrimary] = useState(0);
+  const [edit, setEdit] = useState(0);
+  const [remove, setRemove] = useState(0);
+  return (
+    <section aria-label="Item states">
+      <Button>Before item</Button>
+      <Item.Group aria-label="Item examples">
+        <Item.Root data-case="link">
+          <Item.Icon>
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16">
+              <path d="M3 1h7l3 3v11H3z" fill="currentColor" />
+            </svg>
+          </Item.Icon>
+          <Item.Body>
+            <Item.Link href="#report" onClick={(e) => e.preventDefault()}>
+              {itemLongText}
+            </Item.Link>
+            <Item.Description>{itemLongText}</Item.Description>
+          </Item.Body>
+          <Item.Meta>{itemLongText}</Item.Meta>
+          <Item.Actions>
+            <Button
+              iconOnly
+              square
+              aria-label="Edit report"
+              onClick={() => setEdit((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+            <Button
+              iconOnly
+              square
+              aria-label="Delete report"
+              onClick={() => setRemove((n) => n + 1)}
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M3 3l10 10M13 3L3 13"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+              </svg>
+            </Button>
+          </Item.Actions>
+        </Item.Root>
+        <Item.Root data-case="button">
+          <Item.Body>
+            <Item.Button onClick={() => setPrimary((n) => n + 1)}>
+              Open details
+            </Item.Button>
+            <Item.Description>Opens a details panel</Item.Description>
+          </Item.Body>
+          <Item.Meta>Draft</Item.Meta>
+        </Item.Root>
+        <Item.Root data-case="static">
+          <Item.Body>
+            <Item.Title>Static row</Item.Title>
+            <Item.Description>No operation</Item.Description>
+          </Item.Body>
+          <Item.Meta>Read only</Item.Meta>
+        </Item.Root>
+      </Item.Group>
+      <Button>After item</Button>
+      <p data-testid="item-counts">
+        primary {primary} edit {edit} delete {remove}
+      </p>
     </section>
   );
 }
@@ -529,6 +700,77 @@ function TableStates() {
         </Table.Root>
       </Table.Container>
       <Button>After table</Button>
+    </section>
+  );
+}
+
+const chartSeries = componentManifest.components.Chart.series;
+
+function ChartStates() {
+  return (
+    <section aria-label="Chart states">
+      <Button>Before chart</Button>
+      <Chart.Root data-case="visits">
+        <Chart.Caption>Monthly visits</Chart.Caption>
+        <Chart.Description>
+          Visits rose from 120 in April to 180 in May.
+        </Chart.Description>
+        <Chart.Plot aria-label="Line chart of monthly visits by channel">
+          <svg viewBox="0 0 120 50" aria-hidden="true">
+            {chartSeries.map((series, index) => (
+              <g key={series}>
+                <polyline
+                  points={`0,${45 - index * 6} 120,${35 - index * 6}`}
+                  fill="none"
+                  stroke={`var(--ui-chart-series-${series})`}
+                  strokeDasharray={`var(--ui-chart-dash-${series})`}
+                  strokeWidth="1.5"
+                />
+                <circle
+                  cx={60}
+                  cy={36 - index * 6}
+                  r={3}
+                  fill={`var(--ui-chart-series-${series})`}
+                />
+              </g>
+            ))}
+          </svg>
+        </Chart.Plot>
+        <Chart.Legend>
+          {chartSeries.map((series) => (
+            <Chart.LegendItem key={series} series={series}>
+              Channel {series} with a long series name that must wrap
+            </Chart.LegendItem>
+          ))}
+        </Chart.Legend>
+        <Chart.Data summary="Show data table">
+          <Table.Container aria-label="Monthly visits by channel">
+            <Table.Root>
+              <Table.Caption>Monthly visits by channel</Table.Caption>
+              <Table.Header>
+                <Table.Row>
+                  <Table.Head scope="col">Month</Table.Head>
+                  <Table.Head scope="col">Channel 1</Table.Head>
+                  <Table.Head scope="col">Channel 2</Table.Head>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                <Table.Row>
+                  <Table.Head scope="row">April</Table.Head>
+                  <Table.Cell>120</Table.Cell>
+                  <Table.Cell>80</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Head scope="row">May</Table.Head>
+                  <Table.Cell>180</Table.Cell>
+                  <Table.Cell>95</Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            </Table.Root>
+          </Table.Container>
+        </Chart.Data>
+      </Chart.Root>
+      <Button>After chart</Button>
     </section>
   );
 }
@@ -788,6 +1030,39 @@ function TooltipStates() {
   );
 }
 
+function HoverCardStates() {
+  return (
+    <section aria-label="HoverCard states">
+      <Button>Before hover card</Button>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#profile" delay={100} closeDelay={300}>
+          Profile
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>
+              Utakata-UI maintainers write accessible components. This card only
+              repeats what the linked profile page already shows.
+            </HoverCard.Popup>
+            <HoverCard.Arrow />
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <HoverCard.Root>
+        <HoverCard.Trigger href="#second" delay={100}>
+          Second link
+        </HoverCard.Trigger>
+        <HoverCard.Portal>
+          <HoverCard.Positioner sideOffset={8}>
+            <HoverCard.Popup>A second supplementary preview.</HoverCard.Popup>
+          </HoverCard.Positioner>
+        </HoverCard.Portal>
+      </HoverCard.Root>
+      <Button>After hover card</Button>
+    </section>
+  );
+}
+
 function PopoverStates() {
   return (
     <section aria-label="Popover states">
@@ -812,6 +1087,48 @@ function PopoverStates() {
         </Popover.Portal>
       </Popover.Root>
       <Button>After popover</Button>
+    </section>
+  );
+}
+
+function ContextMenuStates() {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  return (
+    <section aria-label="Context menu states">
+      <Button>Before context menu</Button>
+      <ContextMenu.Root>
+        <ContextMenu.Trigger>
+          <Button variant="outline">File area</Button>
+        </ContextMenu.Trigger>
+        <ContextMenu.Portal>
+          <ContextMenu.Positioner>
+            <ContextMenu.Popup aria-label="File actions">
+              <ContextMenu.Group>
+                <ContextMenu.GroupLabel>Document</ContextMenu.GroupLabel>
+                <ContextMenu.Item onClick={record('Edit')}>
+                  Edit
+                </ContextMenu.Item>
+                <ContextMenu.Item onClick={record('Duplicate')}>
+                  Duplicate
+                </ContextMenu.Item>
+              </ContextMenu.Group>
+              <ContextMenu.Separator />
+              <ContextMenu.Item disabled onClick={record('Delete')}>
+                Delete
+              </ContextMenu.Item>
+              <ContextMenu.Item onClick={record('Share')}>
+                Share
+              </ContextMenu.Item>
+            </ContextMenu.Popup>
+          </ContextMenu.Positioner>
+        </ContextMenu.Portal>
+      </ContextMenu.Root>
+      <Button>After context menu</Button>
+      <output aria-label="Context menu actions">
+        {JSON.stringify(actions)}
+      </output>
     </section>
   );
 }
@@ -853,6 +1170,208 @@ function MenuStates() {
       <Button>After menu</Button>
       <output aria-label="Menu actions">{JSON.stringify(actions)}</output>
     </section>
+  );
+}
+
+function MenubarFixture({ rtl = false }: { rtl?: boolean }) {
+  const [actions, setActions] = useState<string[]>([]);
+  const record = (name: string) => () =>
+    setActions((previous) => [...previous, name]);
+  const label = rtl ? 'Menubar rtl states' : 'Menubar states';
+  return (
+    <section aria-label={label} dir={rtl ? 'rtl' : 'ltr'}>
+      <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>
+        <Button>Before menubar</Button>
+        <Menubar.Root aria-label="Application">
+          <Menubar.Menu>
+            <Menubar.Trigger>File</Menubar.Trigger>
+            <Menubar.Portal>
+              <Menubar.Positioner sideOffset={4}>
+                <Menubar.Popup>
+                  <Menubar.Group>
+                    <Menubar.GroupLabel>Document</Menubar.GroupLabel>
+                    <Menubar.Item onClick={record('New')}>New</Menubar.Item>
+                  </Menubar.Group>
+                  <Menubar.Separator />
+                  <Menubar.Item disabled onClick={record('Print')}>
+                    Print
+                  </Menubar.Item>
+                  <Menubar.SubmenuRoot>
+                    <Menubar.SubmenuTrigger>Export</Menubar.SubmenuTrigger>
+                    <Menubar.Portal>
+                      <Menubar.Positioner>
+                        <Menubar.Popup>
+                          <Menubar.Item onClick={record('Email')}>
+                            Email
+                          </Menubar.Item>
+                          <Menubar.Item onClick={record('Link')}>
+                            Link
+                          </Menubar.Item>
+                        </Menubar.Popup>
+                      </Menubar.Positioner>
+                    </Menubar.Portal>
+                  </Menubar.SubmenuRoot>
+                </Menubar.Popup>
+              </Menubar.Positioner>
+            </Menubar.Portal>
+          </Menubar.Menu>
+          <MenubarMenu label="Format">
+            <Menubar.Item onClick={record('Undo')}>Undo</Menubar.Item>
+            <Menubar.Item onClick={record('Redo')}>Redo</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="View" disabled>
+            <Menubar.Item>Zoom</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="Help">
+            <Menubar.Item onClick={record('About')}>About</Menubar.Item>
+          </MenubarMenu>
+        </Menubar.Root>
+        <Button>After menubar</Button>
+        <output aria-label="Menubar actions">{JSON.stringify(actions)}</output>
+      </DirectionProvider>
+    </section>
+  );
+}
+
+function MenubarStates() {
+  return (
+    <>
+      <MenubarFixture />
+      <MenubarFixture rtl />
+      <section aria-label="Menubar vertical states">
+        <Menubar.Root aria-label="Sidebar" orientation="vertical">
+          <MenubarMenu label="Project" side="inline-end">
+            <Menubar.Item>Open</Menubar.Item>
+          </MenubarMenu>
+          <MenubarMenu label="Account" side="inline-end">
+            <Menubar.Item>Sign out</Menubar.Item>
+          </MenubarMenu>
+        </Menubar.Root>
+      </section>
+    </>
+  );
+}
+
+function NavigationMenuFixture({ rtl = false }: { rtl?: boolean }) {
+  const [followed, setFollowed] = useState<string[]>([]);
+  const follow = (name: string) => () =>
+    setFollowed((previous) => [...previous, name]);
+  const suffix = rtl ? ' rtl' : '';
+  const panel = (label: string, links: [string, string][]) => (
+    <NavigationMenu.Content>
+      <ul aria-label={label} className="fixture-nav-links">
+        {links.map(([name, href]) => (
+          <li key={name}>
+            <NavigationMenu.Link href={href} onClick={follow(name)}>
+              {name}
+            </NavigationMenu.Link>
+          </li>
+        ))}
+      </ul>
+    </NavigationMenu.Content>
+  );
+  return (
+    <section
+      aria-label={`Navigation menu states${suffix}`}
+      dir={rtl ? 'rtl' : 'ltr'}
+    >
+      <Button>Before navigation</Button>
+      <NavigationMenu.Root aria-label={`Primary${suffix}`}>
+        <NavigationMenu.List>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-home"
+              active
+              onClick={follow('Home')}
+            >
+              Home
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="products">
+            <NavigationMenu.Trigger>
+              Products
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Products', [
+              ['UI kit', '#nav-ui'],
+              ['Icons', '#nav-icons'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item value="company">
+            <NavigationMenu.Trigger>
+              Company
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+            {panel('Company', [
+              ['About', '#nav-about'],
+              ['Careers', '#nav-careers'],
+            ])}
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Trigger disabled>
+              Legacy
+              <NavigationMenu.Icon />
+            </NavigationMenu.Trigger>
+          </NavigationMenu.Item>
+          <NavigationMenu.Item>
+            <NavigationMenu.Link
+              href="#nav-pricing"
+              onClick={follow('Pricing')}
+            >
+              Pricing
+            </NavigationMenu.Link>
+          </NavigationMenu.Item>
+        </NavigationMenu.List>
+        <NavigationMenu.Portal>
+          <NavigationMenu.Positioner sideOffset={4}>
+            <NavigationMenu.Popup>
+              <NavigationMenu.Viewport />
+            </NavigationMenu.Popup>
+          </NavigationMenu.Positioner>
+        </NavigationMenu.Portal>
+      </NavigationMenu.Root>
+      <Button>After navigation</Button>
+      <output aria-label="Navigation followed">
+        {JSON.stringify(followed)}
+      </output>
+    </section>
+  );
+}
+
+function NavigationMenuStates() {
+  return (
+    <>
+      <NavigationMenuFixture />
+      <NavigationMenuFixture rtl />
+      <section aria-label="Navigation menu vertical states">
+        <NavigationMenu.Root aria-label="Sidebar" orientation="vertical">
+          <NavigationMenu.List>
+            <NavigationMenu.Item value="docs">
+              <NavigationMenu.Trigger>
+                Docs
+                <NavigationMenu.Icon />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content>
+                <ul aria-label="Docs">
+                  <li>
+                    <NavigationMenu.Link href="#nav-guide">
+                      Guide
+                    </NavigationMenu.Link>
+                  </li>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner sideOffset={4} side="inline-end">
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+        </NavigationMenu.Root>
+      </section>
+    </>
   );
 }
 
@@ -992,6 +1511,44 @@ function AlertDialogStates() {
 
 const sheetOptions = Array.from({ length: 60 }, (_, index) => index + 1);
 
+function DrawerStates() {
+  const [applied, setApplied] = useState(0);
+  return (
+    <section aria-label="Drawer states">
+      <Button>Before drawer</Button>
+      {componentManifest.components.Drawer.sides.map((side) => (
+        <Drawer.Root key={side} side={side}>
+          <Drawer.Trigger render={<Button variant="outline" />}>
+            Open {side} drawer
+          </Drawer.Trigger>
+          <Drawer.Portal>
+            <Drawer.Backdrop />
+            <Drawer.Popup>
+              <Drawer.Title>Filters on the {side}</Drawer.Title>
+              <Drawer.Description>
+                Narrow the list of results.
+              </Drawer.Description>
+              <Drawer.Close render={<Button variant="outline" />}>
+                Close {side} drawer
+              </Drawer.Close>
+              {sheetOptions.map((option) => (
+                <p key={option}>
+                  Filter option {option} / 絞り込み条件 {option}
+                </p>
+              ))}
+              <Button onClick={() => setApplied((count) => count + 1)}>
+                Apply {side} filters
+              </Button>
+            </Drawer.Popup>
+          </Drawer.Portal>
+        </Drawer.Root>
+      ))}
+      <Button>After drawer</Button>
+      <output aria-label="Applied filters">{applied}</output>
+    </section>
+  );
+}
+
 function SheetStates() {
   return (
     <section aria-label="Sheet states">
@@ -1020,6 +1577,66 @@ function SheetStates() {
         </Sheet.Root>
       ))}
       <Button>After sheet</Button>
+    </section>
+  );
+}
+
+function SidebarStates() {
+  return (
+    <section aria-label="Sidebar states">
+      <Button>Before sidebar</Button>
+      <Sidebar.Provider>
+        <Sidebar.Root aria-label="Fixture navigation" closeLabel="Close menu">
+          <Sidebar.Header>Utakata fixture</Sidebar.Header>
+          <Sidebar.Content>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Project</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-overview" current>
+                    Overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-settings">
+                    Settings
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-long">
+                    Internationalization_and_localization_configuration_overview
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-japanese">
+                    アクセシビリティと多言語対応の設定をまとめて確認するページ
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+            <Sidebar.Group>
+              <Sidebar.GroupLabel>Account</Sidebar.GroupLabel>
+              <Sidebar.Menu>
+                <Sidebar.MenuItem>
+                  <Sidebar.MenuButton href="#sidebar-profile">
+                    Profile
+                  </Sidebar.MenuButton>
+                </Sidebar.MenuItem>
+              </Sidebar.Menu>
+            </Sidebar.Group>
+          </Sidebar.Content>
+          <Sidebar.Footer>Version 1.0</Sidebar.Footer>
+        </Sidebar.Root>
+        <div className="fixture-sidebar-inset">
+          <Sidebar.Trigger iconOnly aria-label="Toggle navigation">
+            <svg aria-hidden="true" width="16" height="16">
+              <path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" />
+            </svg>
+          </Sidebar.Trigger>
+          <p>Page content next to the sidebar.</p>
+        </div>
+      </Sidebar.Provider>
+      <Button>After sidebar</Button>
     </section>
   );
 }
@@ -1096,6 +1713,88 @@ function ToastStates() {
           </Toast.Viewport>
         </Toast.Portal>
       </Toast.Provider>
+    </section>
+  );
+}
+
+function DatePickerStates() {
+  const [date, setDate] = useState<CalendarDate | null>('2026-11-10');
+  const [submissions, setSubmissions] = useState(0);
+  return (
+    <section aria-label="Date Picker states">
+      <form
+        aria-label="Booking date form"
+        ref={(form) => {
+          if (!form) return;
+          const count = (event: Event) => {
+            event.preventDefault();
+            setSubmissions((previous) => previous + 1);
+          };
+          form.addEventListener('submit', count);
+          return () => form.removeEventListener('submit', count);
+        }}
+      >
+        <DatePicker
+          label="Booking date"
+          name="bookingDate"
+          locale="en-US"
+          today="2026-11-10"
+          minDate="2026-11-05"
+          defaultValue="2026-11-10"
+          value={date}
+          onValueChange={setDate}
+          labels={{
+            openCalendar: 'Open booking calendar',
+            calendarTitle: 'Choose booking date',
+            formatHint: 'Use YYYY-MM-DD.',
+            invalidDate: 'Enter a valid ISO date.',
+            unavailableDate: 'This date is unavailable.',
+          }}
+          calendarLabels={{
+            previousMonth: 'Previous month',
+            nextMonth: 'Next month',
+            selected: 'Selected',
+          }}
+        />
+        <DatePicker label="Closed date" disabled />
+        <Button type="submit">Submit booking</Button>
+        <Button type="reset" variant="outline">
+          Reset booking
+        </Button>
+        <output aria-label="Booking submissions">{submissions}</output>
+      </form>
+    </section>
+  );
+}
+
+function CalendarStates() {
+  const [value, setValue] = useState<unknown>(null);
+  const [single, setSingle] = useState('');
+  return (
+    <section aria-label="Calendar states">
+      <Button>Before calendar</Button>
+      <Calendar
+        aria-label="Booking dates"
+        mode="range"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        defaultValue={{ from: '2026-11-12', to: '2026-11-14' }}
+        minDate="2026-10-01"
+        isDateDisabled={(date) => date === '2026-11-18'}
+        onValueChange={setValue}
+      />
+      <Calendar
+        aria-label="Appointment date"
+        locale="en-US"
+        today="2026-11-10"
+        defaultMonth="2026-11"
+        weekStartsOn={1}
+        onValueChange={setSingle}
+      />
+      <Button>After calendar</Button>
+      <output aria-label="Calendar value">{JSON.stringify(value)}</output>
+      <output aria-label="Single value">{single}</output>
     </section>
   );
 }
@@ -1426,14 +2125,18 @@ function Fixture() {
       <InputOTPStates />
       <ComboboxStates />
       <SliderStates />
+      <ResizableStates />
       <BadgeStates />
       <SkeletonStates />
       <SpinnerStates />
       <CardStates />
+      <EmptyFixture />
+      <ItemStates />
       <AlertStates />
       <AvatarStates />
       <ProgressStates />
       <TableStates />
+      <ChartStates />
       <BreadcrumbStates />
       <PaginationStates />
       <CarouselFixture />
@@ -1442,13 +2145,21 @@ function Fixture() {
       <TabsStates />
       <ToggleStates />
       <TooltipStates />
+      <HoverCardStates />
       <PopoverStates />
       <MenuStates />
+      <ContextMenuStates />
+      <MenubarStates />
+      <NavigationMenuStates />
       <AlertDialogStates />
       <CommandStates />
       <SheetStates />
+      <SidebarStates />
+      <DrawerStates />
       <ToastStates />
       <ToggleGroupStates />
+      <CalendarStates />
+      <DatePickerStates />
       <ButtonGroupStates />
       <InputGroupStates />
       <section aria-label="Additional public configurations">
@@ -1500,6 +2211,8 @@ const paletteLocale = new URLSearchParams(location.search).get('palette');
 createRoot(root).render(
   new URLSearchParams(location.search).has('carousel') ? (
     <CarouselPage />
+  ) : new URLSearchParams(location.search).has('scroll-area') ? (
+    <ScrollAreaFixture />
   ) : new URLSearchParams(location.search).has('lism') ? (
     <LismFixture />
   ) : new URLSearchParams(location.search).has('reader') ? (

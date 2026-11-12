@@ -159,6 +159,7 @@ test('[carousel.visual] contrast, targets, reflow, forced colors and reduced mot
   await page.evaluate(() => {
     document.documentElement.style.fontSize = '200%';
   });
+  // Enlarging the text reflows the page; verify the visible slide before axe.
   await root.scrollIntoViewIfNeeded();
   const activeText = root.getByText('Life on the shore');
   await expect(activeText).toBeInViewport({ ratio: 1 });

@@ -5,25 +5,38 @@ import { avatarManifest } from './components/Avatar.js';
 import { badgeManifest } from './components/Badge.js';
 import { breadcrumbManifest } from './components/Breadcrumb.js';
 import { buttonGroupManifest } from './components/ButtonGroup.js';
+import { calendarManifest } from './components/Calendar.js';
 import { cardManifest } from './components/Card.js';
 import { carouselManifest } from './components/Carousel.js';
+import { chartManifest } from './components/Chart.js';
 import { checkboxManifest } from './components/Checkbox.js';
 import { collapsibleManifest } from './components/Collapsible.js';
 import { comboboxManifest } from './components/Combobox.js';
 import { commandManifest } from './components/Command.js';
+import { contextMenuManifest } from './components/ContextMenu.js';
+import { datePickerManifest } from './components/DatePicker.js';
+import { drawerManifest } from './components/Drawer.js';
 import { dropdownMenuManifest } from './components/DropdownMenu.js';
+import { emptyManifest } from './components/Empty.js';
+import { hoverCardManifest } from './components/HoverCard.js';
 import { inputManifest } from './components/Input.js';
 import { inputGroupManifest } from './components/InputGroup.js';
 import { inputOTPManifest } from './components/InputOTP.js';
+import { itemManifest } from './components/Item.js';
 import { kbdManifest } from './components/Kbd.js';
+import { menubarManifest } from './components/Menubar.js';
 import { nativeSelectManifest } from './components/NativeSelect.js';
+import { navigationMenuManifest } from './components/NavigationMenu.js';
 import { paginationManifest } from './components/Pagination.js';
 import { popoverManifest } from './components/Popover.js';
 import { progressManifest } from './components/Progress.js';
 import { radioGroupManifest } from './components/RadioGroup.js';
+import { resizableManifest } from './components/Resizable.js';
+import { scrollAreaManifest } from './components/ScrollArea.js';
 import { selectManifest } from './components/Select.js';
 import { separatorManifest } from './components/Separator.js';
 import { sheetManifest } from './components/Sheet.js';
+import { sidebarManifest } from './components/Sidebar.js';
 import { skeletonManifest } from './components/Skeleton.js';
 import { sliderManifest } from './components/Slider.js';
 import { spinnerManifest } from './components/Spinner.js';
@@ -160,20 +173,27 @@ const manifest = {
       accessibility:
         'Base UI manages modal focus, dismissal, and dialog semantics; provide a Title and an optional useful Description. Development diagnostics warn about missing name sources and dangling label/description references.',
     },
+    Item: itemManifest,
     Kbd: kbdManifest,
+    ScrollArea: scrollAreaManifest,
     Separator: separatorManifest,
     Sheet: sheetManifest,
+    Drawer: drawerManifest,
     Badge: badgeManifest,
     Skeleton: skeletonManifest,
     Spinner: spinnerManifest,
     Card: cardManifest,
+    Empty: emptyManifest,
     Carousel: carouselManifest,
     Alert: alertManifest,
     Avatar: avatarManifest,
     Progress: progressManifest,
     Table: tableManifest,
+    Chart: chartManifest,
     Breadcrumb: breadcrumbManifest,
     Pagination: paginationManifest,
+    NavigationMenu: navigationMenuManifest,
+    Sidebar: sidebarManifest,
     Input: inputManifest,
     Textarea: textareaManifest,
     NativeSelect: nativeSelectManifest,
@@ -191,12 +211,18 @@ const manifest = {
     Toggle: toggleManifest,
     Tooltip: tooltipManifest,
     Popover: popoverManifest,
+    HoverCard: hoverCardManifest,
     DropdownMenu: dropdownMenuManifest,
+    ContextMenu: contextMenuManifest,
+    Menubar: menubarManifest,
     AlertDialog: alertDialogManifest,
     Toast: toastManifest,
     InputGroup: inputGroupManifest,
     ToggleGroup: toggleGroupManifest,
     ButtonGroup: buttonGroupManifest,
+    Calendar: calendarManifest,
+    DatePicker: datePickerManifest,
+    Resizable: resizableManifest,
   },
 } as const;
 

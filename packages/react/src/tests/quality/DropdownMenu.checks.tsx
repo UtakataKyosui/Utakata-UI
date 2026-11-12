@@ -4,6 +4,7 @@ import { Button } from '../../components/Button.js';
 import { DropdownMenu } from '../../components/DropdownMenu.js';
 import type { QualityCheck } from '../../metadata/quality.js';
 import { audit } from '../audit.js';
+import { expectDocumentMenu } from '../quality-helpers.js';
 
 export function renderMenu(
   onEdit: () => void = () => {},
@@ -51,13 +52,7 @@ export const dropdownMenuChecks: Record<string, QualityCheck> = {
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     const menu = await openMenu(trigger);
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('group', { name: 'Document' })).toBeInTheDocument();
-    expect(screen.getAllByRole('menuitem')).toHaveLength(4);
-    expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveAttribute(
-      'aria-disabled',
-      'true',
-    );
-    expect(screen.getByRole('separator')).toBeInTheDocument();
+    expectDocumentMenu(4);
     expect((await audit(menu)).violations).toEqual([]);
   },
 };

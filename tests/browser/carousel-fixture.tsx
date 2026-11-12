@@ -33,7 +33,11 @@ const slides: CarouselSlide[] = [
 ];
 
 export function CarouselFixture() {
-  return <Carousel slides={slides} labels={labels} />;
+  return (
+    <div className="fixture-carousel">
+      <Carousel slides={slides} labels={labels} />
+    </div>
+  );
 }
 
 export function CarouselPage() {

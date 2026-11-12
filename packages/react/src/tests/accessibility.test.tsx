@@ -26,25 +26,38 @@ import { avatarChecks } from './quality/Avatar.checks.js';
 import { badgeChecks } from './quality/Badge.checks.js';
 import { breadcrumbChecks } from './quality/Breadcrumb.checks.js';
 import { buttonGroupChecks } from './quality/ButtonGroup.checks.js';
+import { calendarChecks } from './quality/Calendar.checks.js';
 import { cardChecks } from './quality/Card.checks.js';
 import { carouselChecks } from './quality/Carousel.checks.js';
+import { chartChecks } from './quality/Chart.checks.js';
 import { checkboxChecks } from './quality/Checkbox.checks.js';
 import { collapsibleChecks } from './quality/Collapsible.checks.js';
 import { comboboxChecks } from './quality/Combobox.checks.js';
 import { commandChecks } from './quality/Command.checks.js';
+import { contextMenuChecks } from './quality/ContextMenu.checks.js';
+import { datePickerChecks } from './quality/DatePicker.checks.js';
+import { drawerChecks } from './quality/Drawer.checks.js';
 import { dropdownMenuChecks } from './quality/DropdownMenu.checks.js';
+import { emptyChecks } from './quality/Empty.checks.js';
+import { hoverCardChecks } from './quality/HoverCard.checks.js';
 import { inputChecks } from './quality/Input.checks.js';
 import { inputGroupChecks } from './quality/InputGroup.checks.js';
 import { inputOTPChecks } from './quality/InputOTP.checks.js';
+import { itemChecks } from './quality/Item.checks.js';
 import { kbdChecks } from './quality/Kbd.checks.js';
+import { menubarChecks } from './quality/Menubar.checks.js';
 import { nativeSelectChecks } from './quality/NativeSelect.checks.js';
+import { navigationMenuChecks } from './quality/NavigationMenu.checks.js';
 import { paginationChecks } from './quality/Pagination.checks.js';
 import { popoverChecks } from './quality/Popover.checks.js';
 import { progressChecks } from './quality/Progress.checks.js';
 import { radioGroupChecks } from './quality/RadioGroup.checks.js';
+import { resizableChecks } from './quality/Resizable.checks.js';
+import { scrollAreaChecks } from './quality/ScrollArea.checks.js';
 import { selectChecks } from './quality/Select.checks.js';
 import { separatorChecks } from './quality/Separator.checks.js';
 import { sheetChecks } from './quality/Sheet.checks.js';
+import { sidebarChecks } from './quality/Sidebar.checks.js';
 import { skeletonChecks } from './quality/Skeleton.checks.js';
 import { sliderChecks } from './quality/Slider.checks.js';
 import { spinnerChecks } from './quality/Spinner.checks.js';
@@ -143,26 +156,32 @@ describe('accessibility regression checks', () => {
         );
         await waitFor(() => expect(trigger).toHaveFocus());
       },
+      ...itemChecks,
       ...kbdChecks,
       ...separatorChecks,
       ...sheetChecks,
+      ...drawerChecks,
       ...badgeChecks,
       ...skeletonChecks,
       ...spinnerChecks,
       ...cardChecks,
+      ...emptyChecks,
       ...carouselChecks,
+      ...chartChecks,
       ...alertChecks,
       ...avatarChecks,
       ...progressChecks,
       ...tableChecks,
       ...breadcrumbChecks,
       ...paginationChecks,
+      ...sidebarChecks,
       ...inputChecks,
       ...textareaChecks,
       ...nativeSelectChecks,
       ...checkboxChecks,
       ...switchChecks,
       ...radioGroupChecks,
+      ...scrollAreaChecks,
       ...selectChecks,
       ...inputOTPChecks,
       ...comboboxChecks,
@@ -174,12 +193,19 @@ describe('accessibility regression checks', () => {
       ...toggleChecks,
       ...tooltipChecks,
       ...popoverChecks,
+      ...hoverCardChecks,
       ...dropdownMenuChecks,
+      ...contextMenuChecks,
+      ...menubarChecks,
+      ...navigationMenuChecks,
       ...alertDialogChecks,
       ...toastChecks,
       ...inputGroupChecks,
       ...toggleGroupChecks,
       ...buttonGroupChecks,
+      ...calendarChecks,
+      ...datePickerChecks,
+      ...resizableChecks,
     };
     const isolatedChecks = isolateChecks(checks);
     const rules = [

@@ -1,0 +1,87 @@
+---
+title: Composing a Data Table
+description: Combine Table, Pagination, Checkbox and Field for sorting, search, column visibility, paging and row selection
+---
+
+Utakata UI has no single `DataTable` component. You compose one from the existing [Table](/en/components/table), Pagination, Checkbox, Field and Button, because how you hold state and fetch data depends on your app. This page describes the composition and the split of responsibilities. It adds no public API.
+
+## Example [#preview]
+
+An example that combines sorting, search, column visibility, paging and row selection. The data comes from a function inside the example; no network request is made.
+
+<Component path="data-table" />
+
+## Who is responsible for what [#responsibility]
+
+The UI parts (Utakata UI) handle markup, keyboard operation, focus, and exposing names and states. Decisions about data belong to your server or data layer.
+
+| Concern | Server or data layer (yours) | UI parts (Utakata UI) |
+| --- | --- | --- |
+| Search | Filtering the matching rows and computing the total | `Field` + `Input` receive the text and pass it to the caller |
+| Sorting | Ordering, stability and collation (for example Japanese) | `Button` receives the action; only the current column gets `aria-sort` |
+| Paging | Clamping out-of-range pages and slicing one page | `Pagination` marks the current page with `aria-current="page"` |
+| Column visibility | Choosing which fields to return (optional) | `Checkbox` toggles columns; keep the empty row's `colSpan` in step |
+| Row selection | Persisting selection, running bulk actions, checking permissions | `Checkbox` gets a name; the count is announced in a `role="status"` element |
+| Loading and errors | Detecting the state and retrying | You show it, for example `aria-busy` on `Table.Root` or an `Alert` |
+
+In the example, `queryInvoices` stands in for the server. `InvoiceTable` never sorts or filters the `rows` it receives; it renders them as given. You can also build a client-side variant that fetches everything and processes it in the browser, but then pass the processed result to `InvoiceTable`. The UI parts do not care where the data was processed.
+
+## Composition [#composition]
+
+1. Search: `Field.Root` > `Field.Label` + `Input type="search"`. Show the label and attach help text with `Field.Description`.
+2. Column visibility: native `fieldset` and `legend` (for example "Visible columns") holding `Checkbox` elements wrapped in `label`. Leave the row-header column (the number in the example) out of the toggles.
+3. Result status: a `role="status"` element for the count, displayed range and current page. It also says "No invoices match." when the result is empty.
+4. Table: `Table.Container` > `Table.Root` > `Table.Caption`. Name the container with `aria-labelledby` pointing at the caption.
+5. Paging: `Pagination.Root` with an `aria-label`.
+
+### Sorting [#sorting]
+
+- Put a `Button variant="ghost"` inside each sortable header and show the column name.
+- Set `aria-sort` only on the `Table.Head` of the column that is currently sorted, and omit it elsewhere. The values are `ascending` and `descending`.
+- The example cycles ascending, descending, then off. The ▲ and ▼ marks are a visual aid and are `aria-hidden`; `aria-sort` carries the state.
+- Return to page 1 whenever the search or sort condition changes.
+
+### Empty results [#empty]
+
+- Keep the table and render one row spanning every column in `Table.Body` (`colSpan` = selection column + visible columns).
+- Disable the select-all checkbox. Paging stays as a single page and the current page keeps `aria-current="page"`.
+- Update `colSpan` when columns are hidden.
+
+### Row selection [#selection]
+
+- Give each row checkbox a name that identifies the row, for example "Select INV-001".
+- The header checkbox is "Select all invoices on this page". It is `indeterminate` (`aria-checked="mixed"`) when only some rows are selected. It does not select across pages.
+- Selection is kept by row ID. It survives page and condition changes, and "N selected" is the total across them. If rows can stay selected while hidden by a new condition, say so on screen or decide to clear the selection.
+
+### State after a page change [#paging]
+
+These survive moving between pages:
+
+- The sorted column and direction (`aria-sort`)
+- Column visibility
+- Selected IDs and the selected count
+- The search text
+
+Only the current page changes: `aria-current="page"` and the displayed range update. If you keep state in the URL, use the `href` on `Pagination.Link` as a normal link and omit `onClick`. If you switch pages with client state, as the example does, call `preventDefault()` in `onClick`.
+
+## Defaults and out of scope [#defaults]
+
+- The example uses 4 rows per page. Choose your own value.
+- There is no initial sort.
+- Selection is kept across pages.
+- Virtualization, column reordering and resizing, pinned columns, expandable rows, inline editing, multi-column sorting, filter-expression UI, page-size selection and CSV export are out of scope. Add them yourself and keep the same accessibility requirements.
+- Columns are not hidden at narrow widths; the table scrolls horizontally in `Table.Container` (see the Table reference).
+
+## Your responsibilities [#consumer]
+
+- Sanitizing fetched values, checking permissions and resolving conflicts.
+- Loading, error and retry states, and not losing focus when results update.
+- Handling a focused `Previous` or `Next` that becomes disabled (for example on the last page). Focus is lost when that happens, so move it to a nearby enabled link when needed.
+- Translating labels, column names and state names, and writing a `Table.Caption` that fits the table's purpose.
+- Checking the rendered result for contrast, zoom, forced colors and reduced motion.
+
+## Verification and what is unverified [#verification]
+
+- Automated jsdom tests cover empty results, the selected count, `aria-sort`, the state after a page change, and that rows are rendered as received. axe runs in the default, sorted and empty states.
+- Real-browser keyboard operation, screen reader output, theme contrast, zoom, forced colors and reduced motion are unverified by this guide on its own.
+- Types statically prevent problems such as an icon-only button without a name. They cannot verify the text of an `aria-label` or that `aria-sort` is applied correctly in your composition; check the actual DOM.
