@@ -899,56 +899,74 @@
   }
 
   .ui-scroll-area {
-    --ui-scroll-area-surface: var(--ui-color-surface);
-    --ui-scroll-area-shadow: color-mix(
-      in srgb,
-      var(--ui-color-text) 28%,
-      transparent
-    );
-    /* Local covers hide each edge shadow when the content reaches that edge. */
-    background-color: var(--ui-scroll-area-surface);
-    background-image:
-      linear-gradient(var(--ui-scroll-area-surface) 40%, transparent),
-      linear-gradient(transparent, var(--ui-scroll-area-surface) 60%),
-      linear-gradient(to right, var(--ui-scroll-area-surface) 40%, transparent),
-      linear-gradient(to left, var(--ui-scroll-area-surface) 40%, transparent),
-      radial-gradient(
-        farthest-side at top,
-        var(--ui-scroll-area-shadow),
-        transparent
-      ),
-      radial-gradient(
-        farthest-side at bottom,
-        var(--ui-scroll-area-shadow),
-        transparent
-      ),
-      radial-gradient(
-        farthest-side at left,
-        var(--ui-scroll-area-shadow),
-        transparent
-      ),
-      radial-gradient(
-        farthest-side at right,
-        var(--ui-scroll-area-shadow),
-        transparent
-      );
-    background-attachment:
-      local, local, local, local, scroll, scroll, scroll, scroll;
-    background-position: top, bottom, left, right, top, bottom, left, right;
-    background-repeat: no-repeat;
-    background-size:
-      100% 1.5rem,
-      100% 1.5rem,
-      1.5rem 100%,
-      1.5rem 100%,
-      100% 0.5rem,
-      100% 0.5rem,
-      0.5rem 100%,
-      0.5rem 100%;
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
     min-inline-size: 0;
     overflow: auto;
+  }
+
+  @supports (animation-timeline: scroll(self block)) {
+    .ui-scroll-area {
+      --ui-scroll-area-shadow: color-mix(
+        in srgb,
+        var(--ui-color-text) 32%,
+        transparent
+      );
+      --ui-scroll-area-inline-start: 5px;
+      --ui-scroll-area-inline-end: -5px;
+      animation:
+        ui-scroll-area-block-shadow 1s linear,
+        ui-scroll-area-inline-shadow 1s linear;
+      animation-composition: add;
+      animation-timeline: scroll(self block), scroll(self inline);
+    }
+
+    .ui-scroll-area:dir(rtl) {
+      --ui-scroll-area-inline-start: -5px;
+      --ui-scroll-area-inline-end: 5px;
+    }
+
+    @keyframes ui-scroll-area-block-shadow {
+      0% {
+        box-shadow:
+          inset 0 0 0 -3px transparent,
+          inset 0 -5px 8px -3px var(--ui-scroll-area-shadow);
+      }
+      1%,
+      99% {
+        box-shadow:
+          inset 0 5px 8px -3px var(--ui-scroll-area-shadow),
+          inset 0 -5px 8px -3px var(--ui-scroll-area-shadow);
+      }
+      100% {
+        box-shadow:
+          inset 0 5px 8px -3px var(--ui-scroll-area-shadow),
+          inset 0 0 0 -3px transparent;
+      }
+    }
+
+    @keyframes ui-scroll-area-inline-shadow {
+      0% {
+        box-shadow:
+          inset 0 0 0 -3px transparent,
+          inset var(--ui-scroll-area-inline-end) 0 8px -3px
+          var(--ui-scroll-area-shadow);
+      }
+      1%,
+      99% {
+        box-shadow:
+          inset var(--ui-scroll-area-inline-start) 0 8px -3px
+          var(--ui-scroll-area-shadow),
+          inset var(--ui-scroll-area-inline-end) 0 8px -3px
+          var(--ui-scroll-area-shadow);
+      }
+      100% {
+        box-shadow:
+          inset var(--ui-scroll-area-inline-start) 0 8px -3px
+          var(--ui-scroll-area-shadow),
+          inset 0 0 0 -3px transparent;
+      }
+    }
   }
 
   .ui-scroll-area[data-scrollbar="hidden"] {
@@ -2687,10 +2705,15 @@
     cursor: grabbing;
   }
 
-  .ui-resizable__handle:hover::after,
   .ui-resizable__handle:focus-visible::after,
   .ui-resizable__handle[data-dragging]::after {
     background: var(--ui-color-primary);
+  }
+
+  @media (hover: hover) {
+    .ui-resizable__handle:hover::after {
+      background: var(--ui-color-primary);
+    }
   }
 
   .ui-resizable--horizontal > .ui-resizable__handle {
@@ -3760,10 +3783,15 @@
 
     .ui-resizable__handle:focus-visible::before,
     .ui-resizable__handle[data-dragging]::before,
-    .ui-resizable__handle:hover::after,
     .ui-resizable__handle:focus-visible::after,
     .ui-resizable__handle[data-dragging]::after {
       background: Highlight;
+    }
+
+    @media (hover: hover) {
+      .ui-resizable__handle:hover::after {
+        background: Highlight;
+      }
     }
 
     .ui-badge,
