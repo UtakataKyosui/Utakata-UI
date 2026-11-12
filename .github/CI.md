@@ -79,8 +79,13 @@ are reused as verification evidence. Browser downloads cache the headless shell
 by exact Playwright version, OS and architecture. OS libraries are installed
 on every browser job; the cache does not establish that they exist. Each browser job downloads only its selected engine (Chromium uses the headless shell). `browser.yml` runs Chromium, Firefox and WebKit light/dark as six independent matrix
 jobs, with `fail-fast: false` to retain both sets of evidence. Each uses two
-workers and zero retries. Its five-minute suite timeout leaves time for setup
-and evidence upload within the ten-minute job limit. The job records elapsed
+workers and zero retries. Its six-minute suite timeout leaves time for setup
+and evidence upload within the ten-minute job limit. It was raised from five
+minutes after the 283-test Chromium suite ran 4.1 to 5.0 minutes or longer on
+hosted runners (PR #165 runs 43155608496 attempts 1 and 2, and PR #166 run
+43153536887) and left tests unrun, which the required checks treat as
+unverified. A suite that still exceeds the timeout fails; split the job rather
+than extending it again. The job records elapsed
 wall time (checkout through artifact upload) in the Actions summary and fails
 above 420 seconds, 70% of the limit. Six GitHub-hosted browser jobs on PR #85
 (runs 42650709777–42660430846, job start to completion) took 119–149 seconds;
