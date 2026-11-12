@@ -2,6 +2,7 @@ export {
   Box,
   Container,
   Flex,
+  Frame,
   Grid,
   Heading,
   Stack,
@@ -46,6 +47,14 @@ export { Button } from './components/Button.js';
 export type { ButtonGroupProps } from './components/ButtonGroup.js';
 export { ButtonGroup } from './components/ButtonGroup.js';
 export type {
+  CalendarDate,
+  CalendarLabels,
+  CalendarMonth,
+  CalendarProps,
+  CalendarRange,
+} from './components/Calendar.js';
+export { Calendar } from './components/Calendar.js';
+export type {
   CardContentProps,
   CardDescriptionProps,
   CardFooterProps,
@@ -54,6 +63,23 @@ export type {
   CardTitleProps,
 } from './components/Card.js';
 export { Card } from './components/Card.js';
+export {
+  Carousel,
+  type CarouselLabels,
+  type CarouselProps,
+  type CarouselSlide,
+} from './components/Carousel.js';
+export type {
+  ChartCaptionProps,
+  ChartDataProps,
+  ChartDescriptionProps,
+  ChartLegendItemProps,
+  ChartLegendProps,
+  ChartMarkerProps,
+  ChartPlotProps,
+  ChartRootProps,
+} from './components/Chart.js';
+export { Chart } from './components/Chart.js';
 export type {
   CheckboxIndicatorProps,
   CheckboxRootProps,
@@ -78,9 +104,30 @@ export type {
   CommandRootProps,
 } from './components/Command.js';
 export { Command } from './components/Command.js';
+export type { ContextMenuPopupProps } from './components/ContextMenu.js';
+export { ContextMenu } from './components/ContextMenu.js';
+export type {
+  DatePickerLabels,
+  DatePickerProps,
+} from './components/DatePicker.js';
+export { DatePicker } from './components/DatePicker.js';
 export { Dialog } from './components/Dialog.js';
+export type { DrawerPopupProps, DrawerRootProps } from './components/Drawer.js';
+export { Drawer } from './components/Drawer.js';
 export { DropdownMenu } from './components/DropdownMenu.js';
+export type {
+  EmptyActionsProps,
+  EmptyDescriptionProps,
+  EmptyRootProps,
+  EmptyTitleProps,
+} from './components/Empty.js';
+export { Empty } from './components/Empty.js';
 export { Field } from './components/Field.js';
+export type {
+  HoverCardRootProps,
+  HoverCardTriggerProps,
+} from './components/HoverCard.js';
+export { HoverCard } from './components/HoverCard.js';
 export type { InputProps } from './components/Input.js';
 export { Input } from './components/Input.js';
 export type {
@@ -96,10 +143,30 @@ export type {
   InputOTPSlotProps,
 } from './components/InputOTP.js';
 export { InputOTP } from './components/InputOTP.js';
+export type {
+  ItemActionsProps,
+  ItemBodyProps,
+  ItemButtonProps,
+  ItemDescriptionProps,
+  ItemGroupProps,
+  ItemIconProps,
+  ItemLinkProps,
+  ItemMetaProps,
+  ItemRootProps,
+  ItemTitleProps,
+} from './components/Item.js';
+export { Item } from './components/Item.js';
 export type { KbdGroupProps, KbdProps } from './components/Kbd.js';
 export { Kbd, KbdGroup } from './components/Kbd.js';
+export type { MenubarRootProps } from './components/Menubar.js';
+export { DirectionProvider, Menubar } from './components/Menubar.js';
 export type { NativeSelectProps } from './components/NativeSelect.js';
 export { NativeSelect } from './components/NativeSelect.js';
+export type {
+  NavigationMenuLinkProps,
+  NavigationMenuRootProps,
+} from './components/NavigationMenu.js';
+export { NavigationMenu } from './components/NavigationMenu.js';
 export type {
   PaginationDirectionProps,
   PaginationEllipsisProps,
@@ -123,12 +190,31 @@ export type {
   RadioGroupRootProps,
 } from './components/RadioGroup.js';
 export { RadioGroup } from './components/RadioGroup.js';
+export type {
+  ResizableGroupProps,
+  ResizableHandleProps,
+  ResizablePanelProps,
+} from './components/Resizable.js';
+export { Resizable } from './components/Resizable.js';
+export type { ScrollAreaProps } from './components/ScrollArea.js';
+export { ScrollArea } from './components/ScrollArea.js';
 export type { SelectRootProps } from './components/Select.js';
 export { Select } from './components/Select.js';
 export type { SeparatorProps } from './components/Separator.js';
 export { Separator } from './components/Separator.js';
 export type { SheetPopupProps, SheetRootProps } from './components/Sheet.js';
 export { Sheet } from './components/Sheet.js';
+export type {
+  SidebarMenuButtonProps,
+  SidebarProviderProps,
+  SidebarRootProps,
+  SidebarTriggerProps,
+} from './components/Sidebar.js';
+export {
+  Sidebar,
+  sidebarMobileBreakpoint,
+  useSidebar,
+} from './components/Sidebar.js';
 export type { SkeletonProps } from './components/Skeleton.js';
 export { Skeleton } from './components/Skeleton.js';
 export { Slider } from './components/Slider.js';
@@ -182,10 +268,14 @@ export type { AvatarSize } from './metadata/components/Avatar.js';
 export type { BadgeVariant } from './metadata/components/Badge.js';
 export type { ButtonGroupOrientation } from './metadata/components/ButtonGroup.js';
 export type { CardTitleLevel } from './metadata/components/Card.js';
+export type { ChartSeries } from './metadata/components/Chart.js';
+export type { DrawerSide } from './metadata/components/Drawer.js';
+export type { EmptyTitleLevel } from './metadata/components/Empty.js';
 export type { InputSize } from './metadata/components/Input.js';
 export type { InputGroupAddonAlign } from './metadata/components/InputGroup.js';
 export type { NativeSelectSize } from './metadata/components/NativeSelect.js';
 export type { RadioGroupOrientation } from './metadata/components/RadioGroup.js';
+export type { ResizableOrientation } from './metadata/components/Resizable.js';
 export type { SheetSide } from './metadata/components/Sheet.js';
 export type { SkeletonShape } from './metadata/components/Skeleton.js';
 export type { SpinnerSize } from './metadata/components/Spinner.js';

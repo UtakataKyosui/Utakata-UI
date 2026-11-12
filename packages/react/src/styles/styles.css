@@ -21,6 +21,19 @@
     --ui-color-border: #8993a5;
     --ui-color-danger: #b42318;
     --ui-color-on-danger: #fff;
+    --ui-chart-series-1: #2357c6;
+    --ui-chart-series-2: #b54708;
+    --ui-chart-series-3: #067647;
+    --ui-chart-series-4: #7e22ce;
+    --ui-chart-series-5: #c11574;
+    --ui-chart-series-6: #596579;
+    --ui-chart-dash-1: none;
+    --ui-chart-dash-2: 8 4;
+    --ui-chart-dash-3: 2 3;
+    --ui-chart-dash-4: 10 3 2 3;
+    --ui-chart-dash-5: 1 4;
+    --ui-chart-dash-6: 14 4;
+    --ui-chart-duration: 200ms;
     --ui-radius-control: 0.375rem;
     --ui-shadow-popup: 0 0.5rem 1.5rem rgb(0 0 0 / 0.2);
     --ui-focus-ring: 0 0 0 3px
@@ -37,6 +50,12 @@
       --ui-color-border: #748099;
       --ui-color-danger: #ffb4ab;
       --ui-color-on-danger: #3a0a06;
+      --ui-chart-series-1: #9bb9ff;
+      --ui-chart-series-2: #fdb022;
+      --ui-chart-series-3: #6ce9a6;
+      --ui-chart-series-4: #d6bbfb;
+      --ui-chart-series-5: #fda29b;
+      --ui-chart-series-6: #c1cad8;
     }
   }
 }
@@ -584,6 +603,165 @@
     gap: 0.5rem;
   }
 
+  .ui-empty {
+    color: var(--ui-color-text);
+    display: grid;
+    gap: var(--ui-empty-gap, 0.75rem);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding: var(--ui-empty-padding, 1.25rem);
+    text-align: center;
+  }
+
+  .ui-empty__title {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  .ui-empty__description {
+    color: var(--ui-color-muted);
+    margin: 0;
+  }
+
+  .ui-empty__actions {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    min-inline-size: 0;
+  }
+
+  .ui-item-group {
+    display: grid;
+    gap: var(--ui-item-group-gap, 0.5rem);
+    list-style: none;
+    margin: 0;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  .ui-item {
+    align-items: flex-start;
+    background: var(--ui-item-background, var(--ui-color-surface));
+    border: var(--ui-item-border, 1px solid var(--ui-color-border));
+    border-radius: 0.5rem;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ui-item-gap, 0.75rem);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding: var(--ui-item-padding, 0.75rem 1rem);
+    position: relative;
+  }
+
+  @media (hover: hover) {
+    .ui-item:has(.ui-item__link:hover) {
+      background: var(
+        --ui-item-hover-background,
+        color-mix(in srgb, var(--ui-color-primary) 8%, var(--ui-color-surface))
+      );
+    }
+  }
+
+  .ui-item__icon {
+    align-items: center;
+    display: inline-flex;
+    flex: none;
+    min-block-size: 1.5rem;
+  }
+
+  .ui-item__body {
+    display: grid;
+    flex: 1 1 12rem;
+    gap: 0.125rem;
+    min-inline-size: 0;
+  }
+
+  .ui-item__title {
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0;
+    min-inline-size: 0;
+  }
+
+  .ui-item__description {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .ui-item__meta {
+    color: var(--ui-color-muted);
+    flex: 0 1 auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    min-block-size: 1.5rem;
+    min-inline-size: 0;
+  }
+
+  .ui-item__actions {
+    align-items: center;
+    display: flex;
+    flex: 0 1 auto;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* One native control stretched over the row with a pseudo-element, so no
+     element is nested inside the link or button and Tab order stays DOM order. */
+  .ui-item__link {
+    color: var(--ui-color-text);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .ui-item__link::after {
+    border-radius: inherit;
+    content: "";
+    inset: 0;
+    position: absolute;
+  }
+
+  .ui-item__button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.5;
+    padding: 0;
+    text-align: start;
+    text-decoration: none;
+  }
+
+  .ui-item__button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  .ui-item__button:disabled::after {
+    pointer-events: none;
+  }
+
+  .ui-item__link:focus-visible {
+    outline: none;
+  }
+
+  .ui-item__link:focus-visible::after {
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  @media (hover: hover) {
+    .ui-item__link:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
   .ui-alert {
     background: var(--ui-alert-background, var(--ui-color-surface));
     border: 1px solid var(--ui-alert-border, var(--ui-color-border));
@@ -720,10 +898,22 @@
     }
   }
 
+  .ui-scroll-area {
+    border-radius: var(--ui-radius-control);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    overflow: auto;
+  }
+
   .ui-table-container {
     border-radius: var(--ui-radius-control);
     max-inline-size: 100%;
     overflow-x: auto;
+  }
+
+  .ui-scroll-area:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: -2px;
   }
 
   .ui-table-container:focus-visible,
@@ -770,6 +960,103 @@
 
   .ui-table [data-align="end"] {
     text-align: end;
+  }
+
+  .ui-chart {
+    color: var(--ui-color-text);
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-chart__caption {
+    font-weight: 600;
+  }
+
+  .ui-chart__description {
+    color: var(--ui-color-muted);
+    margin: 0;
+  }
+
+  .ui-chart__plot {
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-chart__plot > svg {
+    block-size: auto;
+    max-inline-size: 100%;
+  }
+
+  .ui-chart__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ui-chart__legend-item {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.5rem;
+    min-inline-size: 0;
+  }
+
+  .ui-chart__marker {
+    color: var(--ui-chart-marker-color, currentColor);
+    fill: currentColor;
+    flex: none;
+    stroke: currentColor;
+    stroke-width: 0;
+  }
+
+  .ui-chart__marker--1 {
+    --ui-chart-marker-color: var(--ui-chart-series-1);
+  }
+
+  .ui-chart__marker--2 {
+    --ui-chart-marker-color: var(--ui-chart-series-2);
+  }
+
+  .ui-chart__marker--3 {
+    --ui-chart-marker-color: var(--ui-chart-series-3);
+  }
+
+  .ui-chart__marker--4 {
+    --ui-chart-marker-color: var(--ui-chart-series-4);
+  }
+
+  .ui-chart__marker--5 {
+    --ui-chart-marker-color: var(--ui-chart-series-5);
+  }
+
+  .ui-chart__marker--6 {
+    --ui-chart-marker-color: var(--ui-chart-series-6);
+  }
+
+  .ui-chart__data {
+    min-inline-size: 0;
+  }
+
+  .ui-chart__data-summary {
+    cursor: pointer;
+    font-weight: 600;
+    min-block-size: 1.5rem;
+    padding-block: 0.25rem;
+  }
+
+  .ui-chart__data-summary:focus-visible {
+    border-radius: var(--ui-radius-control);
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-chart__data-content {
+    padding-block-start: 0.5rem;
   }
 
   .ui-breadcrumb__list,
@@ -2131,6 +2418,250 @@
     flex-wrap: nowrap;
   }
 
+  /* Calendar: marks never rely on color alone (border, weight, underline, line-through). */
+  .ui-calendar {
+    color: var(--ui-color-text);
+    display: block;
+    /* Growable, so a flex parent can shrink it below its preferred width. */
+    flex: 1 1 18rem;
+    max-inline-size: 22rem;
+  }
+
+  .ui-calendar__header {
+    align-items: center;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-block-end: 0.5rem;
+  }
+
+  .ui-calendar__title {
+    flex: 1;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .ui-calendar__nav {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    justify-content: center;
+    min-block-size: 2.5rem;
+    min-inline-size: 2.5rem;
+  }
+
+  .ui-calendar__nav[aria-disabled="true"] {
+    border-style: dashed;
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-calendar__grid {
+    border-collapse: collapse;
+    inline-size: 100%;
+    table-layout: fixed;
+  }
+
+  .ui-calendar__weekday {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0;
+  }
+
+  .ui-calendar__cell,
+  .ui-calendar__outside {
+    padding: 0;
+    text-align: center;
+  }
+
+  .ui-calendar__day {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--ui-radius-control);
+    color: var(--ui-color-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.875rem;
+    inline-size: 100%;
+    min-block-size: 2.5rem;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  /* Hover only where it is sustained; selected days keep their own tint. */
+  @media (hover: hover) {
+    .ui-calendar__day:where(:not([aria-disabled="true"])):hover,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):hover {
+      border-color: var(--ui-color-border);
+    }
+  }
+
+  @media (hover: hover) and (forced-colors: none) {
+    .ui-calendar__day:where(
+        :not([aria-disabled="true"], [data-selected])
+      ):hover,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):hover {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 8%,
+        transparent
+      );
+    }
+  }
+
+  @media (forced-colors: none) {
+    .ui-calendar__day:where(
+        :not([aria-disabled="true"], [data-selected])
+      ):active,
+    .ui-calendar__nav:where(:not([aria-disabled="true"])):active {
+      background-color: color-mix(
+        in srgb,
+        var(--ui-color-text) 16%,
+        transparent
+      );
+    }
+  }
+
+  .ui-calendar__day[data-today] {
+    text-decoration: underline 2px;
+    text-underline-offset: 0.25em;
+  }
+
+  .ui-calendar__day[data-selected] {
+    background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent);
+    border: 2px solid currentColor;
+    font-weight: 700;
+  }
+
+  .ui-calendar__day[data-range-start],
+  .ui-calendar__day[data-range-end] {
+    box-shadow: inset 0 0 0 1px var(--ui-color-primary);
+  }
+
+  .ui-calendar__day[aria-disabled="true"] {
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  .ui-calendar__day[data-today][aria-disabled="true"] {
+    text-decoration-line: underline line-through;
+  }
+
+  .ui-calendar__day:focus-visible,
+  .ui-calendar__nav:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  .ui-calendar__day[data-range-start]:focus-visible,
+  .ui-calendar__day[data-range-end]:focus-visible {
+    box-shadow:
+      inset 0 0 0 1px var(--ui-color-primary),
+      var(--ui-focus-ring);
+  }
+
+  .ui-calendar__status {
+    block-size: 1px;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+  }
+
+  /* Resizable: panels share the group by percent; the handle keeps a 24px target but occupies only its line in layout */
+  .ui-resizable {
+    box-sizing: border-box;
+    display: flex;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    min-block-size: 0;
+    min-inline-size: 0;
+  }
+
+  .ui-resizable--vertical {
+    flex-direction: column;
+  }
+
+  .ui-resizable__panel {
+    box-sizing: border-box;
+    flex: var(--ui-resizable-panel-size, 1) 1 0%;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow: auto;
+  }
+
+  .ui-resizable__handle {
+    --ui-resizable-handle-size: 1.5rem;
+    --ui-resizable-handle-line: 1px;
+    box-sizing: border-box;
+    flex: none;
+    position: relative;
+    touch-action: none;
+    user-select: none;
+    z-index: 1;
+  }
+
+  .ui-resizable__handle::before {
+    background: var(--ui-color-border);
+    content: "";
+    position: absolute;
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle {
+    cursor: col-resize;
+    inline-size: var(--ui-resizable-handle-size);
+    margin-inline: calc(
+      (var(--ui-resizable-handle-line) - var(--ui-resizable-handle-size)) /
+      2
+    );
+  }
+
+  .ui-resizable--horizontal > .ui-resizable__handle::before {
+    inset-block: 0;
+    inset-inline-start: calc(
+      (var(--ui-resizable-handle-size) - var(--ui-resizable-handle-line)) /
+      2
+    );
+    inline-size: var(--ui-resizable-handle-line);
+  }
+
+  .ui-resizable--vertical > .ui-resizable__handle {
+    block-size: var(--ui-resizable-handle-size);
+    cursor: row-resize;
+    margin-block: calc(
+      (var(--ui-resizable-handle-line) - var(--ui-resizable-handle-size)) /
+      2
+    );
+  }
+
+  .ui-resizable--vertical > .ui-resizable__handle::before {
+    block-size: var(--ui-resizable-handle-line);
+    inline-size: 100%;
+    inset-block-start: calc(
+      (var(--ui-resizable-handle-size) - var(--ui-resizable-handle-line)) /
+      2
+    );
+  }
+
+  .ui-resizable__handle:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 0;
+  }
+
+  .ui-resizable__handle:focus-visible::before,
+  .ui-resizable__handle[data-dragging]::before {
+    background: var(--ui-color-primary);
+  }
+
   /* Button group: joins borders and end radii; buttons keep every other style */
   .ui-button-group {
     display: inline-flex;
@@ -2251,12 +2782,14 @@
 
   /* overlays-floating */
   .ui-tooltip__positioner,
+  .ui-hover-card__positioner,
   .ui-popover__positioner,
   .ui-dropdown-menu__positioner {
     z-index: var(--ui-z-floating, 50);
   }
 
   .ui-tooltip__trigger:focus-visible,
+  .ui-hover-card__trigger:focus-visible,
   .ui-popover__trigger:focus-visible,
   .ui-dropdown-menu__trigger:focus-visible,
   .ui-popover__popup :focus-visible {
@@ -2265,6 +2798,7 @@
   }
 
   .ui-tooltip__popup,
+  .ui-hover-card__popup,
   .ui-popover__popup,
   .ui-dropdown-menu__popup {
     transform-origin: var(--transform-origin);
@@ -2275,6 +2809,8 @@
 
   .ui-tooltip__popup[data-starting-style],
   .ui-tooltip__popup[data-ending-style],
+  .ui-hover-card__popup[data-starting-style],
+  .ui-hover-card__popup[data-ending-style],
   .ui-popover__popup[data-starting-style],
   .ui-popover__popup[data-ending-style],
   .ui-dropdown-menu__popup[data-starting-style],
@@ -2320,6 +2856,47 @@
     left: -0.25rem;
   }
 
+  .ui-hover-card__trigger {
+    border-radius: var(--ui-radius-control);
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .ui-hover-card__popup {
+    background: var(--ui-hover-card-background, var(--ui-color-surface));
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--ui-shadow-popup);
+    color: var(--ui-hover-card-color, var(--ui-color-text));
+    font-size: 0.875rem;
+    inline-size: 18rem;
+    line-height: 1.5;
+    max-inline-size: calc(100vw - 1rem);
+    overflow-wrap: anywhere;
+    padding: 0.75rem;
+  }
+
+  .ui-hover-card__arrow {
+    background: var(--ui-hover-card-background, var(--ui-color-surface));
+    block-size: 0.5rem;
+    border: 1px solid var(--ui-color-border);
+    inline-size: 0.5rem;
+    rotate: 45deg;
+  }
+
+  .ui-hover-card__arrow[data-side="top"] {
+    border-block-start-color: transparent;
+    border-inline-start-color: transparent;
+    bottom: -0.3125rem;
+  }
+
+  .ui-hover-card__arrow[data-side="bottom"] {
+    border-block-end-color: transparent;
+    border-inline-end-color: transparent;
+    top: -0.3125rem;
+  }
+
   .ui-popover__popup,
   .ui-dropdown-menu__popup {
     background: var(--ui-color-surface);
@@ -2328,6 +2905,53 @@
     box-shadow: var(--ui-shadow-popup);
     color: var(--ui-color-text);
     max-block-size: var(--available-height);
+    overflow: auto;
+  }
+
+  .ui-date-picker {
+    display: grid;
+    gap: 0.375rem;
+    min-inline-size: 0;
+  }
+
+  .ui-date-picker__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ui-date-picker__controls > .ui-input {
+    flex: 1 1 10rem;
+    min-inline-size: 0;
+  }
+
+  .ui-date-picker__controls > .ui-button {
+    max-inline-size: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-date-picker__hint,
+  .ui-date-picker__error {
+    margin: 0;
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-date-picker__hint {
+    color: var(--ui-color-muted);
+  }
+
+  .ui-date-picker__error {
+    color: var(--ui-color-danger);
+  }
+
+  .ui-popover__popup.ui-date-picker__popup {
+    inline-size: min(100%, 22rem);
+    min-inline-size: min(15rem, var(--available-width, 100vw));
+    max-inline-size: min(22rem, var(--available-width, 100vw));
+    max-block-size: var(--available-height, none);
     overflow: auto;
   }
 
@@ -2378,6 +3002,11 @@
     padding: 0.25rem;
   }
 
+  /* The context menu anchors to a point, so there is no anchor width. */
+  .ui-context-menu__popup {
+    min-inline-size: 10rem;
+  }
+
   .ui-dropdown-menu__item {
     align-items: center;
     border-radius: 0.25rem;
@@ -2415,6 +3044,213 @@
     background: var(--ui-color-border);
     block-size: 1px;
     margin: 0.25rem 0;
+  }
+
+  .ui-menubar {
+    align-items: center;
+    background: var(--ui-color-surface);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.5rem;
+    color: var(--ui-color-text);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    padding: 0.25rem;
+  }
+
+  .ui-menubar[aria-orientation="vertical"] {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ui-menubar__trigger {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    color: inherit;
+    cursor: default;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    min-block-size: 2rem;
+    min-inline-size: 2rem;
+    padding: 0.25rem 0.75rem;
+    user-select: none;
+  }
+
+  .ui-menubar__trigger:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-menubar__trigger[data-popup-open],
+  .ui-menubar__trigger[data-highlighted] {
+    background: var(--ui-color-primary);
+    color: var(--ui-color-on-primary);
+  }
+
+  .ui-menubar__trigger[data-disabled] {
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  .ui-menubar__submenu-trigger {
+    justify-content: space-between;
+  }
+
+  .ui-menubar__submenu-trigger::after {
+    content: "\203a" / "";
+    margin-inline-start: 1rem;
+  }
+
+  .ui-menubar__submenu-trigger:dir(rtl)::after {
+    content: "\2039" / "";
+  }
+
+  .ui-menubar__submenu-trigger[data-popup-open] {
+    background: var(--ui-color-primary);
+    color: var(--ui-color-on-primary);
+  }
+
+  /* Navigation menu: links and disclosure triggers share one look. */
+  .ui-navigation-menu {
+    color: var(--ui-color-text);
+    max-inline-size: 100%;
+  }
+
+  .ui-navigation-menu__list {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ui-navigation-menu__trigger,
+  .ui-navigation-menu__link {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    border-radius: 0.375rem;
+    color: inherit;
+    cursor: pointer;
+    display: inline-flex;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    gap: 0.25rem;
+    min-block-size: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .ui-navigation-menu__trigger:focus-visible,
+  .ui-navigation-menu__link:focus-visible {
+    outline: none;
+    box-shadow: var(--ui-focus-ring);
+  }
+
+  .ui-navigation-menu__trigger[data-popup-open] {
+    background: color-mix(in srgb, var(--ui-color-text) 12%, transparent);
+  }
+
+  @media (hover: hover) {
+    .ui-navigation-menu__trigger:hover,
+    .ui-navigation-menu__link:hover {
+      background: color-mix(in srgb, var(--ui-color-text) 8%, transparent);
+    }
+  }
+
+  .ui-navigation-menu__trigger[data-disabled] {
+    color: var(--ui-color-muted);
+    cursor: not-allowed;
+  }
+
+  /* The current page is bold and underlined, so it is not conveyed by color alone. */
+  .ui-navigation-menu__link[data-active] {
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
+  }
+
+  /* Without children the icon draws a chevron whose rotation shows the open state. */
+  .ui-navigation-menu__icon:empty::before {
+    block-size: 0.5em;
+    border-block-end: 2px solid currentColor;
+    border-inline-end: 2px solid currentColor;
+    content: "";
+    display: block;
+    inline-size: 0.5em;
+    transform: translateY(-25%) rotate(45deg);
+    transition: transform 150ms ease;
+  }
+
+  .ui-navigation-menu__icon:empty[data-popup-open]::before {
+    transform: translateY(25%) rotate(225deg);
+  }
+
+  .ui-navigation-menu__positioner {
+    block-size: var(--positioner-height);
+    inline-size: var(--positioner-width);
+    max-inline-size: var(--available-width);
+    z-index: var(--ui-z-floating, 50);
+  }
+
+  .ui-navigation-menu__popup {
+    background: var(--ui-color-surface);
+    block-size: var(--popup-height);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--ui-shadow-popup);
+    color: var(--ui-color-text);
+    inline-size: var(--popup-width);
+    max-block-size: var(--available-height);
+    outline: none;
+    overflow: hidden;
+    transform-origin: var(--transform-origin);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease,
+      inline-size 250ms ease,
+      block-size 250ms ease;
+  }
+
+  .ui-navigation-menu__popup[data-starting-style],
+  .ui-navigation-menu__popup[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+
+  .ui-navigation-menu__viewport {
+    inline-size: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ui-navigation-menu__content {
+    box-sizing: border-box;
+    inline-size: max-content;
+    max-inline-size: calc(100vw - 1rem);
+    min-inline-size: 12rem;
+    overflow-wrap: anywhere;
+    padding: 0.5rem;
+    transition: opacity 150ms ease;
+  }
+
+  .ui-navigation-menu__content[data-starting-style],
+  .ui-navigation-menu__content[data-ending-style] {
+    opacity: 0;
+  }
+
+  .ui-navigation-menu__content .ui-navigation-menu__link {
+    display: flex;
   }
 
   /* overlays-modal */
@@ -2492,6 +3328,232 @@
 
   .ui-sheet__popup--bottom[data-starting-style],
   .ui-sheet__popup--bottom[data-ending-style] {
+    transform: translateY(100%);
+  }
+
+  /*
+   * Sidebar: a named navigation landmark beside the page content. On narrow
+   * viewports it is rendered inside a Sheet (.ui-sidebar__sheet), which keeps
+   * the Dialog and Sheet behavior. --ui-sidebar-width sets the wide-viewport
+   * width. The current link is bold with an inline-start bar, so it is not
+   * conveyed by color alone.
+   */
+  .ui-sidebar-provider {
+    align-items: stretch;
+    display: flex;
+    min-block-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .ui-sidebar {
+    background: var(--ui-color-surface);
+    border-inline-end: 1px solid var(--ui-color-border);
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    flex: 0 0 var(--ui-sidebar-width, 16rem);
+    flex-direction: column;
+    gap: 1rem;
+    inline-size: var(--ui-sidebar-width, 16rem);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    padding: 1rem;
+  }
+
+  .ui-sidebar[hidden] {
+    display: none;
+  }
+
+  .ui-sidebar__sheet {
+    --ui-sheet-size: min(var(--ui-sidebar-width, 16rem), 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+  }
+
+  .ui-sidebar__sheet .ui-sidebar {
+    border: 0;
+    flex: 1 1 auto;
+    inline-size: auto;
+    padding: 0;
+  }
+
+  .ui-sidebar__header,
+  .ui-sidebar__footer,
+  .ui-sidebar__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-inline-size: 0;
+  }
+
+  .ui-sidebar__content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: 1rem;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow-y: auto;
+  }
+
+  .ui-sidebar__group-label {
+    color: var(--ui-color-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .ui-sidebar__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ui-sidebar__menu-button {
+    align-items: center;
+    border-inline-start: 3px solid transparent;
+    border-radius: 0.375rem;
+    box-sizing: border-box;
+    color: var(--ui-color-text);
+    display: flex;
+    gap: 0.5rem;
+    min-block-size: 2.5rem;
+    overflow-wrap: anywhere;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+  }
+
+  .ui-sidebar__menu-button[data-current] {
+    border-inline-start-color: var(--ui-color-primary);
+    font-weight: 700;
+  }
+
+  .ui-sidebar__menu-button:focus-visible {
+    box-shadow: var(--ui-focus-ring);
+    outline: none;
+  }
+
+  @media (hover: hover) {
+    .ui-sidebar__menu-button:hover {
+      background: color-mix(in srgb, var(--ui-color-text) 8%, transparent);
+    }
+  }
+
+  /*
+   * Drawer is a Base UI Drawer attached to one viewport edge and dismissible by
+   * swiping toward that edge. --ui-drawer-size is the width of left/right
+   * drawers and the maximum height of top/bottom drawers. Edges are physical:
+   * left stays left in RTL. The content region scrolls; the popup does not.
+   */
+  .ui-drawer__viewport {
+    box-sizing: border-box;
+    display: flex;
+    inset: 0;
+    position: fixed;
+  }
+
+  .ui-drawer__viewport[data-side="top"] {
+    align-items: flex-start;
+  }
+
+  .ui-drawer__viewport[data-side="bottom"] {
+    align-items: flex-end;
+  }
+
+  .ui-drawer__viewport[data-side="left"] {
+    justify-content: flex-start;
+  }
+
+  .ui-drawer__viewport[data-side="right"] {
+    justify-content: flex-end;
+  }
+
+  .ui-drawer__popup {
+    border-radius: 0;
+    box-shadow: var(--ui-shadow-popup);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    inset: auto;
+    max-height: none;
+    max-width: none;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    transform: translate3d(
+      var(--drawer-swipe-movement-x, 0px),
+      var(--drawer-swipe-movement-y, 0px),
+      0
+    );
+    transition: transform 300ms ease;
+    width: auto;
+  }
+
+  .ui-drawer__popup[data-swiping] {
+    transition: none;
+    user-select: none;
+  }
+
+  .ui-drawer__content {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 1.5rem;
+  }
+
+  .ui-drawer__popup--left,
+  .ui-drawer__popup--right {
+    block-size: 100%;
+    max-width: calc(100% - 2rem);
+    width: var(--ui-drawer-size, 24rem);
+  }
+
+  .ui-drawer__popup--top,
+  .ui-drawer__popup--bottom {
+    inline-size: 100%;
+    max-height: min(var(--ui-drawer-size, 24rem), calc(100dvh - 2rem));
+  }
+
+  /* Decorative grab handle; swiping is never the only way to close. */
+  .ui-drawer__popup--top::after,
+  .ui-drawer__popup--bottom::before {
+    background: var(--ui-color-border);
+    block-size: 0.25rem;
+    border-radius: 999px;
+    content: "";
+    flex: none;
+    inline-size: 2.5rem;
+    margin: 0.5rem auto;
+  }
+
+  .ui-drawer__popup--top::after {
+    order: 1;
+  }
+
+  .ui-drawer__popup--left[data-starting-style],
+  .ui-drawer__popup--left[data-ending-style] {
+    transform: translateX(-100%);
+  }
+
+  .ui-drawer__popup--right[data-starting-style],
+  .ui-drawer__popup--right[data-ending-style] {
+    transform: translateX(100%);
+  }
+
+  .ui-drawer__popup--top[data-starting-style],
+  .ui-drawer__popup--top[data-ending-style] {
+    transform: translateY(-100%);
+  }
+
+  .ui-drawer__popup--bottom[data-starting-style],
+  .ui-drawer__popup--bottom[data-ending-style] {
     transform: translateY(100%);
   }
 
@@ -2583,6 +3645,14 @@
   }
 
   @media (forced-colors: active) {
+    .ui-chart__marker {
+      color: CanvasText;
+    }
+
+    .ui-chart__data-summary:focus-visible {
+      outline: 2px solid Highlight;
+    }
+
     .ui-separator,
     .ui-input-otp__separator {
       background: CanvasText;
@@ -2598,6 +3668,19 @@
 
     .ui-input-otp__slot:disabled {
       border-color: GrayText;
+    }
+
+    .ui-resizable__handle::before {
+      background: CanvasText;
+    }
+
+    .ui-resizable__handle:focus-visible {
+      outline-color: Highlight;
+    }
+
+    .ui-resizable__handle:focus-visible::before,
+    .ui-resizable__handle[data-dragging]::before {
+      background: Highlight;
     }
 
     .ui-badge,
@@ -2633,6 +3716,20 @@
 
     .ui-pagination__link[aria-current="page"] {
       border-color: Highlight;
+    }
+
+    .ui-calendar__day[data-selected] {
+      border-color: Highlight;
+    }
+
+    .ui-calendar__day[aria-disabled="true"],
+    .ui-calendar__nav[aria-disabled="true"] {
+      color: GrayText;
+    }
+
+    .ui-calendar__day:focus-visible,
+    .ui-calendar__nav:focus-visible {
+      outline: 2px solid Highlight;
     }
 
     .ui-pagination__link[aria-disabled="true"] {
@@ -2710,16 +3807,26 @@
     .ui-field__control:focus-visible,
     .ui-dialog__popup :focus-visible,
     .ui-dropdown-menu__trigger:focus-visible,
+    .ui-menubar__trigger:focus-visible,
+    .ui-navigation-menu__trigger:focus-visible,
+    .ui-navigation-menu__link:focus-visible,
+    .ui-scroll-area:focus-visible,
     .ui-table-container:focus-visible,
     .ui-tooltip__trigger:focus-visible,
+    .ui-hover-card__trigger:focus-visible,
     .ui-popover__trigger:focus-visible,
     .ui-popover__popup:focus-visible,
     .ui-popover__popup :focus-visible,
     .ui-breadcrumb__link:focus-visible,
+    .ui-sidebar__menu-button:focus-visible,
     .ui-pagination__link:focus-visible,
     .ui-radio-group__item:focus-visible,
     .ui-select__trigger:focus-visible,
     .ui-slider__thumb:has(:focus-visible) {
+      outline: 2px solid Highlight;
+    }
+
+    .ui-item__link:focus-visible::after {
       outline: 2px solid Highlight;
     }
 
@@ -2729,6 +3836,14 @@
 
     .ui-tabs__tab[data-active] {
       border-color: Highlight;
+    }
+
+    .ui-sidebar {
+      border-inline-end-color: CanvasText;
+    }
+
+    .ui-sidebar__menu-button[data-current] {
+      border-inline-start-color: Highlight;
     }
 
     .ui-tabs__indicator {
@@ -2876,9 +3991,30 @@
     }
 
     .ui-tooltip__popup,
+    .ui-hover-card__popup,
     .ui-popover__popup,
-    .ui-dropdown-menu__popup {
+    .ui-dropdown-menu__popup,
+    .ui-navigation-menu__popup {
       border-color: CanvasText;
+    }
+
+    .ui-navigation-menu__trigger[data-popup-open] {
+      background: Highlight;
+      color: HighlightText;
+      forced-color-adjust: none;
+    }
+
+    @media (hover: hover) {
+      .ui-navigation-menu__trigger:hover,
+      .ui-navigation-menu__link:hover {
+        background: Highlight;
+        color: HighlightText;
+        forced-color-adjust: none;
+      }
+    }
+
+    .ui-navigation-menu__trigger[data-disabled] {
+      color: GrayText;
     }
 
     .ui-command {
@@ -2894,10 +4030,18 @@
     }
 
     .ui-tooltip__arrow,
+    .ui-hover-card__arrow,
     .ui-popover__arrow {
       display: none;
     }
 
+    .ui-menubar {
+      border-color: CanvasText;
+    }
+
+    .ui-menubar__trigger[data-popup-open],
+    .ui-menubar__trigger[data-highlighted],
+    .ui-menubar__submenu-trigger[data-popup-open],
     .ui-dropdown-menu__item[data-highlighted],
     .ui-dropdown-menu__item[data-disabled][data-highlighted] {
       background: Highlight;
@@ -2905,7 +4049,8 @@
       forced-color-adjust: none;
     }
 
-    .ui-dropdown-menu__item[data-disabled] {
+    .ui-dropdown-menu__item[data-disabled],
+    .ui-menubar__trigger[data-disabled] {
       color: GrayText;
     }
 
@@ -2928,6 +4073,10 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .ui-chart {
+      --ui-chart-duration: 0s;
+    }
+
     .ui-button {
       transition: none;
     }
@@ -2967,8 +4116,12 @@
     }
 
     .ui-tooltip__popup,
+    .ui-hover-card__popup,
     .ui-popover__popup,
-    .ui-dropdown-menu__popup {
+    .ui-dropdown-menu__popup,
+    .ui-navigation-menu__popup,
+    .ui-navigation-menu__content,
+    .ui-navigation-menu__icon::before {
       transition: none;
     }
 
@@ -2978,6 +4131,68 @@
 
     .ui-sheet__popup {
       transition: none;
+    }
+
+    .ui-drawer__popup {
+      transition: none;
+    }
+  }
+}
+
+@layer utakata.components {
+  .ui-carousel {
+    min-inline-size: 0;
+  }
+
+  .ui-carousel__controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 0.5rem;
+  }
+
+  .ui-carousel__controls .ui-button {
+    min-inline-size: 24px;
+    min-block-size: 24px;
+  }
+
+  .ui-carousel__controls .ui-button[data-disabled] {
+    border-style: dashed;
+    opacity: 1;
+  }
+
+  .ui-carousel__viewport {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: auto;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-control);
+  }
+
+  .ui-carousel__viewport:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+  }
+
+  .ui-carousel__slide {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    min-inline-size: 0;
+    padding: var(--ui-carousel-slide-padding, 0.75rem);
+    overflow-wrap: anywhere;
+    scroll-snap-align: center;
+  }
+
+  /* Before hydration, hide inactive slides until the inert attribute is set. */
+  .ui-carousel__slide[aria-hidden="true"]:not([inert]) {
+    visibility: hidden;
+  }
+
+  @media (forced-colors: active) {
+    .ui-carousel__viewport:focus-visible {
+      outline-color: Highlight;
     }
   }
 }

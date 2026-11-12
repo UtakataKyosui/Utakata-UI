@@ -44,7 +44,8 @@ test('[coverage.public-configurations] every registered public axis is rendered,
   await expect(page.locator('.ui-separator[aria-hidden="true"]')).toHaveCount(
     1,
   );
-  await expect(page.getByRole('separator')).toHaveCount(1);
+  // Resizable handles are separators too; this counts only static Separators.
+  await expect(page.locator('.ui-separator[role="separator"]')).toHaveCount(1);
   await test.info().attach('public-configurations-evidence', {
     body: JSON.stringify({ registry: coverage, measurements }),
     contentType: 'application/json',

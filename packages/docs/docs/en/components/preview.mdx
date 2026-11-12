@@ -82,6 +82,20 @@ A Card containing a form and a Card whose heading level is changed with `level`.
 
 <Component path="en/card" />
 
+## Empty [#empty]
+
+[Empty](/en/components/empty) explains why data is missing and shows an action the user can take. Use a separate status region if a dynamic update such as a search result needs announcing.
+
+<Component path="en/empty" />
+
+## Item [#item]
+
+See [Item](/en/components/item) for detailed usage and the API.
+
+A row that lays out an icon, body, supplementary meta and actions. A plain row is not operable; put `Item.Link` (navigation) or `Item.Button` (action) in the body and one native element stretches over the whole row. Other operations such as delete go in `Item.Actions` as siblings, never inside the link or button. Tab order is DOM order.
+
+<Component path="en/item" />
+
 ## Alert [#alert]
 
 See [Alert](/en/components/alert) for detailed usage and the API.
@@ -114,6 +128,14 @@ A table with a caption, row and column headers, right-aligned numbers and links 
 
 <Component path="en/table" />
 
+## Chart [#chart]
+
+See [Chart](/en/components/chart) for detailed usage and the API. The adoption decision is in [Chart adoption decision](/en/advanced/chart-adoption).
+
+A renderer-independent chart shell with a `figure`, caption and description, a legend that tells series apart by marker shape, and a data table alternative (`Chart.Data`). You place the renderer inside `Chart.Plot`.
+
+<Component path="en/chart" />
+
 ## Breadcrumb [#breadcrumb]
 
 See [Breadcrumb](/en/components/breadcrumb) for detailed usage and the API.
@@ -129,6 +151,30 @@ See [Pagination](/en/components/pagination) for detailed usage and the API.
 Moves between pages with ordinary links. The current page is marked with `active`; on the first page "Previous" is disabled and removed from the Tab order.
 
 <Component path="en/pagination" />
+
+## NavigationMenu [#navigationmenu]
+
+See [NavigationMenu](/en/components/navigationmenu) for detailed usage and the API.
+
+Site navigation made of links and panels of more links. Name `NavigationMenu.Root` with `aria-label` or `aria-labelledby`. Tab visits each link and trigger in order; Enter, Space, click, tap or hover opens a panel. Down also opens it, Left/Right move between triggers, and Escape closes it and returns focus to the trigger. A pointer moving from the trigger onto the panel keeps it open. Mark the current page link with `active`. A panel stays open after one of its links is activated, so set `closeOnClick` for single-page routing. Use DropdownMenu or Menubar for application commands.
+
+<Component path="en/navigationmenu" />
+
+## Sidebar [#sidebar]
+
+See [Sidebar](/en/components/sidebar) for detailed usage and the API.
+
+A navigation sidebar exposed as a named landmark with links to destinations. On wide viewports `Sidebar.Trigger` (a button with `aria-expanded` and `aria-controls`) collapses and expands it, and collapsed links leave the Tab order and assistive technology. On narrow viewports (below 768px by default) it becomes a Sheet that opens from the left as a modal; a visible close button, Escape and a press on the backdrop close it and return focus to the trigger. When a viewport change removes the focused element, focus moves to the trigger. Mark the link to the current page with `current`; it is also shown with bold text and a bar. Persisted open state, link destinations, routing, the main landmark and a skip link are your responsibility. An icon-only rail, resizing and a keyboard shortcut are not provided.
+
+<Component path="en/sidebar" />
+
+## Carousel [#carousel]
+
+See [Carousel](/en/components/carousel) for detailed usage and the API.
+
+Move with the previous and next buttons, a native touch swipe, or the arrow keys while the viewport has focus. The carousel starts at the first slide. It has no autoplay or wrapping.
+
+<Component path="en/carousel" />
 
 ## Input [#input]
 
@@ -259,6 +305,14 @@ A non-modal popup tied to a Trigger. Name it with `Popover.Title` and describe i
 
 <Component path="en/popover" />
 
+## HoverCard [#hovercard]
+
+See [HoverCard](/en/components/hovercard) for detailed usage and the API.
+
+Shows a supplementary preview of a link on pointer hover and on keyboard focus of the Trigger. Escape closes it, and it stays open when the pointer moves onto the Popup. The Trigger is a link, so it needs an href and link text. Touch and screen-reader users cannot use or hear the card, so never put required information only in it; also provide it on the page or the link target. The Popup cannot receive focus, so put interactive elements in a Popover.
+
+<Component path="hovercard" />
+
 ## DropdownMenu [#dropdownmenu]
 
 See [DropdownMenu](/en/components/dropdownmenu) for detailed usage and the API.
@@ -266,6 +320,22 @@ See [DropdownMenu](/en/components/dropdownmenu) for detailed usage and the API.
 A list of button actions. Move between items with the arrow keys, Home/End and typing; Enter runs an item, closes the menu and returns focus to the Trigger. Disabled items are reachable with the arrow keys but do not run. Do not use it for page navigation; use a list of links instead.
 
 <Component path="en/dropdownmenu" />
+
+## ContextMenu [#contextmenu]
+
+See [ContextMenu](/en/components/contextmenu) for detailed usage and the API.
+
+An action menu opened by right click, long press, or the ContextMenu key / Shift+F10 while an element inside the area is focused. Arrow keys, Home/End, typing, Escape and focus return use the same Base UI behavior as DropdownMenu, and Item, Group and Separator are shared. Popup requires `aria-label` or `aria-labelledby`. Because right click and long press are not discoverable on every device, always offer the same actions through a visible button such as a DropdownMenu.
+
+<Component path="en/contextmenu" />
+
+## Menubar [#menubar]
+
+See [Menubar](/en/components/menubar) for detailed usage and the API.
+
+A bar of several menus, such as File and Edit in an application. Name `Menubar.Root` with `aria-label` or `aria-labelledby`. The bar is a single Tab stop; move between menus with Left/Right (Up/Down for `orientation="vertical"`), and jump with Home and End. Down opens a menu, and while a menu is open Left/Right moves to the neighbouring menu. Nest a menu with `Menubar.SubmenuRoot`: Right opens it, and Left or Escape closes it. For right-to-left content wrap the bar in `DirectionProvider` with `direction="rtl"`, which swaps the horizontal arrow keys. Disabled items are reachable with the arrow keys but do not run. Do not use it for page navigation, and use `DropdownMenu` when there is only one menu.
+
+<Component path="en/menubar" />
 
 ## AlertDialog [#alertdialog]
 
@@ -289,6 +359,14 @@ See [Sheet](/en/components/sheet) for detailed usage and the API.
 A modal panel attached to the top, right, bottom or left edge, built on Dialog. `side` selects the edge (default `right`). Tab stays inside the panel, and Escape, `Sheet.Close` and a press on the backdrop close it and return focus to the trigger. Long content scrolls inside the panel, and the slide transition is removed when reduced motion is requested. Always provide a `Sheet.Title` and a visible `Sheet.Close`.
 
 <Component path="en/sheet" />
+
+## Drawer [#drawer]
+
+See [Drawer](/en/components/drawer) for detailed usage and the API.
+
+A touch-friendly modal panel attached to the top, right, bottom or left edge, built on Base UI Drawer. `side` on `Drawer.Root` selects the edge (default `bottom`). Swiping toward the edge closes it, but a swipe must never be the only way to close: `Drawer.Close`, Escape and a press on the backdrop also close it and return focus to the trigger. Long content scrolls inside the content region, and the slide transition is removed when reduced motion is requested. Do not run an irreversible action on pointer or touch start; run it from a `Button` click and use `AlertDialog` when confirmation is needed. Use `Sheet` for an edge panel without gestures and `Dialog` for a centered modal. Always provide a `Drawer.Title` and a visible `Drawer.Close`. Snap points, non-modal drawers and `swipeDirection` are not provided. Touch scrolling and swiping on physical devices and screen reader output are unverified.
+
+<Component path="en/drawer" />
 
 ## Toast [#toast]
 
@@ -321,3 +399,27 @@ See [ButtonGroup](/en/components/buttongroup) for detailed usage and the API.
 Joins the borders and corner radii of related `Button` elements. Each button is still reached one at a time with Tab, and variant, size, disabled state and type stay as set on each button. The group name (`aria-label` or `aria-labelledby`) is required by the types.
 
 <Component path="en/buttongroup" />
+
+## Calendar [#calendar]
+
+See [Calendar](/en/components/calendar) for detailed usage and the API.
+
+A month calendar for choosing one day or a date range. Dates are `"YYYY-MM-DD"` strings and do not depend on time zones or a date library. Tab enters the grid once; arrow keys, Home, End and PageUp/PageDown (Shift for years) move between days and Enter or Space selects. Unavailable days (`minDate`, `maxDate`, `isDateDisabled`) can be focused but not selected. The name (`aria-label` or `aria-labelledby`) is required by the types.
+
+<Component path="en/calendar" />
+
+## DatePicker [#datepicker]
+
+See [DatePicker](/en/components/datepicker) for usage and API details.
+
+Type a date in `YYYY-MM-DD` format or select one day in the calendar. Unavailable and impossible dates show an error and keep the text available for correction. Escape closes the calendar and returns focus to its trigger. Resetting the form restores the initial date.
+
+<Component path="en/datepicker" />
+
+## Resizable [#resizable]
+
+See [Resizable](/en/components/resizable) for detailed usage and the API.
+
+Moves the boundary between two neighbouring panels with the keyboard or a pointer. The handle is a focusable `separator` and its name (`aria-label` or `aria-labelledby`) is required by the types. `aria-valuenow` is the percent size of the panel before it, and the arrow keys, Home and End change it within `minSize` and `maxSize`. In right-to-left writing (`dir="rtl"`) the arrow keys are mirrored. On narrow screens, switch to `orientation="vertical"` or otherwise adapt the layout.
+
+<Component path="en/resizable" />

@@ -36,6 +36,39 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Calendar keyboard and visuals and keeps zoom and speech manual', () => {
+    const rules = componentManifest.components.Calendar?.qualityRules ?? [];
+    for (const id of ['calendar.keyboard', 'calendar.visual-states'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['calendar.zoom-theme', 'calendar.screen-reader'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
+  it('requires browser evidence for Resizable keyboard, pointer and layout and keeps screen reader and zoom manual', () => {
+    const rules = componentManifest.components.Resizable?.qualityRules ?? [];
+    for (const id of [
+      'resizable.keyboard-pointer-browser',
+      'resizable.visual-layout',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    for (const id of ['resizable.screen-reader', 'resizable.zoom-touch-theme'])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'manual' }),
+        ]),
+      );
+  });
   it('requires browser evidence for ToggleGroup keyboard and visuals and keeps zoom manual', () => {
     const rules = componentManifest.components.ToggleGroup?.qualityRules ?? [];
     for (const id of ['toggle-group.keyboard', 'toggle-group.visual-states'])
@@ -118,6 +151,30 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Drawer focus, dismissal, swipe, placement, motion and forced colors and keeps platform checks manual', () => {
+    const rules = componentManifest.components.Drawer?.qualityRules ?? [];
+    for (const id of [
+      'drawer.focus-containment',
+      'drawer.dismissal-focus-return',
+      'drawer.swipe-scroll',
+      'drawer.placement-scroll',
+      'drawer.reduced-motion',
+      'drawer.forced-focus',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'drawer.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for DropdownMenu keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
     const rules = componentManifest.components.DropdownMenu?.qualityRules ?? [];
     for (const id of [
@@ -134,6 +191,27 @@ describe('public manifest contract', () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: 'dropdown-menu.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Menubar keyboard, dismissal and forced highlight and keeps platform checks manual', () => {
+    const rules = componentManifest.components.Menubar?.qualityRules ?? [];
+    for (const id of [
+      'menubar.keyboard',
+      'menubar.activate-dismiss',
+      'menubar.forced-highlight',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'menubar.platform-manual',
           verification: 'manual',
         }),
       ]),
@@ -172,6 +250,27 @@ describe('public manifest contract', () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: 'tooltip.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for HoverCard interaction and visuals and keeps platform checks manual', () => {
+    const rules = componentManifest.components.HoverCard?.qualityRules ?? [];
+    for (const id of [
+      'hover-card.focus-hover-escape',
+      'hover-card.hoverable',
+      'hover-card.visual-position',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'hover-card.platform-manual',
           verification: 'manual',
         }),
       ]),
@@ -264,6 +363,29 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for NavigationMenu keyboard, pointer, touch and forced colors and keeps platform checks manual', () => {
+    const rules =
+      componentManifest.components.NavigationMenu?.qualityRules ?? [];
+    for (const id of [
+      'navigation-menu.keyboard',
+      'navigation-menu.pointer',
+      'navigation-menu.touch',
+      'navigation-menu.forced-colors',
+    ])
+      expect(rules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ id, verification: 'browser' }),
+        ]),
+      );
+    expect(rules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'navigation-menu.platform-manual',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Breadcrumb reflow and focus and keeps zoom manual', () => {
     expect(componentManifest.components.Breadcrumb?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -339,6 +461,21 @@ describe('public manifest contract', () => {
       ]),
     );
   });
+  it('requires browser evidence for Item layout and focus and keeps zoom manual', () => {
+    expect(componentManifest.components.Item?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'item.layout-focus',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'item.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
   it('requires browser evidence for Card layout and keeps zoom manual', () => {
     expect(componentManifest.components.Card?.qualityRules).toEqual(
       expect.arrayContaining([
@@ -349,6 +486,21 @@ describe('public manifest contract', () => {
         }),
         expect.objectContaining({
           id: 'card.zoom-assistive',
+          verification: 'manual',
+        }),
+      ]),
+    );
+  });
+  it('requires browser evidence for Chart keyboard, theme and motion and keeps zoom manual', () => {
+    expect(componentManifest.components.Chart?.qualityRules).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'chart.keyboard-theme-motion',
+          verification: 'browser',
+          severity: 'error',
+        }),
+        expect.objectContaining({
+          id: 'chart.zoom-assistive',
           verification: 'manual',
         }),
       ]),
@@ -620,19 +772,27 @@ describe('public manifest contract', () => {
       'Button',
       'Field',
       'Dialog',
+      'Item',
       'Kbd',
+      'ScrollArea',
       'Separator',
       'Sheet',
+      'Drawer',
       'Badge',
       'Skeleton',
       'Spinner',
       'Card',
+      'Empty',
+      'Carousel',
       'Alert',
       'Avatar',
       'Progress',
       'Table',
+      'Chart',
       'Breadcrumb',
       'Pagination',
+      'NavigationMenu',
+      'Sidebar',
       'Input',
       'Textarea',
       'NativeSelect',
@@ -650,12 +810,18 @@ describe('public manifest contract', () => {
       'Toggle',
       'Tooltip',
       'Popover',
+      'HoverCard',
       'DropdownMenu',
+      'ContextMenu',
+      'Menubar',
       'AlertDialog',
       'Toast',
       'InputGroup',
       'ToggleGroup',
       'ButtonGroup',
+      'Calendar',
+      'DatePicker',
+      'Resizable',
     ]);
   });
 

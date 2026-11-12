@@ -12,6 +12,8 @@ export const categories = [
       'Toggle',
       'ToggleGroup',
       'DropdownMenu',
+      'ContextMenu',
+      'Menubar',
     ],
   },
   {
@@ -21,6 +23,7 @@ export const categories = [
       'Field',
       'Input',
       'InputGroup',
+      'DatePicker',
       'Textarea',
       'NativeSelect',
       'Select',
@@ -40,7 +43,9 @@ export const categories = [
       'AlertDialog',
       'Command',
       'Sheet',
+      'Drawer',
       'Popover',
+      'HoverCard',
       'Tooltip',
       'Toast',
     ],
@@ -53,7 +58,13 @@ export const categories = [
   {
     slug: 'navigation',
     title: { ja: 'ナビゲーション', en: 'Navigation' },
-    components: ['Breadcrumb', 'Pagination'],
+    components: [
+      'Breadcrumb',
+      'Pagination',
+      'NavigationMenu',
+      'Sidebar',
+      'Carousel',
+    ],
   },
   {
     slug: 'feedback',
@@ -63,7 +74,19 @@ export const categories = [
   {
     slug: 'display',
     title: { ja: 'データ表示', en: 'Data display' },
-    components: ['Card', 'Table', 'Avatar', 'Kbd', 'Separator'],
+    components: [
+      'Card',
+      'Item',
+      'Empty',
+      'Table',
+      'Chart',
+      'ScrollArea',
+      'Avatar',
+      'Kbd',
+      'Separator',
+      'Calendar',
+      'Resizable',
+    ],
   },
 ];
 

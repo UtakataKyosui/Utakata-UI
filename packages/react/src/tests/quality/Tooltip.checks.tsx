@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { expect } from 'vitest';
 import { Button } from '../../components/Button.js';
 import { Tooltip } from '../../components/Tooltip.js';
@@ -30,12 +30,7 @@ export function renderTooltip(
   return screen.getByRole('button', { name: 'Copy' });
 }
 
-/** Focus via keyboard modality so Base UI treats it as focus-visible. */
-export async function keyboardFocus(element: HTMLElement) {
-  fireEvent.keyDown(document.body, { key: 'Tab' });
-  act(() => element.focus());
-  await settle(0);
-}
+export { keyboardFocus } from '../quality-helpers.js';
 
 export const tooltipChecks: Record<string, QualityCheck> = {
   'tooltip.description': async () => {
