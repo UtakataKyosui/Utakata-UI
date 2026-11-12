@@ -48,8 +48,9 @@ section {
 }
 
 .fixture-carousel {
-  /* The page grid grows to its widest fixture; keep the carousel in the viewport. */
-  inline-size: min(100%, calc(100vi - 2rem));
+  /* Add no intrinsic width to the page grid; fill its track up to the viewport. */
+  inline-size: 0;
+  min-inline-size: min(100%, calc(100vi - 2rem));
 }
 
 .fixture-badges {
