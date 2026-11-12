@@ -9,6 +9,7 @@
   --ui-color-muted: #596579;
   --ui-color-border: #8c96a8;
   --ui-color-danger: #b42318;
+  --ui-color-on-danger: #fff;
 }
 
 :root[data-theme="dark"] {
@@ -20,4 +21,5 @@
   --ui-color-muted: #c1cad8;
   --ui-color-border: #748099;
   --ui-color-danger: #ffb4ab;
+  --ui-color-on-danger: #3a0a06;
 }

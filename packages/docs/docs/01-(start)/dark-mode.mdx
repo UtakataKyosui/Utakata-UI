@@ -1,0 +1,106 @@
+---
+title: ダークモード
+description: Reactアプリでライト・ダーク・システム設定を切り替える
+---
+
+Utakata UI は標準で端末の明暗設定に従います。React + Vite のアプリで、利用者がライト・ダーク・システム設定を選び、次回もその設定を使えるようにします。
+
+## 明暗それぞれの色を設定する [#colors]
+
+グローバル CSS に以下を追加します。`light-dark()` は `color-scheme` に応じて色を選びます。設定を `<html>` に適用すると、Portal に表示されるダイアログやメニューにも同じ色が届きます。配色を変える場合は[テーマカラー](/theming)を参照してください。
+
+```css
+@import "@utakata-ui/react/styles.css";
+
+:root {
+  color-scheme: light dark;
+  --ui-color-primary: light-dark(#2357c6, #9bb9ff);
+  --ui-color-on-primary: light-dark(#fff, #101a30);
+  --ui-color-surface: light-dark(#fff, #1c2432);
+  --ui-color-text: light-dark(#1c2432, #f0f3f9);
+  --ui-color-muted: light-dark(#596579, #c1cad8);
+  --ui-color-border: light-dark(#8993a5, #748099);
+  --ui-color-danger: light-dark(#b42318, #ffb4ab);
+  --ui-color-on-danger: light-dark(#fff, #3a0a06);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
+```
+
+## 初回表示に設定を反映する [#initial-theme]
+
+`index.html` の `<head>` に次のスクリプトを置きます。React の起動前に保存済みの設定を読み込みます。システム設定を選んでいるときは属性を外し、端末の設定変更にも追従させます。
+
+```html
+<script>
+  try {
+    const theme = localStorage.getItem("app-theme");
+    if (theme === "light" || theme === "dark") {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch {
+    // Use the system color scheme when storage is unavailable.
+  }
+</script>
+```
+
+## テーマ切り替えを追加する [#theme-switcher]
+
+以下の `ThemeSelect` をアプリのヘッダーや設定画面に置きます。この例は Vite のクライアントで描画するアプリ向けです。
+
+```tsx
+import { useState } from "react";
+
+type Theme = "light" | "dark" | "system";
+
+export function ThemeSelect() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = document.documentElement.dataset.theme;
+    return saved === "light" || saved === "dark" ? saved : "system";
+  });
+
+  function changeTheme(next: Theme) {
+    const root = document.documentElement;
+    if (next === "system") delete root.dataset.theme;
+    else root.dataset.theme = next;
+
+    setTheme(next);
+    try {
+      localStorage.setItem("app-theme", next);
+    } catch {
+      // The current page still uses the selected theme.
+    }
+  }
+
+  return (
+    <label>
+      表示テーマ
+      <select
+        value={theme}
+        onChange={(event) => changeTheme(event.currentTarget.value as Theme)}
+      >
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+        <option value="system">システム設定</option>
+      </select>
+    </label>
+  );
+}
+```
+
+## ボタンで配色を確認する [#preview]
+
+ページのテーマ切り替えで、通常のボタンと危険な操作のボタンの背景色・文字色を確認できます。
+
+<Component path="button" />
