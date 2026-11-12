@@ -1,0 +1,106 @@
+---
+title: Dark mode
+description: Let users choose light, dark, or system in a React app.
+---
+
+By default, Utakata UI follows the system color scheme. In a React + Vite app, use the steps below to offer an explicit choice and remember it across visits.
+
+## Set up the colors [#colors]
+
+Add this to your global stylesheet. `light-dark()` selects the light or dark value based on `color-scheme`. Apply the choice to `<html>` so dialogs and menus rendered through portals inherit the same colors. For custom palettes, see [Theme colors](/en/theming).
+
+```css
+@import "@utakata-ui/react/styles.css";
+
+:root {
+  color-scheme: light dark;
+  --ui-color-primary: light-dark(#2357c6, #9bb9ff);
+  --ui-color-on-primary: light-dark(#fff, #101a30);
+  --ui-color-surface: light-dark(#fff, #1c2432);
+  --ui-color-text: light-dark(#1c2432, #f0f3f9);
+  --ui-color-muted: light-dark(#596579, #c1cad8);
+  --ui-color-border: light-dark(#8993a5, #748099);
+  --ui-color-danger: light-dark(#b42318, #ffb4ab);
+  --ui-color-on-danger: light-dark(#fff, #3a0a06);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--ui-color-surface);
+  color: var(--ui-color-text);
+}
+```
+
+## Apply the saved theme before rendering [#initial-theme]
+
+Put this script in the `<head>` of `index.html` so the saved theme is applied before React starts. System mode leaves the attribute unset, so colors follow changes to the system setting.
+
+```html
+<script>
+  try {
+    const theme = localStorage.getItem("app-theme");
+    if (theme === "light" || theme === "dark") {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch {
+    // Use the system color scheme when storage is unavailable.
+  }
+</script>
+```
+
+## Add a theme switcher [#theme-switcher]
+
+Put `ThemeSelect` in your app header or settings. This example is for a client-rendered Vite app.
+
+```tsx
+import { useState } from "react";
+
+type Theme = "light" | "dark" | "system";
+
+export function ThemeSelect() {
+  const [theme, setTheme] = useState<Theme>(() => {
+    const saved = document.documentElement.dataset.theme;
+    return saved === "light" || saved === "dark" ? saved : "system";
+  });
+
+  function changeTheme(next: Theme) {
+    const root = document.documentElement;
+    if (next === "system") delete root.dataset.theme;
+    else root.dataset.theme = next;
+
+    setTheme(next);
+    try {
+      localStorage.setItem("app-theme", next);
+    } catch {
+      // The current page still uses the selected theme.
+    }
+  }
+
+  return (
+    <label>
+      Theme
+      <select
+        value={theme}
+        onChange={(event) => changeTheme(event.currentTarget.value as Theme)}
+      >
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="system">System</option>
+      </select>
+    </label>
+  );
+}
+```
+
+## Preview the button colors [#preview]
+
+Use this site's theme switcher to see the background and text colors for regular and destructive buttons.
+
+<Component path="en/button" />

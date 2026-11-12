@@ -48,6 +48,7 @@ By default the colors follow the OS light/dark setting. When you override them, 
 | `--ui-color-muted` | Supplementary descriptions |
 | `--ui-color-border` | Borders |
 | `--ui-color-danger` | Errors and dangerous states |
+| `--ui-color-on-danger` | Text and icons on the danger color |
 | `--ui-focus-ring` | Focus box-shadow |
 | `--ui-radius-control` | Control corner radius |
 | `--ui-shadow-popup` | Popup shadow |
@@ -95,7 +96,7 @@ Update `document.documentElement.dataset.brand` from the settings screen and swi
 
 Blue uses the standard colors as they are. This example does not save the choice. If you persist it, keep the choice usable where storage is unavailable, and design how the initial HTML reflects the saved choice in your app.
 
-When switching light and dark manually, adding `data-theme` alone does not change the library colors. Define `color-scheme` and the seven color variables above in separate light and dark selectors. You can remove the attribute when the user chooses to follow the OS.
+See [Dark mode](/en/dark-mode) to let users choose light, dark, or system.
 
 ## Checks after changing colors [#verification]
 
